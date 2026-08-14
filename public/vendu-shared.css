@@ -1,0 +1,28 @@
+/* VendU shared layer: OTP verification + interactive guided tour */
+.otp-row{display:flex;gap:8px;justify-content:center;width:100%;max-width:330px}
+.otp-box{width:46px;height:56px;text-align:center;font-family:inherit;font-size:22px;font-weight:700;color:var(--ink);border:1px solid var(--line);border-radius:12px;background:#fff;outline:0}
+.otp-box:focus{border-color:var(--violet);box-shadow:0 0 0 3px var(--violet-soft)}
+.edu-note{font-size:12px;color:var(--mist);margin-top:14px;max-width:330px;text-align:center;line-height:1.5}
+.edu-err{font-size:13px;font-weight:600;color:#D92D20;margin-top:12px;text-align:center;max-width:330px}
+.edu-ok{font-size:13px;font-weight:600;color:var(--green);margin-top:12px;text-align:center}
+.busy{opacity:.55;pointer-events:none}
+
+/* ---- guided tour ---- */
+.tour-ring{position:fixed;z-index:9000;border-radius:16px;box-shadow:0 0 0 3px var(--violet),0 0 0 9999px rgba(20,16,28,.62);pointer-events:none;transition:all .28s cubic-bezier(.4,0,.2,1)}
+.tour-pulse{position:fixed;z-index:9001;border-radius:16px;pointer-events:none;animation:tourpulse 1.6s ease-out infinite;border:2px solid var(--violet)}
+@keyframes tourpulse{0%{transform:scale(1);opacity:.85}70%{transform:scale(1.14);opacity:0}100%{opacity:0}}
+.tour-card{position:fixed;z-index:9002;width:min(320px,calc(100% - 32px));background:var(--card);border-radius:18px;padding:16px 16px 14px;box-shadow:var(--shadow-lg);transition:top .28s cubic-bezier(.4,0,.2,1)}
+.tour-step{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--violet);text-transform:uppercase}
+.tour-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px;letter-spacing:-.01em;margin:5px 0 5px}
+.tour-text{font-size:13.5px;line-height:1.55;color:var(--mist)}
+.tour-do{display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:var(--violet-soft);color:var(--violet);font-size:12px;font-weight:700;padding:7px 11px;border-radius:100px}
+.tour-actions{display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:10px}
+.tour-skip{border:0;background:none;font-family:inherit;font-size:13px;font-weight:600;color:var(--mist);cursor:pointer;padding:6px 2px}
+.tour-next{border:0;background:var(--ink);color:#fff;font-family:inherit;font-size:14px;font-weight:700;padding:11px 20px;border-radius:12px;cursor:pointer}
+.tour-dots{display:flex;gap:5px;align-items:center}
+.tour-dot{width:6px;height:6px;border-radius:50%;background:var(--line)}
+.tour-dot.on{background:var(--violet);width:16px;border-radius:100px}
+.tour-modal{position:fixed;inset:0;z-index:9002;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(20,16,28,.62)}
+.tour-modal .tour-card{position:relative;text-align:center}
+.tour-modal .tour-emoji{font-size:44px;line-height:1;margin-bottom:8px}
+.tour-modal .tour-actions{justify-content:center}
