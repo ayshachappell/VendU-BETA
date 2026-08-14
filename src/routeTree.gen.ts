@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteImport } from './routes/app'
 import { Route as BetaRouteImport } from './routes/beta'
 import { Route as ApiPublicVerifyCheckRouteImport } from './routes/api/public/verify/check'
 import { Route as ApiPublicVerifySendRouteImport } from './routes/api/public/verify/send'
@@ -17,6 +18,11 @@ import { Route as ApiPublicVerifySendRouteImport } from './routes/api/public/ver
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BetaRoute = BetaRouteImport.update({
@@ -37,12 +43,14 @@ const ApiPublicVerifySendRoute = ApiPublicVerifySendRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRoute
   '/beta': typeof BetaRoute
   '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
   '/api/public/verify/send': typeof ApiPublicVerifySendRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/app': typeof AppRoute
   '/beta': typeof BetaRoute
   '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
   '/api/public/verify/send': typeof ApiPublicVerifySendRoute
@@ -50,6 +58,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRoute
   '/beta': typeof BetaRoute
   '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
   '/api/public/verify/send': typeof ApiPublicVerifySendRoute
@@ -57,12 +66,22 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/beta' | '/api/public/verify/check' | '/api/public/verify/send'
+    | '/'
+    | '/app'
+    | '/beta'
+    | '/api/public/verify/check'
+    | '/api/public/verify/send'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/beta' | '/api/public/verify/check' | '/api/public/verify/send'
+  to:
+    | '/'
+    | '/app'
+    | '/beta'
+    | '/api/public/verify/check'
+    | '/api/public/verify/send'
   id:
     | '__root__'
     | '/'
+    | '/app'
     | '/beta'
     | '/api/public/verify/check'
     | '/api/public/verify/send'
@@ -70,6 +89,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRoute
   BetaRoute: typeof BetaRoute
   ApiPublicVerifyCheckRoute: typeof ApiPublicVerifyCheckRoute
   ApiPublicVerifySendRoute: typeof ApiPublicVerifySendRoute
@@ -82,6 +102,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/beta': {
@@ -110,6 +137,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRoute,
   BetaRoute: BetaRoute,
   ApiPublicVerifyCheckRoute: ApiPublicVerifyCheckRoute,
   ApiPublicVerifySendRoute: ApiPublicVerifySendRoute,
