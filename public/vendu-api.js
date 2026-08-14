@@ -25,7 +25,30 @@
   };
 
   W.sendCode = function (email, build) {
-    return post("/api/public/verify/send", { email: email, build: build });
+    return post("/api/public/verify/send", {
+      email: email,
+      build: build,
+      path: location.pathname,
+    });
+  };
+
+  /* Fallback: if the student tapped the emailed link instead of typing the code,
+     the auth service returns them here with tokens in the URL hash. */
+  W.consumeMagicLink = function () {
+    var h = location.hash || "";
+    if (h.indexOf("access_token=") === -1) return null;
+    var params = new URLSearchParams(h.replace(/^#/, ""));
+    var token = params.get("access_token");
+    history.replaceState(null, "", location.pathname + location.search);
+    if (!token) return null;
+    try {
+      var payload = JSON.parse(atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
+      if (!payload.email || !W.looksLikeEdu(payload.email)) return null;
+      localStorage.setItem(KEY, JSON.stringify({ email: payload.email, at: Date.now() }));
+      return payload.email;
+    } catch (e) {
+      return null;
+    }
   };
 
   W.checkCode = function (email, code, build, gradYear) {
