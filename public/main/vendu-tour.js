@@ -121,6 +121,7 @@
     modal,
     onTargetClick,
     boundEl,
+    boundEvent,
     raf;
 
   function cleanup() {
@@ -128,8 +129,9 @@
       if (el && el.parentNode) el.parentNode.removeChild(el);
     });
     ring = pulse = card = modal = null;
-    if (boundEl && onTargetClick) boundEl.removeEventListener("click", onTargetClick);
+    if (boundEl && onTargetClick) boundEl.removeEventListener(boundEvent || "click", onTargetClick);
     boundEl = null;
+    boundEvent = null;
     onTargetClick = null;
     window.removeEventListener("resize", position);
     window.removeEventListener("scroll", position, true);
@@ -228,12 +230,13 @@
 
     if (st.click || st.event) {
       boundEl = el;
+      boundEvent = st.event || "click";
       onTargetClick = function () {
         i++;
         cleanup();
         setTimeout(show, 420);
       };
-      el.addEventListener(st.event || "click", onTargetClick);
+      el.addEventListener(boundEvent, onTargetClick);
     }
 
     boundTarget = el;
