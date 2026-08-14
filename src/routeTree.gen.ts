@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicVerifyCheckRouteImport } from './routes/api/public/verify/check'
 import { Route as ApiPublicVerifySendRouteImport } from './routes/api/public/verify/send'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicVerifyCheckRoute = ApiPublicVerifyCheckRouteImport.update({
+  id: '/api/public/verify/check',
+  path: '/api/public/verify/check',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicVerifySendRoute = ApiPublicVerifySendRouteImport.update({
@@ -25,27 +31,31 @@ const ApiPublicVerifySendRoute = ApiPublicVerifySendRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
   '/api/public/verify/send': typeof ApiPublicVerifySendRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
   '/api/public/verify/send': typeof ApiPublicVerifySendRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
   '/api/public/verify/send': typeof ApiPublicVerifySendRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/public/verify/send'
+  fullPaths: '/' | '/api/public/verify/check' | '/api/public/verify/send'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/public/verify/send'
-  id: '__root__' | '/' | '/api/public/verify/send'
+  to: '/' | '/api/public/verify/check' | '/api/public/verify/send'
+  id: '__root__' | '/' | '/api/public/verify/check' | '/api/public/verify/send'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiPublicVerifyCheckRoute: typeof ApiPublicVerifyCheckRoute
   ApiPublicVerifySendRoute: typeof ApiPublicVerifySendRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/verify/check': {
+      id: '/api/public/verify/check'
+      path: '/api/public/verify/check'
+      fullPath: '/api/public/verify/check'
+      preLoaderRoute: typeof ApiPublicVerifyCheckRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/verify/send': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiPublicVerifyCheckRoute: ApiPublicVerifyCheckRoute,
   ApiPublicVerifySendRoute: ApiPublicVerifySendRoute,
 }
 export const routeTree = rootRouteImport
