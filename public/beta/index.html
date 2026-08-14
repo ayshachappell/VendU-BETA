@@ -1353,7 +1353,7 @@ function onboarding(){
     });
     if(boxes[0])setTimeout(function(){boxes[0].focus();},60);
     var cbtn=document.getElementById('eduCheck');if(cbtn)cbtn.onclick=submitCode;
-    if(sent){window.addEventListener('storage',function(){var st=VendU.student();if(st&&st.email&&!state.eduDone)submitCode();});}
+    if(sent){var _poll=setInterval(function(){var st=VendU.student();if(st&&st.email){clearInterval(_poll);if(!state.eduDone)submitCode();}else if(state.eduDone){clearInterval(_poll);}},1500);window.addEventListener('storage',function(){var st=VendU.student();if(st&&st.email&&!state.eduDone)submitCode();});window.addEventListener('focus',function(){var st=VendU.student();if(st&&st.email&&!state.eduDone)submitCode();});}
     var rs=document.getElementById('eduResend');if(rs)rs.onclick=function(){VendU.sendCode(state.eduEmail,BUILD).then(function(r){toast(r&&r.ok?'New link sent \u{1F4EC}':((r&&r.message)||'Could not resend.'));});};
     var ed=document.getElementById('eduEdit');if(ed)ed.onclick=function(){state.eduCodeSent=false;state.eduErr='';onboarding();};
     var sk=document.getElementById('eduSkip');if(sk)sk.onclick=function(){demoSkip();};
