@@ -10,33 +10,43 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicVerifySendRouteImport } from './routes/api/public/verify/send'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicVerifySendRoute = ApiPublicVerifySendRouteImport.update({
+  id: '/api/public/verify/send',
+  path: '/api/public/verify/send',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/public/verify/send': typeof ApiPublicVerifySendRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/public/verify/send': typeof ApiPublicVerifySendRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/public/verify/send': typeof ApiPublicVerifySendRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/api/public/verify/send'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/api/public/verify/send'
+  id: '__root__' | '/' | '/api/public/verify/send'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiPublicVerifySendRoute: typeof ApiPublicVerifySendRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +58,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/verify/send': {
+      id: '/api/public/verify/send'
+      path: '/api/public/verify/send'
+      fullPath: '/api/public/verify/send'
+      preLoaderRoute: typeof ApiPublicVerifySendRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiPublicVerifySendRoute: ApiPublicVerifySendRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
