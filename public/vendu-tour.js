@@ -15,6 +15,11 @@
     var n = nav("home");
     if (n && n.className.indexOf("on") === -1) n.click();
   }
+  function goBrowse() {
+    goHome();
+    var t = document.querySelector('.seg [data-home="browse"]');
+    if (t && t.className.indexOf("on") === -1) t.click();
+  }
 
   function steps() {
     var s = [
@@ -28,7 +33,7 @@
       {
         before: goHome,
         target: function () {
-          return $(".searchwrap") || $(".topbar");
+          return $("#q") || $(".topbar");
         },
         title: "Find a hustle",
         text: "Search by name or service, then narrow it down with the category chips right below.",
@@ -36,7 +41,7 @@
         place: "below",
       },
       {
-        before: goHome,
+        before: goBrowse,
         target: function () {
           return $(".card[data-open]");
         },
