@@ -14,7 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      students: {
+        Row: {
+          build: string
+          created_at: string
+          email: string
+          grad_year: string | null
+          id: string
+          school_domain: string
+          verified_at: string
+        }
+        Insert: {
+          build?: string
+          created_at?: string
+          email: string
+          grad_year?: string | null
+          id?: string
+          school_domain: string
+          verified_at?: string
+        }
+        Update: {
+          build?: string
+          created_at?: string
+          email?: string
+          grad_year?: string | null
+          id?: string
+          school_domain?: string
+          verified_at?: string
+        }
+        Relationships: []
+      }
+      verification_attempts: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          kind: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          kind?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          kind?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
