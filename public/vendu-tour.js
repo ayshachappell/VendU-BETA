@@ -99,6 +99,7 @@
     });
   }
 
+  var running = false;
   var list = [],
     i = 0,
     ring,
@@ -123,6 +124,7 @@
   }
 
   function end(done) {
+    running = false;
     cleanup();
     if (done !== false) {
       try {
@@ -273,6 +275,8 @@
     try {
       if (!force && localStorage.getItem(KEY)) return;
     } catch (e) {}
+    if (running) return;
+    running = true;
     list = steps();
     i = 0;
     setTimeout(show, 500);
