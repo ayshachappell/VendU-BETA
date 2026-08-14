@@ -15,6 +15,38 @@ export function normalizeEduEmail(raw: unknown): string | null {
   return email;
 }
 
+/**
+ * Creator/tester allow-list. Set FOUNDER_EMAILS to a comma-separated list of
+ * addresses (any domain) that may verify without a .edu address — used by the
+ * app owner and invited testers.
+ */
+export function isFounderEmail(email: string): boolean {
+  const raw = process.env["FOUNDER_EMAILS"] ?? "";
+  return raw
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean)
+    .includes(email);
+}
+
+/** Any well-formed address, used before deciding whether .edu is required. */
+function normalizeAnyEmail(raw: unknown): string | null {
+  if (typeof raw !== "string") return null;
+  const email = raw.trim().toLowerCase();
+  if (email.length < 6 || email.length > 254) return null;
+  if (!/^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(email)) return null;
+  if (BLOCKED_PREFIX.test(email)) return null;
+  return email;
+}
+
+/** A .edu student address, or an allow-listed creator/tester address. */
+export function normalizeAccessEmail(raw: unknown): string | null {
+  const edu = normalizeEduEmail(raw);
+  if (edu) return edu;
+  const any = normalizeAnyEmail(raw);
+  return any && isFounderEmail(any) ? any : null;
+}
+
 export function schoolDomain(email: string): string {
   return email.split("@")[1] ?? "";
 }
