@@ -72,6 +72,7 @@
         place: "above",
       },
       {
+        before: goHome,
         target: function () {
           return $("#loc");
         },
@@ -82,6 +83,7 @@
         place: "below",
       },
       {
+        before: goHome,
         target: function () {
           return nav("profile");
         },
