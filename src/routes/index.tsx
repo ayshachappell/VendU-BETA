@@ -45,7 +45,22 @@ const features = [
 ];
 
 function Landing() {
+  const [returning, setReturning] = useState(false);
+
+  useEffect(() => {
+    setReturning(handleMagicLinkReturn());
+  }, []);
+
+  if (returning) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-background px-6 text-center">
+        <p className="text-sm text-muted-foreground">Verifying your email — opening VendU…</p>
+      </main>
+    );
+  }
+
   return (
+
     <main className="min-h-screen bg-background text-foreground">
       <section className="mx-auto flex max-w-3xl flex-col items-center px-6 pt-20 pb-14 text-center">
         <img
