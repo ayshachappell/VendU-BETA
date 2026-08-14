@@ -2,7 +2,7 @@
    Highlights real controls, lets the student tap them, and advances. */
 (function () {
   var W = (window.VendU = window.VendU || {});
-  var KEY = "vendu_tour_done_v1";
+  var KEY = "vendu_beta_tour_done_v1";
 
   function $(sel) {
     return document.querySelector(sel);

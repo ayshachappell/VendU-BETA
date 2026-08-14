@@ -1,7 +1,7 @@
 /* VendU — talks to the VendU backend for students-only .edu verification. */
 (function () {
   var W = (window.VendU = window.VendU || {});
-  var KEY = "vendu_student_v1";
+  var KEY = "vendu_beta_student_v1";
 
   function post(path, body) {
     return fetch(path, {
