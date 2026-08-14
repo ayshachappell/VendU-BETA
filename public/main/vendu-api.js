@@ -24,6 +24,10 @@
       String(email).trim().toLowerCase().endsWith(".edu");
   };
 
+  W.looksLikeEmail = function (email) {
+    return /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(String(email || "").trim().toLowerCase());
+  };
+
   W.sendCode = function (email, build) {
     return post("/api/public/verify/send", {
       email: email,
