@@ -1341,7 +1341,7 @@ function onboarding(){
     var sendBtn=document.getElementById('eduBtn');
     if(sendBtn)sendBtn.onclick=function(){
       var v=(document.getElementById('eduIn').value||'').trim().toLowerCase();
-      if(!VendU.looksLikeEdu(v)){fail('Enter a valid college email ending in .edu');return;}
+      if(!VendU.looksLikeEmail(v)){fail('Enter a valid email address');return;}
       if(busy)return;busy=true;sendBtn.textContent='Sending\u2026';sendBtn.classList.add('busy');
       state.eduEmail=v;var cc=campusByDomain(v);if(cc)state.campus=cc;
       VendU.sendCode(v,BUILD).then(function(r){busy=false;
