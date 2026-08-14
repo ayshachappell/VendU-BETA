@@ -18,10 +18,14 @@ export function normalizeEduEmail(raw: unknown): string | null {
 /**
  * Creator/tester allow-list. Set FOUNDER_EMAILS to a comma-separated list of
  * addresses (any domain) that may verify without a .edu address — used by the
- * app owner and invited testers.
+ * app owner and invited testers. FOUNDER_EMAILS_ADDITIONAL is merged in so
+ * extra addresses can be added without overwriting the primary list.
  */
 export function isFounderEmail(email: string): boolean {
-  const raw = process.env["FOUNDER_EMAILS"] ?? "";
+  const raw = [
+    process.env["FOUNDER_EMAILS"] ?? "",
+    process.env["FOUNDER_EMAILS_ADDITIONAL"] ?? "",
+  ].join(",");
   return raw
     .split(",")
     .map((e) => e.trim().toLowerCase())
