@@ -29,6 +29,9 @@
   };
 
   W.sendCode = function (email, build) {
+    try {
+      localStorage.setItem("vendu_return_build", build === "beta" ? "beta" : "main");
+    } catch (e) {}
     return post("/api/public/verify/send", {
       email: email,
       build: build,

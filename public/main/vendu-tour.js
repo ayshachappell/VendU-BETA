@@ -82,6 +82,7 @@
         place: "above",
       },
       {
+        before: goHome,
         target: function () {
           return $("#loc");
         },
@@ -92,6 +93,7 @@
         place: "below",
       },
       {
+        before: goHome,
         target: function () {
           return nav("profile");
         },
@@ -135,6 +137,9 @@
     onTargetClick = null;
     window.removeEventListener("resize", position);
     window.removeEventListener("scroll", position, true);
+    boundTarget = null;
+    if (tick) clearInterval(tick);
+    tick = null;
     cancelAnimationFrame(raf);
   }
 
@@ -243,11 +248,36 @@
     position();
     window.addEventListener("resize", position);
     window.addEventListener("scroll", position, true);
+    tick = setInterval(position, 250);
   }
 
   var boundTarget = null;
+  var tick = null;
   function position() {
-    if (!ring || !boundTarget) return;
+    if (!ring || !card) return;
+    // The app re-renders whole screens; re-resolve the highlight target if it
+    // was swapped out, so the tour keeps following the real control.
+    if (!boundTarget || !document.body.contains(boundTarget)) {
+      var st0 = list[i];
+      var again = null;
+      try {
+        again = st0 && st0.target ? st0.target() : null;
+      } catch (e) {}
+      if (again) {
+        if (boundEl && onTargetClick) boundEl.removeEventListener(boundEvent || "click", onTargetClick);
+        boundTarget = again;
+        if (onTargetClick) {
+          boundEl = again;
+          again.addEventListener(boundEvent || "click", onTargetClick);
+        }
+      } else {
+        ring.style.opacity = "0";
+        pulse.style.opacity = "0";
+        return;
+      }
+    }
+    ring.style.opacity = "";
+    pulse.style.opacity = "";
     var r = boundTarget.getBoundingClientRect();
     var pad = 6;
     var box = {
@@ -272,7 +302,6 @@
     var hr = host.getBoundingClientRect();
     var cw = card.offsetWidth || 320;
     card.style.left = Math.max(12, hr.left + (hr.width - cw) / 2) + "px";
-    raf = requestAnimationFrame(function () {});
   }
 
   function showModal(st) {
