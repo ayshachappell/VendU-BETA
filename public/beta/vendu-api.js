@@ -47,7 +47,7 @@
     if (!token) return null;
     try {
       var payload = JSON.parse(atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
-      if (!payload.email || !W.looksLikeEdu(payload.email)) return null;
+      if (!payload.email) return null;
       localStorage.setItem(KEY, JSON.stringify({ email: payload.email, at: Date.now() }));
       return payload.email;
     } catch (e) {
