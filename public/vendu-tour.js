@@ -11,6 +11,11 @@
     return document.querySelector('#nav .navitem[data-tab="' + tab + '"]');
   }
 
+  function goHome() {
+    var n = nav("home");
+    if (n && n.className.indexOf("on") === -1) n.click();
+  }
+
   function steps() {
     var s = [
       {
@@ -21,6 +26,7 @@
         next: "Show me around",
       },
       {
+        before: goHome,
         target: function () {
           return $(".searchwrap") || $(".topbar");
         },
@@ -30,6 +36,7 @@
         place: "below",
       },
       {
+        before: goHome,
         target: function () {
           return $(".card[data-open]");
         },
@@ -143,14 +150,25 @@
     );
   }
 
-  function show() {
+  function show(tries) {
     cleanup();
     if (i >= list.length) return end();
     var st = list[i];
     if (st.intro) return showModal(st);
+    if (st.before) {
+      try {
+        st.before();
+      } catch (e) {}
+    }
 
     var el = st.target();
     if (!el) {
+      // The screen may still be rendering — wait a beat before giving up.
+      var n = (tries || 0) + 1;
+      if (n < 10)
+        return setTimeout(function () {
+          show(n);
+        }, 150);
       i++;
       return show();
     }
