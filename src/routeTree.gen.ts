@@ -10,33 +10,89 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteImport } from './routes/app'
+import { Route as BetaRouteImport } from './routes/beta'
+import { Route as ApiPublicVerifyCheckRouteImport } from './routes/api/public/verify/check'
+import { Route as ApiPublicVerifySendRouteImport } from './routes/api/public/verify/send'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BetaRoute = BetaRouteImport.update({
+  id: '/beta',
+  path: '/beta',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicVerifyCheckRoute = ApiPublicVerifyCheckRouteImport.update({
+  id: '/api/public/verify/check',
+  path: '/api/public/verify/check',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicVerifySendRoute = ApiPublicVerifySendRouteImport.update({
+  id: '/api/public/verify/send',
+  path: '/api/public/verify/send',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRoute
+  '/beta': typeof BetaRoute
+  '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
+  '/api/public/verify/send': typeof ApiPublicVerifySendRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/app': typeof AppRoute
+  '/beta': typeof BetaRoute
+  '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
+  '/api/public/verify/send': typeof ApiPublicVerifySendRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRoute
+  '/beta': typeof BetaRoute
+  '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
+  '/api/public/verify/send': typeof ApiPublicVerifySendRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/beta'
+    | '/api/public/verify/check'
+    | '/api/public/verify/send'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/app'
+    | '/beta'
+    | '/api/public/verify/check'
+    | '/api/public/verify/send'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/beta'
+    | '/api/public/verify/check'
+    | '/api/public/verify/send'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRoute
+  BetaRoute: typeof BetaRoute
+  ApiPublicVerifyCheckRoute: typeof ApiPublicVerifyCheckRoute
+  ApiPublicVerifySendRoute: typeof ApiPublicVerifySendRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +104,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/beta': {
+      id: '/beta'
+      path: '/beta'
+      fullPath: '/beta'
+      preLoaderRoute: typeof BetaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/verify/check': {
+      id: '/api/public/verify/check'
+      path: '/api/public/verify/check'
+      fullPath: '/api/public/verify/check'
+      preLoaderRoute: typeof ApiPublicVerifyCheckRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/verify/send': {
+      id: '/api/public/verify/send'
+      path: '/api/public/verify/send'
+      fullPath: '/api/public/verify/send'
+      preLoaderRoute: typeof ApiPublicVerifySendRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRoute,
+  BetaRoute: BetaRoute,
+  ApiPublicVerifyCheckRoute: ApiPublicVerifyCheckRoute,
+  ApiPublicVerifySendRoute: ApiPublicVerifySendRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
