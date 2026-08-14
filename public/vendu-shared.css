@@ -26,3 +26,8 @@
 .tour-modal .tour-card{position:relative;text-align:center}
 .tour-modal .tour-emoji{font-size:44px;line-height:1;margin-bottom:8px}
 .tour-modal .tour-actions{justify-content:center}
+
+/* keep the tour footer on one line */
+.tour-actions { flex-wrap: nowrap; }
+.tour-skip { white-space: nowrap; font-size: 12.5px; padding: 8px 6px; }
+.tour-next { white-space: nowrap; }
