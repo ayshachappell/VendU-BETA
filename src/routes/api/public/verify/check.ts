@@ -4,7 +4,7 @@ import {
   logAttempt,
   normalizeBuild,
   normalizeCode,
-  normalizeEduEmail,
+  normalizeAccessEmail,
   recordStudent,
   verifyEmailCode,
 } from "@/lib/edu-verification.server";
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/api/public/verify/check")({
         } catch {
           return json({ ok: false, message: "Invalid request." }, 400);
         }
-        const email = normalizeEduEmail(body["email"]);
+        const email = normalizeAccessEmail(body["email"]);
         const code = normalizeCode(body["code"]);
         if (!email) return json({ ok: false, message: "Enter your .edu email again." }, 400);
         if (!code) return json({ ok: false, message: "Enter the 6-digit code." }, 400);

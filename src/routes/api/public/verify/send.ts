@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   json,
   logAttempt,
-  normalizeEduEmail,
+  normalizeAccessEmail,
   requestEmailCode,
   tooManyRequests,
 } from "@/lib/edu-verification.server";
@@ -17,7 +17,7 @@ export const Route = createFileRoute("/api/public/verify/send")({
         } catch {
           return json({ ok: false, message: "Invalid request." }, 400);
         }
-        const email = normalizeEduEmail((body as { email?: unknown })?.email);
+        const email = normalizeAccessEmail((body as { email?: unknown })?.email);
         if (!email) {
           return json(
             { ok: false, message: "Use your college email — it has to end in .edu" },
