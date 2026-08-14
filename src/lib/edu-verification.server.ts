@@ -69,16 +69,19 @@ function authBase(): { url: string; key: string } {
 }
 
 /** Ask the auth service to email a one-time login code to this address. */
-export async function requestEmailCode(email: string) {
+export async function requestEmailCode(email: string, redirectTo?: string) {
   const { url, key } = authBase();
-  const res = await fetch(`${url}/auth/v1/otp`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", apikey: key },
-    body: JSON.stringify({
-      email,
-      create_user: true,
-    }),
-  });
+  const res = await fetch(
+    `${url}/auth/v1/otp${redirectTo ? `?redirect_to=${encodeURIComponent(redirectTo)}` : ""}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json", apikey: key },
+      body: JSON.stringify({
+        email,
+        create_user: true,
+      }),
+    },
+  );
   if (res.ok) return { ok: true as const };
   const body = (await res.json().catch(() => ({}))) as { msg?: string; error_description?: string };
   return {

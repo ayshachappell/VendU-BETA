@@ -31,7 +31,13 @@ export const Route = createFileRoute("/api/public/verify/send")({
           );
         }
         await logAttempt(email, "send");
-        const result = await requestEmailCode(email);
+        const origin = new URL(request.url).origin;
+        const rawPath = (body as { path?: unknown })?.path;
+        const build = (body as { build?: unknown })?.build === "beta" ? "beta" : "main";
+        const path = typeof rawPath === "string" && rawPath.startsWith("/")
+          ? rawPath
+          : `/${build}/`;
+        const result = await requestEmailCode(email, `${origin}${path}`);
         if (!result.ok) {
           return json({ ok: false, message: result.message }, 502);
         }
