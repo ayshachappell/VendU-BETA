@@ -38,6 +38,7 @@
         title: "Find a hustle",
         text: "Search by name or service, then narrow it down with the category chips right below.",
         doit: "Try typing something",
+        event: "input",
         place: "below",
       },
       {
@@ -72,20 +73,12 @@
       },
       {
         target: function () {
-          return nav("venuU");
-        },
-        title: "VendUniversity",
-        text: "Communities, groups, your class planner, campus routes, and guides for trades, certs and starting a business.",
-        doit: "Tap VendUniversity",
-        click: true,
-        place: "above",
-      },
-      {
-        target: function () {
           return $("#loc");
         },
         title: "Your campus",
         text: "Everything you see is filtered to your school. Tap here to switch campuses anytime.",
+        doit: "Tap your campus",
+        event: "click",
         place: "below",
       },
       {
@@ -118,6 +111,7 @@
     modal,
     onTargetClick,
     boundEl,
+    boundEvent,
     raf;
 
   function cleanup() {
@@ -125,8 +119,9 @@
       if (el && el.parentNode) el.parentNode.removeChild(el);
     });
     ring = pulse = card = modal = null;
-    if (boundEl && onTargetClick) boundEl.removeEventListener("click", onTargetClick);
+    if (boundEl && onTargetClick) boundEl.removeEventListener(boundEvent || "click", onTargetClick);
     boundEl = null;
+    boundEvent = null;
     onTargetClick = null;
     window.removeEventListener("resize", position);
     window.removeEventListener("scroll", position, true);
@@ -223,14 +218,15 @@
       }
     };
 
-    if (st.click) {
+    if (st.click || st.event) {
       boundEl = el;
+      boundEvent = st.event || "click";
       onTargetClick = function () {
         i++;
         cleanup();
         setTimeout(show, 420);
       };
-      el.addEventListener("click", onTargetClick);
+      el.addEventListener(boundEvent, onTargetClick);
     }
 
     boundTarget = el;
