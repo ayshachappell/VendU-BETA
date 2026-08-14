@@ -94,9 +94,7 @@
         next: "Start using VendU",
       },
     ];
-    return s.filter(function (st) {
-      return st.intro || !!st.target;
-    });
+    return s;
   }
 
   var running = false;
