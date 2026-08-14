@@ -38,6 +38,7 @@
         title: "Find a hustle",
         text: "Search by name or service, then narrow it down with the category chips right below.",
         doit: "Try typing something",
+        event: "input",
         place: "below",
       },
       {
@@ -86,6 +87,8 @@
         },
         title: "Your campus",
         text: "Everything you see is filtered to your school. Tap here to switch campuses anytime.",
+        doit: "Tap your campus",
+        event: "click",
         place: "below",
       },
       {
@@ -223,14 +226,14 @@
       }
     };
 
-    if (st.click) {
+    if (st.click || st.event) {
       boundEl = el;
       onTargetClick = function () {
         i++;
         cleanup();
         setTimeout(show, 420);
       };
-      el.addEventListener("click", onTargetClick);
+      el.addEventListener(st.event || "click", onTargetClick);
     }
 
     boundTarget = el;
