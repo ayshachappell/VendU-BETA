@@ -1324,6 +1324,10 @@ function finishOnboarding(){
   var vendor=state.userType==='vendor';
   state.eduDone=true;state.onboarded=true;state.eduCodeSent=false;state.eduErr='';
   state.isSeller=vendor;state.storefrontSetup=false;state.tab='home';state.tourReady=true;
+  /* Verified .edu students see only real students by default; testers keep
+     the sample listings on so the app isn't empty while they explore. */
+  var _pref=null;try{_pref=localStorage.getItem('vendu_show_samples');}catch(e){}
+  setShowSamples(_pref!==null?_pref==='1':!!state.tester);
   syncNav('home');render();
   toast(state.tester?'Tester access \u2713 Quick tour \u2014 explore freely':'Verified \u2713 Quick tour \u2014 then set up your '+(vendor?'storefront':'profile'));
   if(window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour();},600);
