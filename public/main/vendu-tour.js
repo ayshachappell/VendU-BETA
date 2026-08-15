@@ -25,9 +25,9 @@
     var s = [
       {
         intro: true,
-        emoji: "🎓",
-        title: "Quick tour?",
-        text: "Two minutes, and you tap along on the real app. You can skip it anytime and restart it later from your profile.",
+        emoji: "\ud83c\udf93",
+        title: "Let's take the tour",
+        text: "Two quick minutes on the real app \u2014 you tap along as we go. You can replay it anytime from Profile \u2192 Replay tutorial.",
         next: "Show me around",
       },
       {
@@ -35,28 +35,56 @@
         target: function () {
           return $("#q") || $(".topbar");
         },
-        title: "Find a hustle",
-        text: "Search by name or service, then narrow it down with the category chips right below.",
-        doit: "Try typing something",
+        title: "Search your campus",
+        text: "Type a name, a service or a keyword \u2014 \u201cbraids\u201d, \u201ctutor\u201d, \u201cnails\u201d \u2014 and results filter instantly. The category chips just below narrow it further.",
+        doit: "Type anything in the search box",
         event: "input",
         place: "below",
       },
       {
-        before: goBrowse,
+        before: goHome,
+        target: function () {
+          return document.querySelector('.seg [data-home="browse"]');
+        },
+        title: "Feed, Browse & Events",
+        text: "Feed is what's happening now, Browse is every vendor on your campus, and Events shows what's coming up.",
+        doit: "Tap Browse",
+        click: true,
+        place: "below",
+      },
+      {
         target: function () {
           return $(".card[data-open]");
         },
         title: "Open a storefront",
-        text: "Every listing opens a full storefront — services, prices, photos, reviews, and a Book button.",
+        text: "Every listing opens a full storefront: services and prices, photos of past work, reviews, payment apps accepted, and a Book button.",
         doit: "Tap this card",
         click: true,
+      },
+      {
+        target: function () {
+          return $("#bookBtn") || $("#msgBtn") || $("#bookLink") || $(".detail-cta");
+        },
+        title: "Book or message",
+        text: "From here you can message the vendor with questions, save them for later, or book a time straight into their calendar.",
+        place: "above",
+      },
+      {
+        target: function () {
+          return $("#back") || $(".backbtn");
+        },
+        title: "Close the storefront",
+        text: "Back always returns you to where you were. Close a storefront before moving to another tab.",
+        doit: "Tap Back to close it",
+        click: true,
+        place: "below",
       },
       {
         target: function () {
           return nav("market");
         },
         title: "Buy, sell & trade",
-        text: "The Market is where students post items for sale, trades, and requests.",
+        text: "The Market is student-to-student: textbooks, dorm gear, sneakers, plus trades and \u201clooking for\u201d requests. You meet on campus, so no shipping.",
         doit: "Tap Market",
         click: true,
         place: "above",
@@ -66,17 +94,17 @@
           return nav("add");
         },
         title: "Post in seconds",
-        text: "The ＋ button is how you list a service, sell something, or ask the campus for what you need.",
-        doit: "Tap ＋",
+        text: "The \uff0b button is how you list a service, sell an item, post a trade, or ask the campus for what you need. Add a photo, a price, and you're live.",
+        doit: "Tap \uff0b",
         click: true,
         place: "above",
       },
-      {
+            {
         target: function () {
           return nav("venuU");
         },
         title: "VendUniversity",
-        text: "Communities, groups, your class planner, campus routes, and guides for trades, certs and starting a business.",
+        text: "Communities and groups, your class planner, campus routes, and guides for trades, certs and starting a business.",
         doit: "Tap VendUniversity",
         click: true,
         place: "above",
@@ -86,9 +114,9 @@
         target: function () {
           return $("#loc");
         },
-        title: "Your campus",
-        text: "Everything you see is filtered to your school. Tap here to switch campuses anytime.",
-        doit: "Tap your campus",
+        title: "Switch campuses",
+        text: "Everything you see \u2014 vendors, market posts, events \u2014 is filtered to your school. Tap your campus name to look at another one.",
+        doit: "Tap your campus name",
         event: "click",
         place: "below",
       },
@@ -97,17 +125,25 @@
         target: function () {
           return nav("profile");
         },
-        title: "You, and your storefront",
-        text: "Profile holds your bookings, saved hustles, messages, and Vendor mode when you're ready to sell.",
+        title: "Your profile",
+        text: "Profile holds your bookings, saved hustles, messages, market posts \u2014 and Vendor mode when you're ready to sell.",
         doit: "Tap Profile",
         click: true,
         place: "above",
       },
       {
+        target: function () {
+          return $("#profSave") || $("#startsell") || $(".submit");
+        },
+        title: "Save your changes",
+        text: "Edit your name, photo and details, then tap Save \u2014 nothing is stored until you do. Vendors get the same Save button on their storefront setup.",
+        place: "above",
+      },
+      {
         intro: true,
-        emoji: "🚀",
-        title: "That's it — go get seen",
-        text: "You can replay this tour anytime from Profile → Replay tutorial.",
+        emoji: "\ud83d\ude80",
+        title: "That's it \u2014 go get seen",
+        text: "You're verified and ready. Replay this tour anytime from Profile \u2192 Replay tutorial.",
         next: "Start using VendU",
       },
     ];
@@ -208,30 +244,20 @@
       st.text +
       "</div>" +
       (st.doit ? '<div class="tour-do">👆 ' + st.doit + "</div>" : "") +
-      '<div class="tour-actions"><button class="tour-skip" data-tour="skip">Skip tour</button>' +
+      '<div class="tour-actions">' +
       dots() +
-      '<button class="tour-next" data-tour="next">' +
-      (st.click ? "Do it for me" : "Next") +
-      "</button></div>";
+      (st.click ? "" : '<button class="tour-next" data-tour="next">Next</button>') +
+      "</div>";
     document.body.appendChild(ring);
     document.body.appendChild(pulse);
     document.body.appendChild(card);
 
-    card.querySelector('[data-tour="skip"]').onclick = function () {
-      end();
-    };
-    card.querySelector('[data-tour="next"]').onclick = function () {
-      if (st.click) {
-        var t = st.target();
-        cleanup();
-        if (t) t.click();
-        i++;
-        setTimeout(show, 420);
-      } else {
+    var nextBtn = card.querySelector('[data-tour="next"]');
+    if (nextBtn)
+      nextBtn.onclick = function () {
         i++;
         show();
-      }
-    };
+      };
 
     if (st.click || st.event) {
       boundEl = el;
@@ -314,13 +340,10 @@
       st.title +
       '</div><div class="tour-text">' +
       st.text +
-      '</div><div class="tour-actions"><button class="tour-skip" data-tour="skip">Not now</button><button class="tour-next" data-tour="next">' +
+      '</div><div class="tour-actions"><button class="tour-next" data-tour="next">' +
       st.next +
       "</button></div></div>";
     document.body.appendChild(modal);
-    modal.querySelector('[data-tour="skip"]').onclick = function () {
-      end();
-    };
     modal.querySelector('[data-tour="next"]').onclick = function () {
       i++;
       show();
