@@ -13,7 +13,8 @@
 
   function goHome() {
     var n = nav("home");
-    if (n && n.className.indexOf("on") === -1) n.click();
+    if (!n) return;
+    if (n.className.indexOf("on") === -1 || !document.querySelector("#q")) n.click();
   }
   function goBrowse() {
     goHome();
