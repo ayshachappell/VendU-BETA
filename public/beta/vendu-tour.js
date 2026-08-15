@@ -79,6 +79,7 @@
         target: function () {
           return $("#q") || $(".topbar");
         },
+        until: function(){var i=document.querySelector("#q");return !!i&&i.value.trim().length>0;},
         title: "Search your campus",
         text: "Type a name, service or keyword \u2014 \u201cbraids\u201d, \u201ctutor\u201d, \u201cnails\u201d \u2014 and results filter instantly. The chips below narrow by category, and tapping your campus name at the top switches schools.",
         doit: "Type anything in the search box",
@@ -90,6 +91,7 @@
         target: function () {
           return document.querySelector('.seg [data-home="browse"]');
         },
+        until: function(){var t=document.querySelector('.seg [data-home="browse"]');return !!t&&t.className.indexOf("on")>-1;},
         title: "Feed, Browse & Events",
         text: "Feed is what's happening now, Browse is every vendor on your campus, and Events shows what's coming up.",
         doit: "Tap Browse",
@@ -100,6 +102,7 @@
         target: function () {
           return $(".card[data-open]");
         },
+        until: function(){return !!(document.querySelector(".detail-body")||document.querySelector(".cta-bar"));},
         title: "Open a storefront",
         text: "Every listing opens a full storefront: services and prices, photos of past work, reviews and payment apps accepted.",
         doit: "Tap this card",
@@ -115,6 +118,7 @@
       },
       {
         target: closeEl,
+        until: function(){return !closeEl();},
         title: "Close what's open",
         text: "Storefronts, message threads, comments and group pages open on top of the app. Their Back / \u2039 button closes them and frees the Home, Market, and Profile tabs at the bottom.",
         doit: "Tap Back (or \u2039) to close this screen",
@@ -124,6 +128,7 @@
       {
         optional: true,
         target: closeEl,
+        until: function(){return !closeEl();},
         title: "Back to the main tabs",
         text: "If another screen is still stacked on top, close that one too \u2014 you're done when the bottom tab bar is fully visible.",
         doit: "Tap Back again to reach the tabs",
@@ -135,6 +140,7 @@
         target: function () {
           return nav("market");
         },
+        until: function(){var n=nav("market");return !!n&&n.className.indexOf("on")>-1;},
         title: "Buy, sell & trade",
         text: "The Market is student-to-student: textbooks, dorm gear, sneakers, plus trades and \u201clooking for\u201d requests. You meet on campus, so no shipping.",
         doit: "Tap Market",
@@ -160,6 +166,7 @@
         target: function () {
           return nav("profile");
         },
+        until: function(){var n=nav("profile");return !!n&&n.className.indexOf("on")>-1;},
         title: "Your profile",
         text: "Profile holds your bookings, saved hustles, messages and market posts.",
         doit: "Tap Profile",
@@ -247,6 +254,7 @@
     boundEl = null;
     boundEvent = null;
     onTargetClick = null;
+    untilCheck = null;
     window.removeEventListener("resize", position);
     window.removeEventListener("scroll", position, true);
     boundTarget = null;
@@ -348,14 +356,31 @@
     }
 
     boundTarget = el;
+    if (st.until) {
+      var already = false;
+      try { already = st.until(); } catch (e) {}
+      untilCheck = function () {
+        var ok = false;
+        try { ok = st.until(); } catch (e) {}
+        if (already) { if (!ok) already = false; return; }
+        if (!ok) return;
+        i++;
+        cleanup();
+        setTimeout(show, 420);
+      };
+    }
     position();
     window.addEventListener("resize", position);
     window.addEventListener("scroll", position, true);
-    tick = setInterval(position, 250);
+    tick = setInterval(function () {
+      position();
+      if (untilCheck) untilCheck();
+    }, 250);
   }
 
   var boundTarget = null;
   var tick = null;
+  var untilCheck = null;
   function position() {
     if (!ring || !card) return;
     // The app re-renders whole screens; re-resolve the highlight target if it
