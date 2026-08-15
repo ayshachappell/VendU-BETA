@@ -302,7 +302,7 @@
       (st.doit ? '<div class="tour-do">👆 ' + st.doit + "</div>" : "") +
       '<div class="tour-actions">' +
       dots() +
-      (st.click ? "" : '<button class="tour-next" data-tour="next">Next</button>') +
+      (st.click && !st.soft ? "" : '<button class="tour-next" data-tour="next">Next</button>') +
       "</div>";
     document.body.appendChild(ring);
     document.body.appendChild(pulse);
