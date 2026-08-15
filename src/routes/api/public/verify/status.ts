@@ -7,15 +7,15 @@ export const Route = createFileRoute("/api/public/verify/status")({
   server: {
     handlers: {
       GET: async () => {
-        const founderCount = (process.env["FOUNDER_EMAILS"] ?? "")
+        const ceoCount = (process.env["CEO_EMAILS"] ?? process.env["FOUNDER_EMAILS"] ?? "")
           .split(",")
           .map((e) => e.trim())
           .filter(Boolean).length;
         return json({
           ok: true,
           authConfigured: Boolean(process.env["SUPABASE_URL"] && process.env["SUPABASE_PUBLISHABLE_KEY"]),
-          testerAccessConfigured: founderCount > 0,
-          testerCount: founderCount,
+          testerAccessConfigured: ceoCount > 0,
+          testerCount: ceoCount,
         });
       },
     },

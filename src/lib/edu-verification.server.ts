@@ -160,8 +160,7 @@ export async function recordStudent(email: string, build: Build, gradYear: strin
       build,
       verified_at: now,
       last_active_at: now,
-      // Founder accounts keep access permanently and are never purged.
-      // is_founder column = permanent CEO access (never purged)
+      // is_founder column = permanent CEO access; never purged.
       is_founder: isCeoEmail(email),
     },
     { onConflict: "email" },
