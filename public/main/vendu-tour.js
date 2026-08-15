@@ -167,7 +167,7 @@
           return $("#lbBtn") || document.querySelector(".ref-demo");
         },
         title: "\ud83c\udf93 Founders & the leaderboard",
-        text: "The first 10 vendors at each school become Founders \u2014 a \ud83c\udf93 badge on their name everywhere and a free monthly Boost. The Leaderboard ranks Founders by how many vendors they invite.",
+        text: "Founder is earned, not bought. Get 3 vendors to sign up with your referral link and you become a Founder \u2014 only verified .edu student accounts qualify. Founders get a \ud83c\udf93 badge on their name everywhere and a free monthly Boost, and the Leaderboard ranks Founders by how many vendors they invite.",
         place: "above",
       },
       {

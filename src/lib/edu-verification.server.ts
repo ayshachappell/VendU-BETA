@@ -168,7 +168,9 @@ export async function recordStudent(email: string, build: Build, gradYear: strin
       build,
       verified_at: now,
       last_active_at: now,
-      // is_founder column = permanent CEO access; never purged.
+      // Permanent-access flag (legacy column name). CEO addresses
+      // (@integroservicegroup.com) are never purged. This is NOT Founder
+      // status: Founder is earned in-app by referring 3 vendors, .edu only.
       is_founder: isCeoEmail(email),
     },
     { onConflict: "email" },
