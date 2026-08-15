@@ -52,7 +52,15 @@ export function handleMagicLinkReturn(): boolean {
       } catch {
         /* storage blocked */
       }
-      window.location.replace(`${base}#verified`);
+      // Record it server-side too, so the device that requested the link can
+      // unlock even when the email opened in a different browser.
+      void fetch("/api/public/verify/confirm", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, build }),
+      })
+        .catch(() => undefined)
+        .finally(() => window.location.replace(`${base}#verified`));
       return true;
     }
   }
@@ -60,3 +68,4 @@ export function handleMagicLinkReturn(): boolean {
   window.location.replace(`${base}?verify=expired`);
   return true;
 }
+
