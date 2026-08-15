@@ -639,7 +639,7 @@ function feedBody(){
   return founderBanner()+`<div class="feed">${posts.map((p,i)=>{const h=HUSTLES.find(x=>x.id===p.s);const open=state.openC===p.id;return `
     <div class="post" style="animation-delay:${i*40}ms">
       <div class="p-head"><div class="p-av" data-open="${h.id}" style="background:${bg(h)}">${h.init}</div>
-        <div><div class="p-name" data-open="${h.id}">${h.name}${h.v?CHECK:''}${h.founder?'<span class="founderpill">🎓 Founder</span>':''}${samplePill(h)}${campusTag(h)}</div><div class="p-when">${p.when} · ${h.cat}</div></div>
+        <div><div class="p-name" data-open="${h.id}">${h.name}${h.v?CHECK:''}${youPill(h.name)}${h.founder?'<span class="founderpill">🎓 Founder</span>':''}${samplePill(h)}${campusTag(h)}</div><div class="p-when">${p.when} · ${h.cat}</div></div>
         ${p.promo?`<span class="p-promo">${p.promo}</span>`:''}</div>
       <div class="p-text">${p.text}</div>
       <div class="p-actions"><div class="p-act ${p.liked?'liked':''}" data-like="${p.id}">${heart(p.liked)} ${p.likes}</div>
@@ -661,7 +661,7 @@ function browseBody(){
     <div class="chips" style="padding-top:8px"><div class="chip ${state.avail?'on':''}" data-f="avail">🟢 Available now</div><div class="chip ${state.cheap?'on':''}" data-f="cheap">Under $25</div><div class="chip ${state.top?'on':''}" data-f="top">★ Top rated</div></div>
     ${clean?`<div class="sec-head"><div class="sec-title">🔥 Featured on campus</div></div><div class="spotlight-scroll">${feat.map(h=>`<div class="spot" data-open="${h.id}" style="background:${bg(h)}"><span class="tag">${h.cat}</span><div class="who">${h.name}${h.v?CHECK:''}</div><div class="what">${h.offer.split('.')[0]}.</div><div class="price">${h.price}</div></div>`).join('')}</div>`:''}
     <div class="sec-head"><div class="sec-title">${state.near?'Nearest you':state.top?'Top rated':state.cat==='All'?'All hustles':state.cat}</div><div class="sec-link">${f.length} found</div></div>
-    <div class="list">${clean?sponsoredCard():''}${f.length?f.map((h,i)=>`<div class="card" data-open="${h.id}" style="animation-delay:${i*40}ms"><div class="avatar" style="background:${bg(h)}">${h.init}</div><div class="body"><div class="name">${h.name}${h.v?CHECK:''}${h.founder?'<span class="founderpill">🎓 Founder</span>':''}${h.boost?'<span class="boostpill">⚡ Boosted</span>':''}${samplePill(h)}${campusTag(h)}${AVAIL.includes(h.id)?'<span class="availpill">● now</span>':''}${pillFor(h)}</div><div class="offer">${h.offer}</div><div class="metarow"><span class="catbadge">${h.cat}</span><span class="rating">${star} ${h.rating}</span><span class="dist">${pin} ${h.dist} mi</span><span class="pricetag">${h.price}</span></div></div></div>`).join(''):`<div class="empty">No hustles match those filters yet.</div>`}</div>`;
+    <div class="list">${clean?sponsoredCard():''}${f.length?f.map((h,i)=>`<div class="card" data-open="${h.id}" style="animation-delay:${i*40}ms"><div class="avatar" style="background:${bg(h)}">${h.init}</div><div class="body"><div class="name">${h.name}${h.v?CHECK:''}${youPill(h.name)}${h.founder?'<span class="founderpill">🎓 Founder</span>':''}${h.boost?'<span class="boostpill">⚡ Boosted</span>':''}${samplePill(h)}${campusTag(h)}${AVAIL.includes(h.id)?'<span class="availpill">● now</span>':''}${pillFor(h)}</div><div class="offer">${h.offer}</div><div class="metarow"><span class="catbadge">${h.cat}</span><span class="rating">${star} ${h.rating}</span><span class="dist">${pin} ${h.dist} mi</span><span class="pricetag">${h.price}</span></div></div></div>`).join(''):`<div class="empty">No hustles match those filters yet.</div>`}</div>`;
 }
 
 function eventsBody(){
@@ -738,7 +738,7 @@ function detail(id){
     </div>
     <div class="shop-sign">
       <div class="detail-av" style="${avStyle}">${h.me&&h.avatar?'':h.init}</div>
-      <div><div class="store-name" style="font-size:20px;color:var(--ink)">${h.name}${h.v?CHECK:''}${h.me?ceoPill():''}${(h.founder&&!(h.me&&state.ceo))?'<span class="founderpill">🎓 Founder</span>':''}${samplePill(h)}${campusTag(h)}${pillFor(h)}</div>
+      <div><div class="store-name" style="font-size:20px;color:var(--ink)">${h.name}${h.v?CHECK:''}${h.me?ceoPill():youPill(h.name)}${(h.founder&&!(h.me&&state.ceo))?'<span class="founderpill">🎓 Founder</span>':''}${samplePill(h)}${campusTag(h)}${pillFor(h)}</div>
       <div class="store-sub" style="color:var(--mist)">${h.v?`<span style="color:var(--violet);font-weight:600;display:inline-flex;align-items:center;gap:3px">${icon('<path d="M20 6 9 17l-5-5"/>',12)}Verified</span> · `:''}${h.cat}${h.me?'':` · ${pin} ${h.dist} mi`}</div></div>
     </div>
     <div class="socialrow">${socialHTML}</div>
@@ -1284,7 +1284,7 @@ function profile(){
   const av=state.avatar?`background-image:url(${state.avatar})`:`background:${state.themeColor}`;
   const refLink='vendu.app/join?ref=aysha', goal=state.isFounder?5:3;
   const viewBtn=`<button class="submit viewbtn" id="viewme" style="background:var(--card);border:1.5px solid ${state.themeColor};color:var(--ink);margin:0 0 10px;display:flex;align-items:center;justify-content:center;gap:8px;padding:17px 16px"><span style="font-weight:600;font-size:15px;color:var(--mist)">View my</span><span class="viewwm">${WM}</span></button><button class="submit" id="toregular" style="background:transparent;color:var(--mist);border:0;box-shadow:none;margin:0 0 18px;display:flex;align-items:center;justify-content:center;gap:7px;padding:8px;font-size:13px;font-weight:600"><span style="font-size:14px">🔁</span> Switch to regular mode</button>`;
-  const membership=`<div class="plan" style="background:${bannerGrad(state.themeColor)};color:#fff"><div class="plan-badge">${state.ceo?'★ CEO':(state.isFounder?'🎓 Founder':'💠 Vendor')}</div><div class="p-lbl">Your vendor status</div><div class="p-big">${state.isFounder?`Founder #${founderCount()} of ${FOUNDER_CAP}`:'Vendor'}</div>
+  const membership=`<div class="plan" style="background:${bannerGrad(state.themeColor)};color:#fff"><div class="plan-badge">${state.ceo?'★ CEO':(state.isFounder?'🎓 Founder':'💠 Vendor')}</div><div class="p-lbl">Your vendor status</div><div class="p-big">${state.ceo?'CEO · permanent access':(state.isFounder?`Founder #${founderCount()} of ${FOUNDER_CAP}`:'Vendor')}</div>
     <div class="ref"><div class="ref-top"><span>Vendors referred</span><span><b>${state.referrals}</b> / ${goal}</span></div><div style="font-size:11.5px;opacity:.85;margin:-4px 0 9px">${state.isFounder?'🎓 Free + a monthly Boost':'Refer vendors to earn free Boosts'}</div>
       <div class="ref-dots">${Array.from({length:goal}).map((_,i)=>`<div class="rdot ${i<state.referrals?'on':''} ${i===state.justReferred?'pop':''}">🎓</div>`).join('')}</div>
       <div class="ref-link"><span class="rl">${refLink}</span><button id="copyref">Copy</button></div>
@@ -1376,7 +1376,7 @@ function finishOnboarding(){
   if(window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour();},600);
 }
 function obDots(n){return '<div class="ob-top"><div class="ob-dots">'+[0,1,2].map(function(i){return '<span class="obd '+(i<=n?'on':'')+'"></span>';}).join('')+'</div></div>';}
-function enableTesterSkip(){var sk=document.getElementById('obSkip');if(sk)sk.onclick=function(){state.tester=true;finishOnboarding();};}
+function enableTesterSkip(){var sk=document.getElementById('obSkip');if(sk)sk.onclick=function(){state.tester=true;try{localStorage.removeItem('vendu_tour_done_v1');}catch(e){}finishOnboarding();};}
 function onboarding(){
   const s=state.obStep;
   if(s<1){screen.innerHTML=`<div class="ob">
