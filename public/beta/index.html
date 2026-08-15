@@ -507,7 +507,7 @@ function payUrl(app,handle){var h=(handle||'').trim();if(app==='Cash App'){var x
 const REGULATED=['Beauty','Food','Fitness'];
 const AVAIL=[2,4,5,7,9,11];
 const REVIEWS={2:[['Deon',5,'Cleanest fade on campus, always on time.'],['Maya',5,'Booked twice — never disappointed.']],3:[['Bri',5,'My braids lasted 8 weeks!']],5:[['Chris',5,'Grad photos came out unreal.']],10:[['Aisha',5,'The cake jars are dangerous. So good.']]};
-function LBROWS(){return (state.tester&&state.showSamples)?LEADERBOARD_SAMPLE:LEADERBOARD;}
+function LBROWS(){return samplesOn()?LEADERBOARD_SAMPLE:LEADERBOARD;}
 const LEADERBOARD_SAMPLE=[['Marcus B.',9],['Simone T.',7],['Jasmine K.',6],['Tay R.',4],['Kevin O.',2],['Devin W.',1]];
 const firstNum=s=>{const m=(s||'').match(/\d+/);return m?+m[0]:999;};
 let idc=1;
@@ -562,13 +562,18 @@ GOODS.forEach(function(g){if(!g.campus)g.campus='fvsu';});REQUESTS.forEach(funct
    from founder counts and the leaderboard, and are hidden for verified .edu
    students unless they turn samples back on from Profile. ---------------- */
 [HUSTLES,FEED,GOODS,REQUESTS,EVENTS_SEED].forEach(function(list){list.forEach(function(it){it.sample=1;});});
-HUSTLES.forEach(function(h){h.founder=0;h.v=0;});
 const LEADERBOARD=[];
-function hideS(x){return !!(x&&x.sample)&&!(state.tester&&state.showSamples);}
+var TOUR_KEY='vendu_beta_tour_done_v1';
+function tourComplete(){try{return !!localStorage.getItem(TOUR_KEY);}catch(e){return false;}}
+/* Samples are a simulation: testers always see them, and every user sees
+   them until the interactive tutorial is finished. After that a verified
+   .edu student only sees real campus content. */
+function samplesOn(){return state.tester?state.showSamples!==false:!tourComplete();}
+function hideS(x){return !!(x&&x.sample)&&!samplesOn();}
 function liveList(list){return list.filter(function(x){return !hideS(x);});}
 function youPill(n){return (state.ceo&&(n==='You'||(state.vname&&n===state.vname)))?ceoPill():'';}
 function sampleThreads(){return state.inbox.filter(function(t){return !hideS(t);});}
-function purgeSamples(){if(state.tester)return;try{state.inbox=state.inbox.filter(function(t){return !t.sample;});state.classes=(state.classes||[]).filter(function(c){return !c.sample;});state.todos=(state.todos||[]).filter(function(t){return !t.sample;});if(typeof COMM!=='undefined')state.joinedComm=(state.joinedComm||[]).filter(function(k){var c=commByKey(k);return c&&!c.sample;});}catch(e){}}
+function purgeSamples(){if(samplesOn())return;try{state.inbox=state.inbox.filter(function(t){return !t.sample;});state.classes=(state.classes||[]).filter(function(c){return !c.sample;});state.todos=(state.todos||[]).filter(function(t){return !t.sample;});if(typeof COMM!=='undefined')state.joinedComm=(state.joinedComm||[]).filter(function(k){var c=commByKey(k);return c&&!c.sample;});}catch(e){}}
 function samplePill(x){return (x&&x.sample)?'<span class="samplepill">Sample</span>':'';}
 function founderCount(){/* testers and sample vendors never count as real Founders */return (state.isSeller&&state.isFounder&&state.eduDone&&!state.tester&&!state.ceo)?1:0;}
 
@@ -1376,6 +1381,7 @@ function finishOnboarding(){
   if(window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour();},600);
 }
 function obDots(n){return '<div class="ob-top"><div class="ob-dots">'+[0,1,2].map(function(i){return '<span class="obd '+(i<=n?'on':'')+'"></span>';}).join('')+'</div></div>';}
+window.addEventListener('vendu-tour-end',function(){try{purgeSamples();render();}catch(e){}});
 function enableTesterSkip(){var sk=document.getElementById('obSkip');if(sk)sk.onclick=function(){state.tester=true;try{localStorage.removeItem('vendu_beta_tour_done_v1');}catch(e){}finishOnboarding();};}
 function onboarding(){
   const s=state.obStep;
