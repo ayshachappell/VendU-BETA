@@ -21,6 +21,8 @@ export type Database = {
           email: string
           grad_year: string | null
           id: string
+          is_founder: boolean
+          last_active_at: string
           school_domain: string
           verified_at: string
         }
@@ -30,6 +32,8 @@ export type Database = {
           email: string
           grad_year?: string | null
           id?: string
+          is_founder?: boolean
+          last_active_at?: string
           school_domain: string
           verified_at?: string
         }
@@ -39,6 +43,8 @@ export type Database = {
           email?: string
           grad_year?: string | null
           id?: string
+          is_founder?: boolean
+          last_active_at?: string
           school_domain?: string
           verified_at?: string
         }
@@ -70,7 +76,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      purge_stale_students: { Args: never; Returns: number }
     }
     Enums: {
       [_ in never]: never
