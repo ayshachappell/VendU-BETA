@@ -374,12 +374,23 @@
       el.style.width = box.w + "px";
       el.style.height = box.h + "px";
     });
+    card.style.maxHeight = "";
     var ch = card.offsetHeight || 180;
-    var below = box.top + box.h + 14;
-    var above = box.top - ch - 14;
-    var top = list[i].place === "above" || below + ch > window.innerHeight - 12 ? above : below;
+    var spaceAbove = box.top - 14 - 12;
+    var spaceBelow = window.innerHeight - 12 - (box.top + box.h + 14);
+    var wantAbove = list[i].place === "above";
+    var useAbove = wantAbove ? spaceAbove >= ch || spaceAbove >= spaceBelow : !(spaceBelow >= ch) && spaceAbove > spaceBelow;
+    var room = useAbove ? spaceAbove : spaceBelow;
+    if (ch > room) {
+      card.style.maxHeight = Math.max(120, room) + "px";
+      card.style.overflowY = "auto";
+      ch = card.offsetHeight || ch;
+    }
+    var top = useAbove ? box.top - ch - 14 : box.top + box.h + 14;
     if (top < 12) top = 12;
+    if (top + ch > window.innerHeight - 12) top = Math.max(12, window.innerHeight - 12 - ch);
     card.style.top = top + "px";
+
     var host = document.querySelector(".device") || document.body;
     var hr = host.getBoundingClientRect();
     var cw = card.offsetWidth || 320;
