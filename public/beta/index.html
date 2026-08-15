@@ -1339,11 +1339,20 @@ function onboarding(){
   screen.querySelectorAll('[data-gradyear]').forEach(function(el){el.onclick=function(){state.gradYear=el.dataset.gradyear;onboarding();};});
   var busy=false;
   function fail(m){state.eduErr=m;onboarding();}
-  function submitCode(){
+  function submitCode(quiet){
     if(busy)return;
     var st=VendU.student();
     if(st&&st.email){state.eduEmail=st.email;return finishOnboarding();}
-    fail('We haven\u2019t seen that link opened yet. Tap Verify Email in the message, then come back here.');
+    if(!state.eduEmail){if(!quiet)fail('Enter your email again to resend the link.');return;}
+    busy=true;
+    var cb=document.getElementById('eduCheck');
+    if(cb&&!quiet)cb.textContent='Checking\u2026';
+    VendU.checkVerified(state.eduEmail).then(function(ok){
+      busy=false;
+      if(ok){state.eduErr='';return finishOnboarding();}
+      if(cb)cb.textContent='I tapped the link';
+      if(!quiet)fail('We haven\u2019t seen that link opened yet. Tap Verify Email in the message, then come back here.');
+    });
   }
   var sendBtn=document.getElementById('eduBtn');
   if(sendBtn)sendBtn.onclick=function(){
@@ -1355,8 +1364,8 @@ function onboarding(){
       if(r&&r.ok){state.eduErr='';state.eduCodeSent=true;onboarding();toast('Sign-in link sent to '+v+' \u{1F4EC}');}
       else fail((r&&r.message)||'Could not send the link. Try again.');});
   };
-  var cbtn=document.getElementById('eduCheck');if(cbtn)cbtn.onclick=submitCode;
-  if(sent){var _poll=setInterval(function(){var st=VendU.student();if(st&&st.email){clearInterval(_poll);if(!state.eduDone)submitCode();}else if(state.eduDone){clearInterval(_poll);}},1500);window.addEventListener('storage',function(){var st=VendU.student();if(st&&st.email&&!state.eduDone)submitCode();});window.addEventListener('focus',function(){var st=VendU.student();if(st&&st.email&&!state.eduDone)submitCode();});}
+  var cbtn=document.getElementById('eduCheck');if(cbtn)cbtn.onclick=function(){submitCode(false);};
+  if(sent){var _poll=setInterval(function(){if(state.eduDone){clearInterval(_poll);return;}submitCode(true);},3000);window.addEventListener('storage',function(){if(!state.eduDone)submitCode(true);});window.addEventListener('focus',function(){if(!state.eduDone)submitCode(true);});}
   var rs=document.getElementById('eduResend');if(rs)rs.onclick=function(){VendU.sendCode(state.eduEmail,BUILD).then(function(r){toast(r&&r.ok?'New link sent \u{1F4EC}':((r&&r.message)||'Could not resend.'));});};
   var ed=document.getElementById('eduEdit');if(ed)ed.onclick=function(){state.eduCodeSent=false;state.eduErr='';onboarding();};
 }

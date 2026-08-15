@@ -77,6 +77,23 @@
     });
   };
 
+  /* Ask the backend whether this address finished verifying anywhere (any
+     browser, phone or desktop). Unlocks devices that never saw the link. */
+  W.checkVerified = function (email) {
+    return post("/api/public/verify/lookup", { email: email }).then(function (res) {
+      if (res && res.verified) {
+        try {
+          localStorage.setItem(
+            KEY,
+            JSON.stringify({ email: res.email || email, at: Date.now() }),
+          );
+        } catch (e) {}
+        return true;
+      }
+      return false;
+    });
+  };
+
   W.student = function () {
     try {
       return JSON.parse(localStorage.getItem(KEY) || "null");
