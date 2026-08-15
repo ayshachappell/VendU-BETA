@@ -238,6 +238,7 @@
   function end(done) {
     running = false;
     cleanup();
+    try { window.dispatchEvent(new Event('vendu-tour-end')); } catch (e) {}
     if (done !== false) {
       try {
         localStorage.setItem(KEY, "1");
