@@ -575,6 +575,7 @@ var PROFILE_FIELDS=['eduEmail','gradYear','userType','isSeller','isFounder','ceo
 function saveProfile(){try{if(!state||!state.onboarded||state.tester)return;var o={};PROFILE_FIELDS.forEach(function(k){o[k]=state[k];});o.campusId=state.campus?state.campus.id:'fvsu';localStorage.setItem(PROFILE_KEY,JSON.stringify(o));}catch(e){}}
 function loadProfile(){try{return JSON.parse(localStorage.getItem(PROFILE_KEY)||'null');}catch(e){return null;}}
 function applyProfile(p){if(!p)return false;PROFILE_FIELDS.forEach(function(k){if(p[k]!==undefined&&p[k]!==null)state[k]=p[k];});if(p.campusId)state.campus=campusById(p.campusId);state.ceo=isCeoEmail(state.eduEmail||'');return true;}
+function freshPark(){try{var p=JSON.parse(localStorage.getItem(PARK_KEY)||'null');if(p&&p.at&&p.session&&(Date.now()-p.at)<3*60*1000)return p;}catch(e){}return null;}
 function doLogout(){try{saveProfile();}catch(e){}try{var _s=localStorage.getItem('vendu_beta_student_v1');localStorage.setItem('vendu_beta_parked_v1',JSON.stringify({at:Date.now(),session:_s?JSON.parse(_s):null}));}catch(e){}try{if(window.VendU&&VendU.signOut)VendU.signOut();}catch(e){}try{localStorage.removeItem('vendu_beta_student_v1');}catch(e){}toast('Logged out \u2014 sign back in within 3 min to skip re-verifying');setTimeout(function(){location.reload();},600);}
 function setShowSamples(on){state.showSamples=!!on;try{localStorage.setItem('vendu_show_samples',on?'1':'0');}catch(e){}}
 
@@ -590,12 +591,13 @@ try{var _ss=localStorage.getItem('vendu_show_samples');if(_ss!==null)state.showS
      and the student re-verifies their .edu email \u2014 their saved account,
      storefront and finished tutorial are untouched. */
   var park=null;try{park=JSON.parse(localStorage.getItem(PARK_KEY)||'null');}catch(e){}
-  if(park&&park.at){
-    var fresh=(Date.now()-park.at)<3*60*1000;
-    if(!VERIFIED&&fresh&&park.session){try{localStorage.setItem(SESSION_KEY,JSON.stringify(park.session));VERIFIED=true;}catch(e){}}
-    if(!fresh||VERIFIED){try{localStorage.removeItem(PARK_KEY);}catch(e){}}
+  if(park&&park.at&&!VERIFIED){
+    var _p0=loadProfile();
+    if(_p0){state.eduEmail=_p0.eduEmail||'';state.userType=_p0.userType||state.userType;state.gradYear=_p0.gradYear||'';}
+    state.obStep=2;state.eduCodeSent=false;
+    if((Date.now()-park.at)>=3*60*1000){try{localStorage.removeItem(PARK_KEY);}catch(e){}}
   }
-  if(VERIFIED){var p=loadProfile();if(p){applyProfile(p);state.onboarded=true;state.eduDone=true;state.tab='home';}}
+  if(VERIFIED){try{localStorage.removeItem(PARK_KEY);}catch(e){}var p=loadProfile();if(p){applyProfile(p);state.onboarded=true;state.eduDone=true;state.tab='home';}}
 })();
 const screen=document.getElementById('screen'),photo=document.getElementById('photo'),gphoto=document.getElementById('gphoto'),ephoto=document.getElementById('ephoto'),cphoto=document.getElementById('cphoto');
 const color=i=>COLORS[i%COLORS.length];
@@ -1383,17 +1385,23 @@ function onboarding(){
     screen.querySelectorAll('[data-ut]').forEach(el=>el.onclick=()=>{state.userType=el.dataset.ut;state.obStep=2;render();});return;}
   if(VERIFIED||state.eduDone)return finishOnboarding();
   const sent=!!state.eduCodeSent;
+  const _pk=sent?null:freshPark();
+  const _left=_pk?Math.max(0,Math.ceil((3*60*1000-(Date.now()-_pk.at))/1000)):0;
   const err=state.eduErr?`<div class="edu-err">${state.eduErr}</div>`:'';
   screen.innerHTML=`<div class="ob">
     ${obDots(2)}
     <div class="ob-body"><div class="ob-emoji">\u{1F393}</div><div class="ob-title">${sent?'Check your email':'Verify your school email'}</div>
     <div class="ob-text" style="margin-bottom:20px">${sent?('We emailed a secure sign-in link to <b>'+state.eduEmail+'</b>. Open it and VendU unlocks automatically \u2014 you only have to do this once.'):'VendU is students-only. Enter your college <b>.edu</b> email \u2014 any school works \u2014 and we\u2019ll email you a sign-in link. You only verify once.'}</div>
     ${sent?`<div class="edu-note" style="max-width:330px;font-size:14px">Open the email from VendU and tap <b>Verify Email</b>. This page unlocks as soon as you do.</div>${err}<button class="ob-btn" id="eduCheck" style="max-width:330px;margin-top:20px">I tapped the link</button><div class="edu-note">Didn\u2019t get it? Check your spam folder, then <span id="eduResend" style="color:var(--violet);font-weight:700;cursor:pointer">resend the link</span> \u00b7 <span id="eduEdit" style="cursor:pointer;text-decoration:underline">use a different email</span></div>`:`<div class="edu-row" style="width:100%;max-width:330px"><input id="eduIn" type="email" inputmode="email" autocomplete="email" value="${state.eduEmail||''}" placeholder="you@yourschool.edu" style="flex:1;border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-family:inherit;font-size:15px;outline:0;background:#fff"><button class="verify-btn" id="eduBtn">Send link</button></div>${err}<div class="ob-text" style="margin:22px 0 9px;font-weight:600;color:var(--ink)">Expected graduation year</div><div class="pldays" style="justify-content:center;padding:0">${['2025','2026','2027','2028','2029'].map(y=>`<div class="plday ${state.gradYear===y?'on':''}" data-gradyear="${y}">\u2019${y.slice(2)}</div>`).join('')}</div><div class="edu-note">Any college works \u2014 we only use your school email to confirm you\u2019re a student. No spam, ever.</div>`}
+    ${_pk?`<button class="ob-btn" id="eduResume" style="max-width:330px;margin-top:18px">Continue as ${(_pk.session&&_pk.session.email)||state.eduEmail}</button><div class="edu-note">You just logged out \u2014 sign back in within ${Math.floor(_left/60)}:${String(_left%60).padStart(2,'0')} to skip re-verifying. After that, send yourself a new link \u2014 your account and storefront stay saved.</div>`:''}
     <button class="submit" id="obSkip" style="background:transparent;color:var(--mist);border:0;box-shadow:none;margin-top:18px;font-size:13px;font-weight:700;text-decoration:underline">Skip onboarding (tester access)</button>
     <div class="edu-note" style="margin-top:2px">Testers can skip verification — you’ll still get the quick tour.</div>
     </div>
     </div>`;
   var sk=document.getElementById('obSkip');if(sk)sk.onclick=function(){state.tester=true;finishOnboarding();};
+  var rz=document.getElementById('eduResume');
+  if(rz&&_pk)rz.onclick=function(){try{localStorage.setItem(SESSION_KEY,JSON.stringify(_pk.session));localStorage.removeItem(PARK_KEY);}catch(e){}VERIFIED=true;state.eduEmail=(_pk.session&&_pk.session.email)||state.eduEmail;state.eduErr='';finishOnboarding();};
+  if(_pk)setTimeout(function(){if(!state.eduDone&&freshPark()===null){try{localStorage.removeItem(PARK_KEY);}catch(e){}onboarding();}},_left*1000+500);
   screen.querySelectorAll('[data-gradyear]').forEach(function(el){el.onclick=function(){state.gradYear=el.dataset.gradyear;onboarding();};});
   var busy=false;
   function fail(m){state.eduErr=m;onboarding();}
