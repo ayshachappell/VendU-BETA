@@ -1376,7 +1376,7 @@ function finishOnboarding(){
   if(window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour();},600);
 }
 function obDots(n){return '<div class="ob-top"><div class="ob-dots">'+[0,1,2].map(function(i){return '<span class="obd '+(i<=n?'on':'')+'"></span>';}).join('')+'</div></div>';}
-function enableTesterSkip(){var sk=document.getElementById('obSkip');if(sk)sk.onclick=function(){state.tester=true;try{localStorage.removeItem('vendu_tour_done');localStorage.removeItem('vendu_tour_done_beta');}catch(e){}finishOnboarding();};}
+function enableTesterSkip(){var sk=document.getElementById('obSkip');if(sk)sk.onclick=function(){state.tester=true;try{localStorage.removeItem('vendu_beta_tour_done_v1');}catch(e){}finishOnboarding();};}
 function onboarding(){
   const s=state.obStep;
   if(s<1){screen.innerHTML=`<div class="ob">
