@@ -506,6 +506,7 @@ function payUrl(app,handle){var h=(handle||'').trim();if(app==='Cash App'){var x
 const REGULATED=['Beauty','Food','Fitness'];
 const AVAIL=[2,4,5,7,9,11];
 const REVIEWS={2:[['Deon',5,'Cleanest fade on campus, always on time.'],['Maya',5,'Booked twice — never disappointed.']],3:[['Bri',5,'My braids lasted 8 weeks!']],5:[['Chris',5,'Grad photos came out unreal.']],10:[['Aisha',5,'The cake jars are dangerous. So good.']]};
+function LBROWS(){return (state.tester&&state.showSamples)?LEADERBOARD:[];}
 const LEADERBOARD=[['Marcus B.',9],['Simone T.',7],['Jasmine K.',6],['Tay R.',4],['Kevin O.',2],['Devin W.',1]];
 const firstNum=s=>{const m=(s||'').match(/\d+/);return m?+m[0]:999;};
 let idc=1;
@@ -562,8 +563,11 @@ GOODS.forEach(function(g){if(!g.campus)g.campus='fvsu';});REQUESTS.forEach(funct
 [HUSTLES,FEED,GOODS,REQUESTS,EVENTS_SEED].forEach(function(list){list.forEach(function(it){it.sample=1;});});
 HUSTLES.forEach(function(h){h.founder=0;h.v=0;});
 LEADERBOARD.length=0;
-function hideS(x){return !!(x&&x.sample)&&!state.showSamples;}
+function hideS(x){return !!(x&&x.sample)&&!(state.tester&&state.showSamples);}
 function liveList(list){return list.filter(function(x){return !hideS(x);});}
+function youPill(n){return (state.ceo&&(n==='You'||(state.vname&&n===state.vname)))?ceoPill():'';}
+function sampleThreads(){return state.inbox.filter(function(t){return !hideS(t);});}
+function purgeSamples(){if(state.tester)return;try{state.inbox=state.inbox.filter(function(t){return !t.sample;});state.classes=(state.classes||[]).filter(function(c){return !c.sample;});state.todos=(state.todos||[]).filter(function(t){return !t.sample;});state.joinedComm=(state.joinedComm||[]).filter(function(k){var c=commByKey(k);return c&&!c.sample;});}catch(e){}}
 function samplePill(x){return (x&&x.sample)?'<span class="samplepill">Sample</span>':'';}
 function founderCount(){/* testers and sample vendors never count as real Founders */return (state.isSeller&&state.isFounder&&state.eduDone&&!state.tester&&!state.ceo)?1:0;}
 
@@ -584,7 +588,7 @@ var BUILD=(location.pathname.indexOf('/beta')===0)?'beta':'main';
 try{if(window.VendU)VendU.consumeMagicLink();}catch(e){}
 var VERIFY_ERR='';try{if(/[?&]verify=expired/.test(location.search)){VERIFY_ERR='That link expired or was already used. Send yourself a new one.';history.replaceState(null,'',location.pathname);}if(location.hash==='#verified')history.replaceState(null,'',location.pathname);}catch(e){}
 var VERIFIED=!!(window.VendU&&VendU.student());
-let state={eduEmail:'',eduCodeSent:false,eduErr:VERIFY_ERR,tab:'home',home:'feed',cat:'All',q:'',near:false,mkt:'goods',formCat:'Food',foodType:'baked',eduOK:false,a1:false,a2:false,a3:false,submitted:false,avatar:'',gallery:[],themeColor:'#5A2BE0',book:null,openC:0,detail:0,isSeller:true,events:[],about:"Tell buyers about your storefront — what you make or do, your vibe, and how to work with you.",services:[],referrals:0,isFounder:true,addMode:null,svcEdit:false,newPhoto:null,reviewOpen:false,reviewStars:5,leaderboard:false,storefrontSetup:false,avail:false,cheap:false,top:false,justReferred:-1,msgTo:0,openMC:0,bookSet:false,booking:{mode:'builtin',link:'',provider:'Calendly',days:{Mon:true,Tue:true,Wed:true,Thu:true,Fri:true,Sat:true,Sun:false},open:'09:00',close:'18:00',blackouts:[]},onboarded:false,tester:false,showSamples:true,tourReady:false,userType:null,obStep:0,eduDone:false,agree1:false,agree2:false,agree3:false,cardName:'',cardNum:'',cardExp:'',cardCvc:'',vname:'',bookMethod:0,pays:[],socials:[],saved:[],savedView:false,campus:campusById('fvsu'),campusesSeen:['fvsu'],ceo:false,campusPick:false,campusQ:'',hubView:'resources',openRes:-1,joinedOrgs:[],joinedGroups:[],intros:[],introText:'',classes:[{id:'c1',name:'BIOL 101',days:['Mon','Wed','Fri'],start:'09:00',end:'09:50',loc:'Founders Hall 204',c:0},{id:'c2',name:'MATH 241',days:['Tue','Thu'],start:'11:00',end:'12:15',loc:'Science Bldg 110',c:2},{id:'c3',name:'ENG 102',days:['Mon','Wed'],start:'14:00',end:'15:15',loc:'Humanities 3',c:4}],todos:[{id:'t1',text:'Finish BIOL lab report',done:false,due:'Today'},{id:'t2',text:'Email advisor about fall registration',done:false,due:'Tomorrow'},{id:'t3',text:'Read Chapter 5 for ENG',done:true,due:'None'}],plannerSub:'schedule',plannerDay:'',classForm:null,todoText:'',todoDue:'None',route:{stops:[],mode:'walk'},boosted:false,appTheme:'violet',themeView:false,myPostsView:false,thread:0,inboxView:false,joinedComm:[],groupView:null,userView:null,groupCreateView:false,assignMod:false,createGroup:null,groupPostText:'',gradYear:'',inbox:[{id:'ths1',name:'Fades by Marcus',init:'M',color:'#F0873B',unread:1,msgs:[['Fades by Marcus','Appreciate the booking! You want the usual taper this time? ✂️']]},{id:'ths2',name:'Tutor Tori',init:'T',color:'#C026D3',unread:0,msgs:[['You','Hey! Free to help with calc this week?'],['Tutor Tori','Yes! Thursday after 4 works 📚']]}]};
+let state={eduEmail:'',eduCodeSent:false,eduErr:VERIFY_ERR,tab:'home',home:'feed',cat:'All',q:'',near:false,mkt:'goods',formCat:'Food',foodType:'baked',eduOK:false,a1:false,a2:false,a3:false,submitted:false,avatar:'',gallery:[],themeColor:'#5A2BE0',book:null,openC:0,detail:0,isSeller:true,events:[],about:"Tell buyers about your storefront — what you make or do, your vibe, and how to work with you.",services:[],referrals:0,isFounder:true,addMode:null,svcEdit:false,newPhoto:null,reviewOpen:false,reviewStars:5,leaderboard:false,storefrontSetup:false,avail:false,cheap:false,top:false,justReferred:-1,msgTo:0,openMC:0,bookSet:false,booking:{mode:'builtin',link:'',provider:'Calendly',days:{Mon:true,Tue:true,Wed:true,Thu:true,Fri:true,Sat:true,Sun:false},open:'09:00',close:'18:00',blackouts:[]},onboarded:false,tester:false,showSamples:true,tourReady:false,userType:null,obStep:0,eduDone:false,agree1:false,agree2:false,agree3:false,cardName:'',cardNum:'',cardExp:'',cardCvc:'',vname:'',bookMethod:0,pays:[],socials:[],saved:[],savedView:false,campus:campusById('fvsu'),campusesSeen:['fvsu'],ceo:false,campusPick:false,campusQ:'',hubView:'resources',openRes:-1,joinedOrgs:[],joinedGroups:[],intros:[],introText:'',classes:[{sample:1,id:'c1',name:'BIOL 101',days:['Mon','Wed','Fri'],start:'09:00',end:'09:50',loc:'Founders Hall 204',c:0},{sample:1,id:'c2',name:'MATH 241',days:['Tue','Thu'],start:'11:00',end:'12:15',loc:'Science Bldg 110',c:2},{sample:1,id:'c3',name:'ENG 102',days:['Mon','Wed'],start:'14:00',end:'15:15',loc:'Humanities 3',c:4}],todos:[{sample:1,id:'t1',text:'Finish BIOL lab report',done:false,due:'Today'},{sample:1,id:'t2',text:'Email advisor about fall registration',done:false,due:'Tomorrow'},{sample:1,id:'t3',text:'Read Chapter 5 for ENG',done:true,due:'None'}],plannerSub:'schedule',plannerDay:'',classForm:null,todoText:'',todoDue:'None',route:{stops:[],mode:'walk'},boosted:false,appTheme:'violet',themeView:false,myPostsView:false,thread:0,inboxView:false,joinedComm:[],groupView:null,userView:null,groupCreateView:false,assignMod:false,createGroup:null,groupPostText:'',gradYear:'',inbox:[{sample:1,id:'ths1',name:'Fades by Marcus',init:'M',color:'#F0873B',unread:1,msgs:[['Fades by Marcus','Appreciate the booking! You want the usual taper this time? ✂️']]},{sample:1,id:'ths2',name:'Tutor Tori',init:'T',color:'#C026D3',unread:0,msgs:[['You','Hey! Free to help with calc this week?'],['Tutor Tori','Yes! Thursday after 4 works 📚']]}]};
 try{var _ss=localStorage.getItem('vendu_show_samples');if(_ss!==null)state.showSamples=_ss==='1';}catch(e){}
 (function(){
   /* Logged out under 3 minutes ago? Come straight back in. Older than that
@@ -597,7 +601,7 @@ try{var _ss=localStorage.getItem('vendu_show_samples');if(_ss!==null)state.showS
     state.obStep=2;state.eduCodeSent=false;
     if((Date.now()-park.at)>=3*60*1000){try{localStorage.removeItem(PARK_KEY);}catch(e){}}
   }
-  if(VERIFIED){try{localStorage.removeItem(PARK_KEY);}catch(e){}var p=loadProfile();if(p){applyProfile(p);state.onboarded=true;state.eduDone=true;state.tab='home';}}
+  if(VERIFIED){try{localStorage.removeItem(PARK_KEY);}catch(e){}var p=loadProfile();if(p){applyProfile(p);state.onboarded=true;state.eduDone=true;state.tab='home';}purgeSamples();}
 })();
 const screen=document.getElementById('screen'),photo=document.getElementById('photo'),gphoto=document.getElementById('gphoto'),ephoto=document.getElementById('ephoto'),cphoto=document.getElementById('cphoto');
 const color=i=>COLORS[i%COLORS.length];
@@ -640,7 +644,7 @@ function feedBody(){
       <div class="p-text">${p.text}</div>
       <div class="p-actions"><div class="p-act ${p.liked?'liked':''}" data-like="${p.id}">${heart(p.liked)} ${p.likes}</div>
         <div class="p-act ${open?'liked':''}" data-cmt="${p.id}">${icon('<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',17)} ${p.comments.length}${p.comments.length?(open?' · hide':' · view'):''}</div></div>
-      ${open?`${p.comments.map(c=>`<div class="p-comment"><b class="gp-author" data-user="${c[0]}␟${c[0].charAt(0)}␟0" style="cursor:pointer">${c[0]}</b> ${c[1]}</div>`).join('')}<div class="p-cbox"><input id="ci${p.id}" placeholder="Add a comment…"><button data-send="${p.id}">Post</button></div>`:''}
+      ${open?`${p.comments.map(c=>`<div class="p-comment"><b class="gp-author" data-user="${c[0]}␟${c[0].charAt(0)}␟0" style="cursor:pointer">${c[0]}</b>${youPill(c[0])} ${c[1]}</div>`).join('')}<div class="p-cbox"><input id="ci${p.id}" placeholder="Add a comment…"><button data-send="${p.id}">Post</button></div>`:''}
     </div>`}).join('')}</div>`;
 }
 
@@ -733,7 +737,7 @@ function detail(id){
     </div>
     <div class="shop-sign">
       <div class="detail-av" style="${avStyle}">${h.me&&h.avatar?'':h.init}</div>
-      <div><div class="store-name" style="font-size:20px;color:var(--ink)">${h.name}${h.v?CHECK:''}${h.founder?'<span class="founderpill">🎓 Founder</span>':''}${samplePill(h)}${campusTag(h)}${pillFor(h)}</div>
+      <div><div class="store-name" style="font-size:20px;color:var(--ink)">${h.name}${h.v?CHECK:''}${h.me?ceoPill():''}${(h.founder&&!(h.me&&state.ceo))?'<span class="founderpill">🎓 Founder</span>':''}${samplePill(h)}${campusTag(h)}${pillFor(h)}</div>
       <div class="store-sub" style="color:var(--mist)">${h.v?`<span style="color:var(--violet);font-weight:600;display:inline-flex;align-items:center;gap:3px">${icon('<path d="M20 6 9 17l-5-5"/>',12)}Verified</span> · `:''}${h.cat}${h.me?'':` · ${pin} ${h.dist} mi`}</div></div>
     </div>
     <div class="socialrow">${socialHTML}</div>
@@ -822,7 +826,7 @@ function market(){
   REQUESTS.forEach(r=>{if(r.id==null)r.id='m'+(idc++);if(r.likes==null)r.likes=0;if(!r.comments)r.comments=[];});
   const goods=state.mkt==='goods';
   const acts=o=>`<div class="mkt-act"><span class="p-act ${o.liked?'liked':''}" data-mlike="${o.id}">${heart(o.liked)} ${o.likes}</span><span class="p-act ${state.openMC===o.id?'liked':''}" data-mcmt="${o.id}">${icon(com,16)} ${o.comments.length}${o.comments.length?(state.openMC===o.id?' · hide':' · view'):''}</span>${!o.mine?`<span class="p-act" data-mmsg="${o.id}">✉ Message</span>`:''}</div>`;
-  const panel=(o,who)=>`<div class="mkt-comments"><div class="mkt-ch">Comments <span style="color:var(--mist);font-weight:500">· go to ${who}</span></div>${o.comments.length?o.comments.map(c=>`<div class="p-comment"><b class="gp-author" data-user="${c[0]}␟${c[0].charAt(0)}␟0" style="cursor:pointer">${c[0]}</b> ${c[1]}</div>`).join(''):'<div style="font-size:12.5px;color:var(--mist)">No comments yet — be the first.</div>'}<div class="p-cbox"><input id="mci" placeholder="Add a comment…"><button id="mcsend">Post</button></div></div>`;
+  const panel=(o,who)=>`<div class="mkt-comments"><div class="mkt-ch">Comments <span style="color:var(--mist);font-weight:500">· go to ${who}</span></div>${o.comments.length?o.comments.map(c=>`<div class="p-comment"><b class="gp-author" data-user="${c[0]}␟${c[0].charAt(0)}␟0" style="cursor:pointer">${c[0]}</b>${youPill(c[0])} ${c[1]}</div>`).join(''):'<div style="font-size:12.5px;color:var(--mist)">No comments yet — be the first.</div>'}<div class="p-cbox"><input id="mci" placeholder="Add a comment…"><button id="mcsend">Post</button></div></div>`;
   screen.innerHTML=`<div class="topbar"><div class="brandrow"><div class="wordmark go" id="logo">${WM} <span style="font-size:.7em;color:var(--ink)">Market</span></div><div class="locpill" onclick="openCampusPick()"><span class="dot"></span>${CAMP()}</div></div><div class="search">${icon('<circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/>')}<input placeholder="${goods?'Search supplies…':'Search requests…'}"></div></div>
     <div class="campus-wrap"><div class="campus-bg">${wmk()}</div><div class="campus-content">
     <div class="hubseg" style="padding-top:2px">${[['goods','Buy & Trade'],['requests','Requests']].map(x=>`<div class="hchip ${state.mkt===x[0]?'on':''}" data-mkt="${x[0]}">${x[1]}</div>`).join('')}</div>
@@ -932,6 +936,7 @@ function seedMem(n){return NAMEPOOL.slice(0,Math.max(2,n)).map(function(m){retur
 let COMM=[];
 ORGS.forEach(function(o){COMM.push({key:'o'+o.id,name:o.name,emoji:o.emoji,type:o.type,blurb:o.blurb,campus:o.campus,official:true,members:seedMem(4+(o.id%4)),mod:NAMEPOOL[o.id%NAMEPOOL.length].name,posts:[{id:'gp'+o.id+'a',by:NAMEPOOL[o.id%8].name,init:NAMEPOOL[o.id%8].init,c:NAMEPOOL[o.id%8].c,text:'Meeting Thursday at 6 in the student center \u2014 pull up! 🏛\uFE0F'}]});});
 GROUPS.forEach(function(g){COMM.push({key:'g'+g.id,name:g.name,emoji:g.emoji,type:g.type,blurb:g.blurb,campus:g.campus,official:false,members:seedMem(3+(g.id%4)),mod:(g.id===2?'You':NAMEPOOL[g.id%NAMEPOOL.length].name),posts:[{id:'gp'+g.id+'a',by:NAMEPOOL[(g.id+2)%8].name,init:NAMEPOOL[(g.id+2)%8].init,c:NAMEPOOL[(g.id+2)%8].c,text:'Anyone down to link up this week?'}]});});
+[ORGS,GROUPS,INTROS,COMM].forEach(function(l){l.forEach(function(it){it.sample=1;});});
 function commByKey(k){return COMM.filter(function(c){return c.key===k;})[0];}
 function commJoined(k){return state.joinedComm.indexOf(k)>-1;}
 function myMember(){return {name:'You',init:(state.vname?state.vname.trim()[0].toUpperCase():'Y'),c:0};}
@@ -954,7 +959,7 @@ function groupPage(){
   else{h+='<div class="gp-joinprompt">Join to post and join the conversation.</div>';}
   h+='<div class="sec-h" style="margin:16px 0 8px">Posts</div>';
   if(!c.posts.length){h+='<div class="empty" style="padding:24px 0">No posts yet \u2014 be the first!</div>';}
-  else{h+=c.posts.map(function(p){var canDel=isMod||p.by==='You';return '<div class="gp-post"><div class="gp-post-top"><div class="avatar" style="width:32px;height:32px;font-size:13px;border-radius:9px;flex:none;background:'+(p.uc||color(p.c))+'">'+p.init+'</div><span class="gp-author" data-user="'+p.by+'\u241f'+p.init+'\u241f'+p.c+'">'+p.by+'</span>'+(canDel?'<button class="gp-del" data-delgp="'+p.id+'">'+icon(trash,15)+'</button>':'')+'</div><div class="gp-post-text">'+p.text+'</div></div>';}).join('');}
+  else{h+=c.posts.map(function(p){var canDel=isMod||p.by==='You';return '<div class="gp-post"><div class="gp-post-top"><div class="avatar" style="width:32px;height:32px;font-size:13px;border-radius:9px;flex:none;background:'+(p.uc||color(p.c))+'">'+p.init+'</div><span class="gp-author" data-user="'+p.by+'\u241f'+p.init+'\u241f'+p.c+'">'+p.by+'</span>'+youPill(p.by)+(canDel?'<button class="gp-del" data-delgp="'+p.id+'">'+icon(trash,15)+'</button>':'')+'</div><div class="gp-post-text">'+p.text+'</div></div>';}).join('');}
   h+='</div>';
   if(state.assignMod){
     h+='<div class="sheet-bg" id="sheetBg"></div><div class="sheet"><div class="sheet-h">Pass moderator to\u2026</div><div class="sheet-sub">You\u2019ll hand over control and become a regular member.</div>';
@@ -1001,13 +1006,13 @@ function userProfile(){
   var isMe=!!u.me;
   var vendor=HUSTLES.filter(function(h){return h.name===u.name;})[0];
   var yr=isMe?(state.gradYear||''):classYearFor(u.name);
-  var comms=COMM.filter(function(c){return campusVisible(c) && c.members.some(function(m){return m.name===u.name;});});
+  var comms=COMM.filter(function(c){return campusVisible(c) && !hideS(c) && c.members.some(function(m){return m.name===u.name;});});
   var listings=[].concat(GOODS,REQUESTS).filter(function(x){return (x.by===u.name||x.who===u.name)&&campusVisible(x);});
   var mutual=comms.filter(function(c){return commJoined(c.key)&&!isMe;});
   var av=(isMe&&state.avatar)?'background-image:url('+state.avatar+');background-size:cover':'background:'+(u.col||state.themeColor);
   var h='<div class="topbar"><div class="brandrow"><div class="wordmark" style="font-size:18px">Profile</div><div class="locpill" id="upBack" style="cursor:pointer">\u2039 Back</div></div></div>';
   h+='<div class="enter" style="padding:6px 20px 24px">';
-  h+='<div class="up-head"><div class="up-av" style="'+av+'">'+((isMe&&state.avatar)?'':u.init)+'</div><div class="up-name">'+u.name+' '+CHECK+'</div><div class="up-sub">\u2713 Verified student'+(yr?' \u00b7 Class of \u2019'+yr.slice(2):'')+(vendor&&vendor.founder?' \u00b7 🎓 Founder':'')+'</div></div>';
+  h+='<div class="up-head"><div class="up-av" style="'+av+'">'+((isMe&&state.avatar)?'':u.init)+'</div><div class="up-name">'+u.name+' '+CHECK+(isMe?ceoPill():'')+'</div><div class="up-sub">\u2713 Verified student'+(yr?' \u00b7 Class of \u2019'+yr.slice(2):'')+(vendor&&vendor.founder?' \u00b7 🎓 Founder':'')+'</div></div>';
   if(!isMe){h+='<button class="submit" id="upMsg" style="background:var(--violet)">\u2709\uFE0F Message '+u.name.split(' ')[0]+'</button>';}
   if(vendor){h+='<button class="submit" id="upStore" style="background:var(--card);color:var(--ink);border:1px solid var(--line);margin-top:10px">🏪 View '+vendor.name+'\u2019s storefront</button>';}
   if(mutual.length){h+='<div class="up-mutual">🤝 You\u2019re both in '+mutual.map(function(c){return c.name;}).join(', ')+'</div>';}
@@ -1026,9 +1031,9 @@ function userProfile(){
 }
 function communityHTML(){
   var cid=state.campus.id;
-  var orgs=ORGS.filter(function(o){return o.campus===cid;});
-  var groups=GROUPS.filter(function(g){return g.campus===cid;});
-  var intros=state.intros.filter(function(x){return x.campus===cid;}).concat(INTROS.filter(function(x){return x.campus===cid;}));
+  var orgs=ORGS.filter(function(o){return o.campus===cid&&!hideS(o);});
+  var groups=GROUPS.filter(function(g){return g.campus===cid&&!hideS(g);});
+  var intros=state.intros.filter(function(x){return x.campus===cid;}).concat(INTROS.filter(function(x){return x.campus===cid&&!hideS(x);}));
   var h='';
   // New to campus hero + intro composer
   h+='<div class="commhero"><div class="commhero-t">New to '+state.campus.short+'? 👋</div><div class="commhero-s">Introduce yourself and meet classmates before you even step on the yard.</div>'
@@ -1036,9 +1041,9 @@ function communityHTML(){
     +'<button class="submit" id="postIntro" style="margin-top:8px">Post intro</button></div>';
   // Intro board
   h+='<div class="sec-h">Meet classmates</div>';
-  h+=intros.map(function(x){return '<div class="card" style="display:block"><div style="display:flex;gap:11px;align-items:flex-start"><div class="avatar" style="width:40px;height:40px;font-size:15px;flex:0 0 auto;background:'+color(x.c)+'">'+x.who.charAt(0)+'</div><div><div class="gp-author" data-user="'+x.who+'\u241f'+x.who.charAt(0)+'\u241f'+x.c+'" style="font-weight:700;font-size:14px;cursor:pointer">'+x.who+'</div><div style="font-size:13.5px;color:var(--ink);line-height:1.5;margin-top:2px">'+x.text+'</div></div></div></div>';}).join('');
+  h+=intros.map(function(x){return '<div class="card" style="display:block"><div style="display:flex;gap:11px;align-items:flex-start"><div class="avatar" style="width:40px;height:40px;font-size:15px;flex:0 0 auto;background:'+color(x.c)+'">'+x.who.charAt(0)+'</div><div><div class="gp-author" data-user="'+x.who+'\u241f'+x.who.charAt(0)+'\u241f'+x.c+'" style="font-weight:700;font-size:14px;cursor:pointer">'+x.who+youPill(x.who)+'</div><div style="font-size:13.5px;color:var(--ink);line-height:1.5;margin-top:2px">'+x.text+'</div></div></div></div>';}).join('');
   // Communities (organizations + groups)
-  var comms=COMM.filter(function(c){return c.campus===cid;});
+  var comms=COMM.filter(function(c){return c.campus===cid&&!hideS(c);});
   function commRow(c){var on=commJoined(c.key);return '<div class="card orgcard" style="display:block"><div style="display:flex;gap:12px;align-items:center;cursor:pointer" data-opencomm="'+c.key+'"><div class="org-emoji">'+c.emoji+'</div><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:14.5px">'+c.name+'</div><div style="font-size:12px;color:var(--mist)">'+c.type+' \u00b7 '+c.members.length+' members</div><div style="font-size:13px;color:var(--ink);line-height:1.45;margin-top:4px">'+c.blurb+'</div></div><div class="chev-r">'+icon('<path d="m9 18 6-6-6-6"/>',18)+'</div></div><button class="joinbtn '+(on?'on':'')+'" data-joincomm="'+c.key+'">'+(on?'\u2713 Joined \u00b7 leave':'Join')+'</button></div>';}
   h+='<div class="sec-h">Campus organizations</div>';
   h+=comms.filter(function(c){return c.official;}).map(commRow).join('');
@@ -1284,7 +1289,7 @@ function profile(){
       <div class="ref-link"><span class="rl">${refLink}</span><button id="copyref">Copy</button></div>
       <button class="ref-demo" id="lbBtn" style="margin-top:10px">🏆 Leaderboard</button></div></div>`;
   const regularCard=`<div class="cust"><div class="cust-h">${icon('<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/>',18)} Your account</div><div style="font-size:13px;color:var(--mist);line-height:1.5;margin:2px 0 14px">Browse, buy, barter, book vendors, and post to the Market — all free. Set a name and color so classmates recognize you in posts and comments.</div><div class="field"><label>Display name</label><input id="rname" placeholder="e.g. Jordan T." value="${state.vname||''}"></div><div class="cust-lbl">Your color</div><div class="swatches">${THEME_COLORS.map(c=>`<div class="sw ${state.themeColor===c?'on':''}" data-color="${c}" style="background:${c}"></div>`).join('')}</div><div class="cust-lbl" style="margin-top:16px">Class year</div><div class="pldays" style="padding:0">${['2025','2026','2027','2028','2029'].map(y=>`<div class="plday ${state.gradYear===y?'on':''}" data-gradyear="${y}">’${y.slice(2)}</div>`).join('')}</div>${myCommunities().length?`<div class="cust-lbl" style="margin-top:16px">Your communities</div><div class="up-chips">${myCommunities().map(c=>`<div class="up-chip" data-opencomm="${c.key}">${c.emoji} ${c.name}</div>`).join('')}</div>`:''}<button class="submit" id="profSave" style="margin-top:16px">Save profile</button><button class="submit" id="myposts" style="background:var(--card);color:var(--ink);border:1px solid var(--line);margin-top:10px">🗂️ My market posts</button><button class="submit" id="startsell" style="background:var(--violet);margin-top:10px">Become a vendor</button><div style="font-size:12px;color:var(--mist);text-align:center;margin-top:12px;line-height:1.5">Want a storefront, socials, booking & payments? Turn on vendor mode — it’s free.</div></div>`;
-  const menuItems=state.isSeller?[['Set up your storefront','setup'],['Bookings & calendar','bookings'],['✉️ Messages','inbox'],['Saved hustles','saved'],['💬 Send beta feedback','feedback'],['▶︎ Replay tutorial','tour'],[(state.showSamples?'👁 Sample listings: On':'👁 Sample listings: Off'),'samples'],['\uD83D\uDEAA Log out','logout'],['Help & safety','']]:[['Saved & booked','saved'],['✉️ Messages','inbox'],['My marketplace posts','myposts'],['💬 Send beta feedback','feedback'],['▶︎ Replay tutorial','tour'],[(state.showSamples?'👁 Sample listings: On':'👁 Sample listings: Off'),'samples'],['\uD83D\uDEAA Log out','logout'],['Help & safety','']];
+  const menuItems=state.isSeller?[['Set up your storefront','setup'],['Bookings & calendar','bookings'],['✉️ Messages','inbox'],['Saved hustles','saved'],['💬 Send beta feedback','feedback'],['▶︎ Replay tutorial','tour'],...(state.tester?[[(state.showSamples?'👁 Sample listings: On':'👁 Sample listings: Off'),'samples']]:[]),['\uD83D\uDEAA Log out','logout'],['Help & safety','']]:[['Saved & booked','saved'],['✉️ Messages','inbox'],['My marketplace posts','myposts'],['💬 Send beta feedback','feedback'],['▶︎ Replay tutorial','tour'],...(state.tester?[[(state.showSamples?'👁 Sample listings: On':'👁 Sample listings: Off'),'samples']]:[]),['\uD83D\uDEAA Log out','logout'],['Help & safety','']];
   screen.innerHTML=`<div class="topbar"><div class="brandrow"><div class="wordmark">Profile</div></div></div>
     <div style="padding:6px 20px 20px" class="enter">
       <div class="store-row" style="margin:6px 0 16px"><div class="detail-av up" style="${av};position:relative;box-shadow:0 0 0 3px var(--paper),0 0 0 6px ${state.themeColor}">${state.avatar?'':'A'}<div class="cam" style="position:absolute;right:-4px;bottom:-4px;width:26px;height:26px;border-radius:50%;background:var(--violet);color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid var(--paper)">${icon('<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',12)}</div></div>
@@ -1306,14 +1311,14 @@ function profile(){
   const vm=document.getElementById('viewme');if(vm)vm.onclick=()=>openDetail('me');
   screen.querySelectorAll('[data-menu]').forEach(el=>el.onclick=()=>{const m=el.dataset.menu;if(m==='samples'){setShowSamples(!state.showSamples);toast(state.showSamples?'Showing sample listings':'Sample listings hidden — real students only');render();return;}if(m==='logout'){doLogout();return;}if(m==='setup'){state.storefrontSetup=true;render();}else if(m==='bookings'){state.bookSet=true;render();}else if(m==='saved'){state.savedView=true;render();}else if(m==='me'){openDetail('me');}else if(m==='boost'){state.boosted=!state.boosted;toast(state.boosted?'⚡ Storefront boosted! Optional upgrade — listing is always free.':'Boost turned off. Your storefront stays free & live.');render();}else if(m==='theme'){state.themeView=true;render();}else if(m==='regular'){state.isSeller=false;state.tab='profile';toast('Vendor mode off — your storefront is saved. Switch back anytime.');render();}else if(m==='myposts'){state.myPostsView=true;render();}else if(m==='feedback'){try{window.location.href='mailto:'+BETA_EMAIL+'?subject='+encodeURIComponent('VendU Beta Feedback')+'&body='+encodeURIComponent('What I liked:\n\nWhat confused me:\n\nWhat I wish it did:\n');}catch(e){}toast('Opening email — tell us anything! 💬');}else if(m==='tour'){VendU.startTour(true);}else if(m==='inbox'){openInbox();}else toast('Opens in the real build ⚙️');});
 }
-function lbRank(refs){const rows=[...LEADERBOARD,['You',refs]].sort((a,b)=>b[1]-a[1]);return rows.findIndex(r=>r[0]==='You')+1;}
+function lbRank(refs){const rows=[...LBROWS(),['You',refs]].sort((a,b)=>b[1]-a[1]);return rows.findIndex(r=>r[0]==='You')+1;}
 function servicesEditor(){state.storefrontSetup=true;state.svcEdit=false;add();}
 function leaderboard(){
-  const rows=[...LEADERBOARD].concat(founderCount()?[['You',state.referrals]]:[]).sort((a,b)=>b[1]-a[1]);
+  const rows=[...LBROWS()].concat(founderCount()?[['You',state.referrals]]:[]).sort((a,b)=>b[1]-a[1]);
   const medal=i=>['🥇','🥈','🥉'][i]||('#'+(i+1));
   screen.innerHTML=`<div class="topbar"><div class="brandrow"><div class="wordmark">🏆 Leaderboard</div><div class="locpill" id="lbClose" style="cursor:pointer">✕ Close</div></div></div>
     <div style="padding:8px 20px 20px" class="enter"><div class="form-sub">The first ${FOUNDER_CAP} vendors at each school become Founders — they keep a 🎓 Founder badge on their name everywhere (posts, profile and storefront) and get a free monthly Boost. This board ranks Founders by how many vendors they refer with their invite link, so the more classmates you bring on, the higher you climb.</div><div class="lb-summary">🎓 <b>${founderCount()}</b> of <b>${FOUNDER_CAP}</b> founder spots claimed · <b>${Math.max(0,FOUNDER_CAP-founderCount())}</b> left</div>
-    ${rows.length?rows.map((r,i)=>`<div class="lbrow ${r[0]==='You'?'me':''}"><div class="lb-rank">${medal(i)}</div><div class="lb-nmwrap"><div class="lb-name">${r[0]}</div><div class="lb-found">🎓 Founder</div></div><div class="lb-count">${r[1]} <span>referred</span></div></div>`).join(''):`<div class="empty">No Founders yet at ${CAMP()} — verified students who open a storefront claim these spots first. Sample vendors don't count.</div>`}</div>`;
+    ${rows.length?rows.map((r,i)=>`<div class="lbrow ${r[0]==='You'?'me':''}"><div class="lb-rank">${medal(i)}</div><div class="lb-nmwrap"><div class="lb-name">${r[0]}${youPill(r[0])}</div><div class="lb-found">🎓 Founder</div></div><div class="lb-count">${r[1]} <span>referred</span></div></div>`).join(''):`<div class="empty">No Founders yet at ${CAMP()} — verified students who open a storefront claim these spots first. Sample vendors don't count.</div>`}</div>`;
   document.getElementById('lbClose').onclick=()=>{state.leaderboard=false;render();};
 }
 
@@ -1364,6 +1369,7 @@ function finishOnboarding(){
      the sample listings on so the app isn't empty while they explore. */
   var _pref=null;try{_pref=localStorage.getItem('vendu_show_samples');}catch(e){}
   setShowSamples(_pref!==null?_pref==='1':!!state.tester);
+  purgeSamples();
   syncNav('home');render();
   toast(state.tester?'Tester access \u2713 Quick tour \u2014 explore freely':'Verified \u2713 Quick tour \u2014 then set up your '+(vendor?'storefront':'profile'));
   if(window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour();},600);
@@ -1468,7 +1474,7 @@ function themeScreen(){
   screen.querySelectorAll('[data-theme]').forEach(function(el){el.onclick=function(){state.appTheme=el.dataset.theme;applyTheme(el.dataset.theme);toast('Theme applied 🎨');themeScreen();};});
 }
 const BELL_PATH='<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>';
-function unreadTotal(){return state.inbox.reduce(function(n,t){return n+(t.unread||0);},0);}
+function unreadTotal(){return sampleThreads().reduce(function(n,t){return n+(t.unread||0);},0);}
 function bellHTML(){var n=unreadTotal();return '<button class="bell" onclick="openInbox()" aria-label="Messages">'+icon(BELL_PATH,20)+(n?'<span class="bell-dot">'+(n>9?'9+':n)+'</span>':'')+'</button>';}
 function openInbox(){state.thread=0;state.inboxView=true;render();}
 function openThread(name,init,color){
@@ -1478,7 +1484,7 @@ function openThread(name,init,color){
   th.unread=0;state.thread=th.id;state.inboxView=true;state.userView=null;render();
 }
 function inboxScreen(){
-  var list=state.inbox;
+  var list=sampleThreads();
   var h='<div class="topbar"><div class="brandrow"><div class="wordmark">Messages</div><div class="locpill" id="inbClose" style="cursor:pointer">\u2715 Close</div></div></div><div class="enter" style="padding:8px 0 24px">';
   if(!list.length){h+='<div class="empty" style="padding:50px 30px">No messages yet.<br>Reach out to a vendor or someone\u2019s Market post to start a chat.</div>';}
   else{h+=list.map(function(t){var last=t.msgs[t.msgs.length-1];var prev=(last[0]==='You'?'You: ':'')+last[1];return '<div class="inbox-row" data-openth="'+t.id+'"><div class="detail-av" style="width:46px;height:46px;font-size:18px;border-radius:13px;background:'+t.color+';color:#fff;flex:none">'+t.init+'</div><div style="flex:1;min-width:0"><div class="inbox-name" data-openuser="'+t.id+'">'+t.name+'</div><div class="inbox-prev">'+prev+'</div></div>'+(t.unread?'<span class="inbox-badge">'+t.unread+'</span>':'')+'</div>';}).join('');}
