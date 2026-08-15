@@ -145,16 +145,29 @@ export async function logAttempt(email: string, kind: string) {
 
 export async function recordStudent(email: string, build: Build, gradYear: string | null) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const now = new Date().toISOString();
   await supabaseAdmin.from("students").upsert(
     {
       email,
       school_domain: schoolDomain(email),
       grad_year: gradYear,
       build,
-      verified_at: new Date().toISOString(),
+      verified_at: now,
+      last_active_at: now,
+      // Founder accounts keep access permanently and are never purged.
+      is_founder: isFounderEmail(email),
     },
     { onConflict: "email" },
   );
+}
+
+/** Keeps an account alive: inactive students are purged after a year. */
+export async function touchStudent(email: string) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  await supabaseAdmin
+    .from("students")
+    .update({ last_active_at: new Date().toISOString() })
+    .eq("email", email);
 }
 
 export function json(data: unknown, status = 200) {
@@ -184,5 +197,7 @@ export async function isVerifiedStudent(email: string): Promise<boolean> {
     .select("email")
     .eq("email", email)
     .maybeSingle();
-  return Boolean(data);
+  if (!data) return false;
+  await touchStudent(email);
+  return true;
 }
