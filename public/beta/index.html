@@ -481,6 +481,15 @@ const CAMPUSES=[
 function campusById(id){for(var i=0;i<CAMPUSES.length;i++)if(CAMPUSES[i].id===id)return CAMPUSES[i];return CAMPUSES[0];}
 function campusByDomain(d){d=(d||'').toLowerCase();for(var i=0;i<CAMPUSES.length;i++)if(d.indexOf(CAMPUSES[i].domain)>-1)return CAMPUSES[i];return null;}
 function CAMP(){return state.campus?state.campus.short:'your campus';}
+var CEO_DOMAIN='integroservicegroup.com';
+function isCeoEmail(e){return (e||'').toLowerCase().slice(-(CEO_DOMAIN.length+1))==='@'+CEO_DOMAIN;}
+function ceoPill(){return state.ceo?'<span class="founderpill" style="color:#3f2b8c;background:var(--violet-soft)">\u2605 CEO</span>':'';}
+/* Content is funneled to the campus tied to the student's .edu address. Once a
+   user switches campuses, every campus they've selected stays visible. */
+function seenCampuses(){if(!state.campusesSeen||!state.campusesSeen.length)state.campusesSeen=[state.campus?state.campus.id:'fvsu'];return state.campusesSeen;}
+function addCampusSeen(id){var l=seenCampuses();if(id&&l.indexOf(id)<0)l.push(id);}
+function campusVisible(x){if(!x||!x.campus)return true;return seenCampuses().indexOf(x.campus)>-1;}
+function campusTag(x){if(!x||!x.campus||!state.campus||x.campus===state.campus.id)return '';var c=campusById(x.campus);return '<span class="samplepill">'+c.short+'</span>';}
 function wmk(){var c=state.campus||CAMPUSES[0];return (c.short+' 🐾 '+c.mascot+' 🐾 ').repeat(90);}
 function payPh(app){if(app==='Apple Pay'||app==='Google Pay')return 'phone number (e.g. 555-123-4567)';if(app==='Zelle')return 'phone or email';if(app==='Cash App')return '$cashtag';if(app==='Venmo')return '@handle';if(app==='PayPal')return 'paypal.me handle';return 'handle or link';}
 function openCampusPick(){state.campusPick=true;render();}
@@ -555,7 +564,7 @@ LEADERBOARD.length=0;
 function hideS(x){return !!(x&&x.sample)&&!state.showSamples;}
 function liveList(list){return list.filter(function(x){return !hideS(x);});}
 function samplePill(x){return (x&&x.sample)?'<span class="samplepill">Sample</span>':'';}
-function founderCount(){/* testers and sample vendors never count as real Founders */return (state.isSeller&&state.isFounder&&state.eduDone&&!state.tester)?1:0;}
+function founderCount(){/* testers and sample vendors never count as real Founders */return (state.isSeller&&state.isFounder&&state.eduDone&&!state.tester&&!state.ceo)?1:0;}
 function setShowSamples(on){state.showSamples=!!on;try{localStorage.setItem('vendu_show_samples',on?'1':'0');}catch(e){}}
 
 const BETA_EMAIL='youremail@example.com';/* ← set your email for beta feedback */
@@ -563,7 +572,7 @@ var BUILD=(location.pathname.indexOf('/beta')===0)?'beta':'main';
 try{if(window.VendU)VendU.consumeMagicLink();}catch(e){}
 var VERIFY_ERR='';try{if(/[?&]verify=expired/.test(location.search)){VERIFY_ERR='That link expired or was already used. Send yourself a new one.';history.replaceState(null,'',location.pathname);}if(location.hash==='#verified')history.replaceState(null,'',location.pathname);}catch(e){}
 var VERIFIED=!!(window.VendU&&VendU.student());
-let state={eduEmail:'',eduCodeSent:false,eduErr:VERIFY_ERR,tab:'home',home:'feed',cat:'All',q:'',near:false,mkt:'goods',formCat:'Food',foodType:'baked',eduOK:false,a1:false,a2:false,a3:false,submitted:false,avatar:'',gallery:[],themeColor:'#5A2BE0',book:null,openC:0,detail:0,isSeller:true,events:[],about:"Tell buyers about your storefront — what you make or do, your vibe, and how to work with you.",services:[],referrals:0,isFounder:true,addMode:null,svcEdit:false,newPhoto:null,reviewOpen:false,reviewStars:5,leaderboard:false,storefrontSetup:false,avail:false,cheap:false,top:false,justReferred:-1,msgTo:0,openMC:0,bookSet:false,booking:{mode:'builtin',link:'',provider:'Calendly',days:{Mon:true,Tue:true,Wed:true,Thu:true,Fri:true,Sat:true,Sun:false},open:'09:00',close:'18:00',blackouts:[]},onboarded:false,tester:false,showSamples:true,tourReady:false,userType:null,obStep:0,eduDone:false,agree1:false,agree2:false,agree3:false,cardName:'',cardNum:'',cardExp:'',cardCvc:'',vname:'',bookMethod:0,pays:[],socials:[],saved:[],savedView:false,campus:campusById('fvsu'),campusPick:false,campusQ:'',hubView:'resources',openRes:-1,joinedOrgs:[],joinedGroups:[],intros:[],introText:'',classes:[{id:'c1',name:'BIOL 101',days:['Mon','Wed','Fri'],start:'09:00',end:'09:50',loc:'Founders Hall 204',c:0},{id:'c2',name:'MATH 241',days:['Tue','Thu'],start:'11:00',end:'12:15',loc:'Science Bldg 110',c:2},{id:'c3',name:'ENG 102',days:['Mon','Wed'],start:'14:00',end:'15:15',loc:'Humanities 3',c:4}],todos:[{id:'t1',text:'Finish BIOL lab report',done:false,due:'Today'},{id:'t2',text:'Email advisor about fall registration',done:false,due:'Tomorrow'},{id:'t3',text:'Read Chapter 5 for ENG',done:true,due:'None'}],plannerSub:'schedule',plannerDay:'',classForm:null,todoText:'',todoDue:'None',route:{stops:[],mode:'walk'},boosted:false,appTheme:'violet',themeView:false,myPostsView:false,thread:0,inboxView:false,joinedComm:[],groupView:null,userView:null,groupCreateView:false,assignMod:false,createGroup:null,groupPostText:'',gradYear:'',inbox:[{id:'ths1',name:'Fades by Marcus',init:'M',color:'#F0873B',unread:1,msgs:[['Fades by Marcus','Appreciate the booking! You want the usual taper this time? ✂️']]},{id:'ths2',name:'Tutor Tori',init:'T',color:'#C026D3',unread:0,msgs:[['You','Hey! Free to help with calc this week?'],['Tutor Tori','Yes! Thursday after 4 works 📚']]}]};
+let state={eduEmail:'',eduCodeSent:false,eduErr:VERIFY_ERR,tab:'home',home:'feed',cat:'All',q:'',near:false,mkt:'goods',formCat:'Food',foodType:'baked',eduOK:false,a1:false,a2:false,a3:false,submitted:false,avatar:'',gallery:[],themeColor:'#5A2BE0',book:null,openC:0,detail:0,isSeller:true,events:[],about:"Tell buyers about your storefront — what you make or do, your vibe, and how to work with you.",services:[],referrals:0,isFounder:true,addMode:null,svcEdit:false,newPhoto:null,reviewOpen:false,reviewStars:5,leaderboard:false,storefrontSetup:false,avail:false,cheap:false,top:false,justReferred:-1,msgTo:0,openMC:0,bookSet:false,booking:{mode:'builtin',link:'',provider:'Calendly',days:{Mon:true,Tue:true,Wed:true,Thu:true,Fri:true,Sat:true,Sun:false},open:'09:00',close:'18:00',blackouts:[]},onboarded:false,tester:false,showSamples:true,tourReady:false,userType:null,obStep:0,eduDone:false,agree1:false,agree2:false,agree3:false,cardName:'',cardNum:'',cardExp:'',cardCvc:'',vname:'',bookMethod:0,pays:[],socials:[],saved:[],savedView:false,campus:campusById('fvsu'),campusesSeen:['fvsu'],ceo:false,campusPick:false,campusQ:'',hubView:'resources',openRes:-1,joinedOrgs:[],joinedGroups:[],intros:[],introText:'',classes:[{id:'c1',name:'BIOL 101',days:['Mon','Wed','Fri'],start:'09:00',end:'09:50',loc:'Founders Hall 204',c:0},{id:'c2',name:'MATH 241',days:['Tue','Thu'],start:'11:00',end:'12:15',loc:'Science Bldg 110',c:2},{id:'c3',name:'ENG 102',days:['Mon','Wed'],start:'14:00',end:'15:15',loc:'Humanities 3',c:4}],todos:[{id:'t1',text:'Finish BIOL lab report',done:false,due:'Today'},{id:'t2',text:'Email advisor about fall registration',done:false,due:'Tomorrow'},{id:'t3',text:'Read Chapter 5 for ENG',done:true,due:'None'}],plannerSub:'schedule',plannerDay:'',classForm:null,todoText:'',todoDue:'None',route:{stops:[],mode:'walk'},boosted:false,appTheme:'violet',themeView:false,myPostsView:false,thread:0,inboxView:false,joinedComm:[],groupView:null,userView:null,groupCreateView:false,assignMod:false,createGroup:null,groupPostText:'',gradYear:'',inbox:[{id:'ths1',name:'Fades by Marcus',init:'M',color:'#F0873B',unread:1,msgs:[['Fades by Marcus','Appreciate the booking! You want the usual taper this time? ✂️']]},{id:'ths2',name:'Tutor Tori',init:'T',color:'#C026D3',unread:0,msgs:[['You','Hey! Free to help with calc this week?'],['Tutor Tori','Yes! Thursday after 4 works 📚']]}]};
 try{var _ss=localStorage.getItem('vendu_show_samples');if(_ss!==null)state.showSamples=_ss==='1';}catch(e){}
 const screen=document.getElementById('screen'),photo=document.getElementById('photo'),gphoto=document.getElementById('gphoto'),ephoto=document.getElementById('ephoto'),cphoto=document.getElementById('cphoto');
 const color=i=>COLORS[i%COLORS.length];
@@ -596,12 +605,12 @@ function home(){
 
 function feedBody(){
   const q=state.q.toLowerCase();
-  const posts=FEED.filter(p=>{const h=HUSTLES.find(x=>x.id===p.s);return h&&!hideS(p)&&!hideS(h)&&h.campus===state.campus.id&&(!q||(h.name+p.text).toLowerCase().includes(q))});
+  const posts=FEED.filter(p=>{const h=HUSTLES.find(x=>x.id===p.s);return h&&!hideS(p)&&!hideS(h)&&campusVisible(h)&&(!q||(h.name+p.text).toLowerCase().includes(q))});
   if(!posts.length)return founderBanner()+`<div class="empty" style="padding-top:50px">No posts from verified students at ${CAMP()} yet.<br>Be the first — tap the ＋ to post.</div>`;
   return founderBanner()+`<div class="feed">${posts.map((p,i)=>{const h=HUSTLES.find(x=>x.id===p.s);const open=state.openC===p.id;return `
     <div class="post" style="animation-delay:${i*40}ms">
       <div class="p-head"><div class="p-av" data-open="${h.id}" style="background:${bg(h)}">${h.init}</div>
-        <div><div class="p-name" data-open="${h.id}">${h.name}${h.v?CHECK:''}${h.founder?'<span class="founderpill">🎓 Founder</span>':''}${samplePill(h)}</div><div class="p-when">${p.when} · ${h.cat}</div></div>
+        <div><div class="p-name" data-open="${h.id}">${h.name}${h.v?CHECK:''}${h.founder?'<span class="founderpill">🎓 Founder</span>':''}${samplePill(h)}${campusTag(h)}</div><div class="p-when">${p.when} · ${h.cat}</div></div>
         ${p.promo?`<span class="p-promo">${p.promo}</span>`:''}</div>
       <div class="p-text">${p.text}</div>
       <div class="p-actions"><div class="p-act ${p.liked?'liked':''}" data-like="${p.id}">${heart(p.liked)} ${p.likes}</div>
@@ -611,25 +620,25 @@ function feedBody(){
 }
 
 function browseBody(){
-  let f=HUSTLES.filter(h=>!hideS(h)&&h.campus===state.campus.id&&(state.cat==='All'||h.cat===state.cat)&&(state.q===''||(h.name+h.offer+h.cat).toLowerCase().includes(state.q.toLowerCase())));
+  let f=HUSTLES.filter(h=>!hideS(h)&&campusVisible(h)&&(state.cat==='All'||h.cat===state.cat)&&(state.q===''||(h.name+h.offer+h.cat).toLowerCase().includes(state.q.toLowerCase())));
   if(state.avail)f=f.filter(h=>AVAIL.includes(h.id));
   if(state.cheap)f=f.filter(h=>firstNum(h.price)<=25);
   if(state.near)f=[...f].sort((a,b)=>a.dist-b.dist);
   if(state.top)f=[...f].sort((a,b)=>parseFloat(b.rating)-parseFloat(a.rating));
-  const feat=HUSTLES.filter(h=>!hideS(h)&&h.campus===state.campus.id&&['5.0','4.9'].includes(h.rating)).slice(0,5);
+  const feat=HUSTLES.filter(h=>!hideS(h)&&campusVisible(h)&&['5.0','4.9'].includes(h.rating)).slice(0,5);
   const clean=!(state.near||state.avail||state.cheap||state.top)&&state.cat==='All'&&state.q==='';
   return `<div class="chips"><div class="chip near ${state.near?'on':''}" id="nearchip">${pin} Near me</div>${CATS.map(c=>`<div class="chip ${c===state.cat?'on':''}" data-cat="${c}">${c}</div>`).join('')}</div>
     <div class="chips" style="padding-top:8px"><div class="chip ${state.avail?'on':''}" data-f="avail">🟢 Available now</div><div class="chip ${state.cheap?'on':''}" data-f="cheap">Under $25</div><div class="chip ${state.top?'on':''}" data-f="top">★ Top rated</div></div>
     ${clean?`<div class="sec-head"><div class="sec-title">🔥 Featured on campus</div></div><div class="spotlight-scroll">${feat.map(h=>`<div class="spot" data-open="${h.id}" style="background:${bg(h)}"><span class="tag">${h.cat}</span><div class="who">${h.name}${h.v?CHECK:''}</div><div class="what">${h.offer.split('.')[0]}.</div><div class="price">${h.price}</div></div>`).join('')}</div>`:''}
     <div class="sec-head"><div class="sec-title">${state.near?'Nearest you':state.top?'Top rated':state.cat==='All'?'All hustles':state.cat}</div><div class="sec-link">${f.length} found</div></div>
-    <div class="list">${f.length?f.map((h,i)=>`<div class="card" data-open="${h.id}" style="animation-delay:${i*40}ms"><div class="avatar" style="background:${bg(h)}">${h.init}</div><div class="body"><div class="name">${h.name}${h.v?CHECK:''}${h.founder?'<span class="founderpill">🎓 Founder</span>':''}${h.boost?'<span class="boostpill">⚡ Boosted</span>':''}${samplePill(h)}${AVAIL.includes(h.id)?'<span class="availpill">● now</span>':''}${pillFor(h)}</div><div class="offer">${h.offer}</div><div class="metarow"><span class="catbadge">${h.cat}</span><span class="rating">${star} ${h.rating}</span><span class="dist">${pin} ${h.dist} mi</span><span class="pricetag">${h.price}</span></div></div></div>`).join(''):`<div class="empty">No hustles match those filters yet.</div>`}</div>`;
+    <div class="list">${f.length?f.map((h,i)=>`<div class="card" data-open="${h.id}" style="animation-delay:${i*40}ms"><div class="avatar" style="background:${bg(h)}">${h.init}</div><div class="body"><div class="name">${h.name}${h.v?CHECK:''}${h.founder?'<span class="founderpill">🎓 Founder</span>':''}${h.boost?'<span class="boostpill">⚡ Boosted</span>':''}${samplePill(h)}${campusTag(h)}${AVAIL.includes(h.id)?'<span class="availpill">● now</span>':''}${pillFor(h)}</div><div class="offer">${h.offer}</div><div class="metarow"><span class="catbadge">${h.cat}</span><span class="rating">${star} ${h.rating}</span><span class="dist">${pin} ${h.dist} mi</span><span class="pricetag">${h.price}</span></div></div></div>`).join(''):`<div class="empty">No hustles match those filters yet.</div>`}</div>`;
 }
 
 function eventsBody(){
   const cal='<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>';
   const now=Date.now();
   const seed=liveList(EVENTS_SEED).map(e=>{const d=new Date();d.setHours(e.hour,0,0,0);d.setDate(d.getDate()+e.inDays);return Object.assign({},e,{ts:d.getTime()});});
-  const all=[...state.events,...seed].filter(e=>e.campus===state.campus.id&&e.ts>now-3*3600*1000).sort((a,b)=>a.ts-b.ts);
+  const all=[...state.events,...seed].filter(e=>campusVisible(e)&&e.ts>now-3*3600*1000).sort((a,b)=>a.ts-b.ts);
   if(!all.length)return `<div class="empty" style="padding-top:50px">No upcoming events right now.<br>Tap the ＋ to post one.</div>`;
   return `<div class="events">${all.map((e,i)=>{const cc=(e.c!=null?e.c:0);return `<div class="eflyer" style="${e.img?'':'background:'+bannerGrad(color(cc))};animation-delay:${i*40}ms">${e.img?`<img src="${e.img}">`:''}${e.tag?`<span class="etag">${e.tag}</span>`:''}<div class="eover"><div class="etitle">${e.title}</div><div class="emeta">${icon(cal,13)} ${fmtDate(e.ts)}</div><div class="emeta">${pin} ${e.loc}</div><div style="display:flex;gap:8px;margin-top:11px"><button class="eint" data-int="${i}">Interested</button><a class="eint" style="text-decoration:none" href="${mapsUrl(e.loc)}" target="_blank" rel="noopener">${icon('<path d="M9 20l-6-2V4l6 2 6-2 6 2v14l-6-2-6 2zM9 6v14M15 4v14"/>',13)} Directions</a></div></div></div>`;}).join('')}</div>`;
 }
@@ -699,7 +708,7 @@ function detail(id){
     </div>
     <div class="shop-sign">
       <div class="detail-av" style="${avStyle}">${h.me&&h.avatar?'':h.init}</div>
-      <div><div class="store-name" style="font-size:20px;color:var(--ink)">${h.name}${h.v?CHECK:''}${h.founder?'<span class="founderpill">🎓 Founder</span>':''}${samplePill(h)}${pillFor(h)}</div>
+      <div><div class="store-name" style="font-size:20px;color:var(--ink)">${h.name}${h.v?CHECK:''}${h.founder?'<span class="founderpill">🎓 Founder</span>':''}${samplePill(h)}${campusTag(h)}${pillFor(h)}</div>
       <div class="store-sub" style="color:var(--mist)">${h.v?`<span style="color:var(--violet);font-weight:600;display:inline-flex;align-items:center;gap:3px">${icon('<path d="M20 6 9 17l-5-5"/>',12)}Verified</span> · `:''}${h.cat}${h.me?'':` · ${pin} ${h.dist} mi`}</div></div>
     </div>
     <div class="socialrow">${socialHTML}</div>
@@ -792,8 +801,8 @@ function market(){
   screen.innerHTML=`<div class="topbar"><div class="brandrow"><div class="wordmark go" id="logo">${WM} <span style="font-size:.7em;color:var(--ink)">Market</span></div><div class="locpill" onclick="openCampusPick()"><span class="dot"></span>${CAMP()}</div></div><div class="search">${icon('<circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/>')}<input placeholder="${goods?'Search supplies…':'Search requests…'}"></div></div>
     <div class="campus-wrap"><div class="campus-bg">${wmk()}</div><div class="campus-content">
     <div class="hubseg" style="padding-top:2px">${[['goods','Buy & Trade'],['requests','Requests']].map(x=>`<div class="hchip ${state.mkt===x[0]?'on':''}" data-mkt="${x[0]}">${x[1]}</div>`).join('')}</div>
-    ${state.mkt==='housing'?housingHTML():state.mkt==='jobs'?jobsHTML():goods?`<div class="list" style="padding-top:16px">${(GOODS.filter(g=>g.campus===state.campus.id&&!hideS(g)).length?'':'<div class="empty" style="padding-top:40px">Nothing listed at '+CAMP()+' yet. Tap ＋ to post the first item.</div>')}${GOODS.map((g,i)=>(g.campus!==state.campus.id||hideS(g))?'':`<div class="card" style="display:block;animation-delay:${i*40}ms"><div style="display:flex;gap:13px"><div style="width:78px;height:78px;border-radius:14px;overflow:hidden;background:${color(g.c)}22;display:flex;align-items:center;justify-content:center;font-size:32px;flex:none">${g.img?`<img src="${g.img}" style="width:100%;height:100%;object-fit:cover">`:g.emoji}</div><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:15px;line-height:1.2">${g.name}</div><div style="font-family:Bricolage Grotesque;font-weight:700;font-size:16px;margin-top:2px">${g.price}</div><div style="font-size:11.5px;font-weight:600;color:var(--mist);margin-top:1px">${g.tag}</div><div class="mkt-by"><span class="mkt-avatar" style="background:${color(g.bc||0)}">${g.bi||'?'}</span><span class="gp-author" data-user="${g.by||'Student'}␟${g.bi||'?'}␟${g.bc||0}" style="cursor:pointer">${g.by||'Student'}</span></div></div></div>${acts(g)}${state.openMC===g.id?panel(g,g.by||'the seller'):''}</div>`).join('')}</div>`
-    :`<div class="list" style="padding-top:16px">${(REQUESTS.filter(r=>r.campus===state.campus.id&&!hideS(r)).length?'':'<div class="empty" style="padding-top:40px">No open requests at '+CAMP()+' yet. Tap ＋ to post one.</div>')}${REQUESTS.map((r,i)=>(r.campus!==state.campus.id||hideS(r))?'':`<div class="card" style="display:block;animation-delay:${i*40}ms"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div class="avatar" style="width:34px;height:34px;font-size:14px;border-radius:10px;background:${r.uc||color(r.c)}">${r.in}</div><div class="gp-author" data-user="${r.who}␟${r.in}␟${r.c||0}" style="font-weight:700;font-size:14px;cursor:pointer">${r.who}</div><div style="margin-left:auto;font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px;${r.barter?'background:#FFF0E0;color:#a5600f':'background:var(--violet-soft);color:#3f2b8c'}">${r.barter?'Barter':'Looking for'}</div></div><div style="font-size:14px;color:#40384c;line-height:1.4">${r.txt}</div>${acts(r)}${state.openMC===r.id?panel(r,r.who):''}</div>`).join('')}</div>`}
+    ${state.mkt==='housing'?housingHTML():state.mkt==='jobs'?jobsHTML():goods?`<div class="list" style="padding-top:16px">${(GOODS.filter(g=>campusVisible(g)&&!hideS(g)).length?'':'<div class="empty" style="padding-top:40px">Nothing listed at '+CAMP()+' yet. Tap ＋ to post the first item.</div>')}${GOODS.map((g,i)=>(!campusVisible(g)||hideS(g))?'':`<div class="card" style="display:block;animation-delay:${i*40}ms"><div style="display:flex;gap:13px"><div style="width:78px;height:78px;border-radius:14px;overflow:hidden;background:${color(g.c)}22;display:flex;align-items:center;justify-content:center;font-size:32px;flex:none">${g.img?`<img src="${g.img}" style="width:100%;height:100%;object-fit:cover">`:g.emoji}</div><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:15px;line-height:1.2">${g.name}</div><div style="font-family:Bricolage Grotesque;font-weight:700;font-size:16px;margin-top:2px">${g.price}</div><div style="font-size:11.5px;font-weight:600;color:var(--mist);margin-top:1px">${g.tag}</div><div class="mkt-by"><span class="mkt-avatar" style="background:${color(g.bc||0)}">${g.bi||'?'}</span><span class="gp-author" data-user="${g.by||'Student'}␟${g.bi||'?'}␟${g.bc||0}" style="cursor:pointer">${g.by||'Student'}</span></div></div></div>${acts(g)}${state.openMC===g.id?panel(g,g.by||'the seller'):''}</div>`).join('')}</div>`
+    :`<div class="list" style="padding-top:16px">${(REQUESTS.filter(r=>campusVisible(r)&&!hideS(r)).length?'':'<div class="empty" style="padding-top:40px">No open requests at '+CAMP()+' yet. Tap ＋ to post one.</div>')}${REQUESTS.map((r,i)=>(!campusVisible(r)||hideS(r))?'':`<div class="card" style="display:block;animation-delay:${i*40}ms"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div class="avatar" style="width:34px;height:34px;font-size:14px;border-radius:10px;background:${r.uc||color(r.c)}">${r.in}</div><div class="gp-author" data-user="${r.who}␟${r.in}␟${r.c||0}" style="font-weight:700;font-size:14px;cursor:pointer">${r.who}</div><div style="margin-left:auto;font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px;${r.barter?'background:#FFF0E0;color:#a5600f':'background:var(--violet-soft);color:#3f2b8c'}">${r.barter?'Barter':'Looking for'}</div></div><div style="font-size:14px;color:#40384c;line-height:1.4">${r.txt}</div>${acts(r)}${state.openMC===r.id?panel(r,r.who):''}</div>`).join('')}</div>`}
     </div></div>`;
   screen.querySelectorAll('[data-mkt]').forEach(el=>el.onclick=()=>{state.mkt=el.dataset.mkt;state.openMC=0;market();});conveyorHint(screen.querySelector('.hubseg'),'market');
   var _ph=document.getElementById('postHousing');if(_ph)_ph.onclick=()=>toast('Paid housing listings arrive in the full build 🏠');
@@ -903,7 +912,7 @@ function commJoined(k){return state.joinedComm.indexOf(k)>-1;}
 function myMember(){return {name:'You',init:(state.vname?state.vname.trim()[0].toUpperCase():'Y'),c:0};}
 function toggleComm(k){var i=state.joinedComm.indexOf(k),c=commByKey(k);if(!c)return;if(i>-1){state.joinedComm.splice(i,1);c.members=c.members.filter(function(m){return m.name!=='You';});if(c.mod==='You'&&c.members.length){c.mod=c.members[0].name;}toast('Left '+c.name);}else{state.joinedComm.push(k);if(!c.members.some(function(m){return m.name==='You';}))c.members.push(myMember());toast('Joined '+c.name+'! 🎉');}}
 function openGroup(k){state.groupView=k;state.groupPostText='';render();}
-function myCommunities(){return COMM.filter(function(c){return commJoined(c.key)&&c.campus===state.campus.id;});}
+function myCommunities(){return COMM.filter(function(c){return commJoined(c.key)&&campusVisible(c);});}
 function groupPage(){
   var c=commByKey(state.groupView);
   if(!c){state.groupView=null;return render();}
@@ -967,8 +976,8 @@ function userProfile(){
   var isMe=!!u.me;
   var vendor=HUSTLES.filter(function(h){return h.name===u.name;})[0];
   var yr=isMe?(state.gradYear||''):classYearFor(u.name);
-  var comms=COMM.filter(function(c){return c.campus===state.campus.id && c.members.some(function(m){return m.name===u.name;});});
-  var listings=[].concat(GOODS,REQUESTS).filter(function(x){return (x.by===u.name||x.who===u.name)&&x.campus===state.campus.id;});
+  var comms=COMM.filter(function(c){return campusVisible(c) && c.members.some(function(m){return m.name===u.name;});});
+  var listings=[].concat(GOODS,REQUESTS).filter(function(x){return (x.by===u.name||x.who===u.name)&&campusVisible(x);});
   var mutual=comms.filter(function(c){return commJoined(c.key)&&!isMe;});
   var av=(isMe&&state.avatar)?'background-image:url('+state.avatar+');background-size:cover':'background:'+(u.col||state.themeColor);
   var h='<div class="topbar"><div class="brandrow"><div class="wordmark" style="font-size:18px">Profile</div><div class="locpill" id="upBack" style="cursor:pointer">\u2039 Back</div></div></div>';
@@ -1244,7 +1253,7 @@ function profile(){
   const av=state.avatar?`background-image:url(${state.avatar})`:`background:${state.themeColor}`;
   const refLink='vendu.app/join?ref=aysha', goal=state.isFounder?5:3;
   const viewBtn=`<button class="submit viewbtn" id="viewme" style="background:var(--card);border:1.5px solid ${state.themeColor};color:var(--ink);margin:0 0 10px;display:flex;align-items:center;justify-content:center;gap:8px;padding:17px 16px"><span style="font-weight:600;font-size:15px;color:var(--mist)">View my</span><span class="viewwm">${WM}</span></button><button class="submit" id="toregular" style="background:transparent;color:var(--mist);border:0;box-shadow:none;margin:0 0 18px;display:flex;align-items:center;justify-content:center;gap:7px;padding:8px;font-size:13px;font-weight:600"><span style="font-size:14px">🔁</span> Switch to regular mode</button>`;
-  const membership=`<div class="plan" style="background:${bannerGrad(state.themeColor)};color:#fff"><div class="plan-badge">${state.isFounder?'🎓 Founder':'💠 Vendor'}</div><div class="p-lbl">Your vendor status</div><div class="p-big">${state.isFounder?`Founder #${founderCount()} of ${FOUNDER_CAP}`:'Vendor'}</div>
+  const membership=`<div class="plan" style="background:${bannerGrad(state.themeColor)};color:#fff"><div class="plan-badge">${state.ceo?'★ CEO':(state.isFounder?'🎓 Founder':'💠 Vendor')}</div><div class="p-lbl">Your vendor status</div><div class="p-big">${state.isFounder?`Founder #${founderCount()} of ${FOUNDER_CAP}`:'Vendor'}</div>
     <div class="ref"><div class="ref-top"><span>Vendors referred</span><span><b>${state.referrals}</b> / ${goal}</span></div><div style="font-size:11.5px;opacity:.85;margin:-4px 0 9px">${state.isFounder?'🎓 Free + a monthly Boost':'Refer vendors to earn free Boosts'}</div>
       <div class="ref-dots">${Array.from({length:goal}).map((_,i)=>`<div class="rdot ${i<state.referrals?'on':''} ${i===state.justReferred?'pop':''}">🎓</div>`).join('')}</div>
       <div class="ref-link"><span class="rl">${refLink}</span><button id="copyref">Copy</button></div>
@@ -1254,7 +1263,7 @@ function profile(){
   screen.innerHTML=`<div class="topbar"><div class="brandrow"><div class="wordmark">Profile</div></div></div>
     <div style="padding:6px 20px 20px" class="enter">
       <div class="store-row" style="margin:6px 0 16px"><div class="detail-av up" style="${av};position:relative;box-shadow:0 0 0 3px var(--paper),0 0 0 6px ${state.themeColor}">${state.avatar?'':'A'}<div class="cam" style="position:absolute;right:-4px;bottom:-4px;width:26px;height:26px;border-radius:50%;background:var(--violet);color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid var(--paper)">${icon('<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',12)}</div></div>
-      <div><div class="store-name" style="color:var(--ink);font-size:21px">${state.vname||'Your name'} ${CHECK}${state.isFounder?'<span class="founderpill">🎓 Founder</span>':''}</div><div class="store-sub" style="color:var(--mist)"><span style="color:var(--violet);font-weight:600;display:inline-flex;align-items:center;gap:3px">${icon('<path d="M20 6 9 17l-5-5"/>',12)}Verified</span> · ${CAMP()} · ${state.isSeller?'Vendor':'Student'}${state.gradYear?` · Class of ’${state.gradYear.slice(2)}`:''}</div></div></div>
+      <div><div class="store-name" style="color:var(--ink);font-size:21px">${state.vname||'Your name'} ${CHECK}${ceoPill()}${(state.isFounder&&!state.ceo)?'<span class="founderpill">🎓 Founder</span>':''}</div><div class="store-sub" style="color:var(--mist)"><span style="color:var(--violet);font-weight:600;display:inline-flex;align-items:center;gap:3px">${icon('<path d="M20 6 9 17l-5-5"/>',12)}Verified</span> · ${CAMP()} · ${state.isSeller?'Vendor':'Student'}${state.gradYear?` · Class of ’${state.gradYear.slice(2)}`:''}</div></div></div>
       ${state.isSeller?viewBtn+membership+'<button class="submit" id="profSave" style="margin-top:14px">Save profile</button>':regularCard}
       <div class="menu">${menuItems.map(x=>`<div class="svc" data-menu="${x[1]}">${x[0]}<span>${icon('<path d="m9 18 6-6-6-6"/>',18)}</span></div>`).join('')}</div>
     </div>`;
@@ -1384,7 +1393,7 @@ function onboarding(){
     var v=(document.getElementById('eduIn').value||'').trim().toLowerCase();
     if(!VendU.looksLikeEmail(v)){fail('Enter a valid email address');return;}
     if(busy)return;busy=true;sendBtn.textContent='Sending\u2026';sendBtn.classList.add('busy');
-    state.eduEmail=v;var cc=campusByDomain(v);if(cc)state.campus=cc;
+    state.eduEmail=v;state.ceo=isCeoEmail(v);var cc=campusByDomain(v);if(cc){state.campus=cc;}state.campusesSeen=state.ceo?CAMPUSES.map(function(c){return c.id;}):[state.campus.id];
     VendU.sendCode(v,BUILD).then(function(r){busy=false;
       if(r&&r.ok){state.eduErr='';state.eduCodeSent=true;onboarding();toast('Sign-in link sent to '+v+' \u{1F4EC}');}
       else fail((r&&r.message)||'Could not send the link. Try again.');});
@@ -1409,10 +1418,10 @@ function campusPicker(){
   document.getElementById('cpClose').onclick=function(){state.campusPick=false;state.campusQ='';state.themeView=false;state.myPostsView=false;state.thread=0;state.inboxView=false;state.groupView=null;state.userView=null;state.groupCreateView=false;state.assignMod=false;state.createGroup=null;render();};
   document.getElementById('cpq').oninput=function(e){state.campusQ=e.target.value;campusPicker();var q2=document.getElementById('cpq');if(q2){q2.focus();try{q2.setSelectionRange(q2.value.length,q2.value.length);}catch(er){}}};
   document.getElementById('cpNear').onclick=pickNearest;
-  screen.querySelectorAll('[data-camp]').forEach(function(el){el.onclick=function(){state.campus=campusById(el.dataset.camp);state.campusPick=false;state.campusQ='';toast('Now viewing '+state.campus.short);render();};});
+  screen.querySelectorAll('[data-camp]').forEach(function(el){el.onclick=function(){state.campus=campusById(el.dataset.camp);addCampusSeen(state.campus.id);state.campusPick=false;state.campusQ='';toast('Now viewing '+state.campus.short+' \u2014 you\u2019ll keep seeing posts from your other campuses too');render();};});
 }
 function pickNearest(){
-  var done=function(lat,lng){var best=CAMPUSES[0],bd=1e18;CAMPUSES.forEach(function(c){var dx=c.lat-lat,dy=c.lng-lng,d=dx*dx+dy*dy;if(d<bd){bd=d;best=c;}});state.campus=best;state.campusPick=false;state.campusQ='';toast('\uD83D\uDCCD Nearest campus: '+best.short);render();};
+  var done=function(lat,lng){var best=CAMPUSES[0],bd=1e18;CAMPUSES.forEach(function(c){var dx=c.lat-lat,dy=c.lng-lng,d=dx*dx+dy*dy;if(d<bd){bd=d;best=c;}});state.campus=best;addCampusSeen(best.id);state.campusPick=false;state.campusQ='';toast('\uD83D\uDCCD Nearest campus: '+best.short);render();};
   try{navigator.geolocation.getCurrentPosition(function(p){done(p.coords.latitude,p.coords.longitude);},function(){done(32.84,-83.63);});}catch(e){done(32.84,-83.63);}
 }
 const APP_THEMES=[
