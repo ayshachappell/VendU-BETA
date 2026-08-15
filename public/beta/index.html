@@ -506,8 +506,8 @@ function payUrl(app,handle){var h=(handle||'').trim();if(app==='Cash App'){var x
 const REGULATED=['Beauty','Food','Fitness'];
 const AVAIL=[2,4,5,7,9,11];
 const REVIEWS={2:[['Deon',5,'Cleanest fade on campus, always on time.'],['Maya',5,'Booked twice — never disappointed.']],3:[['Bri',5,'My braids lasted 8 weeks!']],5:[['Chris',5,'Grad photos came out unreal.']],10:[['Aisha',5,'The cake jars are dangerous. So good.']]};
-function LBROWS(){return (state.tester&&state.showSamples)?LEADERBOARD:[];}
-const LEADERBOARD=[['Marcus B.',9],['Simone T.',7],['Jasmine K.',6],['Tay R.',4],['Kevin O.',2],['Devin W.',1]];
+function LBROWS(){return (state.tester&&state.showSamples)?LEADERBOARD_SAMPLE:LEADERBOARD;}
+const LEADERBOARD_SAMPLE=[['Marcus B.',9],['Simone T.',7],['Jasmine K.',6],['Tay R.',4],['Kevin O.',2],['Devin W.',1]];
 const firstNum=s=>{const m=(s||'').match(/\d+/);return m?+m[0]:999;};
 let idc=1;
 const MSGS={};
@@ -562,7 +562,7 @@ GOODS.forEach(function(g){if(!g.campus)g.campus='fvsu';});REQUESTS.forEach(funct
    students unless they turn samples back on from Profile. ---------------- */
 [HUSTLES,FEED,GOODS,REQUESTS,EVENTS_SEED].forEach(function(list){list.forEach(function(it){it.sample=1;});});
 HUSTLES.forEach(function(h){h.founder=0;h.v=0;});
-LEADERBOARD.length=0;
+const LEADERBOARD=[];
 function hideS(x){return !!(x&&x.sample)&&!(state.tester&&state.showSamples);}
 function liveList(list){return list.filter(function(x){return !hideS(x);});}
 function youPill(n){return (state.ceo&&(n==='You'||(state.vname&&n===state.vname)))?ceoPill():'';}
