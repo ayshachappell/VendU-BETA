@@ -117,17 +117,6 @@
       {
         before: closeOverlays,
         target: function () {
-          return nav("venuU");
-        },
-        title: "VendUniversity",
-        text: "Communities and groups, your class planner, campus routes, and free guides for trades, certs and starting a business.",
-        doit: "Tap VendUniversity",
-        click: true,
-        place: "above",
-      },
-      {
-        before: closeOverlays,
-        target: function () {
           return nav("add");
         },
         title: "Post in seconds",
