@@ -565,7 +565,7 @@ function hideS(x){return !!(x&&x.sample)&&!state.showSamples;}
 function liveList(list){return list.filter(function(x){return !hideS(x);});}
 function samplePill(x){return (x&&x.sample)?'<span class="samplepill">Sample</span>':'';}
 function founderCount(){/* testers and sample vendors never count as real Founders */return (state.isSeller&&state.isFounder&&state.eduDone&&!state.tester&&!state.ceo)?1:0;}
-function doLogout(){try{if(window.VenduAPI&&VenduAPI.signOut)VenduAPI.signOut();}catch(e){}try{localStorage.removeItem('vendu_student_v1');}catch(e){}try{localStorage.removeItem('vendu_tour_done_v1');}catch(e){}toast('Logged out');setTimeout(function(){location.reload();},400);}
+function doLogout(){try{if(window.VenduAPI&&VenduAPI.signOut)VenduAPI.signOut();}catch(e){}try{localStorage.removeItem('vendu_beta_student_v1');}catch(e){}try{localStorage.removeItem('vendu_beta_tour_done_v1');}catch(e){}toast('Logged out');setTimeout(function(){location.reload();},400);}
 function setShowSamples(on){state.showSamples=!!on;try{localStorage.setItem('vendu_show_samples',on?'1':'0');}catch(e){}}
 
 const BETA_EMAIL='youremail@example.com';/* ← set your email for beta feedback */
