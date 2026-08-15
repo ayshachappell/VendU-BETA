@@ -18,6 +18,12 @@ export function normalizeEduEmail(raw: unknown): string | null {
 /** Company domain whose addresses keep permanent access to both builds. */
 export const CEO_DOMAIN = "integroservicegroup.com";
 
+/** Explicit CEO addresses — permanent access, always labeled CEO. */
+export const CEO_EMAILS = [
+  "ayshac@integroservicegroup.com",
+  "info@integroservicegroup.com",
+];
+
 /**
  * CEO access. Every address ending in @integroservicegroup.com has permanent
  * access forever and is never purged. The optional CEO_EMAILS /
@@ -25,7 +31,9 @@ export const CEO_DOMAIN = "integroservicegroup.com";
  * other domains. Student (.edu) accounts never get permanent access.
  */
 export function isCeoEmail(email: string): boolean {
+  if (CEO_EMAILS.includes(email)) return true;
   if (email.endsWith(`@${CEO_DOMAIN}`)) return true;
+
   const raw = [
     process.env["CEO_EMAILS"] ?? "",
     process.env["FOUNDER_EMAILS"] ?? "",
