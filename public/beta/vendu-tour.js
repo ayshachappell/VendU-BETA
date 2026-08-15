@@ -89,7 +89,7 @@
       {
         target: closeEl,
         title: "Close what's open",
-        text: "Storefronts, message threads, comments and group pages open on top of the app. Their Back / \u2039 button closes them and frees the Home, Market, VendU and Profile tabs at the bottom.",
+        text: "Storefronts, message threads, comments and group pages open on top of the app. Their Back / \u2039 button closes them and frees the Home, Market, and Profile tabs at the bottom.",
         doit: "Tap Back (or \u2039) to close this screen",
         click: true,
         place: "below",
@@ -111,17 +111,6 @@
         title: "Buy, sell & trade",
         text: "The Market is student-to-student: textbooks, dorm gear, sneakers, plus trades and \u201clooking for\u201d requests. You meet on campus, so no shipping.",
         doit: "Tap Market",
-        click: true,
-        place: "above",
-      },
-      {
-        before: closeOverlays,
-        target: function () {
-          return nav("venuU");
-        },
-        title: "VendUniversity",
-        text: "Communities and groups, your class planner, campus routes, and free guides for trades, certs and starting a business.",
-        doit: "Tap VendUniversity",
         click: true,
         place: "above",
       },
