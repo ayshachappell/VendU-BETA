@@ -1376,13 +1376,16 @@ function finishOnboarding(){
   if(window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour();},600);
 }
 function obDots(n){return '<div class="ob-top"><div class="ob-dots">'+[0,1,2].map(function(i){return '<span class="obd '+(i<=n?'on':'')+'"></span>';}).join('')+'</div></div>';}
+function enableTesterSkip(){var sk=document.getElementById('obSkip');if(sk)sk.onclick=function(){state.tester=true;finishOnboarding();};}
 function onboarding(){
   const s=state.obStep;
   if(s<1){screen.innerHTML=`<div class="ob">
     ${obDots(0)}
     <div class="ob-body"><div class="ob-emoji">\u{1F393}</div><div class="ob-title">Welcome to VendU</div><div class="ob-text">Your campus marketplace \u2014 find & book student services, buy & sell stuff, and run your school life. Always free, students only.</div></div>
-    <button class="ob-btn" id="obnext">Get started</button></div>`;
-    document.getElementById('obnext').onclick=()=>{state.obStep=1;render();};return;}
+    <button class="ob-btn" id="obnext">Get started</button>
+    <button class="submit" id="obSkip" style="background:transparent;color:var(--mist);border:0;box-shadow:none;margin-top:14px;font-size:13px;font-weight:700;text-decoration:underline">Skip onboarding (tester access)</button>
+    <div class="edu-note" style="margin-top:2px">Testers can skip verification \u2014 you\u2019ll still get the quick tour.</div></div>`;
+    document.getElementById('obnext').onclick=()=>{state.obStep=1;render();};enableTesterSkip();return;}
   if(s===1){screen.innerHTML=`<div class="ob">
     ${obDots(1)}
     <div class="ob-body" style="justify-content:flex-start;padding-top:24px"><div class="ob-title" style="margin-bottom:6px">How will you use VendU?</div><div class="ob-text" style="margin-bottom:24px">Everything on VendU is free. You can become a vendor \u2014 or switch it off \u2014 anytime.</div>
