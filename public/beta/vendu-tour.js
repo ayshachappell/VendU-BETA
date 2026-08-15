@@ -13,12 +13,29 @@
 
   function goHome() {
     var n = nav("home");
-    if (n && n.className.indexOf("on") === -1) n.click();
+    if (!n) return;
+    if (n.className.indexOf("on") === -1 || !document.querySelector("#q")) n.click();
   }
   function goBrowse() {
     goHome();
     var t = document.querySelector('.seg [data-home="browse"]');
     if (t && t.className.indexOf("on") === -1) t.click();
+  }
+
+  function closeEl() {
+    var sels = ["#msgBack", "#inbClose", "#cpClose", "#back", ".backbtn", "#doneEdit"];
+    for (var k = 0; k < sels.length; k++) {
+      var el = document.querySelector(sels[k]);
+      if (el && el.offsetParent !== null) return el;
+    }
+    return null;
+  }
+  function closeOverlays() {
+    for (var k = 0; k < 5; k++) {
+      var el = closeEl();
+      if (!el) break;
+      try { el.click(); } catch (e) {}
+    }
   }
 
   function steps() {
@@ -70,16 +87,24 @@
         place: "above",
       },
       {
-        target: function () {
-          return $("#back") || $(".backbtn");
-        },
-        title: "Close the storefront",
-        text: "Back always returns you to where you were. Close a storefront before moving to another tab.",
-        doit: "Tap Back to close it",
+        target: closeEl,
+        title: "Close what's open",
+        text: "Storefronts, message threads, comments and group pages all open on top of the app. Their Back / \u2039 button closes them and frees the Home, Market, VendU and Profile tabs at the bottom.",
+        doit: "Tap Back (or \u2039) to close this screen",
         click: true,
         place: "below",
       },
       {
+        optional: true,
+        target: closeEl,
+        title: "Back to the main tabs",
+        text: "If another screen is still stacked on top, close that one too \u2014 you're done when the bottom tab bar is fully visible.",
+        doit: "Tap Back again to reach the tabs",
+        click: true,
+        place: "below",
+      },
+      {
+        before: closeOverlays,
         target: function () {
           return nav("market");
         },
@@ -90,6 +115,7 @@
         place: "above",
       },
       {
+        before: closeOverlays,
         target: function () {
           return nav("add");
         },
@@ -111,7 +137,7 @@
         place: "below",
       },
       {
-        before: goHome,
+        before: function(){closeOverlays();goHome();},
         target: function () {
           return nav("profile");
         },
@@ -206,7 +232,7 @@
     if (!el) {
       // The screen may still be rendering — wait a beat before giving up.
       var n = (tries || 0) + 1;
-      if (n < 10)
+      if (n < (st.optional ? 2 : 10))
         return setTimeout(function () {
           show(n);
         }, 150);
