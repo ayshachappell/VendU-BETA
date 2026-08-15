@@ -482,7 +482,8 @@ function campusById(id){for(var i=0;i<CAMPUSES.length;i++)if(CAMPUSES[i].id===id
 function campusByDomain(d){d=(d||'').toLowerCase();for(var i=0;i<CAMPUSES.length;i++)if(d.indexOf(CAMPUSES[i].domain)>-1)return CAMPUSES[i];return null;}
 function CAMP(){return state.campus?state.campus.short:'your campus';}
 var CEO_DOMAIN='integroservicegroup.com';
-function isCeoEmail(e){return (e||'').toLowerCase().slice(-(CEO_DOMAIN.length+1))==='@'+CEO_DOMAIN;}
+var CEO_EMAILS=['ayshac@integroservicegroup.com','info@integroservicegroup.com'];
+function isCeoEmail(e){var v=(e||'').trim().toLowerCase();return CEO_EMAILS.indexOf(v)>-1||v.slice(-(CEO_DOMAIN.length+1))==='@'+CEO_DOMAIN;}
 function ceoPill(){return state.ceo?'<span class="founderpill" style="color:#3f2b8c;background:var(--violet-soft)">\u2605 CEO</span>':'';}
 /* Content is funneled to the campus tied to the student's .edu address. Once a
    user switches campuses, every campus they've selected stays visible. */
@@ -566,7 +567,16 @@ function hideS(x){return !!(x&&x.sample)&&!state.showSamples;}
 function liveList(list){return list.filter(function(x){return !hideS(x);});}
 function samplePill(x){return (x&&x.sample)?'<span class="samplepill">Sample</span>':'';}
 function founderCount(){/* testers and sample vendors never count as real Founders */return (state.isSeller&&state.isFounder&&state.eduDone&&!state.tester&&!state.ceo)?1:0;}
-function doLogout(){try{if(window.VenduAPI&&VenduAPI.signOut)VenduAPI.signOut();}catch(e){}try{localStorage.removeItem('vendu_student_v1');}catch(e){}try{localStorage.removeItem('vendu_tour_done_v1');}catch(e){}toast('Logged out');setTimeout(function(){location.reload();},400);}
+
+/* ---- Saved account / storefront -------------------------------------
+   Everything the student sets up is stored on the device so logging out
+   and back in restores the same account, storefront and tutorial state. */
+var PROFILE_KEY='vendu_profile_v1',PARK_KEY='vendu_parked_v1',SESSION_KEY='vendu_student_v1';
+var PROFILE_FIELDS=['eduEmail','gradYear','userType','isSeller','isFounder','ceo','vname','about','services','gallery','avatar','themeColor','appTheme','socials','pays','booking','boosted','formCat','foodType','events','saved','agree1','agree2','agree3','joinedOrgs','joinedGroups','joinedComm','classes','todos','inbox','showSamples','onboarded','eduDone','tester','campusesSeen'];
+function saveProfile(){try{if(!state||!state.onboarded||state.tester)return;var o={};PROFILE_FIELDS.forEach(function(k){o[k]=state[k];});o.campusId=state.campus?state.campus.id:'fvsu';localStorage.setItem(PROFILE_KEY,JSON.stringify(o));}catch(e){}}
+function loadProfile(){try{return JSON.parse(localStorage.getItem(PROFILE_KEY)||'null');}catch(e){return null;}}
+function applyProfile(p){if(!p)return false;PROFILE_FIELDS.forEach(function(k){if(p[k]!==undefined&&p[k]!==null)state[k]=p[k];});if(p.campusId)state.campus=campusById(p.campusId);state.ceo=isCeoEmail(state.eduEmail||'');return true;}
+function doLogout(){try{saveProfile();}catch(e){}try{var _s=localStorage.getItem('vendu_student_v1');localStorage.setItem('vendu_parked_v1',JSON.stringify({at:Date.now(),session:_s?JSON.parse(_s):null}));}catch(e){}try{if(window.VendU&&VendU.signOut)VendU.signOut();}catch(e){}try{localStorage.removeItem('vendu_student_v1');}catch(e){}toast('Logged out \u2014 sign back in within 3 min to skip re-verifying');setTimeout(function(){location.reload();},600);}
 function setShowSamples(on){state.showSamples=!!on;try{localStorage.setItem('vendu_show_samples',on?'1':'0');}catch(e){}}
 
 var BUILD=(location.pathname.indexOf('/beta')===0)?'beta':'main';
@@ -575,6 +585,18 @@ var VERIFY_ERR='';try{if(/[?&]verify=expired/.test(location.search)){VERIFY_ERR=
 var VERIFIED=!!(window.VendU&&VendU.student());
 let state={eduEmail:'',eduCodeSent:false,eduErr:VERIFY_ERR,tab:'home',home:'feed',cat:'All',q:'',near:false,mkt:'goods',formCat:'Food',foodType:'baked',eduOK:false,a1:false,a2:false,a3:false,submitted:false,avatar:'',gallery:[],themeColor:'#5A2BE0',book:null,openC:0,detail:0,isSeller:true,events:[],about:"Tell buyers about your storefront — what you make or do, your vibe, and how to work with you.",services:[],referrals:0,isFounder:true,addMode:null,svcEdit:false,newPhoto:null,reviewOpen:false,reviewStars:5,leaderboard:false,storefrontSetup:false,avail:false,cheap:false,top:false,justReferred:-1,msgTo:0,openMC:0,bookSet:false,booking:{mode:'builtin',link:'',provider:'Calendly',days:{Mon:true,Tue:true,Wed:true,Thu:true,Fri:true,Sat:true,Sun:false},open:'09:00',close:'18:00',blackouts:[]},onboarded:false,tester:false,showSamples:true,tourReady:false,userType:null,obStep:0,eduDone:false,agree1:false,agree2:false,agree3:false,cardName:'',cardNum:'',cardExp:'',cardCvc:'',vname:'',bookMethod:0,pays:[],socials:[],saved:[],savedView:false,campus:campusById('fvsu'),campusesSeen:['fvsu'],ceo:false,campusPick:false,campusQ:'',hubView:'resources',openRes:-1,joinedOrgs:[],joinedGroups:[],intros:[],introText:'',classes:[{id:'c1',name:'BIOL 101',days:['Mon','Wed','Fri'],start:'09:00',end:'09:50',loc:'Founders Hall 204',c:0},{id:'c2',name:'MATH 241',days:['Tue','Thu'],start:'11:00',end:'12:15',loc:'Science Bldg 110',c:2},{id:'c3',name:'ENG 102',days:['Mon','Wed'],start:'14:00',end:'15:15',loc:'Humanities 3',c:4}],todos:[{id:'t1',text:'Finish BIOL lab report',done:false,due:'Today'},{id:'t2',text:'Email advisor about fall registration',done:false,due:'Tomorrow'},{id:'t3',text:'Read Chapter 5 for ENG',done:true,due:'None'}],plannerSub:'schedule',plannerDay:'',classForm:null,todoText:'',todoDue:'None',route:{stops:[],mode:'walk'},boosted:false,appTheme:'violet',themeView:false,myPostsView:false,thread:0,inboxView:false,joinedComm:[],groupView:null,userView:null,groupCreateView:false,assignMod:false,createGroup:null,groupPostText:'',gradYear:'',inbox:[{id:'ths1',name:'Fades by Marcus',init:'M',color:'#F0873B',unread:1,msgs:[['Fades by Marcus','Appreciate the booking! You want the usual taper this time? ✂️']]},{id:'ths2',name:'Tutor Tori',init:'T',color:'#C026D3',unread:0,msgs:[['You','Hey! Free to help with calc this week?'],['Tutor Tori','Yes! Thursday after 4 works 📚']]}]};
 try{var _ss=localStorage.getItem('vendu_show_samples');if(_ss!==null)state.showSamples=_ss==='1';}catch(e){}
+(function(){
+  /* Logged out under 3 minutes ago? Come straight back in. Older than that
+     and the student re-verifies their .edu email \u2014 their saved account,
+     storefront and finished tutorial are untouched. */
+  var park=null;try{park=JSON.parse(localStorage.getItem(PARK_KEY)||'null');}catch(e){}
+  if(park&&park.at){
+    var fresh=(Date.now()-park.at)<3*60*1000;
+    if(!VERIFIED&&fresh&&park.session){try{localStorage.setItem(SESSION_KEY,JSON.stringify(park.session));VERIFIED=true;}catch(e){}}
+    if(!fresh||VERIFIED){try{localStorage.removeItem(PARK_KEY);}catch(e){}}
+  }
+  if(VERIFIED){var p=loadProfile();if(p){applyProfile(p);state.onboarded=true;state.eduDone=true;state.tab='home';}}
+})();
 const screen=document.getElementById('screen'),photo=document.getElementById('photo'),gphoto=document.getElementById('gphoto'),ephoto=document.getElementById('ephoto'),cphoto=document.getElementById('cphoto');
 const color=i=>COLORS[i%COLORS.length];
 const bg=h=>h.me?state.themeColor:color(h.c);
@@ -1335,6 +1357,7 @@ function syncNav(tab){try{document.querySelectorAll('#nav .navitem').forEach(fun
 function finishOnboarding(){
   var vendor=state.userType==='vendor';
   state.eduDone=true;state.onboarded=true;state.eduCodeSent=false;state.eduErr='';
+  var _saved=loadProfile();if(_saved&&(!_saved.eduEmail||!state.eduEmail||_saved.eduEmail===state.eduEmail)&&!state.tester){applyProfile(_saved);vendor=state.userType==='vendor';}
   state.isSeller=vendor;state.storefrontSetup=false;state.tab='home';state.tourReady=true;
   /* Verified .edu students see only real students by default; testers keep
      the sample listings on so the app isn't empty while they explore. */
@@ -1491,7 +1514,7 @@ function conveyorHint(el,key){
     raf=requestAnimationFrame(step);
   },450);
 }
-function render(){if(state.onboarded&&state.tourReady&&window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour();},300);if(!state.onboarded){if(state.storefrontSetup)return add();return onboarding();}if(state.campusPick)return campusPicker();if(state.themeView)return themeScreen();if(state.book)return bookingScreen();if(state.bookSet)return bookingSettings();if(state.userView)return userProfile();if(state.thread)return messageScreen();if(state.inboxView)return inboxScreen();if(state.groupCreateView)return createGroupScreen();if(state.groupView)return groupPage();if(state.detail)return detail(state.detail);if(state.leaderboard)return leaderboard();if(state.storefrontSetup)return add();if(state.savedView)return savedScreen();if(state.myPostsView)return myPostsScreen();if(state.svcEdit)return servicesEditor();if(state.tab==='add')return addTab();({home,market,venuU,profile}[state.tab]||home)();}
+function render(){try{saveProfile();}catch(e){}if(state.onboarded&&state.tourReady&&window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour();},300);if(!state.onboarded){if(state.storefrontSetup)return add();return onboarding();}if(state.campusPick)return campusPicker();if(state.themeView)return themeScreen();if(state.book)return bookingScreen();if(state.bookSet)return bookingSettings();if(state.userView)return userProfile();if(state.thread)return messageScreen();if(state.inboxView)return inboxScreen();if(state.groupCreateView)return createGroupScreen();if(state.groupView)return groupPage();if(state.detail)return detail(state.detail);if(state.leaderboard)return leaderboard();if(state.storefrontSetup)return add();if(state.savedView)return savedScreen();if(state.myPostsView)return myPostsScreen();if(state.svcEdit)return servicesEditor();if(state.tab==='add')return addTab();({home,market,venuU,profile}[state.tab]||home)();}
 document.getElementById('nav').querySelectorAll('.navitem').forEach(item=>{item.onclick=()=>{if(!state.onboarded)return;state.tourReady=true;document.querySelectorAll('.navitem').forEach(n=>n.classList.remove('on'));item.classList.add('on');state.tab=item.dataset.tab;state.cat='All';state.q='';state.near=false;state.detail=0;state.book=null;state.svcEdit=false;state.addMode=null;state.newPhoto=null;state.leaderboard=false;state.storefrontSetup=false;state.reviewOpen=false;state.msgTo=0;state.openMC=0;state.bookSet=false;state.savedView=false;state.campusPick=false;state.campusQ='';if(item.dataset.tab!=='add')state.submitted=false;render();screen.scrollTop=0;};});
 render();
 </script>
