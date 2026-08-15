@@ -102,12 +102,6 @@
         click: true,
         place: "below",
       },
-        title: "Close the storefront",
-        text: "Back always returns you to where you were. Close a storefront before moving to another tab.",
-        doit: "Tap Back to close it",
-        click: true,
-        place: "below",
-      },
       {
         before: closeOverlays,
         target: function () {
