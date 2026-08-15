@@ -611,7 +611,7 @@ try{var _ss=localStorage.getItem('vendu_show_samples');if(_ss!==null)state.showS
     state.obStep=2;state.eduCodeSent=false;
     if((Date.now()-park.at)>=3*60*1000){try{localStorage.removeItem(PARK_KEY);}catch(e){}}
   }
-  if(VERIFIED){try{localStorage.removeItem(PARK_KEY);}catch(e){}var p=loadProfile();if(p){applyProfile(p);state.onboarded=true;state.eduDone=true;state.tab='home';}purgeSamples();}
+  if(VERIFIED){try{localStorage.removeItem(PARK_KEY);}catch(e){}var p=loadProfile();if(p){applyProfile(p);state.onboarded=true;state.eduDone=true;state.tab='home';}if(!tourComplete())state.tourReady=true;purgeSamples();}
 })();
 const screen=document.getElementById('screen'),photo=document.getElementById('photo'),gphoto=document.getElementById('gphoto'),ephoto=document.getElementById('ephoto'),cphoto=document.getElementById('cphoto');
 const color=i=>COLORS[i%COLORS.length];
