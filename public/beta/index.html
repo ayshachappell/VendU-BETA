@@ -169,7 +169,8 @@
   .menu .svc{cursor:pointer}
   .nav{position:absolute;bottom:0;left:0;right:0;background:rgba(251,248,243,.94);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:flex;padding:8px 4px 12px;z-index:25}
   .navitem{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 1px;cursor:pointer;color:#A29BAD;font-size:9.5px;font-weight:600;transition:color .15s}.navitem.on{color:var(--violet)}
-  .navadd .plus{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);width:50px;height:50px;border-radius:16px;background:var(--violet);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(90,43,224,.4);z-index:2}
+  .navadd{position:relative;flex:1}
+  .navadd .plus{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:50px;height:50px;border-radius:16px;background:var(--violet);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(90,43,224,.4);z-index:2}
   .enter{animation:enter .3s ease}.fade{animation:fade .3s ease}
   @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
   @keyframes enter{from{opacity:0}to{opacity:1}}
