@@ -556,7 +556,7 @@ LEADERBOARD.length=0;
 function hideS(x){return !!(x&&x.sample)&&!state.showSamples;}
 function liveList(list){return list.filter(function(x){return !hideS(x);});}
 function samplePill(x){return (x&&x.sample)?'<span class="samplepill">Sample</span>':'';}
-function founderCount(){return (state.isSeller&&state.isFounder)?1:0;}
+function founderCount(){/* testers and sample vendors never count as real Founders */return (state.isSeller&&state.isFounder&&state.eduDone&&!state.tester)?1:0;}
 function setShowSamples(on){state.showSamples=!!on;try{localStorage.setItem('vendu_show_samples',on?'1':'0');}catch(e){}}
 
 var BUILD=(location.pathname.indexOf('/beta')===0)?'beta':'main';
