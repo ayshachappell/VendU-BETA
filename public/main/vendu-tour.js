@@ -53,7 +53,7 @@
           return $("#q") || $(".topbar");
         },
         title: "Search your campus",
-        text: "Type a name, a service or a keyword \u2014 \u201cbraids\u201d, \u201ctutor\u201d, \u201cnails\u201d \u2014 and results filter instantly. The category chips just below narrow it further.",
+        text: "Type a name, service or keyword \u2014 \u201cbraids\u201d, \u201ctutor\u201d, \u201cnails\u201d \u2014 and results filter instantly. The chips below narrow by category, and tapping your campus name at the top switches schools.",
         doit: "Type anything in the search box",
         event: "input",
         place: "below",
@@ -74,7 +74,7 @@
           return $(".card[data-open]");
         },
         title: "Open a storefront",
-        text: "Every listing opens a full storefront: services and prices, photos of past work, reviews, payment apps accepted, and a Book button.",
+        text: "Every listing opens a full storefront: services and prices, photos of past work, reviews, payment apps accepted, and a Book button. A \ud83c\udf93 Founder badge next to a name means one of the school's first vendors.",
         doit: "Tap this card",
         click: true,
       },
@@ -83,13 +83,13 @@
           return $("#bookBtn") || $("#msgBtn") || $("#bookLink") || $(".detail-cta");
         },
         title: "Book or message",
-        text: "From here you can message the vendor with questions, save them for later, or book a time straight into their calendar.",
+        text: "Message the vendor with questions, save them for later, or book a time straight into their calendar. Using VendU as a buyer only is totally fine \u2014 selling is optional.",
         place: "above",
       },
       {
         target: closeEl,
         title: "Close what's open",
-        text: "Storefronts, message threads, comments and group pages all open on top of the app. Their Back / \u2039 button closes them and frees the Home, Market, VendU and Profile tabs at the bottom.",
+        text: "Storefronts, message threads, comments and group pages open on top of the app. Their Back / \u2039 button closes them and frees the Home, Market, VendU and Profile tabs at the bottom.",
         doit: "Tap Back (or \u2039) to close this screen",
         click: true,
         place: "below",
@@ -117,48 +117,49 @@
       {
         before: closeOverlays,
         target: function () {
-          return nav("add");
-        },
-        title: "Post in seconds",
-        text: "The \uff0b button is how you list a service, sell an item, post a trade, or ask the campus for what you need. Add a photo, a price, and you're live.",
-        doit: "Tap \uff0b",
-        click: true,
-        place: "above",
-      },
-            {
-        before: closeOverlays,
-        target: function () {
           return nav("venuU");
         },
         title: "VendUniversity",
-        text: "Communities and groups, your class planner, campus routes, and guides for trades, certs and starting a business.",
+        text: "Communities and groups, your class planner, campus routes, and free guides for trades, certs and starting a business.",
         doit: "Tap VendUniversity",
         click: true,
         place: "above",
       },
       {
-        before: goHome,
+        before: closeOverlays,
         target: function () {
-          return $("#loc");
+          return nav("add");
         },
-        title: "Switch campuses",
-        text: "Everything you see \u2014 vendors, market posts, events \u2014 is filtered to your school. Tap your campus name to look at another one.",
-        doit: "Tap your campus name",
-        event: "click",
-        place: "below",
+        title: "Post in seconds",
+        text: "The \uff0b button lists a service, sells an item, posts a trade, or asks the campus for what you need. Becoming a vendor is completely optional and always free \u2014 you can just browse, buy and book if you prefer.",
+        doit: "Tap \uff0b",
+        click: true,
+        place: "above",
       },
       {
-        before: function(){closeOverlays();goHome();},
+        before: function () {
+          closeOverlays();
+          goHome();
+        },
         target: function () {
           return nav("profile");
         },
         title: "Your profile",
-        text: "Profile holds your bookings, saved hustles, messages, market posts \u2014 and Vendor mode when you're ready to sell.",
+        text: "Profile holds your bookings, saved hustles, messages, market posts \u2014 and Vendor mode whenever (or if ever) you want to sell.",
         doit: "Tap Profile",
         click: true,
         place: "above",
       },
       {
+        target: function () {
+          return $("#lbBtn") || document.querySelector(".plan") || $("#startsell") || $("#profSave");
+        },
+        title: "\ud83c\udf93 Founders & the leaderboard",
+        text: "The first 10 vendors at each school become Founders. Founders keep a \ud83c\udf93 Founder badge on their name everywhere they appear \u2014 posts, profile and storefront \u2014 plus a free monthly Boost that pushes their listings to the top. The Leaderboard ranks Founders by how many vendors they refer with their invite link, so the more friends you bring on, the higher you climb.",
+        place: "above",
+      },
+      {
+        before: closeOverlays,
         target: function () {
           return (
             document.querySelector('[data-menu="setup"]') ||
@@ -167,7 +168,7 @@
           );
         },
         title: "Set up your account",
-        text: "Vendors: open Set up storefront to add your services, prices, photos and payment apps. Everyone else: fill in your name, photo and details right here.",
+        text: "Add your name, photo and details here. If you want to sell, open Set up storefront to add services, prices, photos and payment apps \u2014 optional, and you can do it later.",
         doit: "Tap to open your setup",
         click: true,
         place: "above",
@@ -183,9 +184,9 @@
       {
         intro: true,
         emoji: "\ud83d\ude80",
-        title: "That's it \u2014 finish your setup",
-        text: "You're verified and ready. Fill in your details and tap Save. Replay this tour anytime from Profile \u2192 Replay tutorial.",
-        next: "Set up my account",
+        title: "That's it \u2014 you're all set",
+        text: "Explore, book, post, or set up your profile whenever you like. Replay this tour anytime from Profile \u2192 Replay tutorial.",
+        next: "Start using VendU",
       },
     ];
     return s;
