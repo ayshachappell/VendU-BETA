@@ -89,7 +89,7 @@
       {
         target: closeEl,
         title: "Close what's open",
-        text: "Storefronts, message threads, comments and group pages open on top of the app. Their Back / \u2039 button closes them and frees the Home, Market, VendU and Profile tabs at the bottom.",
+        text: "Storefronts, message threads, comments and group pages open on top of the app. Their Back / \u2039 button closes them and frees the Home, Market, and Profile tabs at the bottom.",
         doit: "Tap Back (or \u2039) to close this screen",
         click: true,
         place: "below",
