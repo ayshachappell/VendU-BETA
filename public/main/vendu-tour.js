@@ -74,16 +74,16 @@
           return $(".card[data-open]");
         },
         title: "Open a storefront",
-        text: "Every listing opens a full storefront: services and prices, photos of past work, reviews, payment apps accepted, and a Book button. A \ud83c\udf93 Founder badge next to a name means one of the school's first vendors.",
+        text: "Every listing opens a full storefront: services and prices, photos of past work, reviews and payment apps accepted.",
         doit: "Tap this card",
         click: true,
       },
       {
         target: function () {
-          return $("#bookBtn") || $("#msgBtn") || $("#bookLink") || $(".detail-cta");
+          return document.querySelector(".cta-bar") || $("#bookBtn") || $("#msgBtn");
         },
-        title: "Book or message",
-        text: "Message the vendor with questions, save them for later, or book a time straight into their calendar. Using VendU as a buyer only is totally fine \u2014 selling is optional.",
+        title: "Save, message or book",
+        text: "The bar at the bottom of every storefront does three things: the bookmark saves the vendor for later, the chat icon messages them with questions, and the big button books a time straight into their calendar.",
         place: "above",
       },
       {
@@ -131,7 +131,7 @@
           return nav("add");
         },
         title: "Post in seconds",
-        text: "The \uff0b button lists a service, sells an item, posts a trade, or asks the campus for what you need. Becoming a vendor is completely optional and always free \u2014 you can just browse, buy and book if you prefer.",
+        text: "The \uff0b button lists a service, sells an item, posts a trade, or asks the campus for what you need.",
         doit: "Tap \uff0b",
         click: true,
         place: "above",
@@ -145,32 +145,45 @@
           return nav("profile");
         },
         title: "Your profile",
-        text: "Profile holds your bookings, saved hustles, messages, market posts \u2014 and Vendor mode whenever (or if ever) you want to sell.",
+        text: "Profile holds your bookings, saved hustles, messages and market posts.",
         doit: "Tap Profile",
         click: true,
         place: "above",
       },
       {
+        before: closeOverlays,
         target: function () {
-          return $("#lbBtn") || document.querySelector(".plan") || $("#startsell") || $("#profSave");
+          return $("#startsell") || $("#toregular");
         },
-        title: "\ud83c\udf93 Founders & the leaderboard",
-        text: "The first 10 vendors at each school become Founders. Founders keep a \ud83c\udf93 Founder badge on their name everywhere they appear \u2014 posts, profile and storefront \u2014 plus a free monthly Boost that pushes their listings to the top. The Leaderboard ranks Founders by how many vendors they refer with their invite link, so the more friends you bring on, the higher you climb.",
+        title: "Vendor mode is optional",
+        text: "A vendor is a student who sells \u2014 braids, meals, tutoring, photos, repairs. Vendor mode is free and completely optional: you can stay a regular user and just browse, buy and book.",
+        doit: "Tap Become a vendor to look around (optional)",
+        click: true,
+        soft: true,
         place: "above",
       },
       {
-        before: closeOverlays,
         target: function () {
-          return (
-            document.querySelector('[data-menu="setup"]') ||
-            $("#startsell") ||
-            $("#profSave")
-          );
+          return $("#lbBtn") || document.querySelector(".ref-demo");
         },
-        title: "Set up your account",
-        text: "Add your name, photo and details here. If you want to sell, open Set up storefront to add services, prices, photos and payment apps \u2014 optional, and you can do it later.",
-        doit: "Tap to open your setup",
-        click: true,
+        title: "\ud83c\udf93 Founders & the leaderboard",
+        text: "The first 10 vendors at each school become Founders \u2014 a \ud83c\udf93 badge on their name everywhere and a free monthly Boost. The Leaderboard ranks Founders by how many vendors they invite.",
+        place: "above",
+      },
+      {
+        target: function () {
+          return document.querySelector('[data-menu="setup"]');
+        },
+        title: "Set up your storefront",
+        text: "This is where you add services and prices, photos of past work, socials, payment apps and your booking calendar.",
+        place: "above",
+      },
+      {
+        target: function () {
+          return $("#toregular");
+        },
+        title: "Switch back anytime",
+        text: "Not ready to sell? Switch to regular mode here \u2014 your storefront stays saved and you can turn vendor mode back on whenever you want.",
         place: "above",
       },
       {
@@ -191,6 +204,7 @@
     ];
     return s;
   }
+
 
   var running = false;
   var list = [],
