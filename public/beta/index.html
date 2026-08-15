@@ -1200,7 +1200,7 @@ function add(){
   screen.querySelectorAll('[data-pod]').forEach(el=>el.onclick=()=>{state.pays.splice(+el.dataset.pod,1);add();});
   const apay=document.getElementById('addpay');if(apay)apay.onclick=()=>{state.pays.push({app:'Cash App',handle:''});add();};
   const sf=document.getElementById('sfClose');if(sf)sf.onclick=()=>{state.storefrontSetup=false;state.tab='profile';render();};
-  document.getElementById('save').onclick=()=>{state.isSeller=true;if(!state.onboarded)state.onboarded=true;state.storefrontSetup=false;state.tab='profile';render();toast('Storefront saved ✓');};
+  document.getElementById('save').onclick=()=>{state.isSeller=true;if(!state.onboarded)state.onboarded=true;state.storefrontSetup=false;state.tourReady=true;state.tab='profile';syncNav('profile');render();toast('Storefront saved ✓');};
 }
 
 function mpRow(emoji,title,meta,type,id){return '<div class="mprow"><div class="mpic">'+emoji+'</div><div class="mpbody"><div class="mptitle">'+title+'</div><div class="mpmeta">'+meta+'</div></div><button class="mpdel" data-delpost="'+id+'" data-ptype="'+type+'">Delete</button></div>';}
