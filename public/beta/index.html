@@ -1307,9 +1307,10 @@ function syncNav(tab){try{document.querySelectorAll('#nav .navitem').forEach(fun
 function finishOnboarding(){
   var vendor=state.userType==='vendor';
   state.eduDone=true;state.onboarded=true;state.eduCodeSent=false;state.eduErr='';
-  state.isSeller=vendor;state.storefrontSetup=vendor;state.tab='profile';
-  syncNav('profile');render();
-  toast(vendor?'Verified \u2713 Set up your storefront':'Verified \u2713 Set up your profile');
+  state.isSeller=vendor;state.storefrontSetup=false;state.tab='home';state.tourReady=true;
+  syncNav('home');render();
+  toast('Verified \u2713 Quick tour \u2014 then set up your '+(vendor?'storefront':'profile'));
+  if(window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour(true);},600);
 }
 function obDots(n){return '<div class="ob-top"><div class="ob-dots">'+[0,1,2].map(function(i){return '<span class="obd '+(i<=n?'on':'')+'"></span>';}).join('')+'</div></div>';}
 function onboarding(){

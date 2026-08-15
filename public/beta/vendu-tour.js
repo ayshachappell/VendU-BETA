@@ -149,18 +149,32 @@
       },
       {
         target: function () {
-          return $("#profSave") || $("#startsell") || $(".submit");
+          return (
+            document.querySelector('[data-menu="setup"]') ||
+            $("#startsell") ||
+            $("#profSave")
+          );
         },
-        title: "Save your changes",
-        text: "Edit your name, photo and details, then tap Save \u2014 nothing is stored until you do. Vendors get the same Save button on their storefront setup.",
+        title: "Set up your account",
+        text: "Vendors: open Set up storefront to add your services, prices, photos and payment apps. Everyone else: fill in your name, photo and details right here.",
+        doit: "Tap to open your setup",
+        click: true,
+        place: "above",
+      },
+      {
+        target: function () {
+          return $("#save") || $("#profSave") || $(".submit");
+        },
+        title: "Save when you're done",
+        text: "Nothing is stored until you tap Save \u2014 and you can come back and edit anything anytime.",
         place: "above",
       },
       {
         intro: true,
         emoji: "\ud83d\ude80",
-        title: "That's it \u2014 go get seen",
-        text: "You're verified and ready. Replay this tour anytime from Profile \u2192 Replay tutorial.",
-        next: "Start using VendU",
+        title: "That's it \u2014 finish your setup",
+        text: "You're verified and ready. Fill in your details and tap Save. Replay this tour anytime from Profile \u2192 Replay tutorial.",
+        next: "Set up my account",
       },
     ];
     return s;
