@@ -1408,7 +1408,7 @@ function onboarding(){
     <div class="edu-note" style="margin-top:2px">Testers can skip verification — you’ll still get the quick tour.</div>
     </div>
     </div>`;
-  var sk=document.getElementById('obSkip');if(sk)sk.onclick=function(){state.tester=true;finishOnboarding();};
+  enableTesterSkip();
   var rz=document.getElementById('eduResume');
   if(rz&&_pk)rz.onclick=function(){try{localStorage.setItem(SESSION_KEY,JSON.stringify(_pk.session));localStorage.removeItem(PARK_KEY);}catch(e){}VERIFIED=true;state.eduEmail=(_pk.session&&_pk.session.email)||state.eduEmail;state.eduErr='';finishOnboarding();};
   if(_pk)setTimeout(function(){if(!state.eduDone&&freshPark()===null){try{localStorage.removeItem(PARK_KEY);}catch(e){}onboarding();}},_left*1000+500);
