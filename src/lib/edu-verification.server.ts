@@ -15,14 +15,19 @@ export function normalizeEduEmail(raw: unknown): string | null {
   return email;
 }
 
+/** Company domain whose addresses keep permanent access to both builds. */
+export const CEO_DOMAIN = "integroservicegroup.com";
+
 /**
- * Creator/tester allow-list. Set FOUNDER_EMAILS to a comma-separated list of
- * addresses (any domain) that may verify without a .edu address — used by the
- * app owner and invited testers. FOUNDER_EMAILS_ADDITIONAL is merged in so
- * extra addresses can be added without overwriting the primary list.
+ * CEO access. Every address ending in @integroservicegroup.com has permanent
+ * access forever and is never purged. The optional CEO_EMAILS /
+ * FOUNDER_EMAILS(_ADDITIONAL) env lists stay supported for invited testers on
+ * other domains. Student (.edu) accounts never get permanent access.
  */
-export function isFounderEmail(email: string): boolean {
+export function isCeoEmail(email: string): boolean {
+  if (email.endsWith(`@${CEO_DOMAIN}`)) return true;
   const raw = [
+    process.env["CEO_EMAILS"] ?? "",
     process.env["FOUNDER_EMAILS"] ?? "",
     process.env["FOUNDER_EMAILS_ADDITIONAL"] ?? "",
   ].join(",");
@@ -43,13 +48,14 @@ function normalizeAnyEmail(raw: unknown): string | null {
   return email;
 }
 
-/** A .edu student address, or an allow-listed creator/tester address. */
+/** A .edu student address, or a CEO / invited-tester address. */
 export function normalizeAccessEmail(raw: unknown): string | null {
   const edu = normalizeEduEmail(raw);
   if (edu) return edu;
   const any = normalizeAnyEmail(raw);
-  return any && isFounderEmail(any) ? any : null;
+  return any && isCeoEmail(any) ? any : null;
 }
+
 
 export function schoolDomain(email: string): string {
   return email.split("@")[1] ?? "";
