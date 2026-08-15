@@ -163,3 +163,26 @@ export function json(data: unknown, status = 200) {
     headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
   });
 }
+
+/** Confirm an access token with the auth service and return the verified email. */
+export async function emailFromAccessToken(token: string): Promise<string | null> {
+  const { url, key } = authBase();
+  const res = await fetch(`${url}/auth/v1/user`, {
+    headers: { apikey: key, Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) return null;
+  const body = (await res.json().catch(() => ({}))) as { email?: string };
+  const email = body.email?.trim().toLowerCase();
+  return email || null;
+}
+
+/** Has this address completed verification on this device-independent backend? */
+export async function isVerifiedStudent(email: string): Promise<boolean> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await supabaseAdmin
+    .from("students")
+    .select("email")
+    .eq("email", email)
+    .maybeSingle();
+  return Boolean(data);
+}
