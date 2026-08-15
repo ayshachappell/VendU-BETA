@@ -38,6 +38,33 @@
     }
   }
 
+  function app() {
+    try { return typeof state !== "undefined" ? state : null; } catch (e) { return null; }
+  }
+  function redraw() {
+    try { if (typeof render === "function") render(); } catch (e) {}
+  }
+  /* Vendor-mode steps need the vendor profile on screen; without this the
+     leaderboard / storefront / switch-back targets never exist and the tour
+     silently skips those steps. */
+  function vendorMode() {
+    closeOverlays();
+    var s = app();
+    if (!s) return;
+    s.isSeller = true;
+    s.storefrontSetup = false;
+    s.tab = "profile";
+    try { if (typeof syncNav === "function") syncNav("profile"); } catch (e) {}
+    redraw();
+  }
+  function openSetup() {
+    vendorMode();
+    var s = app();
+    if (!s) return;
+    s.storefrontSetup = true;
+    redraw();
+  }
+
   function steps() {
     var s = [
       {
@@ -163,6 +190,7 @@
         place: "above",
       },
       {
+        before: vendorMode,
         target: function () {
           return $("#lbBtn") || document.querySelector(".ref-demo");
         },
@@ -171,6 +199,7 @@
         place: "above",
       },
       {
+        before: vendorMode,
         target: function () {
           return document.querySelector('[data-menu="setup"]');
         },
@@ -179,6 +208,7 @@
         place: "above",
       },
       {
+        before: vendorMode,
         target: function () {
           return $("#toregular");
         },
@@ -187,6 +217,7 @@
         place: "above",
       },
       {
+        before: openSetup,
         target: function () {
           return $("#save") || $("#profSave") || $(".submit");
         },
