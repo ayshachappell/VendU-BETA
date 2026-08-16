@@ -152,6 +152,15 @@
       {
         before: openStore,
         target: function () {
+          return $(".paychips") || $(".paych") || $(".paych-btn");
+        },
+        title: "Pay a vendor directly",
+        text: "Tap any cash-payment button on a storefront to pay the vendor directly through Cash App, Venmo, Zelle, or PayPal. The button opens their app or profile with the handle already filled in.",
+        place: "below",
+      },
+      {
+        before: openStore,
+        target: function () {
           return $(".cta-bar");
         },
         title: "Save, message or book",
@@ -186,7 +195,7 @@
           return nav("add");
         },
         title: "Post in seconds",
-        text: "The ＋ button posts a service, an item for sale, a request, or a campus event. Requests are for things you want but don't see yet — like help, an item, or a service.",
+        text: "The ＋ button posts a service, an item for sale, a request, or a campus event. A Request is a post for something you are looking for but do not already see on the app — like help, a specific item, or a service.",
         doit: "Tap ＋",
         click: true,
         place: "above",
@@ -231,10 +240,28 @@
           return nav("profile");
         },
         title: "Set up your profile",
-        text: "Tap Profile to finish setting up your account. Upload a profile picture so students recognize you. When you pay a vendor, tap one of their cash-payment buttons (Cash App, Venmo, Zelle, PayPal) to pay them directly. Selling is free and optional — flip on Vendor mode to switch between Student and Vendor views under the same account. Under Set up your storefront you can link your social media accounts, upload, resize and delete storefront photos, and link your direct payment accounts so students can pay you straight away. Founders are the first 10 verified student vendors on a campus; refer 3 vendors through your invite link to earn a 🎓 Founder badge and a monthly Boost. The leaderboard ranks students by vendors referred.",
+        text: "Tap Profile to finish setting up your account. Upload a profile photo, set your name, and tap any vendor's cash-payment button to pay them directly. Everything is free — there are no subscriptions.",
         doit: "Tap Profile to finish",
         click: true,
         next: "Finish",
+        place: "above",
+      },
+      {
+        before: goProfile,
+        target: function () {
+          return $(".detail-av.up") || $(".photo-av.up");
+        },
+        title: "Your profile picture",
+        text: "Tap the camera on your profile photo to upload a picture. Students will see it next to your posts, comments, and storefront.",
+        place: "above",
+      },
+      {
+        before: goProfile,
+        target: function () {
+          return $("#startsell") || $('[data-menu="setup"]') || $("#moretoggle");
+        },
+        title: "Your storefront tools",
+        text: "Selling is free and optional. Turn on Vendor mode, or open Set up your storefront, to link your social accounts, upload, resize and delete storefront photos, and add payment handles like Cash App, Venmo, Zelle or PayPal. Student View and Vendor View are one account — just flip the switch.",
         place: "above",
       },
     ];
