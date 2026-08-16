@@ -14,6 +14,90 @@ export type Database = {
   }
   public: {
     Tables: {
+      bookings: {
+        Row: {
+          build: string
+          created_at: string
+          id: string
+          service: string | null
+          student_email: string
+          vendor_id: string
+        }
+        Insert: {
+          build?: string
+          created_at?: string
+          id?: string
+          service?: string | null
+          student_email: string
+          vendor_id: string
+        }
+        Update: {
+          build?: string
+          created_at?: string
+          id?: string
+          service?: string | null
+          student_email?: string
+          vendor_id?: string
+        }
+        Relationships: []
+      }
+      referrals: {
+        Row: {
+          build: string
+          campus: string | null
+          created_at: string
+          id: string
+          ref_code: string
+          referred_email: string
+        }
+        Insert: {
+          build?: string
+          campus?: string | null
+          created_at?: string
+          id?: string
+          ref_code: string
+          referred_email: string
+        }
+        Update: {
+          build?: string
+          campus?: string | null
+          created_at?: string
+          id?: string
+          ref_code?: string
+          referred_email?: string
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          body: string | null
+          build: string
+          created_at: string
+          id: string
+          stars: number
+          student_email: string
+          vendor_id: string
+        }
+        Insert: {
+          body?: string | null
+          build?: string
+          created_at?: string
+          id?: string
+          stars: number
+          student_email: string
+          vendor_id: string
+        }
+        Update: {
+          body?: string | null
+          build?: string
+          created_at?: string
+          id?: string
+          stars?: number
+          student_email?: string
+          vendor_id?: string
+        }
+        Relationships: []
+      }
       students: {
         Row: {
           build: string
