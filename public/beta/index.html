@@ -1317,8 +1317,7 @@ function myPostsScreen(){
   screen.querySelectorAll('[data-photopost]').forEach(function(el){el.onclick=function(){state.photoTarget={id:el.dataset.photopost,type:el.dataset.ptype};cphoto.value='';cphoto.click();};});
 }
 function settingsScreen(){
-  var items=[['\u25B6\uFE0E Replay tutorial','tour'],['\uD83D\uDCF2 Install VendU on this device','install'],['\uD83D\uDECE\uFE0F Send beta feedback','feedback'],['\uD83D\uDEDF Help & support','support'],['\uD83D\uDCC4 Privacy & terms','legal'],['\uD83D\uDDD1\uFE0F Delete my account','delete'],['\u23FB Log out','logout']];
-  if(typeof BETA_BUILD==='undefined'||!BETA_BUILD)items=items.filter(function(x){return x[1]!=='feedback';});
+  var items=[['\u25B6\uFE0E Replay tutorial','tour'],['\uD83D\uDCF2 Install VendU on this device','install'],['\uD83D\uDCAC Send beta feedback','feedback'],['\uD83D\uDEDF Help & support','support'],['\uD83D\uDCC4 Privacy & terms','legal'],['\uD83D\uDDD1\uFE0F Delete my account','delete'],['\u23FB Log out','logout']];
   screen.innerHTML='<div class="topbar"><div class="brandrow"><div class="wordmark">Settings</div><div class="locpill" id="setBack" style="cursor:pointer">\u2039 Back</div></div></div>'
     +'<div class="enter" style="padding:10px 20px 20px"><div style="font-size:13px;color:var(--mist);line-height:1.5;margin:2px 0 14px">Tutorial, install, help and account controls.</div>'
     +'<div class="menu">'+items.map(function(x){return '<div class="svc" data-smenu="'+x[1]+'">'+x[0]+'<span>'+icon('<path d="m9 18 6-6-6-6"/>',18)+'</span></div>';}).join('')+'</div></div>';
@@ -1326,7 +1325,7 @@ function settingsScreen(){
   screen.querySelectorAll('[data-smenu]').forEach(function(el){el.onclick=function(){var m=el.dataset.smenu;
     if(m==='tour'){state.moreMenu=false;render();VendU.startTour(true);}
     else if(m==='install'){showInstall();}
-    else if(m==='feedback'){if(typeof sendFeedback==='function')sendFeedback();else window.open('/legal/support.html','_blank','noopener');}
+    else if(m==='feedback'){try{window.location.href='mailto:'+BETA_EMAIL+'?subject='+encodeURIComponent('VendU Beta Feedback')+'&body='+encodeURIComponent('What I liked:\n\nWhat confused me:\n\nWhat I wish it did:\n');}catch(e){}toast('Opening email — tell us anything! \uD83D\uDCAC');}
     else if(m==='support'){window.open('/legal/support.html','_blank','noopener');}
     else if(m==='legal'){window.open('/legal/privacy.html','_blank','noopener');}
     else if(m==='delete'){deleteAccount();}
