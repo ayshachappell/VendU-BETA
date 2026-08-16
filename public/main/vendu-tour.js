@@ -82,7 +82,7 @@
           return $(".storefront") || $(".awning") || $(".card");
         },
         title: "Badges tell you who's who",
-        text: "🎓 marks a Founder, ★ marks VendU staff, and campus/community badges show which school, org or group a student belongs to. Badges show on names, profiles and storefronts.",
+        text: "This student carries a 🎓 Founder badge and a 💠 Vendor badge — plus deal badges like 🏷️ Sale, 🏷️ 20% off or ⏳ Ending soon when they run a promo. ★ marks VendU staff, and campus/community badges show which school, org or group a student belongs to. Tap any student's name anywhere to open their profile, see their badges and listings, and message them.",
         place: "below",
       },
       {
@@ -286,6 +286,7 @@
       "</div>" +
       (st.doit ? '<div class="tour-do">👆 ' + st.doit + "</div>" : "") +
       '<div class="tour-actions">' +
+      (i > 0 ? '<button class="tour-back" data-tour="back">Back</button>' : "") +
       dots() +
       (st.click ? "" : '<button class="tour-next" data-tour="next">Next</button>') +
       "</div>";
@@ -293,6 +294,8 @@
     document.body.appendChild(pulse);
     document.body.appendChild(card);
 
+    var bk = card.querySelector('[data-tour="back"]');
+    if (bk) bk.onclick = goBack;
     var nx = card.querySelector('[data-tour="next"]');
     if (nx)
       nx.onclick = function () {
@@ -372,6 +375,13 @@
     card.style.left = Math.max(12, hr.left + (hr.width - cw) / 2) + "px";
   }
 
+  function goBack() {
+    if (i <= 0) return;
+    i--;
+    cleanup();
+    setTimeout(show, 120);
+  }
+
   function showModal(st) {
     modal = document.createElement("div");
     modal.className = "tour-modal";
@@ -382,10 +392,14 @@
       st.title +
       '</div><div class="tour-text">' +
       st.text +
-      '</div><div class="tour-actions"><button class="tour-next" data-tour="next">' +
+      '</div><div class="tour-actions">' +
+      (i > 0 ? '<button class="tour-back" data-tour="back">Back</button>' : "") +
+      '<button class="tour-next" data-tour="next">' +
       st.next +
       "</button></div></div>";
     document.body.appendChild(modal);
+    var mb = modal.querySelector('[data-tour="back"]');
+    if (mb) mb.onclick = goBack;
     modal.querySelector('[data-tour="next"]').onclick = function () {
       i++;
       show();
