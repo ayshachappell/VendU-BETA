@@ -231,7 +231,7 @@
           return nav("profile");
         },
         title: "Set up your profile",
-        text: "Profile is your account, storefront, bookings, saved hustles, messages, leaderboard, Replay tutorial and Log out.",
+        text: "Profile is your account, storefront, bookings, saved hustles, messages, leaderboard, Replay tutorial and Log out. Add a profile picture here so students recognize you, and when you're paying a vendor just tap one of their cash-payment buttons (Cash App, Venmo, Zelle, PayPal) to pay them directly.",
         doit: "Tap Profile to set up your account",
         click: true,
         place: "above",
