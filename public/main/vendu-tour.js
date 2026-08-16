@@ -242,7 +242,7 @@
           return $("#toregular") || $("#startsell") || $(".plan");
         },
         title: "One account, two views",
-        text: "Selling is optional and free — browsing, buying, trading and booking are always free. If you want a storefront, flip on Vendor mode here: same account, you just switch between Student view and Vendor view to reach bookings, services and payouts.",
+        text: "Selling is optional and free — browsing, buying, trading and booking are always free. If you want a storefront, flip on Vendor mode here: same account, you just switch between Student view and Vendor view to reach bookings, services and payouts. Under Set up your storefront you can link your social media accounts, upload, resize and delete storefront photos, and link your direct payment accounts (Cash App, Venmo, Zelle, PayPal) so students can pay you straight away.",
         place: "above",
       },
       {
