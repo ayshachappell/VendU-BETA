@@ -222,6 +222,8 @@
         },
         title: "Your campus",
         text: "Posts, feeds and events are funneled to the campus tied to your .edu email. Switching campuses here replaces your view with that campus — it never mixes two campuses together.",
+        doit: "Tap your campus to switch",
+        click: true,
         place: "below",
       },
       {
@@ -241,7 +243,7 @@
           return $("#toregular") || $("#startsell") || $(".plan");
         },
         title: "One account, two views",
-        text: "Selling is optional and free — browsing, buying, trading and booking always are. If you want a storefront, flip on Vendor mode here: same account, you just switch between Student view and Vendor view to reach bookings, services and payouts.",
+        text: "Selling is optional and free — browsing, buying, trading and booking are always free. If you want a storefront, flip on Vendor mode here: same account, you just switch between Student view and Vendor view to reach bookings, services and payouts.",
         place: "above",
       },
       {
