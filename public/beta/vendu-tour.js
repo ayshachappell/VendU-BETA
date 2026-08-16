@@ -91,6 +91,7 @@
         place: "above",
       },
       {
+        requires: '#nav .navitem[data-tab="venuU"]',
         target: function () {
           return nav("venuU");
         },
@@ -357,7 +358,9 @@
     if (running) return;
     running = true;
     try { if (W.onTour) W.onTour(true); } catch (e) {}
-    list = steps();
+    list = steps().filter(function (s) {
+      return !s.requires || document.querySelector(s.requires);
+    });
     i = 0;
     setTimeout(show, 500);
   };
