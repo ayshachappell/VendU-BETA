@@ -436,6 +436,11 @@
 @keyframes hatpop{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
 .lbrow{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 15px;margin-bottom:9px;box-shadow:var(--shadow)}
 .ceopill{font-size:10px;font-weight:800;color:#4a2ab5;background:#EDE7FF;padding:2px 7px;border-radius:999px;letter-spacing:.02em;white-space:nowrap}
+.vendorpill{font-size:10px;font-weight:800;color:#5A2BE0;background:#EFE9FF;padding:2px 7px;border-radius:999px;letter-spacing:.02em;white-space:nowrap}
+.dealpill{font-size:10px;font-weight:800;color:#B4262A;background:#FDE8E8;padding:2px 7px;border-radius:999px;white-space:nowrap}
+.soonpill{font-size:10px;font-weight:800;color:#8A5A00;background:#FFF0D6;padding:2px 7px;border-radius:999px;white-space:nowrap}
+.commpill{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;color:var(--ink);background:var(--line);padding:3px 9px;border-radius:999px;white-space:nowrap}
+.up-badges{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px}
 .founderpill{font-size:10px;font-weight:800;color:#a5810f;background:#FFF3D6;padding:2px 7px;border-radius:999px;letter-spacing:.02em;white-space:nowrap}
 .beta-tag{font-size:9px;font-weight:800;letter-spacing:.08em;color:#fff;background:var(--violet);padding:3px 7px;border-radius:6px;vertical-align:middle}
 .lb-summary{font-size:12.5px;color:var(--violet);font-weight:600;margin:-2px 0 14px}
@@ -565,6 +570,11 @@ const star='<svg width="13" height="13" viewBox="0 0 24 24" fill="#FFB020" strok
 const pin='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.6"/></svg>';
 const heart=f=>`<svg width="17" height="17" viewBox="0 0 24 24" fill="${f?'#FF5C8A':'none'}" stroke="${f?'#FF5C8A':'currentColor'}" stroke-width="2"><path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11z"/></svg>`;
 function pillFor(h){if(h.cat==='Food'&&h.food)return h.food==='baked'?'<span class="foodpill baked">Baked · cottage food</span>':'<span class="foodpill prep">Prepared · licensed kitchen</span>';if(h.lic&&REGULATED.includes(h.cat))return '<span class="licpill">Licensed</span>';return '';}
+const DEALS={1:{t:'20% off',k:'off'},2:{t:'Sale',k:'sale'},3:{t:'Ending soon',k:'soon'},5:{t:'20% off',k:'off'}};
+function dealPill(h){var d=h&&DEALS[h.id];if(!d)return '';return '<span class="'+(d.k==='soon'?'soonpill':'dealpill')+'">'+(d.k==='soon'?'\u23F3 ':'\uD83C\uDFF7\uFE0F ')+d.t+'</span>';}
+function vendorPills(h){if(!h)return '';return (h.founder?'<span class="founderpill">\u{1F393} Founder</span>':'')+'<span class="vendorpill">\u{1F4A0} Vendor</span>'+dealPill(h);}
+function vendorFor(name){try{return HUSTLES.filter(function(x){return x.name===name;})[0];}catch(e){return null;}}
+function commPills(name){try{return COMM.filter(function(c){return c.campus===state.campus.id&&c.members.some(function(m){return m.name===name;});}).map(function(c){return '<span class="commpill">'+c.emoji+' '+c.name+'</span>';}).join('');}catch(e){return '';}}
 
 /* ===== Account kinds =====
    @integroservicegroup.com  -> CEO. Permanent access, never expires, never purged.
@@ -605,7 +615,7 @@ function feedBody(){
   return founderBanner()+`<div class="feed">${posts.map((p,i)=>{const h=HUSTLES.find(x=>x.id===p.s);const open=state.openC===p.id;return `
     <div class="post" style="animation-delay:${i*40}ms">
       <div class="p-head"><div class="p-av" data-open="${h.id}" style="background:${bg(h)}">${h.init}</div>
-        <div><div class="p-name" data-open="${h.id}">${h.name}${h.v?CHECK:''}${h.founder?'<span class="founderpill">\u{1F393} Founder</span>':''}</div><div class="p-when">${p.when} · ${h.cat}</div></div>
+        <div><div class="p-name" data-open="${h.id}">${h.name}${h.v?CHECK:''}${vendorPills(h)}</div><div class="p-when">${p.when} · ${h.cat}</div></div>
         ${p.promo?`<span class="p-promo">${p.promo}</span>`:''}</div>
       <div class="p-text">${p.text}</div>
       <div class="p-actions"><div class="p-act ${p.liked?'liked':''}" data-like="${p.id}">${heart(p.liked)} ${p.likes}</div>
@@ -626,7 +636,7 @@ function browseBody(){
     <div class="chips" style="padding-top:8px"><div class="chip ${state.avail?'on':''}" data-f="avail">🟢 Available now</div><div class="chip ${state.cheap?'on':''}" data-f="cheap">Under $25</div><div class="chip ${state.top?'on':''}" data-f="top">★ Top rated</div></div>
     ${clean?`<div class="sec-head"><div class="sec-title">🔥 Featured on campus</div></div><div class="spotlight-scroll">${feat.map(h=>`<div class="spot" data-open="${h.id}" style="background:${bg(h)}"><span class="tag">${h.cat}</span><div class="who">${h.name}${h.v?CHECK:''}</div><div class="what">${h.offer.split('.')[0]}.</div><div class="price">${h.price}</div></div>`).join('')}</div>`:''}
     <div class="sec-head"><div class="sec-title">${state.near?'Nearest you':state.top?'Top rated':state.cat==='All'?'All hustles':state.cat}</div><div class="sec-link">${f.length} found</div></div>
-    <div class="list">${f.length?f.map((h,i)=>`<div class="card" data-open="${h.id}" style="animation-delay:${i*40}ms"><div class="avatar" style="background:${bg(h)}">${h.init}</div><div class="body"><div class="name">${h.name}${h.v?CHECK:''}${h.founder?'<span class="founderpill">🎓 Founder</span>':''}${h.boost?'<span class="boostpill">⚡ Boosted</span>':''}${AVAIL.includes(h.id)?'<span class="availpill">● now</span>':''}${pillFor(h)}</div><div class="offer">${h.offer}</div><div class="metarow"><span class="catbadge">${h.cat}</span><span class="rating">${star} ${h.rating}</span><span class="dist">${pin} ${h.dist} mi</span><span class="pricetag">${h.price}</span></div></div></div>`).join(''):`<div class="empty">No hustles match those filters yet.</div>`}</div>`;
+    <div class="list">${f.length?f.map((h,i)=>`<div class="card" data-open="${h.id}" style="animation-delay:${i*40}ms"><div class="avatar" style="background:${bg(h)}">${h.init}</div><div class="body"><div class="name">${h.name}${h.v?CHECK:''}${vendorPills(h)}${h.boost?'<span class="boostpill">⚡ Boosted</span>':''}${AVAIL.includes(h.id)?'<span class="availpill">● now</span>':''}${pillFor(h)}</div><div class="offer">${h.offer}</div><div class="metarow"><span class="catbadge">${h.cat}</span><span class="rating">${star} ${h.rating}</span><span class="dist">${pin} ${h.dist} mi</span><span class="pricetag">${h.price}</span></div></div></div>`).join(''):`<div class="empty">No hustles match those filters yet.</div>`}</div>`;
 }
 
 function eventsBody(){
@@ -703,7 +713,7 @@ function detail(id){
     </div>
     <div class="shop-sign">
       <div class="detail-av" style="${avStyle}">${h.me&&h.avatar?'':h.init}</div>
-      <div><div class="store-name" style="font-size:20px;color:var(--ink)">${h.name}${h.v?CHECK:''}${pillFor(h)}</div>
+      <div><div class="store-name" style="font-size:20px;color:var(--ink)">${h.name}${h.v?CHECK:''}${vendorPills(h)}${pillFor(h)}</div>
       <div class="store-sub" style="color:var(--mist)">${h.v?`<span style="color:var(--violet);font-weight:600;display:inline-flex;align-items:center;gap:3px">${icon('<path d="M20 6 9 17l-5-5"/>',12)}Verified</span> · `:''}${h.cat}${h.me?'':` · ${pin} ${h.dist} mi`}</div></div>
     </div>
     <div class="socialrow">${socialHTML}</div>
@@ -977,7 +987,7 @@ function userProfile(){
   var av=(isMe&&state.avatar)?'background-image:url('+state.avatar+');background-size:cover':'background:'+(u.col||state.themeColor);
   var h='<div class="topbar"><div class="brandrow"><div class="wordmark" style="font-size:18px">Profile</div><div class="locpill" id="upBack" style="cursor:pointer">\u2039 Back</div></div></div>';
   h+='<div class="enter" style="padding:6px 20px 24px">';
-  h+='<div class="up-head"><div class="up-av" style="'+av+'">'+((isMe&&state.avatar)?'':u.init)+'</div><div class="up-name">'+u.name+' '+CHECK+'</div><div class="up-sub">\u2713 Verified student'+(yr?' \u00b7 Class of \u2019'+yr.slice(2):'')+(vendor&&vendor.founder?' \u00b7 🎓 Founder':'')+'</div></div>';
+  h+='<div class="up-head"><div class="up-av" style="'+av+'">'+((isMe&&state.avatar)?'':u.init)+'</div><div class="up-name">'+u.name+' '+CHECK+'</div><div class="up-sub">\u2713 Verified student'+(yr?' \u00b7 Class of \u2019'+yr.slice(2):'')+'</div>'+'<div class="up-badges">'+(vendor?vendorPills(vendor):'')+commPills(u.name)+'</div>'+'</div>';
   if(!isMe){h+='<button class="submit" id="upMsg" style="background:var(--violet)">\u2709\uFE0F Message '+u.name.split(' ')[0]+'</button>';}
   if(vendor){h+='<button class="submit" id="upStore" style="background:var(--card);color:var(--ink);border:1px solid var(--line);margin-top:10px">🏪 View '+vendor.name+'\u2019s storefront</button>';}
   if(mutual.length){h+='<div class="up-mutual">🤝 You\u2019re both in '+mutual.map(function(c){return c.name;}).join(', ')+'</div>';}

@@ -18,6 +18,7 @@
 .tour-do{display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:var(--violet-soft);color:var(--violet);font-size:12px;font-weight:700;padding:7px 11px;border-radius:100px}
 .tour-actions{display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:10px}
 .tour-skip{border:0;background:none;font-family:inherit;font-size:13px;font-weight:600;color:var(--mist);cursor:pointer;padding:6px 2px}
+.tour-back{border:1px solid var(--line);background:transparent;color:var(--mist);font-family:inherit;font-size:13.5px;font-weight:700;padding:10px 14px;border-radius:12px;cursor:pointer;white-space:nowrap}
 .tour-next{border:0;background:var(--ink);color:#fff;font-family:inherit;font-size:14px;font-weight:700;padding:11px 20px;border-radius:12px;cursor:pointer}
 .tour-dots{display:flex;gap:5px;align-items:center}
 .tour-dot{width:6px;height:6px;border-radius:50%;background:var(--line)}
