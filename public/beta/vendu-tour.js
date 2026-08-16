@@ -186,7 +186,7 @@
           return nav("add");
         },
         title: "Post in seconds",
-        text: "The ＋ button posts a service, an item for sale, a request, or a campus event.",
+        text: "The ＋ button posts a service, an item for sale, a request, or a campus event. Requests are for things you want but don't see yet — like help, an item, or a service.",
         doit: "Tap ＋",
         click: true,
         place: "above",
@@ -231,27 +231,9 @@
           return nav("profile");
         },
         title: "Set up your profile",
-        text: "Profile is your account, storefront, bookings, saved hustles, messages, leaderboard, Replay tutorial and Log out. Add a profile picture here so students recognize you, and when you're paying a vendor just tap one of their cash-payment buttons (Cash App, Venmo, Zelle, PayPal) to pay them directly.",
-        doit: "Tap Profile to set up your account",
+        text: "Tap Profile to finish setting up your account. Upload a profile picture so students recognize you. When you pay a vendor, tap one of their cash-payment buttons (Cash App, Venmo, Zelle, PayPal) to pay them directly. Selling is free and optional — flip on Vendor mode to switch between Student and Vendor views under the same account. Under Set up your storefront you can link your social media accounts, upload, resize and delete storefront photos, and link your direct payment accounts so students can pay you straight away. Founders are the first 10 verified student vendors on a campus; refer 3 vendors through your invite link to earn a 🎓 Founder badge and a monthly Boost. The leaderboard ranks students by vendors referred.",
+        doit: "Tap Profile to finish",
         click: true,
-        place: "above",
-      },
-      {
-        before: goProfile,
-        target: function () {
-          return $("#toregular") || $("#startsell") || $(".plan");
-        },
-        title: "One account, two views",
-        text: "Selling is optional and free — browsing, buying, trading and booking are always free. If you want a storefront, flip on Vendor mode here: same account, you just switch between Student view and Vendor view to reach bookings, services and payouts. Under Set up your storefront you can link your social media accounts, upload, resize and delete storefront photos, and link your direct payment accounts (Cash App, Venmo, Zelle, PayPal) so students can pay you straight away.",
-        place: "above",
-      },
-      {
-        before: goProfile,
-        target: function () {
-          return $("#lbBtn") || $(".plan");
-        },
-        title: "Founders & the leaderboard",
-        text: "Founders are the first 10 verified student vendors on a campus. Get 3 vendors to sign up with your invite link and you become a founder — a 🎓 badge everywhere you post plus a monthly Boost. The leaderboard ranks students by vendors referred. That's the tour — you're set!",
         next: "Finish",
         place: "above",
       },
