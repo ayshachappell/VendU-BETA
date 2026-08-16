@@ -43,3 +43,6 @@
 .tour-next{flex:0 0 auto;min-width:64px;text-align:center;padding:10px 16px}
 .tour-card{padding:16px}
 .tour-dots{display:none}
+
+.store-badges{display:inline-flex;align-items:center;gap:6px;vertical-align:middle;margin-left:6px}
+.tour-card-center{position:fixed}
