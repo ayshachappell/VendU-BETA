@@ -1,0 +1,36 @@
+const CACHE_NAME = 'vendu-main-v1';
+const ASSETS = [
+  '/main/index.html',
+  '/main/vendu-shared.css',
+  '/main/vendu-api.js',
+  '/main/vendu-tour.js',
+  '/main/manifest.webmanifest',
+  '/icons/icon-192.png',
+  '/icons/icon-512.png',
+  '/favicon.png'
+];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
+  );
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
+    )
+  );
+  self.clients.claim();
+});
+
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      if (response) return response;
+      return fetch(event.request).catch(() => caches.match('/main/index.html'));
+    })
+  );
+});
