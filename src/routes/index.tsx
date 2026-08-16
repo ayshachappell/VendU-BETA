@@ -72,20 +72,21 @@ function Landing() {
           className="rounded-2xl shadow-lg"
         />
         <h1 className="mt-7 text-4xl font-extrabold tracking-tight sm:text-5xl">
-          Where campus hustles get seen
+          Sell your stuff. Book a service. Get paid.
         </h1>
         <p className="mt-4 max-w-xl text-base text-muted-foreground sm:text-lg">
-          VendU is the students-only marketplace for your school. Verify with any{" "}
-          <strong className="text-foreground">.edu</strong> email and you&rsquo;re in — free,
-          forever.
+          VendU is the campus marketplace made for students — at every college and trade school.
+          Free to join with your school email. Verify with any{" "}
+          <strong className="text-foreground">.edu</strong> and you&rsquo;re in.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <a
             href="/main/index.html"
             className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Open VendU
+            Join your campus →
           </a>
+
           <a
             href="/beta/index.html"
             className="inline-flex items-center justify-center rounded-xl border border-input bg-card px-6 py-3 text-sm font-semibold transition-colors hover:bg-accent"
