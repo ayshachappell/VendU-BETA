@@ -16,6 +16,11 @@
     var n = nav("home");
     if (n && n.className.indexOf("on") === -1) n.click();
   }
+  function goFeed() {
+    goHome();
+    var t = document.querySelector('.seg [data-home="feed"]');
+    if (t && t.className.indexOf("on") === -1) t.click();
+  }
   function goBrowse() {
     goHome();
     var t = document.querySelector('.seg [data-home="browse"]');
@@ -28,7 +33,7 @@
         intro: true,
         emoji: "🎓",
         title: "Let's walk the app",
-        text: "Two minutes on the real app — you tap along. This runs once after you verify your school email. You can replay it anytime from Profile → Replay tutorial.",
+        text: "A quick guided tour on the real app — you tap along. It runs once after you verify your school email, and you can replay it anytime from Profile → Replay tutorial.",
         next: "Show me around",
       },
       {
@@ -37,9 +42,29 @@
           return $("#q") || $(".topbar");
         },
         title: "Search your campus",
-        text: "Search any student by name or service, then narrow with the category chips just below. Everything you see is from your own campus.",
+        text: "Search any student by name or service, then narrow with the category chips below. Everything you see is from your own campus.",
         doit: "Type anything in the search box",
         event: "input",
+        place: "below",
+      },
+      {
+        before: goHome,
+        target: function () {
+          return $(".seg");
+        },
+        title: "Feed, Browse & Events",
+        text: "Feed is what students are posting right now, Browse lists every hustle and storefront, Events shows what's happening on campus this week.",
+        place: "below",
+      },
+      {
+        before: goFeed,
+        target: function () {
+          return $("[data-cmt]");
+        },
+        title: "Like & comment",
+        text: "Every post can be liked and commented on. Tap the comment icon to open the thread, then type a reply and hit Post — tapping a name opens that student's profile.",
+        doit: "Tap the comment icon",
+        click: true,
         place: "below",
       },
       {
@@ -54,10 +79,18 @@
       },
       {
         target: function () {
+          return $(".sf-head") || $(".detail") || $(".card");
+        },
+        title: "Badges tell you who's who",
+        text: "🎓 marks a Founder, ★ marks VendU staff, and campus/community badges show which school, org or group a student belongs to. Badges show on names, profiles and storefronts.",
+        place: "below",
+      },
+      {
+        target: function () {
           return $(".cta-bar");
         },
         title: "Save, message or book",
-        text: "From any storefront you can save it for later, message the student directly, or book a time — no cash needed up front.",
+        text: "From any storefront you can save it, message the student directly, or book a time — messages live in Profile → Messages.",
         place: "above",
       },
       {
@@ -75,7 +108,7 @@
           return nav("market");
         },
         title: "Buy, sell & trade",
-        text: "Market is where students post items for sale, trades, campus housing and jobs.",
+        text: "Market is where students post items for sale, trades, campus housing and jobs — each one can be liked, commented on or messaged about.",
         doit: "Tap Market",
         click: true,
         place: "above",
@@ -95,11 +128,20 @@
         target: function () {
           return nav("venuU");
         },
-        title: "VendUniversity",
-        text: "Communities and groups, your class planner, campus routes, and free guides on trades, certs and starting a business.",
+        title: "Communities & VendUniversity",
+        text: "Join campus communities and student groups, post inside them, plan your classes and routes, and read free guides on trades, certs and starting a business.",
         doit: "Tap VendUni",
         click: true,
         place: "above",
+      },
+      {
+        requires: '#nav .navitem[data-tab="venuU"]',
+        target: function () {
+          return $('[data-hub="communities"]') || $("[data-hub]");
+        },
+        title: "Join a community",
+        text: "Communities are campus orgs; groups are smaller circles you can create. Joining adds that badge to your name so students can see what you're part of.",
+        place: "below",
       },
       {
         before: goHome,
@@ -113,15 +155,15 @@
       {
         intro: true,
         emoji: "🛍️",
-        title: "Becoming a vendor is optional",
-        text: "You never have to sell anything — browsing, buying, trading and booking are always free. If you do want a storefront, flip on Vendor mode in Profile. There is no subscription.",
+        title: "One account, two views",
+        text: "Selling is optional and free — browsing, buying, trading and booking always are. If you do want a storefront, flip on Vendor mode in Profile: it's the same account, you just switch between Student view and Vendor view to reach bookings, services and payouts.",
         next: "Got it",
       },
       {
         intro: true,
         emoji: "🏆",
         title: "Founders & the leaderboard",
-        text: "Founders are the first verified student vendors on a campus. Refer other vendors with your invite link to claim a founder spot — founders keep a 🎓 badge on their name everywhere they post, on their profile and on their storefront, plus a monthly Boost. The leaderboard in Profile ranks students by vendors referred, so you can see where you stand.",
+        text: "Founders are the first verified student vendors on a campus. Refer other vendors with your invite link to claim a founder spot — founders keep a 🎓 badge everywhere they post, plus a monthly Boost. The leaderboard in Profile ranks students by vendors referred so you can see where you stand.",
         next: "Last step",
       },
       {
@@ -130,14 +172,13 @@
           return nav("profile");
         },
         title: "Set up your profile",
-        text: "Profile is your account, storefront, bookings, saved hustles, messages, leaderboard, Replay tutorial and Log out. Finish here and you're live.",
+        text: "Profile is your account, storefront, Student/Vendor switch, bookings, saved hustles, messages, leaderboard, Replay tutorial and Log out. Finish here and you're live.",
         doit: "Tap Profile to set up your account",
         click: true,
         place: "above",
       },
     ];
   }
-
   var running = false;
   var list = [],
     i = 0,
