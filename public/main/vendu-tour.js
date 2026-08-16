@@ -12,9 +12,14 @@
   function nav(tab) {
     return document.querySelector('#nav .navitem[data-tab="' + tab + '"]');
   }
-  function goHome() {
-    var n = nav("home");
+  function tapNav(tab) {
+    var n = nav(tab);
     if (n && n.className.indexOf("on") === -1) n.click();
+  }
+  function goHome() {
+    closeStore();
+    closeUser();
+    tapNav("home");
   }
   function goFeed() {
     goHome();
@@ -26,12 +31,41 @@
     var t = document.querySelector('.seg [data-home="browse"]');
     if (t && t.className.indexOf("on") === -1) t.click();
   }
-
+  function closeStore() {
+    var b = $("#back");
+    if (b) b.click();
+  }
+  function closeUser() {
+    var b = $("#upBack");
+    if (b) b.click();
+  }
+  function openThread() {
+    if ($("[data-user]")) return;
+    goFeed();
+    var c = $("[data-cmt]");
+    if (c) c.click();
+  }
+  function openUserCard() {
+    if ($("#upBack")) return;
+    openThread();
+    var n = $("[data-user]");
+    if (n) n.click();
+  }
   function openStore() {
     if ($(".cta-bar") || $(".storefront")) return;
     goBrowse();
     var c = $(".card[data-open]");
     if (c) c.click();
+  }
+  function goHub() {
+    closeStore();
+    closeUser();
+    tapNav("venuU");
+  }
+  function goProfile() {
+    closeStore();
+    closeUser();
+    tapNav("profile");
   }
 
   function steps() {
@@ -61,6 +95,8 @@
         },
         title: "Feed, Browse & Events",
         text: "Feed is what students are posting right now, Browse lists every hustle and storefront, Events shows what's happening on campus this week.",
+        doit: "Tap Feed, Browse or Events",
+        click: true,
         place: "below",
       },
       {
@@ -69,8 +105,30 @@
           return $("[data-cmt]");
         },
         title: "Like & comment",
-        text: "Every post can be liked and commented on. Tap the comment icon to open the thread, then type a reply and hit Post — tapping a name opens that student's profile.",
+        text: "Every post can be liked and commented on. Tap the comment icon to open the thread, then type a reply and hit Post.",
         doit: "Tap the comment icon",
+        click: true,
+        place: "below",
+      },
+      {
+        before: openThread,
+        target: function () {
+          return $("[data-user]");
+        },
+        title: "Tap any student's name",
+        text: "Names are tappable everywhere in VendU — in posts, comments, Market listings and communities. Tapping one opens that student's profile with their badges, active listings and a message button.",
+        doit: "Tap a student's name",
+        click: true,
+        place: "below",
+      },
+      {
+        before: openUserCard,
+        target: function () {
+          return $("#upBack");
+        },
+        title: "Their profile",
+        text: "Here you see who they are, the communities and campus badges they carry, anything they have listed, and a button to message them. Back returns you to the feed.",
+        doit: "Tap Back",
         click: true,
         place: "below",
       },
@@ -90,7 +148,7 @@
           return $(".store-badges") || $(".shop-sign") || $(".up-badges");
         },
         title: "Badges tell you who's who",
-        text: "This student carries a 🎓 Founder badge and a 💠 Vendor badge — plus deal badges like 🏷️ Sale, 🏷️ 20% off or ⏳ Ending soon when they run a promo. ★ marks VendU staff, and campus/community badges show which school, org or group a student belongs to. Tap any student's name anywhere to open their profile, see their badges and listings, and message them.",
+        text: "This student carries a 🎓 Founder badge and a 💠 Vendor badge — plus deal badges like 🏷️ Sale, 🏷️ 20% off or ⏳ Ending soon when they run a promo. ★ marks VendU staff, and campus/community badges show which school, org or group a student belongs to.",
         place: "below",
       },
       {
@@ -99,7 +157,7 @@
           return $(".cta-bar");
         },
         title: "Save, message or book",
-        text: "From any storefront you can save it, message the student directly, or book a time — messages live in Profile → Messages.",
+        text: "From any storefront you can save it, message the student directly, or book a time — messages live in Profile → Messages. After a booking you can leave an optional review.",
         place: "above",
       },
       {
@@ -114,6 +172,7 @@
         place: "below",
       },
       {
+        before: goHome,
         target: function () {
           return nav("market");
         },
@@ -146,11 +205,14 @@
       },
       {
         requires: '#nav .navitem[data-tab="venuU"]',
+        before: goHub,
         target: function () {
-          return $('[data-hub="communities"]') || $("[data-hub]");
+          return $(".hubseg") || $("[data-hub]");
         },
-        title: "Join a community",
-        text: "Communities are campus orgs; groups are smaller circles you can create. Joining adds that badge to your name so students can see what you're part of.",
+        title: "Everything inside VendUniversity",
+        text: "Resources are free guides, Community is campus orgs and the groups you can create, Planner holds your classes and to-dos, Routes maps your walk across campus. Joining a community adds that badge to your name.",
+        doit: "Tap any tab up here",
+        click: true,
         place: "below",
       },
       {
@@ -163,32 +225,38 @@
         place: "below",
       },
       {
-        intro: true,
-        emoji: "🛍️",
-        title: "One account, two views",
-        text: "Selling is optional and free — browsing, buying, trading and booking always are. If you do want a storefront, flip on Vendor mode in Profile: it's the same account, you just switch between Student view and Vendor view to reach bookings, services and payouts.",
-        next: "Got it",
-      },
-      {
-        intro: true,
-        emoji: "🏆",
-        title: "Founders & the leaderboard",
-        text: "Founders are the first verified student vendors on a campus. Refer other vendors with your invite link to claim a founder spot — founders keep a 🎓 badge everywhere they post, plus a monthly Boost. The leaderboard in Profile ranks students by vendors referred so you can see where you stand.",
-        next: "Last step",
-      },
-      {
         before: goHome,
         target: function () {
           return nav("profile");
         },
         title: "Set up your profile",
-        text: "Profile is your account, storefront, Student/Vendor switch, bookings, saved hustles, messages, leaderboard, Replay tutorial and Log out. Finish here and you're live.",
+        text: "Profile is your account, storefront, bookings, saved hustles, messages, leaderboard, Replay tutorial and Log out.",
         doit: "Tap Profile to set up your account",
         click: true,
         place: "above",
       },
+      {
+        before: goProfile,
+        target: function () {
+          return $("#toregular") || $("#startsell") || $(".plan");
+        },
+        title: "One account, two views",
+        text: "Selling is optional and free — browsing, buying, trading and booking always are. If you want a storefront, flip on Vendor mode here: same account, you just switch between Student view and Vendor view to reach bookings, services and payouts.",
+        place: "above",
+      },
+      {
+        before: goProfile,
+        target: function () {
+          return $("#lbBtn") || $(".plan");
+        },
+        title: "Founders & the leaderboard",
+        text: "Founders are the first 10 verified student vendors on a campus. Get 3 vendors to sign up with your invite link and you become a founder — a 🎓 badge everywhere you post plus a monthly Boost. The leaderboard ranks students by vendors referred. That's the tour — you're set!",
+        next: "Finish",
+        place: "above",
+      },
     ];
   }
+
   var running = false;
   var dir = 1;
   var list = [],
