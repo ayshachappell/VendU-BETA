@@ -1388,7 +1388,7 @@ function onboarding(){
   const s=state.obStep;
   if(s===0){screen.innerHTML=`<div class="ob">
     <div class="ob-top"><div class="ob-dots"><span class="obd on"></span><span class="obd"></span><span class="obd"></span></div></div>
-    <div class="ob-body"><div class="ob-emoji">\u{1F393}</div><div class="ob-title">Welcome to VendU</div><div class="ob-text">Your campus marketplace \u2014 find & book student services, buy, sell & trade, join communities, and organize your school life. Always free.</div></div>
+    <div class="ob-body"><div class="ob-emoji">\u{1F393}</div><div class="ob-title">Welcome to <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WM}</span></div><div class="ob-text">Your campus marketplace \u2014 find & book student services, buy, sell & trade, join communities, and organize your school life. Always free.</div></div>
     <button class="ob-btn" id="obnext">Get started</button><button class="ob-back" id="obskip">I\u2019m a tester \u2014 skip \u2192</button></div>`;
     document.getElementById('obnext').onclick=()=>{state.obStep=1;render();};
     var _sk0=document.getElementById('obskip');if(_sk0)_sk0.onclick=()=>demoSkip();
