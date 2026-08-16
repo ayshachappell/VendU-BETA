@@ -79,7 +79,7 @@
       },
       {
         target: function () {
-          return $(".sf-head") || $(".detail") || $(".card");
+          return $(".storefront") || $(".awning") || $(".card");
         },
         title: "Badges tell you who's who",
         text: "🎓 marks a Founder, ★ marks VendU staff, and campus/community badges show which school, org or group a student belongs to. Badges show on names, profiles and storefronts.",
