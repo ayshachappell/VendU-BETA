@@ -156,6 +156,7 @@
         },
         title: "Save, message or book",
         text: "From any storefront you can save it, message the student directly, or book a time — messages live in Profile → Messages. After a booking you can leave an optional review.",
+        lock: true,
         place: "above",
       },
       {
@@ -268,6 +269,8 @@
     onTargetClick,
     boundEl,
     boundEvent,
+    lockEl,
+    lockHandler,
     raf;
 
   function realSteps() {
@@ -287,6 +290,9 @@
     });
     ring = pulse = card = modal = null;
     if (boundEl && onTargetClick) boundEl.removeEventListener(boundEvent || "click", onTargetClick);
+    if (lockEl && lockHandler) lockEl.removeEventListener("click", lockHandler, true);
+    lockEl = null;
+    lockHandler = null;
     boundEl = null;
     boundEvent = null;
     onTargetClick = null;
@@ -356,6 +362,15 @@
     document.body.appendChild(card);
 
     wireCard(st);
+
+    if (st.lock) {
+      lockEl = el;
+      lockHandler = function (ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+      };
+      lockEl.addEventListener("click", lockHandler, true);
+    }
 
     if (st.click || st.event) {
       boundEl = el;
