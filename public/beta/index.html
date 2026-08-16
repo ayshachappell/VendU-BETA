@@ -1629,6 +1629,9 @@ function deleteAccount(){
   setTimeout(function(){location.reload();},900);
 }
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/beta/sw.js').catch(function(){});
+}
 </script>
 </body>
 </html>

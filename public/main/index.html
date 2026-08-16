@@ -1630,6 +1630,9 @@ function deleteAccount(){
   setTimeout(function(){location.reload();},900);
 }
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/main/sw.js').catch(function(){});
+}
 </script>
 </body>
 </html>
