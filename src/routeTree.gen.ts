@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as BetaRouteImport } from './routes/beta'
+import { Route as ApiPublicAccountDeleteRouteImport } from './routes/api/public/account/delete'
 import { Route as ApiPublicCommunityActivityRouteImport } from './routes/api/public/community/activity'
 import { Route as ApiPublicNotifyAppointmentRouteImport } from './routes/api/public/notify/appointment'
 import { Route as ApiPublicVerifyCheckRouteImport } from './routes/api/public/verify/check'
@@ -34,6 +35,11 @@ const AppRoute = AppRouteImport.update({
 const BetaRoute = BetaRouteImport.update({
   id: '/beta',
   path: '/beta',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicAccountDeleteRoute = ApiPublicAccountDeleteRouteImport.update({
+  id: '/api/public/account/delete',
+  path: '/api/public/account/delete',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicCommunityActivityRoute =
@@ -83,6 +89,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
+  '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
   '/api/public/community/activity': typeof ApiPublicCommunityActivityRoute
   '/api/public/notify/appointment': typeof ApiPublicNotifyAppointmentRoute
   '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
@@ -96,6 +103,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
+  '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
   '/api/public/community/activity': typeof ApiPublicCommunityActivityRoute
   '/api/public/notify/appointment': typeof ApiPublicNotifyAppointmentRoute
   '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
@@ -110,6 +118,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
+  '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
   '/api/public/community/activity': typeof ApiPublicCommunityActivityRoute
   '/api/public/notify/appointment': typeof ApiPublicNotifyAppointmentRoute
   '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
@@ -125,6 +134,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/beta'
+    | '/api/public/account/delete'
     | '/api/public/community/activity'
     | '/api/public/notify/appointment'
     | '/api/public/verify/check'
@@ -138,6 +148,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/beta'
+    | '/api/public/account/delete'
     | '/api/public/community/activity'
     | '/api/public/notify/appointment'
     | '/api/public/verify/check'
@@ -151,6 +162,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/beta'
+    | '/api/public/account/delete'
     | '/api/public/community/activity'
     | '/api/public/notify/appointment'
     | '/api/public/verify/check'
@@ -165,6 +177,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRoute
   BetaRoute: typeof BetaRoute
+  ApiPublicAccountDeleteRoute: typeof ApiPublicAccountDeleteRoute
   ApiPublicCommunityActivityRoute: typeof ApiPublicCommunityActivityRoute
   ApiPublicNotifyAppointmentRoute: typeof ApiPublicNotifyAppointmentRoute
   ApiPublicVerifyCheckRoute: typeof ApiPublicVerifyCheckRoute
@@ -196,6 +209,13 @@ declare module '@tanstack/react-router' {
       path: '/beta'
       fullPath: '/beta'
       preLoaderRoute: typeof BetaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/account/delete': {
+      id: '/api/public/account/delete'
+      path: '/api/public/account/delete'
+      fullPath: '/api/public/account/delete'
+      preLoaderRoute: typeof ApiPublicAccountDeleteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/community/activity': {
@@ -261,6 +281,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRoute,
   BetaRoute: BetaRoute,
+  ApiPublicAccountDeleteRoute: ApiPublicAccountDeleteRoute,
   ApiPublicCommunityActivityRoute: ApiPublicCommunityActivityRoute,
   ApiPublicNotifyAppointmentRoute: ApiPublicNotifyAppointmentRoute,
   ApiPublicVerifyCheckRoute: ApiPublicVerifyCheckRoute,
