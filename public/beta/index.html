@@ -606,7 +606,7 @@ function applyAccount(email){
   state.tester=false;
   if(state.isCEO){state.isFounder=false;}
   if(state.isRealStudent||state.isCEO)creditReferral();
-  loadReferrals();
+  loadReferrals();syncReferralsFromServer();syncServerStats();
   var cc=campusByDomain(email||'');if(cc)state.campus=cc;
   if(typeof refreshDemo==='function')refreshDemo();
 }
@@ -616,7 +616,11 @@ function myRefCode(){var e=String(state.acctEmail||'').toLowerCase();var s=(e.sp
 function myRefLink(){try{return location.origin+location.pathname+'?ref='+myRefCode();}catch(e){return 'vendu.app/join?ref='+myRefCode();}}
 function syncFounder(){state.isFounder=!state.isCEO&&state.referrals>=FOUNDER_GOAL;}
 function loadReferrals(){try{state.referrals=parseInt(localStorage.getItem('vendu_refs_'+myRefCode())||'0',10)||0;}catch(e){state.referrals=0;}syncFounder();}
-function creditReferral(){try{var r=localStorage.getItem('vendu_ref_from');if(!r||localStorage.getItem('vendu_ref_done'))return;if(r===myRefCode())return;localStorage.setItem('vendu_ref_done','1');var k='vendu_refs_'+r;localStorage.setItem(k,String((parseInt(localStorage.getItem(k)||'0',10)||0)+1));}catch(e){}}
+function creditReferral(){try{var r=localStorage.getItem('vendu_ref_from');if(!r||localStorage.getItem('vendu_ref_done'))return;if(r===myRefCode())return;localStorage.setItem('vendu_ref_done','1');try{if(window.VendU&&VendU.recordReferral)VendU.recordReferral(r,(state.campus&&state.campus.name)||'',BUILD);}catch(e){}var k='vendu_refs_'+r;localStorage.setItem(k,String((parseInt(localStorage.getItem(k)||'0',10)||0)+1));}catch(e){}}
+/* Keep referrals, ratings and jobs-done in sync with the shared backend so they
+   follow the student across devices. */
+function syncReferralsFromServer(){try{if(!window.VendU||!VendU.referralCount||!state.isRealStudent&&!state.isCEO)return;VendU.referralCount(myRefCode(),BUILD).then(function(r){if(r&&r.ok&&typeof r.referrals==='number'){state.referrals=r.referrals;try{localStorage.setItem('vendu_refs_'+myRefCode(),String(r.referrals));}catch(e){}syncFounder();try{render();}catch(e){}}});}catch(e){}}
+function syncServerStats(){try{if(!window.VendU||!VendU.vendorStats)return;var ids=HUSTLES.filter(function(h){return !h.me;}).map(function(h){return h.id;});if(!ids.length)return;VendU.vendorStats(ids,BUILD).then(function(r){if(!r||!r.ok||!r.stats)return;var changed=false;Object.keys(r.stats).forEach(function(id){var st=r.stats[id];var h=HUSTLES.find(function(x){return x.id===id;});if(!h||!st)return;if(st.jobs){h.jobs=(parseInt(h.jobs,10)||0)+st.jobs;changed=true;}if(st.avg){h.rating=st.avg;h.reviewCount=(parseInt(h.reviewCount,10)||0)+st.reviews;changed=true;}});if(changed){try{render();}catch(e){}}});}catch(e){}}
 try{var _rp=new URL(location.href).searchParams.get('ref');if(_rp)localStorage.setItem('vendu_ref_from',_rp);}catch(e){}
 function accountBadge(){return state.isCEO?'<span class="ceopill">\u2605 CEO</span>':(state.isFounder&&state.isRealStudent?'<span class="founderpill">\u{1F393} Founder</span>':'');}
 function doLogout(){try{VendU.signOut();}catch(e){}try{localStorage.removeItem('vendu_return_build');}catch(e){}location.reload();}
