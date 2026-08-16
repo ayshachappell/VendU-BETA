@@ -770,6 +770,17 @@ function detail(id){
   screen.querySelectorAll('[data-payapp]').forEach(el=>el.onclick=()=>toast('Pay '+fn+' via '+el.dataset.payapp+(el.dataset.payh?' — '+el.dataset.payh:'')+' (opens in the real build)'));
 }
 
+function notifyBooking(h,b){
+  try{
+    var when=b.date+' \u00b7 '+b.time;
+    var th=(state.inbox||[]).filter(function(t){return t.name===h.name;})[0];
+    if(!th){th={id:'th'+(idc++),name:h.name,init:(h.name.trim()[0]||'?').toUpperCase(),color:'#5A2BE0',unread:0,msgs:[]};state.inbox.unshift(th);}
+    th.msgs.push(['You','\uD83D\uDCC5 Booking request: '+b.svc+' \u2014 '+when]);
+    th.msgs.push([h.name,'Confirmed! '+b.svc+' on '+when+'. You\u2019ll get a reminder 1 hour before \u23F0']);
+    th.unread=(th.unread||0)+1;
+    if(window.VendU&&VendU.notifyAppointment)VendU.notifyAppointment({vendor:h.name,vendorId:h.id,service:b.svc,when:when,phone:state.phone||'',build:BUILD});
+  }catch(e){}
+}
 function bookingScreen(){
   const b=state.book,h=HUSTLES.find(x=>x.id===b.id);
   if(b.step==='done'){
@@ -787,13 +798,13 @@ function bookingScreen(){
       <div class="book-lbl">Choose a service</div>${h.services.map(s=>`<div class="opt ${b.svc===s[0]?'on':''}" data-svc="${s[0]}">${s[0]}<span class="p" style="font-weight:700">${s[1]}</span></div>`).join('')}
       <div class="book-lbl">Pick a day</div><div class="pillrow">${dates.map(d=>`<div class="tpick ${b.date===d?'on':''}" data-date="${d}">${d}</div>`).join('')}</div>
       <div class="book-lbl">Pick a time</div><div class="pillrow">${times.map(t=>{var taken=(BOOKED[b.id]||[]).indexOf(b.date+"|"+t)>-1;return `<div class="tpick ${b.time===t?'on':''} ${taken?'taken':''}" ${taken?'':`data-time="${t}"`}>${t}${taken?' · booked':''}</div>`}).join('')}</div>
-      <div class="sublock" style="margin-top:18px">${icon('<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',16)}Adds to your calendar + sends a confirmation text now and a reminder 1 hour before.</div>
+      <div class="book-lbl">Your mobile number <span style="color:var(--mist);font-weight:500">· for confirmation & reminder texts</span></div><input id="bphone" type="tel" inputmode="tel" placeholder="(555) 555-5555" value="${state.phone||''}" style="width:100%;box-sizing:border-box;padding:13px 14px;border:1px solid var(--line);border-radius:13px;font:inherit;font-size:15px;background:var(--card)"><div class="sublock" style="margin-top:18px">${icon('<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',16)}Adds to your calendar + sends a confirmation text now and a reminder 1 hour before.</div>
       <button class="submit" id="confirm">Confirm booking</button></div></div>`;
   document.getElementById('bback').onclick=()=>{state.book=null;detail(h.id);};
   screen.querySelectorAll('[data-svc]').forEach(el=>el.onclick=()=>{state.book.svc=el.dataset.svc;bookingScreen();});
   screen.querySelectorAll('[data-date]').forEach(el=>el.onclick=()=>{state.book.date=el.dataset.date;bookingScreen();});
   screen.querySelectorAll('[data-time]').forEach(el=>el.onclick=()=>{state.book.time=el.dataset.time;bookingScreen();});
-  document.getElementById('confirm').onclick=()=>{(BOOKED[state.book.id]=BOOKED[state.book.id]||[]).push(state.book.date+'|'+state.book.time);var _jb=HUSTLES.find(x=>x.id===state.book.id);if(_jb)_jb.jobs=(_jb.jobs||0)+1;state.book.step='done';bookingScreen();screen.scrollTop=0;};
+  document.getElementById('confirm').onclick=()=>{var _ph=document.getElementById('bphone');state.phone=(_ph&&_ph.value.trim())||state.phone||'';try{localStorage.setItem('vendu_phone',state.phone);}catch(e){}notifyBooking(h,state.book);(BOOKED[state.book.id]=BOOKED[state.book.id]||[]).push(state.book.date+'|'+state.book.time);var _jb=HUSTLES.find(x=>x.id===state.book.id);if(_jb)_jb.jobs=(_jb.jobs||0)+1;state.book.step='done';bookingScreen();screen.scrollTop=0;};
 }
 
 const SPONSORS=[
@@ -836,10 +847,10 @@ function market(){
   const goods=state.mkt==='goods';
   const acts=o=>`<div class="mkt-act"><span class="p-act ${o.liked?'liked':''}" data-mlike="${o.id}">${heart(o.liked)} ${o.likes}</span><span class="p-act ${state.openMC===o.id?'liked':''}" data-mcmt="${o.id}">${icon(com,16)} ${o.comments.length}${o.comments.length?(state.openMC===o.id?' · hide':' · view'):''}</span>${!o.mine?`<span class="p-act" data-mmsg="${o.id}">✉ Message</span>`:''}</div>`;
   const panel=(o,who)=>`<div class="mkt-comments"><div class="mkt-ch">Comments <span style="color:var(--mist);font-weight:500">· go to ${who}</span></div>${o.comments.length?o.comments.map(c=>`<div class="p-comment"><b class="gp-author" data-user="${c[0]}␟${c[0].charAt(0)}␟0" style="cursor:pointer">${c[0]}</b> ${c[1]}</div>`).join(''):'<div style="font-size:12.5px;color:var(--mist)">No comments yet — be the first.</div>'}<div class="p-cbox"><input id="mci" placeholder="Add a comment…"><button id="mcsend">Post</button></div></div>`;
-  screen.innerHTML=`<div class="topbar"><div class="brandrow"><div class="wordmark go" id="logo">${WM} <span style="font-size:.7em;color:var(--ink)">Market</span></div><div class="locpill" onclick="openCampusPick()"><span class="dot"></span>${CAMP()}</div></div><div class="search">${icon('<circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/>')}<input placeholder="${goods?'Search supplies…':'Search requests…'}"></div></div>
+  screen.innerHTML=`<div class="topbar"><div class="brandrow"><div class="wordmark go" id="logo">${WM} <span style="font-size:.7em;color:var(--ink)">Market</span></div><div style="display:flex;align-items:center;gap:10px">${bellHTML()}<div class="locpill" onclick="openCampusPick()"><span class="dot"></span>${CAMP()}</div></div></div><div class="search">${icon('<circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/>')}<input placeholder="${goods?'Search supplies…':'Search requests…'}"></div></div>
     <div class="campus-wrap"><div class="campus-bg">${wmk()}</div><div class="campus-content">
     <div class="hubseg" style="padding-top:2px">${[['goods','Buy & Trade'],['requests','Requests']].map(x=>`<div class="hchip ${state.mkt===x[0]?'on':''}" data-mkt="${x[0]}">${x[1]}</div>`).join('')}</div>
-    ${state.mkt==='housing'?housingHTML():state.mkt==='jobs'?jobsHTML():goods?`<div class="list" style="padding-top:16px">${GOODS.map((g,i)=>g.campus!==state.campus.id?'':`<div class="card" style="display:block;animation-delay:${i*40}ms"><div style="display:flex;gap:13px"><div style="width:78px;height:78px;border-radius:14px;overflow:hidden;background:${color(g.c)}22;display:flex;align-items:center;justify-content:center;font-size:32px;flex:none">${g.img?`<img src="${g.img}" style="width:100%;height:100%;object-fit:cover">`:g.emoji}</div><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:15px;line-height:1.2">${g.name}</div><div style="font-family:Bricolage Grotesque;font-weight:700;font-size:16px;margin-top:2px">${g.price}</div><div style="font-size:11.5px;font-weight:600;color:var(--mist);margin-top:1px">${g.tag}</div><div class="mkt-by"><span class="mkt-avatar" style="background:${color(g.bc||0)}">${g.bi||'?'}</span><span class="gp-author" data-user="${g.by||'Student'}␟${g.bi||'?'}␟${g.bc||0}" style="cursor:pointer">${g.by||'Student'}</span></div></div></div>${acts(g)}${state.openMC===g.id?panel(g,g.by||'the seller'):''}</div>`).join('')}</div>`
+    ${state.mkt==='housing'?housingHTML():state.mkt==='jobs'?jobsHTML():goods?`<div class="list" style="padding-top:16px">${GOODS.map((g,i)=>g.campus!==state.campus.id?'':`<div class="card" style="display:block;animation-delay:${i*40}ms"><div style="display:flex;gap:13px"><div style="width:78px;height:78px;border-radius:14px;overflow:hidden;background:${color(g.c)}22;display:flex;align-items:center;justify-content:center;font-size:32px;flex:none">${g.img?`<img src="${g.img}" style="width:100%;height:100%;object-fit:cover">`:g.emoji}</div><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:15px;line-height:1.2">${g.name}</div><div style="font-family:Bricolage Grotesque;font-weight:700;font-size:16px;margin-top:2px">${g.price}</div><div style="font-size:11.5px;font-weight:600;color:var(--mist);margin-top:1px">${g.tag}${g.sold?' · <span style="color:#E11D48;font-weight:800">SOLD</span>':''}</div><div class="mkt-by"><span class="mkt-avatar" style="background:${color(g.bc||0)}">${g.bi||'?'}</span><span class="gp-author" data-user="${g.by||'Student'}␟${g.bi||'?'}␟${g.bc||0}" style="cursor:pointer">${g.by||'Student'}</span></div></div></div>${acts(g)}${state.openMC===g.id?panel(g,g.by||'the seller'):''}</div>`).join('')}</div>`
     :`<div class="list" style="padding-top:16px">${REQUESTS.map((r,i)=>r.campus!==state.campus.id?'':`<div class="card" style="display:block;animation-delay:${i*40}ms"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div class="avatar" style="width:34px;height:34px;font-size:14px;border-radius:10px;background:${r.uc||color(r.c)}">${r.in}</div><div class="gp-author" data-user="${r.who}␟${r.in}␟${r.c||0}" style="font-weight:700;font-size:14px;cursor:pointer">${r.who}</div><div style="margin-left:auto;font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px;${r.barter?'background:#FFF0E0;color:#a5600f':'background:var(--violet-soft);color:#3f2b8c'}">${r.barter?'Barter':'Looking for'}</div></div><div style="font-size:14px;color:#40384c;line-height:1.4">${r.txt}</div>${acts(r)}${state.openMC===r.id?panel(r,r.who):''}</div>`).join('')}</div>`}
     </div></div>`;
   screen.querySelectorAll('[data-mkt]').forEach(el=>el.onclick=()=>{state.mkt=el.dataset.mkt;state.openMC=0;market();});conveyorHint(screen.querySelector('.hubseg'),'market');
@@ -1192,7 +1203,7 @@ function miniForm(mode){
     <div class="field"><label>Item name</label><input id="f1" placeholder="e.g. Mini fridge"></div>
     <div class="field"><label>Price</label><input id="f2" placeholder="$25"></div>
     <div class="field"><label>Type</label><div class="catgrid">${['Sell','Trade or sell','Move-out'].map((t,i)=>`<div class="catpick ${i===0?'on':''}" data-tag="${t}">${t}</div>`).join('')}</div></div>`;}
-  else if(mode==='request'){title='Post a request or barter';body=`
+  else if(mode==='request'){title='Post a request or barter';body=`${photoBox}
     <div class="field"><label>What do you need?</label><textarea id="f1" placeholder="e.g. ISO a photographer for grad photos — can pay ~$100"></textarea></div>
     <div class="field"><label>Type</label><div class="catgrid"><div class="catpick on" data-tag="0">Looking for</div><div class="catpick" data-tag="1">Barter / trade</div></div></div>`;}
   else{title='Post an event';body=`${photoBox}
@@ -1209,7 +1220,7 @@ function miniForm(mode){
     const v=id=>{const e=document.getElementById(id);return e?e.value.trim():'';};
     const rc=()=>Math.floor(Math.random()*12);
     if(mode==='item'){GOODS.unshift({name:v('f1')||'New item',price:v('f2')||'$—',tag:tag,img:state.newPhoto,emoji:'📦',c:rc(),by:(state.vname||'You'),bi:((state.vname||'Y').trim()[0]||'Y').toUpperCase(),bc:0,uc:state.themeColor,mine:true,id:'mp'+(idc++),campus:state.campus.id});state.tab='market';state.mkt='goods';}
-    else if(mode==='request'){REQUESTS.unshift({who:(state.vname||'You'),in:((state.vname||'Y').trim()[0]||'Y').toUpperCase(),c:rc(),uc:state.themeColor,mine:true,id:'mp'+(idc++),barter:tag==='1'?1:0,txt:v('f1')||'New request',campus:state.campus.id});state.tab='market';state.mkt='requests';}
+    else if(mode==='request'){REQUESTS.unshift({img:state.newPhoto,who:(state.vname||'You'),in:((state.vname||'Y').trim()[0]||'Y').toUpperCase(),c:rc(),uc:state.themeColor,mine:true,id:'mp'+(idc++),barter:tag==='1'?1:0,txt:v('f1')||'New request',campus:state.campus.id});state.tab='market';state.mkt='requests';}
     else{let ts=Date.now()+2*86400000;const d=v('f2'),t=v('f3');if(d){const p=new Date(d+'T'+(t||'12:00')).getTime();if(!isNaN(p))ts=p;}state.events.unshift({title:v('f1')||'New event',loc:v('f4')||'Campus',ts:ts,img:state.newPhoto,tag:'New',c:rc(),mine:true,id:'mp'+(idc++),by:(state.vname||'You'),campus:state.campus.id});state.tab='home';state.home='events';}
     state.addMode=null;state.newPhoto=null;render();toast('Posted to VendU! 🎉');
   };
@@ -1267,16 +1278,16 @@ function add(){
   document.getElementById('save').onclick=()=>{state.isSeller=true;if(!state.onboarded)state.onboarded=true;state.storefrontSetup=false;state.tab='profile';render();toast('Storefront saved ✓');};
 }
 
-function mpRow(emoji,title,meta,type,id){return '<div class="mprow"><div class="mpic">'+emoji+'</div><div class="mpbody"><div class="mptitle">'+title+'</div><div class="mpmeta">'+meta+'</div></div><button class="mpdel" data-delpost="'+id+'" data-ptype="'+type+'">Delete</button></div>';}
+function mpRow(emoji,title,meta,type,id,img,sold){return '<div class="mprow"'+(sold?' style="opacity:.6"':'')+'>'+'<div class="mpic">'+(img?'<img src="'+img+'" style="width:100%;height:100%;object-fit:cover;border-radius:12px">':emoji)+'</div>'+'<div class="mpbody"><div class="mptitle">'+title+(sold?' \u00b7 SOLD':'')+'</div><div class="mpmeta">'+meta+'</div>'+'<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">'+'<button class="mpdel" data-photopost="'+id+'" data-ptype="'+type+'">\uD83D\uDCF7 '+(img?'Change photo':'Add photo')+'</button>'+(type==='item'?'<button class="mpdel" data-soldpost="'+id+'">'+(sold?'\u21ba Mark available':'\u2713 Mark as sold')+'</button>':'')+'</div></div>'+'<button class="mpdel" data-delpost="'+id+'" data-ptype="'+type+'">Delete</button></div>';}
 function myPostsScreen(){
   var items=GOODS.filter(function(g){return g.mine;}),reqs=REQUESTS.filter(function(r){return r.mine;}),evs=(state.events||[]).filter(function(e){return e.mine;});
   var total=items.length+reqs.length+evs.length;
   var h='<div class="topbar"><div class="brandrow"><div class="wordmark">My posts</div><div class="locpill" id="mpBack" style="cursor:pointer">\u2715 Close</div></div></div><div class="enter" style="padding:10px 0 20px">';
   if(!total){h+='<div class="empty" style="padding:44px 30px">You haven\u2019t posted anything yet.<br>Tap the \uFF0B to sell an item, post a request, or add an event.</div>';}
   else{
-    if(items.length){h+='<div class="sec-h">Items ('+items.length+')</div>'+items.map(function(g){return mpRow(g.emoji||'📦',g.name,g.price+' \u00b7 '+g.tag,'item',g.id);}).join('');}
-    if(reqs.length){h+='<div class="sec-h">Requests ('+reqs.length+')</div>'+reqs.map(function(r){return mpRow('🙋',r.txt,r.barter?'Barter':'Looking for','request',r.id);}).join('');}
-    if(evs.length){h+='<div class="sec-h">Events ('+evs.length+')</div>'+evs.map(function(e){return mpRow('🎉',e.title,e.loc||'Campus','event',e.id);}).join('');}
+    if(items.length){h+='<div class="sec-h">Items ('+items.length+')</div>'+items.map(function(g){return mpRow(g.emoji||'📦',g.name,g.price+' \u00b7 '+g.tag,'item',g.id,g.img,g.sold);}).join('');}
+    if(reqs.length){h+='<div class="sec-h">Requests ('+reqs.length+')</div>'+reqs.map(function(r){return mpRow('🙋',r.txt,r.barter?'Barter':'Looking for','request',r.id,r.img,false);}).join('');}
+    if(evs.length){h+='<div class="sec-h">Events ('+evs.length+')</div>'+evs.map(function(e){return mpRow('🎉',e.title,e.loc||'Campus','event',e.id,e.img,false);}).join('');}
   }
   h+='</div>';
   screen.innerHTML=h;
@@ -1286,6 +1297,8 @@ function myPostsScreen(){
     else if(t==='request'){var i=REQUESTS.findIndex(function(r){return String(r.id)===id;});if(i>-1)REQUESTS.splice(i,1);}
     else{var i=state.events.findIndex(function(e){return String(e.id)===id;});if(i>-1)state.events.splice(i,1);}
     toast('Post removed');myPostsScreen();};});
+  screen.querySelectorAll('[data-soldpost]').forEach(function(el){el.onclick=function(){var g=GOODS.filter(function(x){return String(x.id)===el.dataset.soldpost;})[0];if(g){g.sold=!g.sold;toast(g.sold?'Marked as sold \u2713':'Back on the market');myPostsScreen();}};});
+  screen.querySelectorAll('[data-photopost]').forEach(function(el){el.onclick=function(){state.photoTarget={id:el.dataset.photopost,type:el.dataset.ptype};cphoto.value='';cphoto.click();};});
 }
 function profile(){
   const av=state.avatar?`background-image:url(${state.avatar})`:`background:${state.themeColor}`;
@@ -1298,7 +1311,7 @@ function profile(){
       <button class="ref-demo" id="lbBtn" style="margin-top:10px">🏆 Leaderboard</button></div></div>`;
   const regularCard=`<div class="cust"><div class="cust-h">${icon('<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/>',18)} Your account</div><div style="font-size:13px;color:var(--mist);line-height:1.5;margin:2px 0 14px">Browse, buy, barter, book vendors, and post to the Market — all free. Set a name and color so classmates recognize you in posts and comments.</div><div class="field"><label>Display name</label><input id="rname" placeholder="e.g. Jordan T." value="${state.vname||''}"></div><div class="cust-lbl">Your color</div><div class="swatches">${THEME_COLORS.map(c=>`<div class="sw ${state.themeColor===c?'on':''}" data-color="${c}" style="background:${c}"></div>`).join('')}</div><div class="cust-lbl" style="margin-top:16px">Class year</div><div class="pldays" style="padding:0">${['2025','2026','2027','2028','2029'].map(y=>`<div class="plday ${state.gradYear===y?'on':''}" data-gradyear="${y}">’${y.slice(2)}</div>`).join('')}</div>${myCommunities().length?`<div class="cust-lbl" style="margin-top:16px">Your communities</div><div class="up-chips">${myCommunities().map(c=>`<div class="up-chip" data-opencomm="${c.key}">${c.emoji} ${c.name}</div>`).join('')}</div>`:''}<button class="submit" id="viewmyprofile" style="background:var(--card);color:var(--ink);border:1px solid var(--line);margin-top:16px">👤 View my profile</button><button class="submit" id="startsell" style="background:var(--violet);margin-top:10px">Become a vendor</button><div style="font-size:12px;color:var(--mist);text-align:center;margin-top:12px;line-height:1.5">Want a storefront, socials, booking & payments? Turn on vendor mode.</div></div>`;
   const menuItems=state.isSeller?[['Set up your storefront','setup'],['Bookings & calendar','bookings'],['✉️ Messages','inbox'],['Saved hustles','saved'],['💬 Send beta feedback','feedback'],['▶︎ Replay tutorial','tour'],['Help & safety',''],['\u23FB Log out','logout']]:[['Saved & booked','saved'],['✉️ Messages','inbox'],['My marketplace posts','myposts'],['💬 Send beta feedback','feedback'],['▶︎ Replay tutorial','tour'],['Help & safety',''],['\u23FB Log out','logout']];
-  screen.innerHTML=`<div class="topbar"><div class="brandrow"><div class="wordmark">Profile</div></div></div>
+  screen.innerHTML=`<div class="topbar"><div class="brandrow"><div class="wordmark">Profile</div>${bellHTML()}</div></div>
     <div style="padding:6px 20px 20px" class="enter">
       <div class="store-row" style="margin:6px 0 16px"><div class="detail-av up" style="${av};position:relative;box-shadow:0 0 0 3px var(--paper),0 0 0 6px ${state.themeColor}">${state.avatar?'':'A'}<div class="cam" style="position:absolute;right:-4px;bottom:-4px;width:26px;height:26px;border-radius:50%;background:var(--violet);color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid var(--paper)">${icon('<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',12)}</div></div>
       <div><div class="store-name" style="color:var(--ink);font-size:21px">${state.vname||'Your name'} ${CHECK}${accountBadge()}</div><div class="store-sub" style="color:var(--mist)"><span style="color:var(--violet);font-weight:600;display:inline-flex;align-items:center;gap:3px">${icon('<path d="M20 6 9 17l-5-5"/>',12)}Verified</span> · ${CAMP()} · ${state.isSeller?'Vendor':'Student'}${state.gradYear?` · Class of ’${state.gradYear.slice(2)}`:''}</div></div></div>
@@ -1334,7 +1347,7 @@ function wireLogo(){const l=document.getElementById('logo');if(l)l.onclick=()=>{
 photo.onchange=e=>{const f=e.target.files[0];if(f){const r=new FileReader();r.onload=()=>{state.avatar=r.result;render();};r.readAsDataURL(f);}};
 gphoto.onchange=e=>{const files=[...e.target.files];let n=files.length;if(!n)return;files.forEach(f=>{const r=new FileReader();r.onload=()=>{state.gallery.push({src:r.result,fit:'cover'});if(--n===0)render();};r.readAsDataURL(f);});};
 ephoto.onchange=e=>{const f=e.target.files[0];if(f){const r=new FileReader();r.onload=()=>{state.events.unshift(r.result);state.home='events';render();};r.readAsDataURL(f);}};
-cphoto.onchange=e=>{const f=e.target.files[0];if(f){const r=new FileReader();r.onload=()=>{state.newPhoto=r.result;render();};r.readAsDataURL(f);}};
+cphoto.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const t=state.photoTarget;if(t){const arr=t.type==='item'?GOODS:(t.type==='request'?REQUESTS:state.events);const o=arr.filter(function(x){return String(x.id)===t.id;})[0];if(o){o.img=r.result;}state.photoTarget=null;toast('Photo added \u2713');myPostsScreen();return;}state.newPhoto=r.result;render();};r.readAsDataURL(f);};
 function bookingSettings(){
   const b=state.booking;const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
   const info='<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>';
@@ -1547,9 +1560,9 @@ function setDemoVisible(on){Object.keys(_DEMOARR).forEach(function(k){on?_demoFi
 function refreshDemo(){setDemoVisible(!!(state.tester||state.tourActive));}
 window.VendU=window.VendU||{};VendU.onTour=function(active){state.tourActive=!!active;refreshDemo();try{render();}catch(e){}};
 setDemoVisible(false);
-state.booked=loadBooked();
+state.booked=loadBooked();try{state.phone=localStorage.getItem('vendu_phone')||'';}catch(e){state.phone='';}
 function render(){if(state.onboarded&&window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour();},300);if(!state.onboarded){if(state.storefrontSetup)return add();return onboarding();}if(state.campusPick)return campusPicker();if(state.themeView)return themeScreen();if(state.book)return bookingScreen();if(state.bookSet)return bookingSettings();if(state.userView)return userProfile();if(state.thread)return messageScreen();if(state.inboxView)return inboxScreen();if(state.groupCreateView)return createGroupScreen();if(state.groupView)return groupPage();if(state.detail)return detail(state.detail);if(state.leaderboard)return leaderboard();if(state.storefrontSetup)return add();if(state.savedView)return savedScreen();if(state.myPostsView)return myPostsScreen();if(state.svcEdit)return servicesEditor();if(state.tab==='add')return addTab();({home,market,venuU,profile}[state.tab]||home)();}
-document.getElementById('nav').querySelectorAll('.navitem').forEach(item=>{item.onclick=()=>{if(!state.onboarded)return;document.querySelectorAll('.navitem').forEach(n=>n.classList.remove('on'));item.classList.add('on');state.tab=item.dataset.tab;state.cat='All';state.q='';state.near=false;state.detail=0;state.book=null;state.svcEdit=false;state.addMode=null;state.newPhoto=null;state.leaderboard=false;state.storefrontSetup=false;state.reviewOpen=false;state.msgTo=0;state.openMC=0;state.bookSet=false;state.subPrompt=false;state.savedView=false;state.campusPick=false;state.campusQ='';if(item.dataset.tab!=='add')state.submitted=false;render();screen.scrollTop=0;};});
+document.getElementById('nav').querySelectorAll('.navitem').forEach(item=>{item.onclick=()=>{if(!state.onboarded)return;document.querySelectorAll('.navitem').forEach(n=>n.classList.remove('on'));item.classList.add('on');state.tab=item.dataset.tab;state.userView=null;state.thread=0;state.inboxView=false;state.groupView=null;state.groupCreateView=false;state.myPostsView=false;state.themeView=false;state.reviewOpen=false;state.cat='All';state.q='';state.near=false;state.detail=0;state.book=null;state.svcEdit=false;state.addMode=null;state.newPhoto=null;state.leaderboard=false;state.storefrontSetup=false;state.reviewOpen=false;state.msgTo=0;state.openMC=0;state.bookSet=false;state.subPrompt=false;state.savedView=false;state.campusPick=false;state.campusQ='';if(item.dataset.tab!=='add')state.submitted=false;render();screen.scrollTop=0;};});
 render();
 </script>
 </body>

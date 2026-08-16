@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as BetaRouteImport } from './routes/beta'
 import { Route as ApiPublicCommunityActivityRouteImport } from './routes/api/public/community/activity'
+import { Route as ApiPublicNotifyAppointmentRouteImport } from './routes/api/public/notify/appointment'
 import { Route as ApiPublicVerifyCheckRouteImport } from './routes/api/public/verify/check'
 import { Route as ApiPublicVerifyConfirmRouteImport } from './routes/api/public/verify/confirm'
 import { Route as ApiPublicVerifyLinkRouteImport } from './routes/api/public/verify/link'
@@ -39,6 +40,12 @@ const ApiPublicCommunityActivityRoute =
   ApiPublicCommunityActivityRouteImport.update({
     id: '/api/public/community/activity',
     path: '/api/public/community/activity',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicNotifyAppointmentRoute =
+  ApiPublicNotifyAppointmentRouteImport.update({
+    id: '/api/public/notify/appointment',
+    path: '/api/public/notify/appointment',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicVerifyCheckRoute = ApiPublicVerifyCheckRouteImport.update({
@@ -77,6 +84,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
   '/api/public/community/activity': typeof ApiPublicCommunityActivityRoute
+  '/api/public/notify/appointment': typeof ApiPublicNotifyAppointmentRoute
   '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
   '/api/public/verify/confirm': typeof ApiPublicVerifyConfirmRoute
   '/api/public/verify/link': typeof ApiPublicVerifyLinkRoute
@@ -89,6 +97,7 @@ export interface FileRoutesByTo {
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
   '/api/public/community/activity': typeof ApiPublicCommunityActivityRoute
+  '/api/public/notify/appointment': typeof ApiPublicNotifyAppointmentRoute
   '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
   '/api/public/verify/confirm': typeof ApiPublicVerifyConfirmRoute
   '/api/public/verify/link': typeof ApiPublicVerifyLinkRoute
@@ -102,6 +111,7 @@ export interface FileRoutesById {
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
   '/api/public/community/activity': typeof ApiPublicCommunityActivityRoute
+  '/api/public/notify/appointment': typeof ApiPublicNotifyAppointmentRoute
   '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
   '/api/public/verify/confirm': typeof ApiPublicVerifyConfirmRoute
   '/api/public/verify/link': typeof ApiPublicVerifyLinkRoute
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/beta'
     | '/api/public/community/activity'
+    | '/api/public/notify/appointment'
     | '/api/public/verify/check'
     | '/api/public/verify/confirm'
     | '/api/public/verify/link'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/beta'
     | '/api/public/community/activity'
+    | '/api/public/notify/appointment'
     | '/api/public/verify/check'
     | '/api/public/verify/confirm'
     | '/api/public/verify/link'
@@ -140,6 +152,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/beta'
     | '/api/public/community/activity'
+    | '/api/public/notify/appointment'
     | '/api/public/verify/check'
     | '/api/public/verify/confirm'
     | '/api/public/verify/link'
@@ -153,6 +166,7 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRoute
   BetaRoute: typeof BetaRoute
   ApiPublicCommunityActivityRoute: typeof ApiPublicCommunityActivityRoute
+  ApiPublicNotifyAppointmentRoute: typeof ApiPublicNotifyAppointmentRoute
   ApiPublicVerifyCheckRoute: typeof ApiPublicVerifyCheckRoute
   ApiPublicVerifyConfirmRoute: typeof ApiPublicVerifyConfirmRoute
   ApiPublicVerifyLinkRoute: typeof ApiPublicVerifyLinkRoute
@@ -189,6 +203,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/community/activity'
       fullPath: '/api/public/community/activity'
       preLoaderRoute: typeof ApiPublicCommunityActivityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/notify/appointment': {
+      id: '/api/public/notify/appointment'
+      path: '/api/public/notify/appointment'
+      fullPath: '/api/public/notify/appointment'
+      preLoaderRoute: typeof ApiPublicNotifyAppointmentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/verify/check': {
@@ -241,6 +262,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRoute,
   BetaRoute: BetaRoute,
   ApiPublicCommunityActivityRoute: ApiPublicCommunityActivityRoute,
+  ApiPublicNotifyAppointmentRoute: ApiPublicNotifyAppointmentRoute,
   ApiPublicVerifyCheckRoute: ApiPublicVerifyCheckRoute,
   ApiPublicVerifyConfirmRoute: ApiPublicVerifyConfirmRoute,
   ApiPublicVerifyLinkRoute: ApiPublicVerifyLinkRoute,
