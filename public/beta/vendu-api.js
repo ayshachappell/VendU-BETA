@@ -136,4 +136,17 @@
     return activity({ action: "referralCount", email: myEmail(), refCode: refCode, build: build });
   };
 
+  /* ---- appointment notifications (SMS when a text provider is connected) ---- */
+  W.notifyAppointment = function (appt) {
+    return post("/api/public/notify/appointment", {
+      email: myEmail(),
+      vendor: appt.vendor,
+      vendorId: appt.vendorId,
+      service: appt.service,
+      when: appt.when,
+      phone: appt.phone,
+      build: appt.build,
+    });
+  };
+
 })();
