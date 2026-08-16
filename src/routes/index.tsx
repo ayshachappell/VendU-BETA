@@ -6,23 +6,24 @@ import { handleMagicLinkReturn } from "@/lib/vendu-magic-link";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "VendU — Where Campus Hustles Get Seen" },
+      { title: "VendU — Sell Your Stuff, Book a Service, Get Paid" },
       {
         name: "description",
         content:
-          "VendU is the students-only campus marketplace: find and book student services, buy, sell and trade, and run your school life. Free, .edu verified.",
+          "VendU is the campus marketplace made for students at every college and trade school. Sell your stuff, book a classmate's service, and get paid. Free with your school email.",
       },
-      { property: "og:title", content: "VendU — Where Campus Hustles Get Seen" },
+      { property: "og:title", content: "VendU — sell your stuff, book a service, get paid." },
       {
         property: "og:description",
         content:
-          "The students-only campus marketplace. Book student vendors, buy and trade goods, join campus communities. Verified with your .edu email.",
+          "The campus marketplace for students. Sell your stuff, book a service, get paid — free to join with your .edu email.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "manifest", href: "/manifest.webmanifest" }],
   }),
+
   component: Landing,
 });
 
