@@ -231,7 +231,7 @@
           return nav("profile");
         },
         title: "Set up your profile",
-        text: "Profile is your account, storefront, bookings, saved hustles, messages, leaderboard, Replay tutorial and Log out.",
+        text: "Profile is your account, storefront, bookings, saved hustles, messages, leaderboard, Replay tutorial and Log out. Add a profile picture here so students recognize you, and when you're paying a vendor just tap one of their cash-payment buttons (Cash App, Venmo, Zelle, PayPal) to pay them directly.",
         doit: "Tap Profile to set up your account",
         click: true,
         place: "above",
@@ -242,7 +242,7 @@
           return $("#toregular") || $("#startsell") || $(".plan");
         },
         title: "One account, two views",
-        text: "Selling is optional and free — browsing, buying, trading and booking are always free. If you want a storefront, flip on Vendor mode here: same account, you just switch between Student view and Vendor view to reach bookings, services and payouts.",
+        text: "Selling is optional and free — browsing, buying, trading and booking are always free. If you want a storefront, flip on Vendor mode here: same account, you just switch between Student view and Vendor view to reach bookings, services and payouts. Under Set up your storefront you can link your social media accounts, upload, resize and delete storefront photos, and link your direct payment accounts (Cash App, Venmo, Zelle, PayPal) so students can pay you straight away.",
         place: "above",
       },
       {
