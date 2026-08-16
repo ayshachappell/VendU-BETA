@@ -125,9 +125,16 @@
           return $("#upBack");
         },
         title: "Their profile",
-        text: "Here you see who they are, the communities and campus badges they carry, anything they have listed, and a button to message them. Back returns you to the feed.",
-        doit: "Tap Back",
-        click: true,
+        text: "Here you see who they are, their communities and campus badges, anything they have listed, and a button to message them.",
+        place: "below",
+      },
+      {
+        before: openUserCard,
+        target: function () {
+          return $(".up-badges") || $(".store-badges") || $(".shop-sign");
+        },
+        title: "Badges tell you who's who",
+        text: "Badges sit next to a name everywhere. 🎓 Founder is one of the first 10 verified student vendors on a campus, 💠 Vendor means they sell, ★ marks VendU staff, and campus or community badges show the school, org and groups they belong to. Deal badges — 🏷️ Sale, 🏷️ 20% off, ⏳ Ending soon — show while a vendor is running a promo.",
         place: "below",
       },
       {
@@ -143,10 +150,10 @@
       {
         before: openStore,
         target: function () {
-          return $(".store-badges") || $(".shop-sign") || $(".up-badges");
+          return $(".svc") || $(".block-t") || $(".storefront");
         },
-        title: "Badges tell you who's who",
-        text: "This student carries a 🎓 Founder badge and a 💠 Vendor badge — plus deal badges like 🏷️ Sale, 🏷️ 20% off or ⏳ Ending soon when they run a promo. ★ marks VendU staff, and campus/community badges show which school, org or group a student belongs to.",
+        title: "Services & prices",
+        text: "Each vendor lists exactly what they do and what it costs, above their reviews and photos of past work.",
         place: "below",
       },
       {
@@ -155,7 +162,7 @@
           return $(".paychips") || $(".paych") || $(".paych-btn");
         },
         title: "Pay a vendor directly",
-        text: "Tap any cash-payment button on a storefront to pay the vendor directly through Cash App, Venmo, Zelle, or PayPal. The button opens their app or profile with the handle already filled in.",
+        text: "Under Accepts, tap any payment button — Cash App, Venmo, Zelle or PayPal — to pay the vendor directly. It opens their app or profile with the handle already filled in.",
         place: "below",
       },
       {
@@ -164,7 +171,7 @@
           return $(".cta-bar");
         },
         title: "Save, message or book",
-        text: "From any storefront you can save it, message the student directly, or book a time — messages live in Profile → Messages. After a booking you can leave an optional review.",
+        text: "From any storefront you can save it, message the student directly, or book a time — messages live in Profile → Messages. After a booking you can leave an optional review, and their rating updates right away.",
         lock: true,
         place: "above",
       },
@@ -239,11 +246,10 @@
         target: function () {
           return nav("profile");
         },
-        title: "Set up your profile",
-        text: "Tap Profile to finish setting up your account. Upload a profile photo, set your name, and tap any vendor's cash-payment button to pay them directly. Everything is free — there are no subscriptions.",
+        title: "Finish in Profile",
+        text: "Everything about your account lives here — and it is all free.",
         doit: "Tap Profile to finish",
         click: true,
-        next: "Finish",
         place: "above",
       },
       {
@@ -252,7 +258,16 @@
           return $(".detail-av.up") || $(".photo-av.up");
         },
         title: "Your profile picture",
-        text: "Tap the camera on your profile photo to upload a picture. Students will see it next to your posts, comments, and storefront.",
+        text: "Tap the camera on your photo to upload a picture, then set your display name. Students see both next to your posts, comments and storefront.",
+        place: "above",
+      },
+      {
+        before: goProfile,
+        target: function () {
+          return $("#viewmyprofile") || $(".detail-av.up");
+        },
+        title: "View my profile",
+        text: "This shows your profile exactly as other students see it — your badges, communities and anything you have listed.",
         place: "above",
       },
       {
@@ -260,8 +275,18 @@
         target: function () {
           return $("#startsell") || $('[data-menu="setup"]') || $("#moretoggle");
         },
-        title: "Your storefront tools",
-        text: "Selling is free and optional. Turn on Vendor mode, or open Set up your storefront, to link your social accounts, upload, resize and delete storefront photos, and add payment handles like Cash App, Venmo, Zelle or PayPal. Student View and Vendor View are one account — just flip the switch.",
+        title: "One account, two views",
+        text: "Selling is free and optional. Turn on Vendor mode to flip between Student View and Vendor View — same account, no second login.",
+        place: "above",
+      },
+      {
+        before: goProfile,
+        target: function () {
+          return $("#startsell") || $('[data-menu="setup"]') || $("#moretoggle");
+        },
+        title: "Set up your storefront",
+        text: "Inside Set up your storefront you link your social accounts, upload, resize and delete storefront photos, add your services and prices, set a sale with an end date, and add payment handles like Cash App, Venmo, Zelle or PayPal. Hit Save and your storefront is live.",
+        next: "Finish",
         place: "above",
       },
     ];
