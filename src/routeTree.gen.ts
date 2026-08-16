@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as BetaRouteImport } from './routes/beta'
+import { Route as ApiPublicCommunityActivityRouteImport } from './routes/api/public/community/activity'
 import { Route as ApiPublicVerifyCheckRouteImport } from './routes/api/public/verify/check'
 import { Route as ApiPublicVerifyConfirmRouteImport } from './routes/api/public/verify/confirm'
 import { Route as ApiPublicVerifyLinkRouteImport } from './routes/api/public/verify/link'
@@ -34,6 +35,12 @@ const BetaRoute = BetaRouteImport.update({
   path: '/beta',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicCommunityActivityRoute =
+  ApiPublicCommunityActivityRouteImport.update({
+    id: '/api/public/community/activity',
+    path: '/api/public/community/activity',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicVerifyCheckRoute = ApiPublicVerifyCheckRouteImport.update({
   id: '/api/public/verify/check',
   path: '/api/public/verify/check',
@@ -69,6 +76,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
+  '/api/public/community/activity': typeof ApiPublicCommunityActivityRoute
   '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
   '/api/public/verify/confirm': typeof ApiPublicVerifyConfirmRoute
   '/api/public/verify/link': typeof ApiPublicVerifyLinkRoute
@@ -80,6 +88,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
+  '/api/public/community/activity': typeof ApiPublicCommunityActivityRoute
   '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
   '/api/public/verify/confirm': typeof ApiPublicVerifyConfirmRoute
   '/api/public/verify/link': typeof ApiPublicVerifyLinkRoute
@@ -92,6 +101,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
+  '/api/public/community/activity': typeof ApiPublicCommunityActivityRoute
   '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
   '/api/public/verify/confirm': typeof ApiPublicVerifyConfirmRoute
   '/api/public/verify/link': typeof ApiPublicVerifyLinkRoute
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/beta'
+    | '/api/public/community/activity'
     | '/api/public/verify/check'
     | '/api/public/verify/confirm'
     | '/api/public/verify/link'
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/beta'
+    | '/api/public/community/activity'
     | '/api/public/verify/check'
     | '/api/public/verify/confirm'
     | '/api/public/verify/link'
@@ -127,6 +139,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/beta'
+    | '/api/public/community/activity'
     | '/api/public/verify/check'
     | '/api/public/verify/confirm'
     | '/api/public/verify/link'
@@ -139,6 +152,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRoute
   BetaRoute: typeof BetaRoute
+  ApiPublicCommunityActivityRoute: typeof ApiPublicCommunityActivityRoute
   ApiPublicVerifyCheckRoute: typeof ApiPublicVerifyCheckRoute
   ApiPublicVerifyConfirmRoute: typeof ApiPublicVerifyConfirmRoute
   ApiPublicVerifyLinkRoute: typeof ApiPublicVerifyLinkRoute
@@ -168,6 +182,13 @@ declare module '@tanstack/react-router' {
       path: '/beta'
       fullPath: '/beta'
       preLoaderRoute: typeof BetaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/community/activity': {
+      id: '/api/public/community/activity'
+      path: '/api/public/community/activity'
+      fullPath: '/api/public/community/activity'
+      preLoaderRoute: typeof ApiPublicCommunityActivityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/verify/check': {
@@ -219,6 +240,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRoute,
   BetaRoute: BetaRoute,
+  ApiPublicCommunityActivityRoute: ApiPublicCommunityActivityRoute,
   ApiPublicVerifyCheckRoute: ApiPublicVerifyCheckRoute,
   ApiPublicVerifyConfirmRoute: ApiPublicVerifyConfirmRoute,
   ApiPublicVerifyLinkRoute: ApiPublicVerifyLinkRoute,

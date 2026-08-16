@@ -107,4 +107,33 @@
       localStorage.removeItem(KEY);
     } catch (e) {}
   };
+
+  /* ---- shared activity: bookings, reviews, referrals (cross-device) ---- */
+  function myEmail() {
+    var s = W.student();
+    return (s && s.email) || "";
+  }
+  function activity(payload) {
+    return post("/api/public/community/activity", payload);
+  }
+  W.recordBooking = function (vendorId, service, build) {
+    if (!myEmail()) return Promise.resolve({ ok: false });
+    return activity({ action: "book", email: myEmail(), vendorId: vendorId, service: service, build: build });
+  };
+  W.postReview = function (vendorId, stars, body, build) {
+    if (!myEmail()) return Promise.resolve({ ok: false });
+    return activity({ action: "review", email: myEmail(), vendorId: vendorId, stars: stars, body: body, build: build });
+  };
+  W.vendorStats = function (vendorIds, build) {
+    return activity({ action: "stats", vendorIds: vendorIds, build: build });
+  };
+  W.recordReferral = function (refCode, campus, build) {
+    if (!myEmail() || !refCode) return Promise.resolve({ ok: false });
+    return activity({ action: "referral", email: myEmail(), refCode: refCode, campus: campus, build: build });
+  };
+  W.referralCount = function (refCode, build) {
+    if (!myEmail()) return Promise.resolve({ ok: false });
+    return activity({ action: "referralCount", email: myEmail(), refCode: refCode, build: build });
+  };
+
 })();
