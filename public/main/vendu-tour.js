@@ -87,7 +87,7 @@
       {
         before: openStore,
         target: function () {
-          return $(".storefront") || $(".awning") || $(".card");
+          return $(".store-badges") || $(".shop-sign") || $(".up-badges");
         },
         title: "Badges tell you who's who",
         text: "This student carries a 🎓 Founder badge and a 💠 Vendor badge — plus deal badges like 🏷️ Sale, 🏷️ 20% off or ⏳ Ending soon when they run a promo. ★ marks VendU staff, and campus/community badges show which school, org or group a student belongs to. Tap any student's name anywhere to open their profile, see their badges and listings, and message them.",
@@ -261,12 +261,15 @@
     if (!el) {
       // The screen may still be rendering — wait a beat before giving up.
       var n = (tries || 0) + 1;
-      if (n < 8)
+      if (n < 12)
         return setTimeout(function () {
           show(n);
         }, 150);
+      // Going backwards we never skip past steps — the user asked for the
+      // previous step, so show its card centred instead of rewinding further.
+      if (dir < 0) return showCentered(st);
       i += dir;
-      if (i < 0) { i = 0; dir = 1; }
+      if (i >= list.length) return end();
       return show();
     }
     try {
@@ -279,35 +282,12 @@
     pulse.className = "tour-pulse";
     card = document.createElement("div");
     card.className = "tour-card";
-    card.innerHTML =
-      '<div class="tour-step">Step ' +
-      realIndex() +
-      " of " +
-      realSteps() +
-      '</div><div class="tour-title">' +
-      st.title +
-      '</div><div class="tour-text">' +
-      st.text +
-      "</div>" +
-      (st.doit ? '<div class="tour-do">👆 ' + st.doit + "</div>" : "") +
-      '<div class="tour-actions">' +
-      (i > 0 ? '<button class="tour-back" data-tour="back">Back</button>' : '<span class="tour-spacer"></span>') +
-      dots() +
-      (st.click ? '<span class="tour-spacer"></span>' : '<button class="tour-next" data-tour="next">Next</button>') +
-      "</div>";
+    card.innerHTML = cardHTML(st, true);
     document.body.appendChild(ring);
     document.body.appendChild(pulse);
     document.body.appendChild(card);
 
-    var bk = card.querySelector('[data-tour="back"]');
-    if (bk) bk.onclick = goBack;
-    var nx = card.querySelector('[data-tour="next"]');
-    if (nx)
-      nx.onclick = function () {
-        dir = 1;
-        i++;
-        show();
-      };
+    wireCard(st);
 
     if (st.click || st.event) {
       boundEl = el;
@@ -380,6 +360,55 @@
     var hr = host.getBoundingClientRect();
     var cw = card.offsetWidth || 320;
     card.style.left = Math.max(12, hr.left + (hr.width - cw) / 2) + "px";
+  }
+
+
+  function showCentered(st) {
+    cleanup();
+    card = document.createElement("div");
+    card.className = "tour-card tour-card-center";
+    card.innerHTML = cardHTML(st, false);
+    document.body.appendChild(card);
+    wireCard(st);
+    var host = document.querySelector(".device") || document.body;
+    var hr = host.getBoundingClientRect();
+    var cw = card.offsetWidth || 320;
+    card.style.left = Math.max(12, hr.left + (hr.width - cw) / 2) + "px";
+    card.style.top = Math.max(12, (window.innerHeight - (card.offsetHeight || 200)) / 2) + "px";
+  }
+
+  function cardHTML(st, withDo) {
+    return (
+      '<div class="tour-step">Step ' +
+      realIndex() +
+      " of " +
+      realSteps() +
+      '</div><div class="tour-title">' +
+      st.title +
+      '</div><div class="tour-text">' +
+      st.text +
+      "</div>" +
+      (withDo && st.doit ? '<div class="tour-do">👆 ' + st.doit + "</div>" : "") +
+      '<div class="tour-actions">' +
+      (i > 0 ? '<button class="tour-back" data-tour="back">Back</button>' : '<span class="tour-spacer"></span>') +
+      dots() +
+      (withDo && st.click
+        ? '<span class="tour-spacer"></span>'
+        : '<button class="tour-next" data-tour="next">Next</button>') +
+      "</div>"
+    );
+  }
+
+  function wireCard() {
+    var bk = card.querySelector('[data-tour="back"]');
+    if (bk) bk.onclick = goBack;
+    var nx = card.querySelector('[data-tour="next"]');
+    if (nx)
+      nx.onclick = function () {
+        dir = 1;
+        i++;
+        show();
+      };
   }
 
   function goBack() {
