@@ -460,7 +460,7 @@
       '<div class="tour-actions">' +
       (i > 0 ? '<button class="tour-back" data-tour="back">Back</button>' : '<span class="tour-spacer"></span>') +
       dots() +
-      (withDo && st.click
+      (withDo && (st.click || st.event)
         ? '<span class="tour-spacer"></span>'
         : '<button class="tour-next" data-tour="next">Next</button>') +
       "</div>"
