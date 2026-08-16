@@ -1,0 +1,42 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Delete your account — VendU</title>
+<meta name="description" content="Permanently delete your VendU account and all associated data.">
+<link rel="icon" href="/icons/icon-192.png">
+<style>
+:root{--violet:#5A2BE0;--ink:#1B1626;--mist:#6B6480;--paper:#FBF8F3}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:40px 22px 80px}
+a{color:var(--violet)}
+h1{font-size:30px;letter-spacing:-.02em;margin:0 0 6px}
+h2{font-size:19px;margin:34px 0 8px}
+.sub{color:var(--mist);font-size:14px;margin-bottom:26px}
+.brand{font-weight:800;font-size:20px;color:var(--violet);text-decoration:none}
+nav{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;margin:30px 0 0;padding-top:20px;border-top:1px solid #e6e1d8}
+.box{background:#fff;border:1px solid #e6e1d8;border-radius:14px;padding:18px 20px;margin:18px 0}
+</style></head><body><div class="wrap"><a class="brand" href="/main/index.html">VendU</a>
+<h1>Delete your account</h1><div class="sub">Deletion is permanent and cannot be undone.</div>
+
+<div class="box"><b>Fastest way:</b> open VendU → <b>Profile</b> → <b>🗑️ Delete my account</b>.</div>
+<h2>Or request deletion here</h2>
+<p>Enter the school email you signed up with. We will delete your profile, storefront, posts, messages, bookings, reviews and referral records.</p>
+<div class="box">
+<input id="em" type="email" placeholder="you@yourschool.edu" style="width:100%;padding:12px;border:1px solid #e6e1d8;border-radius:10px;font-size:15px">
+<button id="go" style="margin-top:10px;width:100%;padding:12px;border:0;border-radius:10px;background:#5A2BE0;color:#fff;font-weight:700;font-size:15px;cursor:pointer">Delete my account</button>
+<div id="msg" style="margin-top:10px;font-size:14px;color:#6B6480"></div>
+</div>
+<p style="font-size:14px;color:#6B6480">Prefer email? Write to <a href="mailto:info@integroservicegroup.com">info@integroservicegroup.com</a> from your school address with the subject "Delete my account".</p>
+<script>
+document.getElementById('go').onclick=function(){
+  var e=document.getElementById('em').value.trim(),m=document.getElementById('msg');
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)){m.textContent='Enter a valid email address.';return;}
+  m.textContent='Deleting\u2026';
+  fetch('/api/public/account/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e})})
+    .then(function(r){return r.json();})
+    .then(function(){m.textContent='Done. Your VendU account and data have been deleted.';})
+    .catch(function(){m.textContent='Something went wrong. Email info@integroservicegroup.com and we will remove it manually.';});
+};
+</script>
+<nav><a href="/legal/privacy.html">Privacy</a><a href="/legal/terms.html">Terms</a><a href="/legal/support.html">Support</a><a href="/legal/delete-account.html">Delete account</a><a href="/main/index.html">Open VendU</a></nav>
+</div></body></html>
