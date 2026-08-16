@@ -84,8 +84,6 @@
         },
         title: "Search your campus",
         text: "Search any student by name or service, then narrow with the category chips below. Everything you see is from your own campus.",
-        doit: "Type anything in the search box",
-        event: "input",
         place: "below",
       },
       {
