@@ -1,7 +1,7 @@
 {
   "name": "VendU — Campus Marketplace",
   "short_name": "VendU",
-  "description": "Where campus hustles get seen. Find, book and sell student services, goods and trades.",
+  "description": "Sell your stuff, book a service, get paid. The campus marketplace for students at every college and trade school.",
   "start_url": "/main/index.html",
   "scope": "/main/",
   "display": "standalone",

@@ -6,23 +6,24 @@ import { handleMagicLinkReturn } from "@/lib/vendu-magic-link";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "VendU — Where Campus Hustles Get Seen" },
+      { title: "VendU — Sell Your Stuff, Book a Service, Get Paid" },
       {
         name: "description",
         content:
-          "VendU is the students-only campus marketplace: find and book student services, buy, sell and trade, and run your school life. Free, .edu verified.",
+          "VendU is the campus marketplace made for students at every college and trade school. Sell your stuff, book a classmate's service, and get paid. Free with your school email.",
       },
-      { property: "og:title", content: "VendU — Where Campus Hustles Get Seen" },
+      { property: "og:title", content: "VendU — sell your stuff, book a service, get paid." },
       {
         property: "og:description",
         content:
-          "The students-only campus marketplace. Book student vendors, buy and trade goods, join campus communities. Verified with your .edu email.",
+          "The campus marketplace for students. Sell your stuff, book a service, get paid — free to join with your .edu email.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "manifest", href: "/manifest.webmanifest" }],
   }),
+
   component: Landing,
 });
 
@@ -71,20 +72,21 @@ function Landing() {
           className="rounded-2xl shadow-lg"
         />
         <h1 className="mt-7 text-4xl font-extrabold tracking-tight sm:text-5xl">
-          Where campus hustles get seen
+          Sell your stuff. Book a service. Get paid.
         </h1>
         <p className="mt-4 max-w-xl text-base text-muted-foreground sm:text-lg">
-          VendU is the students-only marketplace for your school. Verify with any{" "}
-          <strong className="text-foreground">.edu</strong> email and you&rsquo;re in — free,
-          forever.
+          VendU is the campus marketplace made for students — at every college and trade school.
+          Free to join with your school email. Verify with any{" "}
+          <strong className="text-foreground">.edu</strong> and you&rsquo;re in.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <a
             href="/main/index.html"
             className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Open VendU
+            Join your campus →
           </a>
+
           <a
             href="/beta/index.html"
             className="inline-flex items-center justify-center rounded-xl border border-input bg-card px-6 py-3 text-sm font-semibold transition-colors hover:bg-accent"
