@@ -1,5 +1,7 @@
-/* VendU — interactive guided tour of the real app.
-   Highlights real controls, lets the student tap them, and advances. */
+/* VendU — mandatory interactive guided tour of the real app.
+   Highlights real controls, lets the student tap them, and advances.
+   Identical steps in the Main and BETA builds; steps whose target does not
+   exist in a build (e.g. VendUniversity in BETA) are skipped automatically. */
 (function () {
   var W = (window.VendU = window.VendU || {});
   var KEY = "vendu_tour_done_v1";
@@ -10,7 +12,6 @@
   function nav(tab) {
     return document.querySelector('#nav .navitem[data-tab="' + tab + '"]');
   }
-
   function goHome() {
     var n = nav("home");
     if (n && n.className.indexOf("on") === -1) n.click();
@@ -22,12 +23,12 @@
   }
 
   function steps() {
-    var s = [
+    return [
       {
         intro: true,
         emoji: "🎓",
-        title: "Quick tour?",
-        text: "Two minutes, and you tap along on the real app. You can skip it anytime and restart it later from your profile.",
+        title: "Let's walk the app",
+        text: "Two minutes on the real app — you tap along. This runs once after you verify your school email. You can replay it anytime from Profile → Replay tutorial.",
         next: "Show me around",
       },
       {
@@ -35,9 +36,9 @@
         target: function () {
           return $("#q") || $(".topbar");
         },
-        title: "Find a hustle",
-        text: "Search by name or service, then narrow it down with the category chips right below.",
-        doit: "Try typing something",
+        title: "Search your campus",
+        text: "Search any student by name or service, then narrow with the category chips just below. Everything you see is from your own campus.",
+        doit: "Type anything in the search box",
         event: "input",
         place: "below",
       },
@@ -47,16 +48,34 @@
           return $(".card[data-open]");
         },
         title: "Open a storefront",
-        text: "Every listing opens a full storefront — services, prices, photos, reviews, and a Book button.",
-        doit: "Tap this card",
+        text: "Every listing is a full storefront: services, prices, photos, reviews and payment options.",
+        doit: "Tap this listing",
         click: true,
+      },
+      {
+        target: function () {
+          return $(".cta-bar");
+        },
+        title: "Save, message or book",
+        text: "From any storefront you can save it for later, message the student directly, or book a time — no cash needed up front.",
+        place: "above",
+      },
+      {
+        target: function () {
+          return $("#back");
+        },
+        title: "Close the storefront",
+        text: "Back always returns you to where you were.",
+        doit: "Tap Back",
+        click: true,
+        place: "below",
       },
       {
         target: function () {
           return nav("market");
         },
         title: "Buy, sell & trade",
-        text: "The Market is where students post items for sale, trades, and requests.",
+        text: "Market is where students post items for sale, trades, campus housing and jobs.",
         doit: "Tap Market",
         click: true,
         place: "above",
@@ -66,7 +85,7 @@
           return nav("add");
         },
         title: "Post in seconds",
-        text: "The ＋ button is how you list a service, sell something, or ask the campus for what you need.",
+        text: "The ＋ button posts a service, an item for sale, a request, or a campus event.",
         doit: "Tap ＋",
         click: true,
         place: "above",
@@ -76,8 +95,8 @@
           return nav("venuU");
         },
         title: "VendUniversity",
-        text: "Communities, groups, your class planner, campus routes, and guides for trades, certs and starting a business.",
-        doit: "Tap VendUniversity",
+        text: "Communities and groups, your class planner, campus routes, and free guides on trades, certs and starting a business.",
+        doit: "Tap VendUni",
         click: true,
         place: "above",
       },
@@ -87,31 +106,35 @@
           return $("#loc");
         },
         title: "Your campus",
-        text: "Everything you see is filtered to your school. Tap here to switch campuses anytime.",
-        doit: "Tap your campus",
-        event: "click",
+        text: "Posts, feeds and events are funneled to the campus tied to your .edu email. Switching campuses here replaces your view with that campus — it never mixes two campuses together.",
         place: "below",
+      },
+      {
+        intro: true,
+        emoji: "🛍️",
+        title: "Becoming a vendor is optional",
+        text: "You never have to sell anything — browsing, buying, trading and booking are always free. If you do want a storefront, flip on Vendor mode in Profile. There is no subscription.",
+        next: "Got it",
+      },
+      {
+        intro: true,
+        emoji: "🏆",
+        title: "Founders & the leaderboard",
+        text: "Founders are the first verified student vendors on a campus. Refer other vendors with your invite link to claim a founder spot — founders keep a 🎓 badge on their name everywhere they post, on their profile and on their storefront, plus a monthly Boost. The leaderboard in Profile ranks students by vendors referred, so you can see where you stand.",
+        next: "Last step",
       },
       {
         before: goHome,
         target: function () {
           return nav("profile");
         },
-        title: "You, and your storefront",
-        text: "Profile holds your bookings, saved hustles, messages, and Vendor mode when you're ready to sell.",
-        doit: "Tap Profile",
+        title: "Set up your profile",
+        text: "Profile is your account, storefront, bookings, saved hustles, messages, leaderboard, Replay tutorial and Log out. Finish here and you're live.",
+        doit: "Tap Profile to set up your account",
         click: true,
         place: "above",
       },
-      {
-        intro: true,
-        emoji: "🚀",
-        title: "That's it — go get seen",
-        text: "You can replay this tour anytime from Profile → Replay tutorial.",
-        next: "Start using VendU",
-      },
     ];
-    return s;
   }
 
   var running = false;
@@ -125,6 +148,17 @@
     boundEl,
     boundEvent,
     raf;
+
+  function realSteps() {
+    return list.filter(function (s) {
+      return !s.intro;
+    }).length;
+  }
+  function realIndex() {
+    var n = 0;
+    for (var k = 0; k <= i && k < list.length; k++) if (!list[k].intro) n++;
+    return n;
+  }
 
   function cleanup() {
     [ring, pulse, card, modal].forEach(function (el) {
@@ -181,7 +215,7 @@
     if (!el) {
       // The screen may still be rendering — wait a beat before giving up.
       var n = (tries || 0) + 1;
-      if (n < 10)
+      if (n < 8)
         return setTimeout(function () {
           show(n);
         }, 150);
@@ -200,39 +234,29 @@
     card.className = "tour-card";
     card.innerHTML =
       '<div class="tour-step">Step ' +
-      i +
+      realIndex() +
       " of " +
-      (list.length - 2) +
+      realSteps() +
       '</div><div class="tour-title">' +
       st.title +
       '</div><div class="tour-text">' +
       st.text +
       "</div>" +
       (st.doit ? '<div class="tour-do">👆 ' + st.doit + "</div>" : "") +
-      '<div class="tour-actions"><button class="tour-skip" data-tour="skip">Skip tour</button>' +
+      '<div class="tour-actions">' +
       dots() +
-      '<button class="tour-next" data-tour="next">' +
-      (st.click ? "Do it for me" : "Next") +
-      "</button></div>";
+      (st.click ? "" : '<button class="tour-next" data-tour="next">Next</button>') +
+      "</div>";
     document.body.appendChild(ring);
     document.body.appendChild(pulse);
     document.body.appendChild(card);
 
-    card.querySelector('[data-tour="skip"]').onclick = function () {
-      end();
-    };
-    card.querySelector('[data-tour="next"]').onclick = function () {
-      if (st.click) {
-        var t = st.target();
-        cleanup();
-        if (t) t.click();
-        i++;
-        setTimeout(show, 420);
-      } else {
+    var nx = card.querySelector('[data-tour="next"]');
+    if (nx)
+      nx.onclick = function () {
         i++;
         show();
-      }
-    };
+      };
 
     if (st.click || st.event) {
       boundEl = el;
@@ -298,6 +322,7 @@
     var above = box.top - ch - 14;
     var top = list[i].place === "above" || below + ch > window.innerHeight - 12 ? above : below;
     if (top < 12) top = 12;
+    if (top + ch > window.innerHeight - 12) top = Math.max(12, window.innerHeight - ch - 12);
     card.style.top = top + "px";
     var host = document.querySelector(".device") || document.body;
     var hr = host.getBoundingClientRect();
@@ -315,13 +340,10 @@
       st.title +
       '</div><div class="tour-text">' +
       st.text +
-      '</div><div class="tour-actions"><button class="tour-skip" data-tour="skip">Not now</button><button class="tour-next" data-tour="next">' +
+      '</div><div class="tour-actions"><button class="tour-next" data-tour="next">' +
       st.next +
       "</button></div></div>";
     document.body.appendChild(modal);
-    modal.querySelector('[data-tour="skip"]').onclick = function () {
-      end();
-    };
     modal.querySelector('[data-tour="next"]').onclick = function () {
       i++;
       show();
