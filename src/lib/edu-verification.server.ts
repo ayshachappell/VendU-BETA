@@ -217,3 +217,41 @@ export async function isVerifiedStudent(email: string): Promise<boolean> {
   await touchStudent(email);
   return true;
 }
+
+/** Exchange the parameters carried by an emailed sign-in link for a session.
+ *  Covers both link shapes GoTrue can produce: `token_hash` (implicit/verify
+ *  redirects) and `code` (PKCE redirects). */
+export async function emailFromLinkParams(params: {
+  tokenHash?: string | undefined;
+  type?: string | undefined;
+  code?: string | undefined;
+}): Promise<string | null> {
+  const { url, key } = authBase();
+  let accessToken: string | null = null;
+
+  if (params.tokenHash) {
+    const res = await fetch(`${url}/auth/v1/verify`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", apikey: key },
+      body: JSON.stringify({
+        type: params.type && /^[a-z_]+$/.test(params.type) ? params.type : "magiclink",
+        token_hash: params.tokenHash,
+      }),
+    });
+    const body = (await res.json().catch(() => ({}))) as { access_token?: string };
+    accessToken = body.access_token ?? null;
+  }
+
+  if (!accessToken && params.code) {
+    const res = await fetch(`${url}/auth/v1/token?grant_type=pkce`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", apikey: key },
+      body: JSON.stringify({ auth_code: params.code }),
+    });
+    const body = (await res.json().catch(() => ({}))) as { access_token?: string };
+    accessToken = body.access_token ?? null;
+  }
+
+  if (!accessToken) return null;
+  return emailFromAccessToken(accessToken);
+}

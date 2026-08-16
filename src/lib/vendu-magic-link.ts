@@ -35,23 +35,30 @@ export function handleMagicLinkReturn(): boolean {
   const hash = new URLSearchParams((window.location.hash || "").replace(/^#/, ""));
   const query = new URLSearchParams(window.location.search);
   const token = hash.get("access_token");
-  const error = hash.get("error") ?? hash.get("error_code") ?? query.get("error");
-  if (!token && !error) return false;
+  const tokenHash = query.get("token_hash") ?? hash.get("token_hash");
+  const code = query.get("code");
+  const error =
+    hash.get("error") ?? hash.get("error_code") ?? query.get("error") ?? query.get("error_code");
+  if (!token && !tokenHash && !code && !error) return false;
 
   const build = targetBuild(query.has("build") ? query : hash);
   const base = `/${build}/index.html`;
 
+  const unlock = (email: string) => {
+    try {
+      localStorage.setItem(
+        STUDENT_KEY[build],
+        JSON.stringify({ email, at: Date.now(), build }),
+      );
+    } catch {
+      /* storage blocked */
+    }
+    window.location.replace(`${base}#verified`);
+  };
+
   if (token) {
     const email = emailFromJwt(token);
     if (email) {
-      try {
-        localStorage.setItem(
-          STUDENT_KEY[build],
-          JSON.stringify({ email, at: Date.now(), build }),
-        );
-      } catch {
-        /* storage blocked */
-      }
       // Record it server-side too, so the device that requested the link can
       // unlock even when the email opened in a different browser.
       void fetch("/api/public/verify/confirm", {
@@ -60,12 +67,31 @@ export function handleMagicLinkReturn(): boolean {
         body: JSON.stringify({ token, build }),
       })
         .catch(() => undefined)
-        .finally(() => window.location.replace(`${base}#verified`));
+        .finally(() => unlock(email));
       return true;
     }
+  }
+
+  if (tokenHash || code) {
+    void fetch("/api/public/verify/link", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        token_hash: tokenHash,
+        type: query.get("type") ?? hash.get("type") ?? undefined,
+        code,
+        build,
+      }),
+    })
+      .then((r) => r.json() as Promise<{ ok?: boolean; email?: string }>)
+      .then((r) => {
+        if (r?.ok && r.email) unlock(r.email);
+        else window.location.replace(`${base}?verify=expired`);
+      })
+      .catch(() => window.location.replace(`${base}?verify=expired`));
+    return true;
   }
 
   window.location.replace(`${base}?verify=expired`);
   return true;
 }
-
