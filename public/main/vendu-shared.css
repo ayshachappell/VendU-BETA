@@ -32,3 +32,14 @@
 .tour-actions { flex-wrap: nowrap; }
 .tour-skip { white-space: nowrap; font-size: 12.5px; padding: 8px 6px; }
 .tour-next { white-space: nowrap; }
+
+/* --- tidy tour footer: Back | progress | Next, always aligned --- */
+.tour-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;flex-wrap:nowrap}
+.tour-modal .tour-actions{justify-content:space-between}
+.tour-spacer{flex:0 0 auto;width:64px;height:1px}
+.tour-prog{flex:1 1 auto;height:4px;border-radius:99px;background:var(--line);overflow:hidden;min-width:36px}
+.tour-prog i{display:block;height:100%;background:var(--violet);border-radius:99px;transition:width .25s ease}
+.tour-back{flex:0 0 auto;min-width:64px;text-align:center;padding:10px 14px}
+.tour-next{flex:0 0 auto;min-width:64px;text-align:center;padding:10px 16px}
+.tour-card{padding:16px}
+.tour-dots{display:none}

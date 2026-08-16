@@ -446,6 +446,11 @@
 .lb-summary{font-size:12.5px;color:var(--violet);font-weight:600;margin:-2px 0 14px}
 .lb-nmwrap{flex:1;min-width:0}
 .lb-found{font-size:11px;color:var(--mist);font-weight:600;margin-top:1px}
+
+/* --- badge & name polish --- */
+.p-name,.name,.store-name,.up-name{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-width:0;line-height:1.25}
+.founderpill,.vendorpill,.dealpill,.soonpill,.commpill,.ceopill{flex:0 0 auto;font-size:10px;font-weight:800;letter-spacing:.01em;line-height:1;padding:4px 8px;border-radius:999px;white-space:nowrap;text-transform:none}
+.up-badges{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px}
 </style>
 </head>
 <body>
@@ -507,7 +512,7 @@ let idc=1;
 const MSGS={};
 const BOOKED={};
 
-const FOUNDER_CAP=10, FOUNDERS=LEADERBOARD.length+1;
+const FOUNDER_CAP=10, FOUNDER_GOAL=3, FOUNDERS=Math.min(FOUNDER_CAP,LEADERBOARD.length+1);
 function pic(a,b,e,t){var svg='<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+a+'"/><stop offset="1" stop-color="'+b+'"/></linearGradient></defs><rect width="320" height="240" fill="url(%23g)"/><text x="160" y="122" font-size="96" text-anchor="middle">'+e+'</text><text x="160" y="210" font-size="22" font-family="sans-serif" font-weight="700" fill="rgba(255,255,255,.92)" text-anchor="middle">'+t+'</text></svg>';return {src:'data:image/svg+xml;utf8,'+encodeURIComponent(svg),fit:'cover'};}
 const HUSTLES=[
   {id:1,name:"Nia's Kitchen",init:'N',cat:'Food',food:'prepared',v:1,lic:1,dist:0.4,offer:'Home-cooked plates & weekly meal prep. Delivered to your dorm.',price:'$8–12',rating:'4.9',reviews:41,jobs:120,since:'2024',c:0,pays:['Cash App','Zelle'],bio:"Junior, business major. Order by 6pm for next-day plates.",services:[['Single plate','$10'],['Weekly prep (5 meals)','$45'],['Party tray','$60']]},
@@ -554,7 +559,7 @@ var BUILD=(location.pathname.indexOf('/beta')===0)?'beta':'main';
 try{if(window.VendU)VendU.consumeMagicLink();}catch(e){}
 var VERIFY_ERR='';try{if(/[?&]verify=expired/.test(location.search)){VERIFY_ERR='That link expired or was already used. Send yourself a new one.';history.replaceState(null,'',location.pathname);}if(location.hash==='#verified')history.replaceState(null,'',location.pathname);}catch(e){}
 var VERIFIED=!!(window.VendU&&VendU.student());
-let state={eduEmail:'',eduCodeSent:false,eduErr:VERIFY_ERR,tab:'home',home:'feed',cat:'All',q:'',near:false,mkt:'goods',formCat:'Food',foodType:'baked',eduOK:false,a1:false,a2:false,a3:false,submitted:false,avatar:'',gallery:[],themeColor:'#5A2BE0',book:null,openC:0,detail:0,isSeller:true,events:[],about:"Tell buyers about your storefront — what you make or do, your vibe, and how to work with you.",services:[],referrals:0,isFounder:true,addMode:null,svcEdit:false,newPhoto:null,reviewOpen:false,reviewStars:5,leaderboard:false,storefrontSetup:false,avail:false,cheap:false,top:false,justReferred:-1,msgTo:0,openMC:0,bookSet:false,booking:{mode:'builtin',link:'',provider:'Calendly',days:{Mon:true,Tue:true,Wed:true,Thu:true,Fri:true,Sat:true,Sun:false},open:'09:00',close:'18:00',blackouts:[]},onboarded:false,tester:false,isCEO:false,isRealStudent:false,acctEmail:'',tourActive:false,userType:null,obStep:0,subscribed:false,subPrompt:false,eduDone:false,agree1:false,agree2:false,agree3:false,cardName:'',cardNum:'',cardExp:'',cardCvc:'',vname:'',bookMethod:0,pays:[],socials:[],saved:[],savedView:false,campus:campusById('fvsu'),campusPick:false,campusQ:'',hubView:'resources',openRes:-1,joinedOrgs:[],joinedGroups:[],intros:[],introText:'',classes:[{id:'c1',name:'BIOL 101',days:['Mon','Wed','Fri'],start:'09:00',end:'09:50',loc:'Founders Hall 204',c:0},{id:'c2',name:'MATH 241',days:['Tue','Thu'],start:'11:00',end:'12:15',loc:'Science Bldg 110',c:2},{id:'c3',name:'ENG 102',days:['Mon','Wed'],start:'14:00',end:'15:15',loc:'Humanities 3',c:4}],todos:[{id:'t1',text:'Finish BIOL lab report',done:false,due:'Today'},{id:'t2',text:'Email advisor about fall registration',done:false,due:'Tomorrow'},{id:'t3',text:'Read Chapter 5 for ENG',done:true,due:'None'}],plannerSub:'schedule',plannerDay:'',classForm:null,todoText:'',todoDue:'None',route:{stops:[],mode:'walk'},boosted:false,appTheme:'violet',themeView:false,myPostsView:false,thread:0,inboxView:false,joinedComm:[],groupView:null,userView:null,groupCreateView:false,assignMod:false,createGroup:null,groupPostText:'',gradYear:'',inbox:[{id:'ths1',name:'Fades by Marcus',init:'M',color:'#F0873B',unread:1,msgs:[['Fades by Marcus','Appreciate the booking! You want the usual taper this time? ✂️']]},{id:'ths2',name:'Tutor Tori',init:'T',color:'#C026D3',unread:0,msgs:[['You','Hey! Free to help with calc this week?'],['Tutor Tori','Yes! Thursday after 4 works 📚']]}]};
+let state={eduEmail:'',eduCodeSent:false,eduErr:VERIFY_ERR,tab:'home',home:'feed',cat:'All',q:'',near:false,mkt:'goods',formCat:'Food',foodType:'baked',eduOK:false,a1:false,a2:false,a3:false,submitted:false,avatar:'',gallery:[],themeColor:'#5A2BE0',book:null,openC:0,detail:0,isSeller:true,events:[],about:"Tell buyers about your storefront — what you make or do, your vibe, and how to work with you.",services:[],referrals:0,isFounder:false,addMode:null,svcEdit:false,newPhoto:null,reviewOpen:false,reviewStars:5,leaderboard:false,storefrontSetup:false,avail:false,cheap:false,top:false,justReferred:-1,msgTo:0,openMC:0,bookSet:false,booking:{mode:'builtin',link:'',provider:'Calendly',days:{Mon:true,Tue:true,Wed:true,Thu:true,Fri:true,Sat:true,Sun:false},open:'09:00',close:'18:00',blackouts:[]},onboarded:false,tester:false,isCEO:false,isRealStudent:false,acctEmail:'',tourActive:false,userType:null,obStep:0,subscribed:false,subPrompt:false,eduDone:false,agree1:false,agree2:false,agree3:false,cardName:'',cardNum:'',cardExp:'',cardCvc:'',vname:'',bookMethod:0,pays:[],socials:[],saved:[],savedView:false,campus:campusById('fvsu'),campusPick:false,campusQ:'',hubView:'resources',openRes:-1,joinedOrgs:[],joinedGroups:[],intros:[],introText:'',classes:[{id:'c1',name:'BIOL 101',days:['Mon','Wed','Fri'],start:'09:00',end:'09:50',loc:'Founders Hall 204',c:0},{id:'c2',name:'MATH 241',days:['Tue','Thu'],start:'11:00',end:'12:15',loc:'Science Bldg 110',c:2},{id:'c3',name:'ENG 102',days:['Mon','Wed'],start:'14:00',end:'15:15',loc:'Humanities 3',c:4}],todos:[{id:'t1',text:'Finish BIOL lab report',done:false,due:'Today'},{id:'t2',text:'Email advisor about fall registration',done:false,due:'Tomorrow'},{id:'t3',text:'Read Chapter 5 for ENG',done:true,due:'None'}],plannerSub:'schedule',plannerDay:'',classForm:null,todoText:'',todoDue:'None',route:{stops:[],mode:'walk'},boosted:false,appTheme:'violet',themeView:false,myPostsView:false,thread:0,inboxView:false,joinedComm:[],groupView:null,userView:null,groupCreateView:false,assignMod:false,createGroup:null,groupPostText:'',gradYear:'',inbox:[{id:'ths1',name:'Fades by Marcus',init:'M',color:'#F0873B',unread:1,msgs:[['Fades by Marcus','Appreciate the booking! You want the usual taper this time? ✂️']]},{id:'ths2',name:'Tutor Tori',init:'T',color:'#C026D3',unread:0,msgs:[['You','Hey! Free to help with calc this week?'],['Tutor Tori','Yes! Thursday after 4 works 📚']]}]};
 const screen=document.getElementById('screen'),photo=document.getElementById('photo'),gphoto=document.getElementById('gphoto'),ephoto=document.getElementById('ephoto'),cphoto=document.getElementById('cphoto');
 const color=i=>COLORS[i%COLORS.length];
 const bg=h=>h.me?state.themeColor:color(h.c);
@@ -571,10 +576,14 @@ const pin='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="c
 const heart=f=>`<svg width="17" height="17" viewBox="0 0 24 24" fill="${f?'#FF5C8A':'none'}" stroke="${f?'#FF5C8A':'currentColor'}" stroke-width="2"><path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11z"/></svg>`;
 function pillFor(h){if(h.cat==='Food'&&h.food)return h.food==='baked'?'<span class="foodpill baked">Baked · cottage food</span>':'<span class="foodpill prep">Prepared · licensed kitchen</span>';if(h.lic&&REGULATED.includes(h.cat))return '<span class="licpill">Licensed</span>';return '';}
 const DEALS={1:{t:'20% off',k:'off'},2:{t:'Sale',k:'sale'},3:{t:'Ending soon',k:'soon'},5:{t:'20% off',k:'off'}};
-function dealPill(h){var d=h&&DEALS[h.id];if(!d)return '';return '<span class="'+(d.k==='soon'?'soonpill':'dealpill')+'">'+(d.k==='soon'?'\u23F3 ':'\uD83C\uDFF7\uFE0F ')+d.t+'</span>';}
-function vendorPills(h){if(!h)return '';return (h.founder?'<span class="founderpill">\u{1F393} Founder</span>':'')+'<span class="vendorpill">\u{1F4A0} Vendor</span>'+dealPill(h);}
+function dealFor(h,txt){var t=String(txt||'').toLowerCase();var m=t.match(/(\d{1,2})\s*%\s*off/);if(m)return {t:m[1]+'% off',k:'off'};if(/(ending soon|last chance|today only|before they|ends friday|this week only|slots left)/.test(t))return {t:'Ending soon',k:'soon'};if(/(sale|special|discount|deal|bogo)/.test(t))return {t:'Sale',k:'sale'};return h?DEALS[h.id]:null;}
+function pillHTML(d){return '<span class="'+(d.k==='soon'?'soonpill':'dealpill')+'">'+(d.k==='soon'?'\u23F3 ':'\uD83C\uDFF7\uFE0F ')+d.t+'</span>';}
+function dealPill(h){var d=h&&DEALS[h.id];return d?pillHTML(d):'';}
+/* Max two badges anywhere. Priority: the deal the post is actually about,
+   then Founder, then Vendor. */
+function vendorPills(h,txt){if(!h)return '';var out=[];var d=dealFor(h,txt);if(d)out.push(pillHTML(d));if(h.founder)out.push('<span class="founderpill">\u{1F393} Founder</span>');if(out.length<2)out.push('<span class="vendorpill">\u{1F4A0} Vendor</span>');return out.slice(0,2).join('');}
 function vendorFor(name){try{return HUSTLES.filter(function(x){return x.name===name;})[0];}catch(e){return null;}}
-function commPills(name){try{return COMM.filter(function(c){return c.campus===state.campus.id&&c.members.some(function(m){return m.name===name;});}).map(function(c){return '<span class="commpill">'+c.emoji+' '+c.name+'</span>';}).join('');}catch(e){return '';}}
+function commPills(name,max){try{return COMM.filter(function(c){return c.campus===state.campus.id&&c.members.some(function(m){return m.name===name;});}).slice(0,max||1).map(function(c){return '<span class="commpill">'+c.emoji+' '+c.name+'</span>';}).join('');}catch(e){return '';}}
 
 /* ===== Account kinds =====
    @integroservicegroup.com  -> CEO. Permanent access, never expires, never purged.
@@ -589,9 +598,19 @@ function applyAccount(email){
   state.isRealStudent=isEduEmail(email);
   state.tester=false;
   if(state.isCEO){state.isFounder=false;}
+  if(state.isRealStudent||state.isCEO)creditReferral();
+  loadReferrals();
   var cc=campusByDomain(email||'');if(cc)state.campus=cc;
   if(typeof refreshDemo==='function')refreshDemo();
 }
+
+/* ===== Referrals & founder spots (10 per school, 3 vendor referrals = founder) ===== */
+function myRefCode(){var e=String(state.acctEmail||'').toLowerCase();var s=(e.split('@')[0]||'').replace(/[^a-z0-9]/g,'');return (s||'vendu').slice(0,14);}
+function myRefLink(){try{return location.origin+location.pathname+'?ref='+myRefCode();}catch(e){return 'vendu.app/join?ref='+myRefCode();}}
+function syncFounder(){state.isFounder=!state.isCEO&&state.referrals>=FOUNDER_GOAL;}
+function loadReferrals(){try{state.referrals=parseInt(localStorage.getItem('vendu_refs_'+myRefCode())||'0',10)||0;}catch(e){state.referrals=0;}syncFounder();}
+function creditReferral(){try{var r=localStorage.getItem('vendu_ref_from');if(!r||localStorage.getItem('vendu_ref_done'))return;if(r===myRefCode())return;localStorage.setItem('vendu_ref_done','1');var k='vendu_refs_'+r;localStorage.setItem(k,String((parseInt(localStorage.getItem(k)||'0',10)||0)+1));}catch(e){}}
+try{var _rp=new URL(location.href).searchParams.get('ref');if(_rp)localStorage.setItem('vendu_ref_from',_rp);}catch(e){}
 function accountBadge(){return state.isCEO?'<span class="ceopill">\u2605 CEO</span>':(state.isFounder&&state.isRealStudent?'<span class="founderpill">\u{1F393} Founder</span>':'');}
 function doLogout(){try{VendU.signOut();}catch(e){}try{localStorage.removeItem('vendu_return_build');}catch(e){}location.reload();}
 
@@ -615,7 +634,7 @@ function feedBody(){
   return founderBanner()+`<div class="feed">${posts.map((p,i)=>{const h=HUSTLES.find(x=>x.id===p.s);const open=state.openC===p.id;return `
     <div class="post" style="animation-delay:${i*40}ms">
       <div class="p-head"><div class="p-av" data-open="${h.id}" style="background:${bg(h)}">${h.init}</div>
-        <div><div class="p-name" data-open="${h.id}">${h.name}${h.v?CHECK:''}${vendorPills(h)}</div><div class="p-when">${p.when} · ${h.cat}</div></div>
+        <div><div class="p-name" data-open="${h.id}">${h.name}${h.v?CHECK:''}${vendorPills(h,p.text||p.body||'')}</div><div class="p-when">${p.when} · ${h.cat}</div></div>
         ${p.promo?`<span class="p-promo">${p.promo}</span>`:''}</div>
       <div class="p-text">${p.text}</div>
       <div class="p-actions"><div class="p-act ${p.liked?'liked':''}" data-like="${p.id}">${heart(p.liked)} ${p.likes}</div>
@@ -987,7 +1006,7 @@ function userProfile(){
   var av=(isMe&&state.avatar)?'background-image:url('+state.avatar+');background-size:cover':'background:'+(u.col||state.themeColor);
   var h='<div class="topbar"><div class="brandrow"><div class="wordmark" style="font-size:18px">Profile</div><div class="locpill" id="upBack" style="cursor:pointer">\u2039 Back</div></div></div>';
   h+='<div class="enter" style="padding:6px 20px 24px">';
-  h+='<div class="up-head"><div class="up-av" style="'+av+'">'+((isMe&&state.avatar)?'':u.init)+'</div><div class="up-name">'+u.name+' '+CHECK+'</div><div class="up-sub">\u2713 Verified student'+(yr?' \u00b7 Class of \u2019'+yr.slice(2):'')+'</div>'+'<div class="up-badges">'+(vendor?vendorPills(vendor):'')+commPills(u.name)+'</div>'+'</div>';
+  h+='<div class="up-head"><div class="up-av" style="'+av+'">'+((isMe&&state.avatar)?'':u.init)+'</div><div class="up-name">'+u.name+' '+CHECK+'</div><div class="up-sub">\u2713 Verified student'+(yr?' \u00b7 Class of \u2019'+yr.slice(2):'')+'</div>'+'<div class="up-badges">'+(vendor?vendorPills(vendor):'')+commPills(u.name,2)+'</div>'+'</div>';
   if(!isMe){h+='<button class="submit" id="upMsg" style="background:var(--violet)">\u2709\uFE0F Message '+u.name.split(' ')[0]+'</button>';}
   if(vendor){h+='<button class="submit" id="upStore" style="background:var(--card);color:var(--ink);border:1px solid var(--line);margin-top:10px">🏪 View '+vendor.name+'\u2019s storefront</button>';}
   if(mutual.length){h+='<div class="up-mutual">🤝 You\u2019re both in '+mutual.map(function(c){return c.name;}).join(', ')+'</div>';}
@@ -1256,12 +1275,12 @@ function myPostsScreen(){
 }
 function profile(){
   const av=state.avatar?`background-image:url(${state.avatar})`:`background:${state.themeColor}`;
-  const refLink='vendu.app/join?ref=aysha', goal=state.isFounder?5:3;
+  const refLink=myRefLink(), refShown=refLink.replace(/^https?:\/\//,''), goal=FOUNDER_GOAL;
   const viewBtn=`<button class="submit viewbtn" id="viewme" style="background:var(--card);border:1.5px solid ${state.themeColor};color:var(--ink);margin:0 0 10px;display:flex;align-items:center;justify-content:center;gap:8px;padding:17px 16px"><span style="font-weight:600;font-size:15px;color:var(--mist)">View my</span><span class="viewwm">${WM}</span></button><button class="submit" id="toregular" style="background:transparent;color:var(--mist);border:0;box-shadow:none;margin:0 0 18px;display:flex;align-items:center;justify-content:center;gap:7px;padding:8px;font-size:13px;font-weight:600"><span style="font-size:14px">🔁</span> Switch to regular mode</button>`;
   const membership=`<div class="plan" style="background:${bannerGrad(state.themeColor)};color:#fff"><div class="plan-badge">${state.isFounder?'🎓 Founder':'💠 Vendor'}</div><div class="p-lbl">Your membership</div><div class="p-big">${state.isFounder?`Founder #${FOUNDERS} of ${FOUNDER_CAP}`:'Vendor'}</div>
-    <div class="ref"><div class="ref-top"><span>Vendors referred</span><span><b>${state.referrals}</b> / ${goal}</span></div><div style="font-size:11.5px;opacity:.85;margin:-4px 0 9px">${state.isFounder?'🎓 Free + a monthly Boost':'Refer vendors to earn free Boosts'}</div>
+    <div class="ref"><div class="ref-top"><span>Vendors referred</span><span><b>${state.referrals}</b> / ${goal}</span></div><div style="font-size:11.5px;opacity:.85;margin:-4px 0 9px">${state.isFounder?'🎓 Founder — free forever + a monthly Boost':`${Math.max(0,goal-state.referrals)} more vendor sign-ups through your link to become a founder`}</div>
       <div class="ref-dots">${Array.from({length:goal}).map((_,i)=>`<div class="rdot ${i<state.referrals?'on':''} ${i===state.justReferred?'pop':''}">🎓</div>`).join('')}</div>
-      <div class="ref-link"><span class="rl">${refLink}</span><button id="copyref">Copy</button></div>
+      <div class="ref-link"><span class="rl">${refShown}</span><button id="copyref">Copy</button></div>
       <button class="ref-demo" id="lbBtn" style="margin-top:10px">🏆 Leaderboard</button></div></div>`;
   const regularCard=`<div class="cust"><div class="cust-h">${icon('<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/>',18)} Your account</div><div style="font-size:13px;color:var(--mist);line-height:1.5;margin:2px 0 14px">Browse, buy, barter, book vendors, and post to the Market — all free. Set a name and color so classmates recognize you in posts and comments.</div><div class="field"><label>Display name</label><input id="rname" placeholder="e.g. Jordan T." value="${state.vname||''}"></div><div class="cust-lbl">Your color</div><div class="swatches">${THEME_COLORS.map(c=>`<div class="sw ${state.themeColor===c?'on':''}" data-color="${c}" style="background:${c}"></div>`).join('')}</div><div class="cust-lbl" style="margin-top:16px">Class year</div><div class="pldays" style="padding:0">${['2025','2026','2027','2028','2029'].map(y=>`<div class="plday ${state.gradYear===y?'on':''}" data-gradyear="${y}">’${y.slice(2)}</div>`).join('')}</div>${myCommunities().length?`<div class="cust-lbl" style="margin-top:16px">Your communities</div><div class="up-chips">${myCommunities().map(c=>`<div class="up-chip" data-opencomm="${c.key}">${c.emoji} ${c.name}</div>`).join('')}</div>`:''}<button class="submit" id="myposts" style="background:var(--card);color:var(--ink);border:1px solid var(--line);margin-top:16px">🗂️ My market posts</button><button class="submit" id="startsell" style="background:var(--violet);margin-top:10px">Become a vendor</button><div style="font-size:12px;color:var(--mist);text-align:center;margin-top:12px;line-height:1.5">Want a storefront, socials, booking & payments? Turn on vendor mode.</div></div>`;
   const menuItems=state.isSeller?[['Set up your storefront','setup'],['Bookings & calendar','bookings'],['✉️ Messages','inbox'],['Saved hustles','saved'],['💬 Send beta feedback','feedback'],['▶︎ Replay tutorial','tour'],['Help & safety',''],['\u23FB Log out','logout']]:[['Saved & booked','saved'],['✉️ Messages','inbox'],['My marketplace posts','myposts'],['💬 Send beta feedback','feedback'],['▶︎ Replay tutorial','tour'],['Help & safety',''],['\u23FB Log out','logout']];

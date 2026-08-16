@@ -27,6 +27,13 @@
     if (t && t.className.indexOf("on") === -1) t.click();
   }
 
+  function openStore() {
+    if ($(".cta-bar") || $(".storefront")) return;
+    goBrowse();
+    var c = $(".card[data-open]");
+    if (c) c.click();
+  }
+
   function steps() {
     return [
       {
@@ -78,6 +85,7 @@
         click: true,
       },
       {
+        before: openStore,
         target: function () {
           return $(".storefront") || $(".awning") || $(".card");
         },
@@ -86,6 +94,7 @@
         place: "below",
       },
       {
+        before: openStore,
         target: function () {
           return $(".cta-bar");
         },
@@ -94,6 +103,7 @@
         place: "above",
       },
       {
+        before: openStore,
         target: function () {
           return $("#back");
         },
@@ -180,6 +190,7 @@
     ];
   }
   var running = false;
+  var dir = 1;
   var list = [],
     i = 0,
     ring,
@@ -231,15 +242,8 @@
   }
 
   function dots() {
-    return (
-      '<div class="tour-dots">' +
-      list
-        .map(function (_, n) {
-          return '<span class="tour-dot' + (n === i ? " on" : "") + '"></span>';
-        })
-        .join("") +
-      "</div>"
-    );
+    var pct = Math.round(((i + 1) / Math.max(1, list.length)) * 100);
+    return '<div class="tour-prog"><i style="width:' + pct + '%"></i></div>';
   }
 
   function show(tries) {
@@ -261,7 +265,8 @@
         return setTimeout(function () {
           show(n);
         }, 150);
-      i++;
+      i += dir;
+      if (i < 0) { i = 0; dir = 1; }
       return show();
     }
     try {
@@ -286,9 +291,9 @@
       "</div>" +
       (st.doit ? '<div class="tour-do">👆 ' + st.doit + "</div>" : "") +
       '<div class="tour-actions">' +
-      (i > 0 ? '<button class="tour-back" data-tour="back">Back</button>' : "") +
+      (i > 0 ? '<button class="tour-back" data-tour="back">Back</button>' : '<span class="tour-spacer"></span>') +
       dots() +
-      (st.click ? "" : '<button class="tour-next" data-tour="next">Next</button>') +
+      (st.click ? '<span class="tour-spacer"></span>' : '<button class="tour-next" data-tour="next">Next</button>') +
       "</div>";
     document.body.appendChild(ring);
     document.body.appendChild(pulse);
@@ -299,6 +304,7 @@
     var nx = card.querySelector('[data-tour="next"]');
     if (nx)
       nx.onclick = function () {
+        dir = 1;
         i++;
         show();
       };
@@ -307,6 +313,7 @@
       boundEl = el;
       boundEvent = st.event || "click";
       onTargetClick = function () {
+        dir = 1;
         i++;
         cleanup();
         setTimeout(show, 420);
@@ -377,6 +384,7 @@
 
   function goBack() {
     if (i <= 0) return;
+    dir = -1;
     i--;
     cleanup();
     setTimeout(show, 120);
@@ -393,7 +401,8 @@
       '</div><div class="tour-text">' +
       st.text +
       '</div><div class="tour-actions">' +
-      (i > 0 ? '<button class="tour-back" data-tour="back">Back</button>' : "") +
+      (i > 0 ? '<button class="tour-back" data-tour="back">Back</button>' : '<span class="tour-spacer"></span>') +
+      dots() +
       '<button class="tour-next" data-tour="next">' +
       st.next +
       "</button></div></div>";
@@ -401,6 +410,7 @@
     var mb = modal.querySelector('[data-tour="back"]');
     if (mb) mb.onclick = goBack;
     modal.querySelector('[data-tour="next"]').onclick = function () {
+      dir = 1;
       i++;
       show();
     };
