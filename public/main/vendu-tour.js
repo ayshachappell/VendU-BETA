@@ -68,6 +68,16 @@
     tapNav("profile");
   }
 
+  function postBadge() {
+    return (
+      $(".p-name .dealpill") ||
+      $(".p-name .soonpill") ||
+      $(".p-name .founderpill") ||
+      $(".p-name .vendorpill") ||
+      $(".p-name")
+    );
+  }
+
   function steps() {
     return [
       {
@@ -79,18 +89,14 @@
       },
       {
         before: goHome,
-        target: function () {
-          return $("#q") || $(".topbar");
-        },
+        target: function () { return $("#q") || $(".topbar"); },
         title: "Search your campus",
         text: "Search any student by name or service, then narrow with the category chips below. Everything you see is from your own campus.",
         place: "below",
       },
       {
         before: goHome,
-        target: function () {
-          return $(".seg");
-        },
+        target: function () { return $(".seg"); },
         title: "Feed, Browse & Events",
         text: "Feed is what students are posting right now, Browse lists every hustle and storefront, Events shows what's happening on campus this week.",
         doit: "Tap Feed, Browse or Events",
@@ -99,49 +105,32 @@
       },
       {
         before: goFeed,
-        target: function () {
-          return $("[data-cmt]");
-        },
+        target: function () { return $("[data-cmt]"); },
         title: "Like & comment",
-        text: "Every post can be liked and commented on. Tap the comment icon to open the thread, then type a reply and hit Post.",
+        text: "Every post can be liked and commented on. Tap the comment icon to open the thread, type a reply and hit Post.",
         doit: "Tap the comment icon",
         click: true,
         place: "below",
       },
       {
         before: openThread,
-        target: function () {
-          return $("[data-user]");
-        },
+        target: function () { return $("[data-user]"); },
         title: "Tap any student's name",
-        text: "Names are tappable everywhere in VendU — in posts, comments, Market listings and communities. Tapping one opens that student's profile with their badges, active listings and a message button.",
+        text: "Names are tappable everywhere — posts, comments, Market listings and communities. Tapping one opens that student's profile with their badges, communities, active listings and a message button.",
         doit: "Tap a student's name",
         click: true,
         place: "below",
       },
       {
-        before: openUserCard,
-        target: function () {
-          return $("#upBack");
-        },
-        title: "Their profile",
-        text: "Here you see who they are, their communities and campus badges, anything they have listed, and a button to message them.",
-        place: "below",
-      },
-      {
-        before: openUserCard,
-        target: function () {
-          return $(".up-badges") || $(".store-badges") || $(".shop-sign");
-        },
+        before: goFeed,
+        target: postBadge,
         title: "Badges tell you who's who",
-        text: "Badges sit next to a name everywhere. 🎓 Founder is one of the first 10 verified student vendors on a campus, 💠 Vendor means they sell, ★ marks VendU staff, and campus or community badges show the school, org and groups they belong to. Deal badges — 🏷️ Sale, 🏷️ 20% off, ⏳ Ending soon — show while a vendor is running a promo.",
+        text: "Badges sit next to a name everywhere — on posts, profiles and storefronts. 🎓 Founder is one of the first 10 verified student vendors on a campus, 💠 Vendor means they sell, ★ marks VendU staff, and campus or community badges show the school, org and groups they belong to. Deal badges — 🏷️ Sale, 🏷️ 20% off, ⏳ Ending soon — show while a vendor is running a promo. Posts show up to two.",
         place: "below",
       },
       {
         before: goBrowse,
-        target: function () {
-          return $(".card[data-open]");
-        },
+        target: function () { return $(".card[data-open]"); },
         title: "Open a storefront",
         text: "Every listing is a full storefront: services, prices, photos, reviews and payment options.",
         doit: "Tap this listing",
@@ -149,37 +138,29 @@
       },
       {
         before: openStore,
-        target: function () {
-          return $(".svc") || $(".block-t") || $(".storefront");
-        },
+        target: function () { return $(".svc") || $(".block-t") || $(".storefront"); },
         title: "Services & prices",
         text: "Each vendor lists exactly what they do and what it costs, above their reviews and photos of past work.",
         place: "below",
       },
       {
         before: openStore,
-        target: function () {
-          return $(".paychips") || $(".paych") || $(".paych-btn");
-        },
+        target: function () { return $(".paychips") || $(".paych") || $(".paych-btn"); },
         title: "Pay a vendor directly",
-        text: "Under Accepts, tap any payment button — Cash App, Venmo, Zelle or PayPal — to pay the vendor directly. It opens their app or profile with the handle already filled in.",
+        text: "Under Accepts, tap any payment button — Cash App, Venmo, Zelle or PayPal — to pay the vendor directly. It opens their app with the handle already filled in.",
         place: "below",
       },
       {
         before: openStore,
-        target: function () {
-          return $(".cta-bar");
-        },
+        target: function () { return $(".cta-bar"); },
         title: "Save, message or book",
-        text: "From any storefront you can save it, message the student directly, or book a time — messages live in Profile → Messages. After a booking you can leave an optional review, and their rating updates right away.",
+        text: "Save the storefront, message the student, or book a time — messages live in Profile → Messages. After a booking you can leave an optional review, and their rating updates right away.",
         lock: true,
         place: "above",
       },
       {
         before: openStore,
-        target: function () {
-          return $("#back");
-        },
+        target: function () { return $("#back"); },
         title: "Close the storefront",
         text: "Back always returns you to where you were.",
         doit: "Tap Back",
@@ -188,9 +169,7 @@
       },
       {
         before: goHome,
-        target: function () {
-          return nav("market");
-        },
+        target: function () { return nav("market"); },
         title: "Buy, sell & trade",
         text: "Market is where students post items for sale, trades, campus housing and jobs — each one can be liked, commented on or messaged about.",
         doit: "Tap Market",
@@ -198,20 +177,16 @@
         place: "above",
       },
       {
-        target: function () {
-          return nav("add");
-        },
+        target: function () { return nav("add"); },
         title: "Post in seconds",
-        text: "The ＋ button posts a service, an item for sale, a request, or a campus event. A Request is a post for something you are looking for but do not already see on the app — like help, a specific item, or a service.",
+        text: "The ＋ button posts a service, an item for sale, a request, or a campus event. A Request is a post for something you are looking for but do not already see on the app — like help, a specific item, or a service. You can add photos, then delete a post or mark it sold anytime.",
         doit: "Tap ＋",
         click: true,
         place: "above",
       },
       {
         requires: '#nav .navitem[data-tab="venuU"]',
-        target: function () {
-          return nav("venuU");
-        },
+        target: function () { return nav("venuU"); },
         title: "Communities & VendUniversity",
         text: "Join campus communities and student groups, post inside them, plan your classes and routes, and read free guides on trades, certs and starting a business.",
         doit: "Tap VendUni",
@@ -221,9 +196,7 @@
       {
         requires: '#nav .navitem[data-tab="venuU"]',
         before: goHub,
-        target: function () {
-          return $(".hubseg") || $("[data-hub]");
-        },
+        target: function () { return $(".hubseg") || $("[data-hub]"); },
         title: "Everything inside VendUniversity",
         text: "Resources are free guides, Community is campus orgs and the groups you can create, Planner holds your classes and to-dos, Routes maps your walk across campus. Joining a community adds that badge to your name.",
         doit: "Tap any tab up here",
@@ -232,9 +205,7 @@
       },
       {
         before: goHome,
-        target: function () {
-          return $("#loc");
-        },
+        target: function () { return $("#loc"); },
         title: "Your campus",
         text: "Posts, feeds and events are funneled to the campus tied to your .edu email. Switching campuses here replaces your view with that campus — it never mixes two campuses together.",
         doit: "Tap your campus to switch",
@@ -243,9 +214,7 @@
       },
       {
         before: goHome,
-        target: function () {
-          return nav("profile");
-        },
+        target: function () { return nav("profile"); },
         title: "Finish in Profile",
         text: "Everything about your account lives here — and it is all free.",
         doit: "Tap Profile to finish",
@@ -254,36 +223,35 @@
       },
       {
         before: goProfile,
-        target: function () {
-          return $(".detail-av.up") || $(".photo-av.up");
-        },
-        title: "Your profile picture",
-        text: "Tap the camera on your photo to upload a picture, then set your display name. Students see both next to your posts, comments and storefront.",
+        target: function () { return $("#viewmyprofile") || $(".detail-av.up") || $(".photo-av.up"); },
+        title: "Your photo & public profile",
+        text: "Tap the camera on your photo to upload a picture and set your display name — students see both next to your posts and comments. View my profile shows your page exactly as other students see it: badges, communities and anything you have listed.",
         place: "above",
       },
       {
         before: goProfile,
-        target: function () {
-          return $("#viewmyprofile") || $(".detail-av.up");
-        },
-        title: "View my profile",
-        text: "This shows your profile exactly as other students see it — your badges, communities and anything you have listed.",
+        target: function () { return $("#viewme"); },
+        title: "View my storefront",
+        text: "Vendors tap View my VendU to see their live storefront the way buyers do — your services and prices at the top, then your photos and reviews, and your Cash App, Venmo, Zelle or PayPal buttons under Accepts.",
         place: "above",
       },
       {
         before: goProfile,
-        target: function () {
-          return $("#startsell") || $('[data-menu="setup"]') || $("#moretoggle");
-        },
-        title: "One account, two views",
-        text: "Selling is free and optional. Turn on Vendor mode to flip between Student View and Vendor View — same account, no second login.",
+        target: function () { return $("#toregular") || $("#startsell") || $('[data-menu="setup"]'); },
+        title: "Two views, one account",
+        text: "Selling is free and optional. Switch to regular mode flips you to Student View; flip back to Vendor View anytime. Same login, same profile, same badges — nothing is lost either way.",
         place: "above",
       },
       {
         before: goProfile,
-        target: function () {
-          return $("#startsell") || $('[data-menu="setup"]') || $("#moretoggle");
-        },
+        target: function () { return $("#lbBtn"); },
+        title: "The campus leaderboard",
+        text: "🏆 Leaderboard ranks vendors on your campus by bookings, ratings and reviews this month. Complete bookings and earn good reviews to climb — the top spots get seen first in Browse.",
+        place: "above",
+      },
+      {
+        before: goProfile,
+        target: function () { return $("#startsell") || $('[data-menu="setup"]') || $("#moretoggle"); },
         title: "Set up your storefront",
         text: "Inside Set up your storefront you link your social accounts, upload, resize and delete storefront photos, add your services and prices, set a sale with an end date, and add payment handles like Cash App, Venmo, Zelle or PayPal. Hit Save and your storefront is live.",
         next: "Finish",
@@ -291,7 +259,6 @@
       },
     ];
   }
-
   var running = false;
   var dir = 1;
   var list = [],
