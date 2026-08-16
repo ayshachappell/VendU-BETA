@@ -246,11 +246,10 @@
         target: function () {
           return nav("profile");
         },
-        title: "Set up your profile",
-        text: "Tap Profile to finish setting up your account. Upload a profile photo, set your name, and tap any vendor's cash-payment button to pay them directly. Everything is free — there are no subscriptions.",
+        title: "Finish in Profile",
+        text: "Everything about your account lives here — and it is all free.",
         doit: "Tap Profile to finish",
         click: true,
-        next: "Finish",
         place: "above",
       },
       {
@@ -259,7 +258,16 @@
           return $(".detail-av.up") || $(".photo-av.up");
         },
         title: "Your profile picture",
-        text: "Tap the camera on your profile photo to upload a picture. Students will see it next to your posts, comments, and storefront.",
+        text: "Tap the camera on your photo to upload a picture, then set your display name. Students see both next to your posts, comments and storefront.",
+        place: "above",
+      },
+      {
+        before: goProfile,
+        target: function () {
+          return $("#viewmyprofile") || $(".detail-av.up");
+        },
+        title: "View my profile",
+        text: "This shows your profile exactly as other students see it — your badges, communities and anything you have listed.",
         place: "above",
       },
       {
@@ -267,8 +275,18 @@
         target: function () {
           return $("#startsell") || $('[data-menu="setup"]') || $("#moretoggle");
         },
-        title: "Your storefront tools",
-        text: "Selling is free and optional. Turn on Vendor mode, or open Set up your storefront, to link your social accounts, upload, resize and delete storefront photos, and add payment handles like Cash App, Venmo, Zelle or PayPal. Student View and Vendor View are one account — just flip the switch.",
+        title: "One account, two views",
+        text: "Selling is free and optional. Turn on Vendor mode to flip between Student View and Vendor View — same account, no second login.",
+        place: "above",
+      },
+      {
+        before: goProfile,
+        target: function () {
+          return $("#startsell") || $('[data-menu="setup"]') || $("#moretoggle");
+        },
+        title: "Set up your storefront",
+        text: "Inside Set up your storefront you link your social accounts, upload, resize and delete storefront photos, add your services and prices, set a sale with an end date, and add payment handles like Cash App, Venmo, Zelle or PayPal. Hit Save and your storefront is live.",
+        next: "Finish",
         place: "above",
       },
     ];
