@@ -6,17 +6,17 @@
 <title>VendU — sell your stuff, book a service, get paid.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/beta/vendu-shared.css?v=3">
+<link rel="stylesheet" href="/beta/vendu-shared.css?v=5">
 <link rel="manifest" href="/beta/manifest.webmanifest">
-<meta name="theme-color" content="#5A2BE0">
+<meta name="theme-color" content="#9E2B7E">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
-<script src="/beta/vendu-api.js?v=3"></script>
-<script src="/beta/vendu-tour.js?v=3"></script>
+<script src="/beta/vendu-api.js?v=5"></script>
+<script src="/beta/vendu-tour.js?v=5"></script>
 <style>
-  :root{--paper:#FBF8F3;--ink:#1C1526;--mist:#6B6478;--line:#E7E0D6;--violet:#5A2BE0;--violet-soft:#EFE8FF;--amber:#FFB020;--rose:#FF5C8A;--green:#0E9F6E;--card:#FFFFFF;--school-a:#1D3A8A;--school-b:#F5C518;--shadow:0 6px 24px rgba(28,21,38,.08);--shadow-lg:0 14px 40px rgba(28,21,38,.16)}
+  :root{--paper:#FBF8F3;--ink:#1C1526;--mist:#6B6478;--line:#E7E0D6;--violet:#9E2B7E;--violet-soft:#EFE8FF;--amber:#FFB020;--rose:#FF5C8A;--green:#0E9F6E;--card:#FFFFFF;--school-a:#1D3A8A;--school-b:#F5C518;--shadow:0 6px 24px rgba(28,21,38,.08);--shadow-lg:0 14px 40px rgba(28,21,38,.16)}
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{background:#EDE7DD;color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   body{display:flex;justify-content:center;min-height:100vh}
@@ -45,7 +45,7 @@
   .seg{display:flex;gap:6px;background:rgba(239,234,225,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-radius:12px;padding:4px;margin:0 20px}
   .seg div{flex:1;text-align:center;padding:9px;border-radius:9px;font-size:13.5px;font-weight:600;color:var(--mist);cursor:pointer;transition:.15s}
   .seg div.on{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
-  .founder{margin:14px 20px 0;background:linear-gradient(100deg,rgba(90,43,224,.86),rgba(138,91,240,.86));backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);color:#fff;border-radius:16px;padding:13px 15px;font-size:13px;line-height:1.35;box-shadow:0 8px 22px rgba(90,43,224,.25);display:flex;gap:11px;align-items:center}
+  .founder{margin:14px 20px 0;background:linear-gradient(100deg,rgba(158,43,126,.86),rgba(192,66,158,.86));backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);color:#fff;border-radius:16px;padding:13px 15px;font-size:13px;line-height:1.35;box-shadow:0 8px 22px rgba(158,43,126,.25);display:flex;gap:11px;align-items:center}
   .founder .em{font-size:20px}.founder b{font-family:'Bricolage Grotesque',sans-serif;font-weight:700}
   .chips{display:flex;gap:9px;overflow-x:auto;padding:14px 20px 4px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
   .chip{flex:none;border:1px solid var(--line);background:rgba(255,255,255,.82);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);color:var(--ink);font-size:13px;font-weight:600;padding:9px 15px;border-radius:100px;cursor:pointer;transition:.15s;white-space:nowrap}
@@ -110,7 +110,7 @@
   .gallery img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;display:block;cursor:pointer}
   .gadd{aspect-ratio:1;border:1.5px dashed #c9c1b4;border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--mist);cursor:pointer;background:rgba(255,255,255,.5)}
   .svc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 14px;display:flex;justify-content:space-between;align-items:center;font-size:14px;margin-bottom:8px}.svc .p{font-weight:700}
-  .paychips{display:flex;flex-wrap:wrap;gap:7px}.paych{font-size:12px;font-weight:600;background:var(--violet-soft);color:#3f2b8c;padding:6px 11px;border-radius:100px}
+  .paychips{display:flex;flex-wrap:wrap;gap:7px}.paych{font-size:12px;font-weight:600;background:var(--violet-soft);color:#63204F;padding:6px 11px;border-radius:100px}
   .paynote{display:flex;align-items:center;gap:8px;background:#E7F7F0;color:#0b7a54;border-radius:12px;padding:11px 14px;font-size:13px;font-weight:600;margin-top:12px}
   .cta-bar{position:absolute;bottom:0;left:0;right:0;background:var(--paper);border-top:1px solid var(--line);padding:14px 20px;display:flex;gap:10px;z-index:30}
   .btn{flex:1;border:0;border-radius:14px;padding:15px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;transition:.15s}
@@ -153,12 +153,12 @@
   .box{width:22px;height:22px;border-radius:7px;border:2px solid var(--line);flex:none;display:flex;align-items:center;justify-content:center;transition:.15s;margin-top:1px}
   .box svg{width:12px;height:12px;stroke:#fff;stroke-width:3;opacity:0}.attest.on .box{background:var(--violet);border-color:var(--violet)}.attest.on .box svg{opacity:1}
   .attest span{font-size:12.5px;line-height:1.4;color:#40384c}
-  .sublock{display:flex;gap:10px;align-items:center;background:var(--violet-soft);border-radius:12px;padding:13px 14px;font-size:12.5px;line-height:1.4;color:#3f2b8c;margin:4px 0 14px}
+  .sublock{display:flex;gap:10px;align-items:center;background:var(--violet-soft);border-radius:12px;padding:13px 14px;font-size:12.5px;line-height:1.4;color:#63204F;margin:4px 0 14px}
   .submit{width:100%;background:var(--ink);color:#fff;border:0;border-radius:14px;padding:16px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;margin-top:6px;transition:.15s}.submit:disabled{background:#D8D2CA;color:#fff;cursor:not-allowed}
   .done{text-align:center;padding:48px 30px}
   .done .mark{width:74px;height:74px;border-radius:50%;background:var(--violet-soft);color:var(--violet);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;animation:pop .55s cubic-bezier(.2,.8,.3,1.3)}
   .done h3{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;margin-bottom:8px}.done p{color:var(--mist);font-size:14px;line-height:1.55;margin-bottom:22px}
-  .plan{margin:6px 0 16px;border-radius:20px;padding:20px;color:#fff;position:relative;overflow:hidden;box-shadow:0 12px 30px rgba(90,43,224,.28)}
+  .plan{margin:6px 0 16px;border-radius:20px;padding:20px;color:#fff;position:relative;overflow:hidden;box-shadow:0 12px 30px rgba(158,43,126,.28)}
   .plan::after{content:"";position:absolute;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.16),transparent 70%);top:-70px;right:-40px;pointer-events:none}
   .plan .p-lbl{font-size:12px;font-weight:600;opacity:.75;text-transform:uppercase;letter-spacing:.05em}.plan .p-big{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:22px;margin:4px 0 3px}.plan .p-sub{font-size:12.5px;opacity:.85}
   .cust{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:16px;box-shadow:var(--shadow)}
@@ -170,7 +170,7 @@
   .menu .svc{cursor:pointer}
   .nav{position:absolute;bottom:0;left:0;right:0;background:rgba(251,248,243,.94);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:flex;padding:8px 4px 12px;z-index:25}
   .navitem{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 1px;cursor:pointer;color:#A29BAD;font-size:9.5px;font-weight:600;transition:color .15s}.navitem.on{color:var(--violet)}
-  .navadd .plus{width:50px;height:50px;border-radius:16px;background:var(--violet);color:#fff;display:flex;align-items:center;justify-content:center;margin-top:-18px;box-shadow:0 8px 20px rgba(90,43,224,.4)}
+  .navadd .plus{width:50px;height:50px;border-radius:16px;background:var(--violet);color:#fff;display:flex;align-items:center;justify-content:center;margin-top:-18px;box-shadow:0 8px 20px rgba(158,43,126,.4)}
   .enter{animation:enter .3s ease}.fade{animation:fade .3s ease}
   @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
   @keyframes enter{from{opacity:0}to{opacity:1}}
@@ -208,7 +208,7 @@
 .plsub{display:flex;gap:6px;background:rgba(239,234,225,.72);border-radius:12px;padding:4px;margin:8px 20px 12px}
 .plseg{flex:1;text-align:center;padding:9px;border-radius:9px;font-size:13.5px;font-weight:600;color:var(--mist);cursor:pointer}
 .plseg.on{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
-.plnudge{margin:0 20px 12px;background:var(--violet-soft);color:#3f2b8c;border-radius:12px;padding:12px 14px;font-size:13.5px;line-height:1.45}
+.plnudge{margin:0 20px 12px;background:var(--violet-soft);color:#63204F;border-radius:12px;padding:12px 14px;font-size:13.5px;line-height:1.45}
 .plnudge.done{background:#E7F7F0;color:#0b7a54}
 .pldays{display:flex;gap:6px;overflow-x:auto;padding:0 20px 4px;scrollbar-width:none}
 .pldays::-webkit-scrollbar{display:none}
@@ -241,7 +241,7 @@
 .rtchips{display:flex;flex-wrap:wrap;gap:8px;padding:0 20px}
 .rtadd{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:8px 12px;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap}
 .rtadd:active{transform:scale(.97)}
-.rtsum{margin:12px 20px;background:var(--violet-soft);color:#3f2b8c;border-radius:12px;padding:12px 14px;font-size:14px}
+.rtsum{margin:12px 20px;background:var(--violet-soft);color:#63204F;border-radius:12px;padding:12px 14px;font-size:14px}
 .rtline{padding:0 20px}
 .rtstop{display:flex;align-items:center;gap:11px;padding:6px 0}
 .rtmark{width:26px;height:26px;border-radius:50%;background:var(--violet);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex:0 0 auto}
@@ -256,7 +256,7 @@
 .spon-name{font-weight:700;font-size:14.5px}
 .spon-blurb{font-size:12.5px;color:var(--mist);line-height:1.4;margin-top:2px}
 .spon-note{font-size:11px;color:#a5810f;margin-top:9px}
-.boostpill{font-size:10px;font-weight:800;color:#fff;background:linear-gradient(90deg,#7C3AED,#5A2BE0);padding:2px 7px;border-radius:999px;letter-spacing:.02em}
+.boostpill{font-size:10px;font-weight:800;color:#fff;background:linear-gradient(90deg,#C0429E,#9E2B7E);padding:2px 7px;border-radius:999px;letter-spacing:.02em}
 .lst{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px}
 .lst-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
 .lst-title{font-weight:700;font-size:14.5px;line-height:1.25}
@@ -367,7 +367,7 @@
 .obc-d{font-size:13px;color:var(--mist);line-height:1.45}
 .sub-price{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:44px;margin:6px 0}
 .sub-price span{font-size:18px;color:var(--mist);font-weight:600}
-.sub-note{background:var(--violet-soft);color:#3f2b8c;border-radius:12px;padding:12px 14px;font-size:12.5px;line-height:1.45;margin:14px 0}
+.sub-note{background:var(--violet-soft);color:#63204F;border-radius:12px;padding:12px 14px;font-size:12.5px;line-height:1.45;margin:14px 0}
 .mkt-by{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--mist);margin-top:7px}
 .mkt-avatar{width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;font-family:'Bricolage Grotesque',sans-serif}
 .up{cursor:pointer}
@@ -402,7 +402,7 @@
 .gp-compose{display:flex;gap:8px;margin-top:14px}
 .gp-compose input{flex:1;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-family:inherit;font-size:14px;outline:0;background:#fff}
 .gp-compose button{border:0;background:var(--violet);color:#fff;border-radius:12px;padding:0 16px;font-weight:700;font-family:inherit;cursor:pointer}
-.gp-joinprompt{margin-top:14px;background:var(--violet-soft);color:#3f2b8c;border-radius:12px;padding:12px 14px;font-size:13px;text-align:center}
+.gp-joinprompt{margin-top:14px;background:var(--violet-soft);color:#63204F;border-radius:12px;padding:12px 14px;font-size:13px;text-align:center}
 .gp-post{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;margin-bottom:9px}
 .gp-post-top{display:flex;align-items:center;gap:10px;margin-bottom:7px}
 .gp-author{font-weight:700;font-size:13.5px;cursor:pointer;color:var(--violet)}
@@ -424,7 +424,7 @@
 .up-av{width:88px;height:88px;border-radius:26px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:34px;background-position:center}
 .up-name{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:22px}
 .up-sub{font-size:13px;color:var(--violet);font-weight:600;margin-top:4px}
-.up-mutual{margin-top:12px;background:var(--violet-soft);color:#3f2b8c;border-radius:12px;padding:11px 14px;font-size:13px;line-height:1.4}
+.up-mutual{margin-top:12px;background:var(--violet-soft);color:#63204F;border-radius:12px;padding:11px 14px;font-size:13px;line-height:1.4}
 .up-chips{display:flex;flex-wrap:wrap;gap:8px}
 .up-chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:8px 13px;font-size:12.5px;font-weight:600;cursor:pointer}
 .up-listing{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:13px;padding:11px 13px;margin-bottom:8px}
@@ -436,8 +436,8 @@
 .rdot.pop{animation:hatpop .5s cubic-bezier(.2,.8,.3,1.4)}
 @keyframes hatpop{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
 .lbrow{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 15px;margin-bottom:9px;box-shadow:var(--shadow)}
-.ceopill{font-size:10px;font-weight:800;color:#4a2ab5;background:#EDE7FF;padding:2px 7px;border-radius:999px;letter-spacing:.02em;white-space:nowrap}
-.vendorpill{font-size:10px;font-weight:800;color:#5A2BE0;background:#EFE9FF;padding:2px 7px;border-radius:999px;letter-spacing:.02em;white-space:nowrap}
+.ceopill{font-size:10px;font-weight:800;color:#7A1F5F;background:#EDE7FF;padding:2px 7px;border-radius:999px;letter-spacing:.02em;white-space:nowrap}
+.vendorpill{font-size:10px;font-weight:800;color:#9E2B7E;background:#EFE9FF;padding:2px 7px;border-radius:999px;letter-spacing:.02em;white-space:nowrap}
 .dealpill{font-size:10px;font-weight:800;color:#B4262A;background:#FDE8E8;padding:2px 7px;border-radius:999px;white-space:nowrap}
 .soonpill{font-size:10px;font-weight:800;color:#8A5A00;background:#FFF0D6;padding:2px 7px;border-radius:999px;white-space:nowrap}
 .commpill{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;color:var(--ink);background:var(--line);padding:3px 9px;border-radius:999px;white-space:nowrap}
@@ -518,7 +518,7 @@
   padding:5px 10px!important;border-radius:100px;line-height:1;box-shadow:0 1px 2px rgba(20,16,28,.10)}
 .store-badges .dealpill,.store-badges .soonpill{background:linear-gradient(180deg,#FFE9B8,#FBD27E)!important;color:#7A4A05!important}
 .store-badges .founderpill{background:linear-gradient(180deg,#7E2338,#5E152A)!important;color:#FFE7EE!important}
-.store-badges .vendorpill{background:linear-gradient(180deg,#EFE7FF,#DED0FF)!important;color:#4A22B8!important}
+.store-badges .vendorpill{background:linear-gradient(180deg,#EFE7FF,#DED0FF)!important;color:#7A1F5F!important}
 .store-badges .licpill,.store-badges .foodpill{background:linear-gradient(180deg,#D8F5E9,#B5E9D5)!important;color:#0A6E50!important}
 .store-badges .ceopill{background:linear-gradient(180deg,#22202C,#131118)!important;color:#FFD98A!important}
 
@@ -544,7 +544,7 @@
   backdrop-filter:blur(4px) saturate(1.1);-webkit-backdrop-filter:blur(4px) saturate(1.1)}
 .store-badges .dealpill,.store-badges .soonpill{color:#9A6108!important;background:rgba(251,210,126,.16)!important;border:1px solid rgba(154,97,8,.32)!important}
 .store-badges .founderpill{color:#7E2338!important;background:rgba(126,35,56,.09)!important;border:1px solid rgba(126,35,56,.30)!important}
-.store-badges .vendorpill{color:#4A22B8!important;background:rgba(74,34,184,.08)!important;border:1px solid rgba(74,34,184,.28)!important}
+.store-badges .vendorpill{color:#7A1F5F!important;background:rgba(74,34,184,.08)!important;border:1px solid rgba(74,34,184,.28)!important}
 .store-badges .licpill,.store-badges .foodpill{color:#0A6E50!important;background:rgba(10,110,80,.08)!important;border:1px solid rgba(10,110,80,.28)!important}
 .store-badges .ceopill{color:#8A6A10!important;background:rgba(138,106,16,.10)!important;border:1px solid rgba(138,106,16,.30)!important}
 
@@ -571,8 +571,8 @@
   </nav>
 </div>
 <script>
-const COLORS=['#5A2BE0','#FF5C8A','#0E9F6E','#F0873B','#2563EB','#C026D3','#0891B2','#E11D48','#7C3AED','#059669','#DB2777','#0D9488'];
-const THEME_COLORS=['#5A2BE0','#1D3A8A','#0E9F6E','#F0873B','#E11D48','#C026D3','#0891B2'];
+const COLORS=['#9E2B7E','#FF5C8A','#0E9F6E','#F0873B','#2563EB','#C026D3','#0891B2','#E11D48','#C0429E','#059669','#DB2777','#0D9488'];
+const THEME_COLORS=['#9E2B7E','#1D3A8A','#0E9F6E','#F0873B','#E11D48','#C026D3','#0891B2'];
 const CAMPUSES=[
  {id:'fvsu',name:'Fort Valley State University',short:'Fort Valley State',domain:'fvsu.edu',mascot:'Wildcats',lat:32.54,lng:-83.89},
  {id:'spelman',name:'Spelman College',short:'Spelman',domain:'spelman.edu',mascot:'Jaguars',lat:33.75,lng:-84.41},
@@ -598,9 +598,9 @@ function wmk(){var c=state.campus||CAMPUSES[0];return (c.short+' 🐾 '+c.mascot
 function payPh(app){if(app==='Apple Pay'||app==='Google Pay')return 'phone number (e.g. 555-123-4567)';if(app==='Zelle')return 'phone or email';if(app==='Cash App')return '$cashtag';if(app==='Venmo')return '@handle';if(app==='PayPal')return 'paypal.me handle';return 'handle or link';}
 function openCampusPick(){state.campusPick=true;render();}
 /* ===== Universal campuses: any .edu, real school names, per-campus theming ===== */
-function campusAccent(){return (state.campus&&state.campus.accent)||'#5A2BE0';}
+function campusAccent(){return (state.campus&&state.campus.accent)||'#9E2B7E';}
 function applyCampusTheme(){try{document.documentElement.style.setProperty('--campus-accent',campusAccent());document.documentElement.style.setProperty('--school-a',campusAccent());}catch(e){}}
-function makeCampus(c){var base=CAMPUSES[0];return {id:base.id,domain:c.domain,name:c.display_name,short:c.display_name,mascot:c.mascot||'',accent:c.accent_color||'#5A2BE0',dynamic:true,lat:c.lat||0,lng:c.lng||0};}
+function makeCampus(c){var base=CAMPUSES[0];return {id:base.id,domain:c.domain,name:c.display_name,short:c.display_name,mascot:c.mascot||'',accent:c.accent_color||'#9E2B7E',dynamic:true,lat:c.lat||0,lng:c.lng||0};}
 var CAMPUS_PREF_KEY='vendu_beta_campus_v1';
 function saveCampusPref(){try{var c=state.campus;if(!c)return;localStorage.setItem(CAMPUS_PREF_KEY,JSON.stringify({id:c.dynamic?'':c.id,domain:c.domain||'',name:c.name||''}));}catch(e){}}
 function restoreCampusPref(){try{var p=JSON.parse(localStorage.getItem(CAMPUS_PREF_KEY)||'null');if(!p)return;if(p.id){var k=campusById(p.id);if(k){state.campus=k;applyCampusTheme();loadCampusEvents();return;}}if(p.domain){var known=campusByDomain(p.domain);if(known){state.campus=known;applyCampusTheme();loadCampusEvents();return;}state.campus=makeCampus({domain:p.domain,display_name:p.name||p.domain,accent_color:''});applyCampusTheme();joinCampus(p.domain,p.name?{display_name:p.name}:null);}}catch(e){}}
@@ -727,7 +727,7 @@ const HUSTLES=[
   {id:11,name:'Paws by Val',init:'V',cat:'Other',v:1,lic:0,dist:1.4,offer:'Dog grooming & walking for campus pet parents.',price:'$20–45',rating:'4.9',reviews:16,jobs:38,since:'2024',c:10,pays:['Cash App','Venmo'],bio:"Animal-science major who loves dogs. Gentle with nervous pups.",services:[['Bath & brush','$25'],['Nail trim','$12'],['30-min walk','$15']]},
   {id:12,name:'Styled by Ken',init:'K',cat:'Other',v:1,lic:0,dist:0.8,offer:'Personal styling & closet edits for interviews, dates & photos.',price:'$30–70',rating:'4.8',reviews:12,jobs:24,since:'2024',c:11,pays:['Cash App','PayPal'],bio:"Fashion-merch major. I shop your closet first, then fill the gaps on a budget.",services:[['Closet edit','$30'],['Interview look','$45'],['Full styling','$70']]},
 ];
-const SEEDPICS={2:[pic('#5b6cff','#8a5bf0','💈','Fresh fade'),pic('#1d3a8a','#0891b2','✂️','Line-up'),pic('#232b39','#5a2be0','🧔','Beard trim')],3:[pic('#c026d3','#e11d48','💇🏾','Knotless'),pic('#7c3aed','#c026d3','👑','Cornrows'),pic('#e11d48','#f0873b','🌀','Twists')],5:[pic('#0e9f6e','#0891b2','📸','Grad shoot'),pic('#5a2be0','#2563eb','🎓','Portraits'),pic('#f0873b','#e11d48','🌅','Golden hour')],7:[pic('#e11d48','#c026d3','💅','Custom set'),pic('#f0873b','#e11d48','✨','Coffin'),pic('#5a2be0','#c026d3','🎨','Nail art')],10:[pic('#f0873b','#e11d48','🧁','Cupcakes'),pic('#0e9f6e','#0891b2','🍰','Cake jars'),pic('#c026d3','#7c3aed','🎂','Custom cake')]};
+const SEEDPICS={2:[pic('#5b6cff','#C86BB6','💈','Fresh fade'),pic('#1d3a8a','#0891b2','✂️','Line-up'),pic('#232b39','#9E2B7E','🧔','Beard trim')],3:[pic('#c026d3','#e11d48','💇🏾','Knotless'),pic('#C0429E','#c026d3','👑','Cornrows'),pic('#e11d48','#f0873b','🌀','Twists')],5:[pic('#0e9f6e','#0891b2','📸','Grad shoot'),pic('#9E2B7E','#2563eb','🎓','Portraits'),pic('#f0873b','#e11d48','🌅','Golden hour')],7:[pic('#e11d48','#c026d3','💅','Custom set'),pic('#f0873b','#e11d48','✨','Coffin'),pic('#9E2B7E','#c026d3','🎨','Nail art')],10:[pic('#f0873b','#e11d48','🧁','Cupcakes'),pic('#0e9f6e','#0891b2','🍰','Cake jars'),pic('#c026d3','#C0429E','🎂','Custom cake')]};
 HUSTLES.forEach(h=>{if(SEEDPICS[h.id])h.gallery=SEEDPICS[h.id];});var _b4=HUSTLES.find(h=>h.id===4);if(_b4)_b4.bm=2;var _b5=HUSTLES.find(h=>h.id===5);if(_b5){_b5.bm=1;_b5.link='calendly.com/shotbytay';}HUSTLES.forEach(function(h){var fn=(h.name.split(' ')[0]||'vendor').replace(/[^a-z]/gi,'').toLowerCase()||'vendor';h.pays=h.pays.map(function(p){if(typeof p!=='string')return p;var hh=p==='Cash App'?'$'+fn:(p==='Venmo'?'@'+fn:(p==='PayPal'?fn:'@'+fn));return {app:p,handle:hh};});});HUSTLES.forEach(function(h){if(!h.campus)h.campus='fvsu';});HUSTLES.push({id:21,name:'Slays by Simone',init:'S',cat:'Beauty',v:1,lic:1,dist:0.3,offer:'Makeup & lashes for events, shoots, and date nights.',price:'$40–90',rating:'5.0',reviews:22,jobs:60,since:'2024',c:5,pays:['Cash App','Venmo'],bio:'Booking glam for the whole yard. DM to lock your slot.',services:[['Soft glam','$45'],['Full glam','$70'],['Lash add-on','$20']],campus:'spelman'});HUSTLES.push({id:22,name:'Tutor Tori',init:'T',cat:'Tutoring',v:1,lic:0,dist:0.6,offer:'Bio, Chem & MCAT prep — group rates available.',price:'$25/hr',rating:'4.9',reviews:14,jobs:33,since:'2023',c:4,pays:['Venmo','Zelle'],bio:'Pre-med junior tutoring the sciences.',services:[['1-on-1 hour','$25'],['MCAT session','$40']],campus:'spelman'});var _rp=[['Alex R.',5,'Super reliable and easy to work with.'],['Jaz T.',5,'Highly recommend — great value.'],['Sam K.',4,'Solid experience, would book again.'],['Kay B.',5,'On time and professional.'],['Dev M.',5,'Exactly what I needed. Fast too.']];HUSTLES.forEach(function(h){if(!REVIEWS[h.id])REVIEWS[h.id]=[_rp[h.id%_rp.length]];});
 const FEED=[
   {id:1,s:2,promo:'20% OFF',when:'2h ago',text:"Finals week fade specials 💈 20% off all cuts through Friday. Text me to grab a slot before they're gone!",likes:34,liked:false,comments:[['Deon','bet, booking now']]},
@@ -765,7 +765,7 @@ function markBooked(id,svc){if(hasBooked(id))return;state.booked.push(id);saveBo
 try{if(window.VendU)VendU.consumeMagicLink();}catch(e){}
 var VERIFY_ERR='';try{if(/[?&]verify=expired/.test(location.search)){VERIFY_ERR='That link expired or was already used. Send yourself a new one.';history.replaceState(null,'',location.pathname);}if(location.hash==='#verified')history.replaceState(null,'',location.pathname);}catch(e){}
 var VERIFIED=!!(window.VendU&&VendU.student());
-let state={eduEmail:'',eduCodeSent:false,eduErr:VERIFY_ERR,tab:'home',home:'feed',cat:'All',q:'',near:false,mkt:'goods',formCat:'Food',foodType:'baked',eduOK:false,a1:false,a2:false,a3:false,submitted:false,avatar:'',gallery:[],themeColor:'#5A2BE0',book:null,openC:0,detail:0,isSeller:true,events:[],about:"Tell buyers about your storefront — what you make or do, your vibe, and how to work with you.",services:[],referrals:0,isFounder:false,addMode:null,svcEdit:false,newPhoto:null,reviewOpen:false,reviewStars:5,booked:[],leaderboard:false,storefrontSetup:false,avail:false,cheap:false,top:false,justReferred:-1,msgTo:0,openMC:0,bookSet:false,booking:{mode:'builtin',link:'',provider:'Calendly',days:{Mon:true,Tue:true,Wed:true,Thu:true,Fri:true,Sat:true,Sun:false},open:'09:00',close:'18:00',blackouts:[]},onboarded:false,tester:false,isCEO:false,isRealStudent:false,acctEmail:'',tourActive:false,userType:null,obStep:0,subscribed:false,subPrompt:false,eduDone:false,agree1:false,agree2:false,agree3:false,cardName:'',cardNum:'',cardExp:'',cardCvc:'',vname:'',bookMethod:0,pays:[],socials:[],saved:[],savedView:false,campus:campusById('fvsu'),campusPick:false,campusQ:'',hubView:'resources',openRes:-1,joinedOrgs:[],joinedGroups:[],intros:[],introText:'',classes:[{id:'c1',name:'BIOL 101',days:['Mon','Wed','Fri'],start:'09:00',end:'09:50',loc:'Founders Hall 204',c:0},{id:'c2',name:'MATH 241',days:['Tue','Thu'],start:'11:00',end:'12:15',loc:'Science Bldg 110',c:2},{id:'c3',name:'ENG 102',days:['Mon','Wed'],start:'14:00',end:'15:15',loc:'Humanities 3',c:4}],todos:[{id:'t1',text:'Finish BIOL lab report',done:false,due:'Today'},{id:'t2',text:'Email advisor about fall registration',done:false,due:'Tomorrow'},{id:'t3',text:'Read Chapter 5 for ENG',done:true,due:'None'}],plannerSub:'schedule',plannerDay:'',classForm:null,todoText:'',todoDue:'None',route:{stops:[],mode:'walk'},promo:{type:'none',pct:'20',ends:''},moreMenu:false,boosted:false,appTheme:'violet',themeView:false,myPostsView:false,thread:0,inboxView:false,joinedComm:[],groupView:null,userView:null,groupCreateView:false,assignMod:false,createGroup:null,groupPostText:'',gradYear:'',inbox:[{id:'ths1',name:'Fades by Marcus',init:'M',color:'#F0873B',unread:1,msgs:[['Fades by Marcus','Appreciate the booking! You want the usual taper this time? ✂️']]},{id:'ths2',name:'Tutor Tori',init:'T',color:'#C026D3',unread:0,msgs:[['You','Hey! Free to help with calc this week?'],['Tutor Tori','Yes! Thursday after 4 works 📚']]}]};
+let state={eduEmail:'',eduCodeSent:false,eduErr:VERIFY_ERR,tab:'home',home:'feed',cat:'All',q:'',near:false,mkt:'goods',formCat:'Food',foodType:'baked',eduOK:false,a1:false,a2:false,a3:false,submitted:false,avatar:'',gallery:[],themeColor:'#9E2B7E',book:null,openC:0,detail:0,isSeller:true,events:[],about:"Tell buyers about your storefront — what you make or do, your vibe, and how to work with you.",services:[],referrals:0,isFounder:false,addMode:null,svcEdit:false,newPhoto:null,reviewOpen:false,reviewStars:5,booked:[],leaderboard:false,storefrontSetup:false,avail:false,cheap:false,top:false,justReferred:-1,msgTo:0,openMC:0,bookSet:false,booking:{mode:'builtin',link:'',provider:'Calendly',days:{Mon:true,Tue:true,Wed:true,Thu:true,Fri:true,Sat:true,Sun:false},open:'09:00',close:'18:00',blackouts:[]},onboarded:false,tester:false,isCEO:false,isRealStudent:false,acctEmail:'',tourActive:false,userType:null,obStep:0,subscribed:false,subPrompt:false,eduDone:false,agree1:false,agree2:false,agree3:false,cardName:'',cardNum:'',cardExp:'',cardCvc:'',vname:'',bookMethod:0,pays:[],socials:[],saved:[],savedView:false,campus:campusById('fvsu'),campusPick:false,campusQ:'',hubView:'resources',openRes:-1,joinedOrgs:[],joinedGroups:[],intros:[],introText:'',classes:[{id:'c1',name:'BIOL 101',days:['Mon','Wed','Fri'],start:'09:00',end:'09:50',loc:'Founders Hall 204',c:0},{id:'c2',name:'MATH 241',days:['Tue','Thu'],start:'11:00',end:'12:15',loc:'Science Bldg 110',c:2},{id:'c3',name:'ENG 102',days:['Mon','Wed'],start:'14:00',end:'15:15',loc:'Humanities 3',c:4}],todos:[{id:'t1',text:'Finish BIOL lab report',done:false,due:'Today'},{id:'t2',text:'Email advisor about fall registration',done:false,due:'Tomorrow'},{id:'t3',text:'Read Chapter 5 for ENG',done:true,due:'None'}],plannerSub:'schedule',plannerDay:'',classForm:null,todoText:'',todoDue:'None',route:{stops:[],mode:'walk'},promo:{type:'none',pct:'20',ends:''},moreMenu:false,boosted:false,appTheme:'violet',themeView:false,myPostsView:false,thread:0,inboxView:false,joinedComm:[],groupView:null,userView:null,groupCreateView:false,assignMod:false,createGroup:null,groupPostText:'',gradYear:'',inbox:[{id:'ths1',name:'Fades by Marcus',init:'M',color:'#F0873B',unread:1,msgs:[['Fades by Marcus','Appreciate the booking! You want the usual taper this time? ✂️']]},{id:'ths2',name:'Tutor Tori',init:'T',color:'#C026D3',unread:0,msgs:[['You','Hey! Free to help with calc this week?'],['Tutor Tori','Yes! Thursday after 4 works 📚']]}]};
 const screen=document.getElementById('screen'),photo=document.getElementById('photo'),gphoto=document.getElementById('gphoto'),ephoto=document.getElementById('ephoto'),cphoto=document.getElementById('cphoto');
 const color=i=>COLORS[i%COLORS.length];
 const bg=h=>h.me?state.themeColor:color(h.c);
@@ -984,7 +984,7 @@ function notifyBooking(h,b){
   try{
     var when=b.date+' \u00b7 '+b.time;
     var th=(state.inbox||[]).filter(function(t){return t.name===h.name;})[0];
-    if(!th){th={id:'th'+(idc++),name:h.name,init:(h.name.trim()[0]||'?').toUpperCase(),color:'#5A2BE0',unread:0,msgs:[]};state.inbox.unshift(th);}
+    if(!th){th={id:'th'+(idc++),name:h.name,init:(h.name.trim()[0]||'?').toUpperCase(),color:'#9E2B7E',unread:0,msgs:[]};state.inbox.unshift(th);}
     th.msgs.push(['You','\uD83D\uDCC5 Booking request: '+b.svc+' \u2014 '+when]);
     th.msgs.push([h.name,'Confirmed! '+b.svc+' on '+when+'. You\u2019ll get a reminder 1 hour before \u23F0']);
     th.unread=(th.unread||0)+1;
@@ -1061,7 +1061,7 @@ function market(){
     <div class="campus-wrap"><div class="campus-bg">${wmk()}</div><div class="campus-content">
     <div class="hubseg" style="padding-top:2px">${[['goods','Buy & Trade'],['requests','Requests']].map(x=>`<div class="hchip ${state.mkt===x[0]?'on':''}" data-mkt="${x[0]}">${x[1]}</div>`).join('')}</div>
     ${state.mkt==='housing'?housingHTML():state.mkt==='jobs'?jobsHTML():goods?`<div class="list" style="padding-top:16px">${GOODS.map((g,i)=>g.campus!==state.campus.id?'':`<div class="card" style="display:block;animation-delay:${i*40}ms"><div style="display:flex;gap:13px"><div style="width:78px;height:78px;border-radius:14px;overflow:hidden;background:${color(g.c)}22;display:flex;align-items:center;justify-content:center;font-size:32px;flex:none">${g.img?`<img src="${g.img}" style="width:100%;height:100%;object-fit:cover">`:g.emoji}</div><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:15px;line-height:1.2">${g.name}</div><div style="font-family:Bricolage Grotesque;font-weight:700;font-size:16px;margin-top:2px">${g.price}</div><div style="font-size:11.5px;font-weight:600;color:var(--mist);margin-top:1px">${g.tag}${g.sold?' · <span style="color:#E11D48;font-weight:800">SOLD</span>':''}</div><div class="mkt-by"><span class="mkt-avatar" style="background:${color(g.bc||0)}">${g.bi||'?'}</span><span class="gp-author" data-user="${g.by||'Student'}␟${g.bi||'?'}␟${g.bc||0}" style="cursor:pointer">${g.by||'Student'}</span></div></div></div>${acts(g)}${state.openMC===g.id?panel(g,g.by||'the seller'):''}</div>`).join('')}</div>`
-    :`<div class="list" style="padding-top:16px">${REQUESTS.map((r,i)=>r.campus!==state.campus.id?'':`<div class="card" style="display:block;animation-delay:${i*40}ms"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div class="avatar" style="width:34px;height:34px;font-size:14px;border-radius:10px;background:${r.uc||color(r.c)}">${r.in}</div><div class="gp-author" data-user="${r.who}␟${r.in}␟${r.c||0}" style="font-weight:700;font-size:14px;cursor:pointer">${r.who}</div><div style="margin-left:auto;font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px;${r.barter?'background:#FFF0E0;color:#a5600f':'background:var(--violet-soft);color:#3f2b8c'}">${r.barter?'Barter':'Looking for'}</div></div><div style="font-size:14px;color:#40384c;line-height:1.4">${r.txt}</div>${acts(r)}${state.openMC===r.id?panel(r,r.who):''}</div>`).join('')}</div>`}
+    :`<div class="list" style="padding-top:16px">${REQUESTS.map((r,i)=>r.campus!==state.campus.id?'':`<div class="card" style="display:block;animation-delay:${i*40}ms"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div class="avatar" style="width:34px;height:34px;font-size:14px;border-radius:10px;background:${r.uc||color(r.c)}">${r.in}</div><div class="gp-author" data-user="${r.who}␟${r.in}␟${r.c||0}" style="font-weight:700;font-size:14px;cursor:pointer">${r.who}</div><div style="margin-left:auto;font-size:11px;font-weight:700;padding:3px 9px;border-radius:100px;${r.barter?'background:#FFF0E0;color:#a5600f':'background:var(--violet-soft);color:#63204F'}">${r.barter?'Barter':'Looking for'}</div></div><div style="font-size:14px;color:#40384c;line-height:1.4">${r.txt}</div>${acts(r)}${state.openMC===r.id?panel(r,r.who):''}</div>`).join('')}</div>`}
     </div></div>`;
   screen.querySelectorAll('[data-mkt]').forEach(el=>el.onclick=()=>{state.mkt=el.dataset.mkt;state.openMC=0;market();});conveyorHint(screen.querySelector('.hubseg'),'market');
   var _ph=document.getElementById('postHousing');if(_ph)_ph.onclick=()=>toast('Paid housing listings arrive in the full build 🏠');
@@ -1614,7 +1614,7 @@ function bookingSettings(){
   document.getElementById('bsave').onclick=()=>{state.bookSet=false;toast('Availability saved ✓');render();};
 }
 
-function demoSkip(){state.eduDone=true;state.onboarded=true;state.userType='vendor';state.isSeller=true;state.subscribed=true;state.agree1=true;state.agree2=true;state.agree3=true;state.formCat='Beauty';if(!state.services.length)state.services=[['Signature service','$25'],['Add-on','$10']];if(!state.gallery.length)state.gallery=[pic('#5a2be0','#8a5bf0','\u2728','Your work'),pic('#0e9f6e','#0891b2','\ud83d\udcf7','Your work'),pic('#c026d3','#e11d48','\ud83c\udfa8','Your work')];if(!state.socials.length)state.socials=[{type:'Instagram',url:'instagram.com/you'},{type:'TikTok',url:'tiktok.com/@you'}];if(!state.pays.length)state.pays=[{app:'Cash App',handle:'$you'},{app:'Venmo',handle:'@you'}];state.tab='home';state.tester=true;state.isCEO=false;state.isRealStudent=false;if(typeof refreshDemo==='function')refreshDemo();render();if(window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour(false);},350);}
+function demoSkip(){state.eduDone=true;state.onboarded=true;state.userType='vendor';state.isSeller=true;state.subscribed=true;state.agree1=true;state.agree2=true;state.agree3=true;state.formCat='Beauty';if(!state.services.length)state.services=[['Signature service','$25'],['Add-on','$10']];if(!state.gallery.length)state.gallery=[pic('#9E2B7E','#C86BB6','\u2728','Your work'),pic('#0e9f6e','#0891b2','\ud83d\udcf7','Your work'),pic('#c026d3','#e11d48','\ud83c\udfa8','Your work')];if(!state.socials.length)state.socials=[{type:'Instagram',url:'instagram.com/you'},{type:'TikTok',url:'tiktok.com/@you'}];if(!state.pays.length)state.pays=[{app:'Cash App',handle:'$you'},{app:'Venmo',handle:'@you'}];state.tab='home';state.tester=true;state.isCEO=false;state.isRealStudent=false;if(typeof refreshDemo==='function')refreshDemo();render();if(window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour(false);},350);}
 function finishOnboarding(){state.onboarded=true;state.tab='home';state.obStep=0;try{document.querySelectorAll('#nav .navitem').forEach(function(n){n.classList.toggle('on',n.dataset.tab==='home');});}catch(e){}render();}
 function onboarding(){
   /* Already verified (e.g. returning from the emailed sign-in link): drop straight
@@ -1623,14 +1623,14 @@ function onboarding(){
   const s=state.obStep;
   if(s===0){screen.innerHTML=`<div class="ob">
     <div class="ob-top"><div class="ob-dots"><span class="obd on"></span><span class="obd"></span><span class="obd"></span></div></div>
-    <div class="ob-body"><img src="/icons/icon-192.png" alt="VendU app icon" width="92" height="92" style="border-radius:22px;box-shadow:0 10px 26px rgba(90,43,224,.28);margin-bottom:26px"><div class="ob-title">Welcome to <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WM}</span></div><div class="ob-text">Your campus marketplace \u2014 find & book student services, buy, sell & trade. Always free.</div></div>
+    <div class="ob-body"><img src="/icons/icon-192.png" alt="VendU app icon" width="92" height="92" style="border-radius:22px;box-shadow:0 10px 26px rgba(158,43,126,.28);margin-bottom:26px"><div class="ob-title">Welcome to <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WM}</span></div><div class="ob-text">Your campus marketplace \u2014 find & book student services, buy, sell & trade. Always free.</div></div>
     <button class="ob-btn" id="obnext">Get started</button><button class="ob-back" id="obskip">I\u2019m a tester \u2014 skip \u2192</button></div>`;
     document.getElementById('obnext').onclick=()=>{state.obStep=1;render();};
     var _sk0=document.getElementById('obskip');if(_sk0)_sk0.onclick=()=>demoSkip();
     return;}
   if(s===1){screen.innerHTML=`<div class="ob">
     <div class="ob-top"><div class="ob-dots"><span class="obd on"></span><span class="obd on"></span><span class="obd"></span></div></div>
-    <div class="ob-body" style="justify-content:flex-start;padding-top:24px"><img src="/icons/icon-192.png" alt="VendU logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(90,43,224,.26);margin-bottom:14px"><div class="ob-title" style="margin-bottom:6px">How will you use <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WM}</span>?</div><div class="ob-text" style="margin-bottom:24px">Everyone gets a free account. Becoming a vendor is completely optional \u2014 you can switch it on or off anytime.</div>
+    <div class="ob-body" style="justify-content:flex-start;padding-top:24px"><img src="/icons/icon-192.png" alt="VendU logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(158,43,126,.26);margin-bottom:14px"><div class="ob-title" style="margin-bottom:6px">How will you use <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WM}</span>?</div><div class="ob-text" style="margin-bottom:24px">Everyone gets a free account. Becoming a vendor is completely optional \u2014 you can switch it on or off anytime.</div>
       <div class="ob-choice" data-ut="regular"><div class="obc-em">\u{1F64B}\u{1F3FF}\u200D\u2640\uFE0F</div><div><div class="obc-t">Just browsing</div><div class="obc-d">Book vendors, buy, sell & barter items, message & comment. Always free.</div></div></div>
       <div class="ob-choice" data-ut="vendor"><div class="obc-em">\u{1F6CD}\uFE0F</div><div><div class="obc-t">I\u2019m a vendor</div><div class="obc-d">I offer a service and want a storefront with services, bookings & payments. Free \u2014 optional, and you can turn it off anytime.</div></div></div>
     </div><button class="ob-back" id="obback1">\u2039 Back</button></div>`;
@@ -1643,7 +1643,7 @@ function onboarding(){
     const err=state.eduErr?`<div class="edu-err">${state.eduErr}</div>`:'';
     screen.innerHTML=`<div class="ob">
     <div class="ob-top"><div class="ob-dots"><span class="obd on"></span><span class="obd on"></span><span class="obd on"></span></div></div>
-    <div class="ob-body"><img src="/icons/icon-192.png" alt="VendU logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(90,43,224,.26);margin-bottom:14px"><div class="ob-title">${sent?'Check your email':'Verify your school email'}</div>
+    <div class="ob-body"><img src="/icons/icon-192.png" alt="VendU logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(158,43,126,.26);margin-bottom:14px"><div class="ob-title">${sent?'Check your email':'Verify your school email'}</div>
     <div class="ob-text" style="margin-bottom:20px">${sent?('We emailed a secure sign-in link to <b>'+state.eduEmail+'</b>. Open it and VendU unlocks automatically.'):'VendU is students-only. Enter your college <b>.edu</b> email \u2014 any school works \u2014 and we\u2019ll email you a sign-in link. Your campus feed is set from this address.'}</div>
     ${sent?`<div class="edu-note" style="max-width:330px;font-size:14px">Open the email from VendU and tap <b>Verify Email</b>. This page unlocks as soon as you do.</div>${err}<div class="edu-note" style="margin-top:16px">Waiting for you to tap the link\u2026 this screen unlocks by itself.</div><div class="edu-note">Didn\u2019t get it? Check your spam folder, then <span id="eduResend" style="color:var(--violet);font-weight:700;cursor:pointer">resend the link</span> \u00b7 <span id="eduEdit" style="cursor:pointer;text-decoration:underline">use a different email</span></div>`:`<div class="edu-row" style="width:100%;max-width:330px"><input id="eduIn" type="email" inputmode="email" autocomplete="email" value="${state.eduEmail||''}" placeholder="you@yourschool.edu" style="flex:1;border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-family:inherit;font-size:15px;outline:0;background:#fff"><button class="verify-btn" id="eduBtn">Send link</button></div>${err}<div class="ob-text" style="margin:22px 0 9px;font-weight:600;color:var(--ink)">Expected graduation year</div><div class="pldays" style="justify-content:center;padding:0">${['2025','2026','2027','2028','2029'].map(y=>`<div class="plday ${state.gradYear===y?'on':''}" data-gradyear="${y}">\u2019${y.slice(2)}</div>`).join('')}</div><div class="edu-note">Any college works \u2014 we only use your school email to confirm you\u2019re a student and to show you your campus. No spam, ever.</div>`}
     </div>
@@ -1793,7 +1793,7 @@ function pickNearest(){
   catch(e){useLocal(32.84,-83.63);}
 }
 const APP_THEMES=[
- {id:'violet',name:'Violet \u2014 Creative',primary:'#5A2BE0',dark:'#3d1c99',soft:'#EFE8FF',accent:'#FFB020',desc:'Energetic and youthful. Signals creativity and community \u2014 the current VendU look.'},
+ {id:'violet',name:'Violet \u2014 Creative',primary:'#9E2B7E',dark:'#6B1B54',soft:'#EFE8FF',accent:'#FFB020',desc:'Energetic and youthful. Signals creativity and community \u2014 the current VendU look.'},
  {id:'navy',name:'Navy \u2014 Trust',primary:'#1D3A8A',dark:'#132456',soft:'#E6ECFA',accent:'#F5C518',desc:'Calm and credible. Navy reads as trustworthy and established \u2014 think banks and universities.'},
  {id:'emerald',name:'Emerald \u2014 Growth',primary:'#0E7C5A',dark:'#08503b',soft:'#E3F5EE',accent:'#F0873B',desc:'Fresh and grounded. Green signals growth, money, and momentum for student founders.'}
 ];
@@ -1810,7 +1810,7 @@ function openInbox(){state.thread=0;state.inboxView=true;render();}
 function openThread(name,init,color){
   name=name||'a seller';
   var th=state.inbox.filter(function(t){return t.name===name;})[0];
-  if(!th){th={id:'th'+(idc++),name:name,init:(init||name.trim()[0]||'?').toUpperCase(),color:color||'#5A2BE0',unread:0,msgs:[[name,'Hey! Thanks for reaching out 👋 What can I do for you?']]};state.inbox.unshift(th);}
+  if(!th){th={id:'th'+(idc++),name:name,init:(init||name.trim()[0]||'?').toUpperCase(),color:color||'#9E2B7E',unread:0,msgs:[[name,'Hey! Thanks for reaching out 👋 What can I do for you?']]};state.inbox.unshift(th);}
   th.unread=0;state.thread=th.id;state.inboxView=true;state.userView=null;render();
 }
 function inboxScreen(){
@@ -1892,7 +1892,7 @@ function showInstall(){
       :'On desktop: click the install icon in your browser\u2019s address bar, or use the browser menu \u2192 \u201CInstall VendU\u201D.');
   var w=document.createElement('div');
   w.style.cssText='position:fixed;inset:0;background:rgba(15,12,30,.55);display:flex;align-items:flex-end;justify-content:center;z-index:9999';
-  w.innerHTML='<div style="background:var(--paper,#FBF8F3);border-radius:20px 20px 0 0;padding:22px 20px 26px;max-width:520px;width:100%"><div style="font-size:19px;font-weight:800;margin-bottom:6px">\uD83D\uDCF2 Install VendU</div><div style="font-size:14px;line-height:1.5;color:#5d5870">'+msg+'</div><button style="margin-top:16px;width:100%;padding:13px;border:0;border-radius:12px;background:#5A2BE0;color:#fff;font-weight:700;font-size:15px">Got it</button></div>';
+  w.innerHTML='<div style="background:var(--paper,#FBF8F3);border-radius:20px 20px 0 0;padding:22px 20px 26px;max-width:520px;width:100%"><div style="font-size:19px;font-weight:800;margin-bottom:6px">\uD83D\uDCF2 Install VendU</div><div style="font-size:14px;line-height:1.5;color:#5d5870">'+msg+'</div><button style="margin-top:16px;width:100%;padding:13px;border:0;border-radius:12px;background:#9E2B7E;color:#fff;font-weight:700;font-size:15px">Got it</button></div>';
   w.onclick=function(e){if(e.target===w||e.target.tagName==='BUTTON')w.remove();};
   document.body.appendChild(w);
 }

@@ -104,12 +104,14 @@
         place: "below",
       },
       {
-        before: goFeed,
-        target: function () { return $(".p-name[data-open]") || $("[data-user]") || $(".p-name"); },
+        before: openThread,
+        target: function () { return $(".p-comment [data-user]") || $("[data-user]") || $(".p-name"); },
         title: "Like, comment & tap any name",
-        text: "Every post can be liked and commented on with the ♡ and 💬 icons. Names are tappable everywhere — tapping one opens that student's profile, badges and listings, where you can message them directly.",
-        doit: "Tap the student's name",
+        text: "Every post can be liked and commented on with the ♡ and 💬 icons. Names are tappable everywhere — even in the comments. Tapping one opens that student's profile, badges and listings, where you can message them directly. Close it with ‹ Back.",
+        doit: "Tap the commenter's name",
         click: true,
+        then: "#upBack",
+        thenDoit: "Now tap ‹ Back to close their profile",
         place: "below",
       },
       {
@@ -160,6 +162,8 @@
         target: function () { return $("#startsell") || $('[data-menu="setup"]') || $("#moretoggle"); },
         title: "Your profile & storefront",
         text: "Upload your photo and display name, use View my profile or View my VendU to see yourself as students do, and check 🏆 Leaderboard for the top vendors this month. Set up your storefront is where you link socials, add and resize photos, list services and prices, set a sale with an end date, and add Cash App, Venmo, Zelle or PayPal handles. Selling is optional — switching between Student and Vendor view keeps the same account.",
+        lock: true,
+        next: "Next",
         place: "above",
       },
       {
@@ -292,6 +296,7 @@
       boundEl = el;
       boundEvent = st.event || "click";
       onTargetClick = function () {
+        if (st.then) return waitThen(st);
         dir = 1;
         i++;
         cleanup();
@@ -309,6 +314,37 @@
 
   var boundTarget = null;
   var tick = null;
+
+  // Two-part step: after the first tap, wait for a second control (e.g. Back)
+  // to appear, re-highlight it, and only then advance.
+  function waitThen(st) {
+    if (boundEl && onTargetClick) boundEl.removeEventListener(boundEvent || "click", onTargetClick);
+    var tries = 0;
+    var poll = setInterval(function () {
+      var el2 = document.querySelector(st.then);
+      if (!el2) {
+        if (++tries > 40) clearInterval(poll);
+        return;
+      }
+      clearInterval(poll);
+      boundTarget = el2;
+      boundEl = el2;
+      boundEvent = "click";
+      if (card) {
+        var d = card.querySelector(".tour-do");
+        if (d && st.thenDoit) d.textContent = "👆 " + st.thenDoit;
+      }
+      onTargetClick = function () {
+        dir = 1;
+        i++;
+        cleanup();
+        setTimeout(show, 420);
+      };
+      el2.addEventListener("click", onTargetClick);
+      position();
+    }, 150);
+  }
+
   function position() {
     if (!ring || !card) return;
     // The app re-renders whole screens; re-resolve the highlight target if it

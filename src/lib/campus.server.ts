@@ -66,7 +66,7 @@ export function searchSchools(query: string, limit = 12) {
 
 /** Small palette so every campus gets a stable, sensible accent. */
 const PALETTE = [
-  "#5A2BE0", "#0F766E", "#B91C1C", "#1D4ED8", "#B45309",
+  "#9E2B7E", "#0F766E", "#B91C1C", "#1D4ED8", "#B45309",
   "#7C2D12", "#065F46", "#9D174D", "#4338CA", "#0369A1",
 ];
 
