@@ -7,9 +7,8 @@
 <title>VendU — sell your stuff, book a service, get paid.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/beta/vendu-shared.css">
 <script>
-window.VENDU_ASSET_V=Date.now();
-document.write('<link rel="stylesheet" href="/beta/vendu-shared.css?v='+window.VENDU_ASSET_V+'">');
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('/beta/sw.js',{scope:'/beta/',updateViaCache:'none'}).then(function(r){
     return r.update().catch(function(){});
@@ -22,8 +21,8 @@ if('serviceWorker' in navigator){
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
-<script>document.write('<scr'+'ipt src="/beta/vendu-api.js?v='+window.VENDU_ASSET_V+'"><\/scr'+'ipt>');</script>
-<script>document.write('<scr'+'ipt src="/beta/vendu-tour.js?v='+window.VENDU_ASSET_V+'"><\/scr'+'ipt>');</script>
+<script src="/beta/vendu-api.js"></script>
+<script src="/beta/vendu-tour.js"></script>
 <style>
   :root{--paper:#FBF8F3;--ink:#1C1526;--mist:#6B6478;--line:#E7E0D6;--violet:#5A2BE0;--violet-soft:#EFE8FF;--amber:#FFB020;--rose:#FF5C8A;--green:#0E9F6E;--card:#FFFFFF;--school-a:#1D3A8A;--school-b:#F5C518;--shadow:0 6px 24px rgba(28,21,38,.08);--shadow-lg:0 14px 40px rgba(28,21,38,.16)}
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
