@@ -498,7 +498,10 @@ function openCampusPick(){state.campusPick=true;render();}
 /* ===== Universal campuses: any .edu, real school names, per-campus theming ===== */
 function campusAccent(){return (state.campus&&state.campus.accent)||'#5A2BE0';}
 function applyCampusTheme(){try{document.documentElement.style.setProperty('--campus-accent',campusAccent());document.documentElement.style.setProperty('--school-a',campusAccent());}catch(e){}}
-function makeCampus(c){return {id:c.domain,domain:c.domain,name:c.display_name,short:c.display_name,mascot:c.mascot||'',accent:c.accent_color||'#5A2BE0',dynamic:true,lat:0,lng:0};}
+function makeCampus(c){var base=CAMPUSES[0];return {id:base.id,domain:c.domain,name:c.display_name,short:c.display_name,mascot:c.mascot||'',accent:c.accent_color||'#5A2BE0',dynamic:true,lat:c.lat||0,lng:c.lng||0};}
+var CAMPUS_PREF_KEY='vendu_campus_v1';
+function saveCampusPref(){try{var c=state.campus;if(!c)return;localStorage.setItem(CAMPUS_PREF_KEY,JSON.stringify({id:c.dynamic?'':c.id,domain:c.domain||'',name:c.name||''}));}catch(e){}}
+function restoreCampusPref(){try{var p=JSON.parse(localStorage.getItem(CAMPUS_PREF_KEY)||'null');if(!p)return;if(p.id){var k=campusById(p.id);if(k){state.campus=k;applyCampusTheme();loadCampusEvents();return;}}if(p.domain){var known=campusByDomain(p.domain);if(known){state.campus=known;applyCampusTheme();loadCampusEvents();return;}state.campus=makeCampus({domain:p.domain,display_name:p.name||p.domain,accent_color:''});applyCampusTheme();joinCampus(p.domain,p.name?{display_name:p.name}:null);}}catch(e){}}
 function campusMascot(){var m=(state.campus&&state.campus.mascot)||'';m=String(m);return m&&m.length<=3?m+' ':'';}
 function CAMPPILL(){return campusMascot()+CAMP();}
 function joinCampus(domainOrEmail,patch,cb){
@@ -509,7 +512,7 @@ function joinCampus(domainOrEmail,patch,cb){
       var known=campusByDomain(r.campus.domain);
       if(known){known.accent=r.campus.accent_color;known.domain=r.campus.domain;if(r.campus.mascot)known.mascot=r.campus.mascot;state.campus=known;}
       else{state.campus=makeCampus(r.campus);}
-      applyCampusTheme();loadCampusEvents();
+      applyCampusTheme();loadCampusEvents();saveCampusPref();
       if(cb)cb(state.campus);
       try{render();}catch(e){}
     });
@@ -1646,7 +1649,7 @@ function cpRenderList(){
     return '<div class="svc" '+attr+' style="cursor:pointer"><div><div style="font-weight:700">'+name+(on?' <span style="color:var(--violet);font-size:12px">\u00b7 current</span>':'')+'</div><div style="font-size:12px;color:var(--mist)">'+sub+'</div></div><span>'+(on?'<span style="color:var(--violet);font-weight:800">\u2713</span>':icon('<path d="m9 18 6-6-6-6"/>',18))+'</span></div>';
   };
   var html=local.map(function(c){
-    var on=state.campus&&state.campus.id===c.id;
+    var on=state.campus&&!state.campus.dynamic&&state.campus.id===c.id;
     return row(c.short,c.name+' \u00b7 '+c.mascot,'data-camp="'+c.id+'"',on);
   }).join('')+remote.map(function(r){
     var on=state.campus&&state.campus.domain===r.domain;
@@ -1654,7 +1657,7 @@ function cpRenderList(){
   }).join('');
   if(!html)html='<div class="prompt">'+(ql.length===1?'Keep typing\u2026':'Type your school name \u2014 every U.S. college, community college and trade school is searchable.')+'</div>';
   box.innerHTML=html;
-  box.querySelectorAll('[data-camp]').forEach(function(el){el.onclick=function(){state.campus=campusById(el.dataset.camp);applyCampusTheme();loadCampusEvents();state.campusPick=false;state.campusQ='';state.campusResults=[];toast('Now viewing '+state.campus.short);render();};});
+  box.querySelectorAll('[data-camp]').forEach(function(el){el.onclick=function(){state.campus=campusById(el.dataset.camp);applyCampusTheme();loadCampusEvents();saveCampusPref();state.campusPick=false;state.campusQ='';state.campusResults=[];toast('Now viewing '+state.campus.short);render();};});
   box.querySelectorAll('[data-domain]').forEach(function(el){el.onclick=function(){
     var d=el.dataset.domain,n=el.dataset.name;
     state.campusPick=false;state.campusQ='';state.campusResults=[];
@@ -1663,8 +1666,30 @@ function cpRenderList(){
   };});
 }
 function pickNearest(){
-  var done=function(lat,lng){var best=CAMPUSES[0],bd=1e18;CAMPUSES.forEach(function(c){var dx=c.lat-lat,dy=c.lng-lng,d=dx*dx+dy*dy;if(d<bd){bd=d;best=c;}});state.campus=best;state.campusPick=false;state.campusQ='';toast('\uD83D\uDCCD Nearest campus: '+best.short);render();};
-  try{navigator.geolocation.getCurrentPosition(function(p){done(p.coords.latitude,p.coords.longitude);},function(){done(32.84,-83.63);});}catch(e){done(32.84,-83.63);}
+  toast('\uD83D\uDCCD Finding your nearest campus\u2026');
+  var localBest=function(lat,lng){var best=CAMPUSES[0],bd=1e18;CAMPUSES.forEach(function(c){var dx=c.lat-lat,dy=c.lng-lng,d=dx*dx+dy*dy;if(d<bd){bd=d;best=c;}});return best;};
+  var useLocal=function(lat,lng){var b=localBest(lat,lng);state.campus=b;applyCampusTheme();loadCampusEvents();saveCampusPref();state.campusPick=false;state.campusQ='';state.campusResults=[];toast('\uD83D\uDCCD Nearest campus: '+b.short);render();};
+  var resolve=function(lat,lng){
+    fetch('https://api.bigdatacloud.net/data/reverse-geocode-client?latitude='+lat+'&longitude='+lng+'&localityLanguage=en')
+      .then(function(r){return r.json();})
+      .then(function(g){
+        var city=g.city||g.locality||'',region=g.principalSubdivision||'';
+        var tries=[city,city+' '+region,region].filter(Boolean);
+        var step=function(i){
+          if(i>=tries.length||!window.VendU||!VendU.searchSchools)return useLocal(lat,lng);
+          VendU.searchSchools(tries[i]).then(function(r){
+            var hit=(r&&r.ok&&r.results&&r.results[0])||null;
+            if(!hit)return step(i+1);
+            state.campusPick=false;state.campusQ='';state.campusResults=[];
+            joinCampus(hit.domain,{display_name:hit.name},function(c){toast('\uD83D\uDCCD Nearest campus: '+c.short);});
+            render();
+          }).catch(function(){step(i+1);});
+        };
+        step(0);
+      }).catch(function(){useLocal(lat,lng);});
+  };
+  try{navigator.geolocation.getCurrentPosition(function(p){resolve(p.coords.latitude,p.coords.longitude);},function(){toast('Allow location access to find your nearest campus');},{timeout:8000});}
+  catch(e){useLocal(32.84,-83.63);}
 }
 const APP_THEMES=[
  {id:'violet',name:'Violet \u2014 Creative',primary:'#5A2BE0',dark:'#3d1c99',soft:'#EFE8FF',accent:'#FFB020',desc:'Energetic and youthful. Signals creativity and community \u2014 the current VendU look.'},
@@ -1747,6 +1772,7 @@ setDemoVisible(false);
 state.campusEvents=[];state.campusResults=[];applyCampusTheme();state.booked=loadBooked();try{state.phone=localStorage.getItem('vendu_phone')||'';}catch(e){state.phone='';}
 function render(){if(state.onboarded&&window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour();},300);if(!state.onboarded){if(state.storefrontSetup)return add();return onboarding();}if(state.moreMenu)return settingsScreen();if(state.campusPick)return campusPicker();if(state.themeView)return themeScreen();if(state.book)return bookingScreen();if(state.bookSet)return bookingSettings();if(state.userView)return userProfile();if(state.thread)return messageScreen();if(state.inboxView)return inboxScreen();if(state.groupCreateView)return createGroupScreen();if(state.groupView)return groupPage();if(state.detail)return detail(state.detail);if(state.leaderboard)return leaderboard();if(state.storefrontSetup)return add();if(state.savedView)return savedScreen();if(state.myPostsView)return myPostsScreen();if(state.svcEdit)return servicesEditor();if(state.tab==='add')return addTab();({home,market,venuU,profile}[state.tab]||home)();}
 document.getElementById('nav').querySelectorAll('.navitem').forEach(item=>{item.onclick=()=>{if(!state.onboarded)return;document.querySelectorAll('.navitem').forEach(n=>n.classList.remove('on'));item.classList.add('on');state.tab=item.dataset.tab;state.moreMenu=false;state.userView=null;state.thread=0;state.inboxView=false;state.groupView=null;state.groupCreateView=false;state.myPostsView=false;state.themeView=false;state.reviewOpen=false;state.cat='All';state.q='';state.near=false;state.detail=0;state.book=null;state.svcEdit=false;state.addMode=null;state.newPhoto=null;state.leaderboard=false;state.storefrontSetup=false;state.reviewOpen=false;state.msgTo=0;state.openMC=0;state.bookSet=false;state.subPrompt=false;state.savedView=false;state.campusPick=false;state.campusQ='';if(item.dataset.tab!=='add')state.submitted=false;render();screen.scrollTop=0;};});
+try{restoreCampusPref();}catch(e){}
 render();
 
 /* ---- installability, support & account deletion ---- */
