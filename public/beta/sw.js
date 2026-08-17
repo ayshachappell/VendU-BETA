@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vendu-beta-v5';
+const CACHE_NAME = 'vendu-beta-v6';
 const ASSETS = [
   '/beta/index.html',
   '/beta/vendu-shared.css',
