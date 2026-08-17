@@ -490,6 +490,36 @@
 .win-hint span{opacity:.85;color:#fff}
 .detail-body{padding-bottom:120px}
 .awning{padding:38px 20px 50px}
+
+/* ===== Boutique awning v2 — dimensional fabric, folded valance, signal badges ===== */
+.awning{overflow:visible;padding:34px 20px 30px;border-radius:0 0 4px 4px}
+.awning::before{content:"";position:absolute;inset:0;overflow:hidden;background:
+  linear-gradient(to bottom,rgba(255,255,255,.16),rgba(255,255,255,0) 42%,rgba(0,0,0,.14) 100%),
+  repeating-linear-gradient(45deg,transparent 0 20px,rgba(255,255,255,.13) 20px 40px);
+  pointer-events:none}
+/* horizontal fold seam across the fabric */
+.awning .awn-fold{position:absolute;left:0;right:0;bottom:0;height:14px;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(0,0,0,.16),rgba(255,255,255,.14) 55%,rgba(0,0,0,.10));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28)}
+/* 3D scalloped valance that hangs below and casts a shadow onto the content */
+.awning::after{content:"";position:absolute;left:0;right:0;bottom:-17px;height:18px;
+  background:
+    radial-gradient(circle at 13px 0,rgba(0,0,0,.22) 0 13px,transparent 13.4px),
+    radial-gradient(circle at 13px -2px,var(--awn) 0 13px,transparent 13.4px);
+  background-size:26px 18px;background-repeat:repeat-x;
+  filter:drop-shadow(0 7px 7px rgba(20,16,28,.26)) drop-shadow(0 2px 2px rgba(20,16,28,.18));
+  transform:none}
+.shop-sign{margin-top:-6px;padding-top:16px}
+/* high-trust signal badges */
+.store-badges{display:inline-flex;flex-wrap:wrap;gap:6px;vertical-align:middle;margin-left:6px}
+.store-badges span,.store-badges .dealpill,.store-badges .soonpill,.store-badges .founderpill,.store-badges .vendorpill,.store-badges .licpill,.store-badges .foodpill{
+  border:0!important;font-size:10px!important;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+  padding:5px 10px!important;border-radius:100px;line-height:1;box-shadow:0 1px 2px rgba(20,16,28,.10)}
+.store-badges .dealpill,.store-badges .soonpill{background:linear-gradient(180deg,#FFE9B8,#FBD27E)!important;color:#7A4A05!important}
+.store-badges .founderpill{background:linear-gradient(180deg,#7E2338,#5E152A)!important;color:#FFE7EE!important}
+.store-badges .vendorpill{background:linear-gradient(180deg,#EFE7FF,#DED0FF)!important;color:#4A22B8!important}
+.store-badges .licpill,.store-badges .foodpill{background:linear-gradient(180deg,#D8F5E9,#B5E9D5)!important;color:#0A6E50!important}
+.store-badges .ceopill{background:linear-gradient(180deg,#22202C,#131118)!important;color:#FFD98A!important}
 </style>
 </head>
 <body>
@@ -887,7 +917,7 @@ function detail(id){
     <div class="storefront">
       <div class="roofline"><div class="backbtn" id="back">${icon('<path d="m15 18-6-6 6-6"/>')} Back</div></div>
       <div class="awning" style="background:linear-gradient(160deg,${c},${shade(c,-10)});color:${tc};text-shadow:${tc==='#ffffff'?'0 1px 2px rgba(0,0,0,.25)':'none'};--awn:${c}">
-        <div class="awn-welcome">Welcome to my VendU</div><div class="awn-name">${h.name}</div>
+        <div class="awn-welcome">Welcome to my VendU</div><div class="awn-fold"></div>
       </div>
     </div>
     <div class="shop-sign">
