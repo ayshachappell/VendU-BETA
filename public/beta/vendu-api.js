@@ -149,4 +149,21 @@
     });
   };
 
+  /* ---- campuses: universal .edu support, search, theming, events ---- */
+  W.resolveCampus = function (emailOrDomain, patch) {
+    var body = { email: emailOrDomain, domain: emailOrDomain };
+    if (patch) {
+      if (patch.display_name) body.display_name = patch.display_name;
+      if (patch.mascot !== undefined) body.mascot = patch.mascot;
+      if (patch.accent_color) body.accent_color = patch.accent_color;
+    }
+    return post("/api/public/campus/resolve", body);
+  };
+  W.searchSchools = function (q) {
+    return post("/api/public/campus/search", { q: q });
+  };
+  W.campusEvents = function (domain) {
+    return post("/api/public/campus/events", { domain: domain });
+  };
+
 })();

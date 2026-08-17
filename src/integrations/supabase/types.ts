@@ -41,6 +41,119 @@ export type Database = {
         }
         Relationships: []
       }
+      campus_event_feeds: {
+        Row: {
+          active: boolean
+          created_at: string
+          domain: string
+          feed_type: string
+          feed_url: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          domain: string
+          feed_type?: string
+          feed_url: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          domain?: string
+          feed_type?: string
+          feed_url?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campus_event_feeds_domain_fkey"
+            columns: ["domain"]
+            isOneToOne: false
+            referencedRelation: "campuses"
+            referencedColumns: ["domain"]
+          },
+        ]
+      }
+      campuses: {
+        Row: {
+          accent_color: string
+          created_at: string
+          display_name: string
+          domain: string
+          id: string
+          mascot: string | null
+          updated_at: string
+        }
+        Insert: {
+          accent_color?: string
+          created_at?: string
+          display_name: string
+          domain: string
+          id?: string
+          mascot?: string | null
+          updated_at?: string
+        }
+        Update: {
+          accent_color?: string
+          created_at?: string
+          display_name?: string
+          domain?: string
+          id?: string
+          mascot?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      events_cache: {
+        Row: {
+          created_at: string
+          description: string | null
+          domain: string
+          ends_at: string | null
+          external_id: string
+          fetched_at: string
+          id: string
+          link: string | null
+          location: string | null
+          starts_at: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          domain: string
+          ends_at?: string | null
+          external_id: string
+          fetched_at?: string
+          id?: string
+          link?: string | null
+          location?: string | null
+          starts_at: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          domain?: string
+          ends_at?: string | null
+          external_id?: string
+          fetched_at?: string
+          id?: string
+          link?: string | null
+          location?: string | null
+          starts_at?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       referrals: {
         Row: {
           build: string
