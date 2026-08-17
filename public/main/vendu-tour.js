@@ -320,6 +320,37 @@
 
   var boundTarget = null;
   var tick = null;
+
+  // Two-part step: after the first tap, wait for a second control (e.g. Back)
+  // to appear, re-highlight it, and only then advance.
+  function waitThen(st) {
+    if (boundEl && onTargetClick) boundEl.removeEventListener(boundEvent || "click", onTargetClick);
+    var tries = 0;
+    var poll = setInterval(function () {
+      var el2 = document.querySelector(st.then);
+      if (!el2) {
+        if (++tries > 40) clearInterval(poll);
+        return;
+      }
+      clearInterval(poll);
+      boundTarget = el2;
+      boundEl = el2;
+      boundEvent = "click";
+      if (card) {
+        var d = card.querySelector(".tour-doit");
+        if (d && st.thenDoit) d.textContent = st.thenDoit;
+      }
+      onTargetClick = function () {
+        dir = 1;
+        i++;
+        cleanup();
+        setTimeout(show, 420);
+      };
+      el2.addEventListener("click", onTargetClick);
+      position();
+    }, 150);
+  }
+
   function position() {
     if (!ring || !card) return;
     // The app re-renders whole screens; re-resolve the highlight target if it
