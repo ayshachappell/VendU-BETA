@@ -451,6 +451,45 @@
 .p-name,.name,.store-name,.up-name{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-width:0;line-height:1.25}
 .founderpill,.vendorpill,.dealpill,.soonpill,.commpill,.ceopill{flex:0 0 auto;font-size:10px;font-weight:800;letter-spacing:.01em;line-height:1;padding:4px 8px;border-radius:999px;white-space:nowrap;text-transform:none}
 .up-badges{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px}
+
+/* ===== Storefront refresh — refined awning, editorial layout, floating action bar ===== */
+.storefront{background:transparent}
+.roofline{background:transparent;height:0;padding:0;overflow:visible}
+.roofline .backbtn{position:absolute;top:14px;left:14px;z-index:5;color:#fff;background:rgba(0,0,0,.28);backdrop-filter:blur(8px);border-radius:100px;padding:7px 13px 7px 9px;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:4px}
+.awning{padding:34px 20px 46px;box-shadow:none;position:relative;overflow:hidden}
+.awning::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent 0 20px,rgba(255,255,255,.14) 20px 40px);pointer-events:none}
+.awning::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:34px;background:var(--paper);border-radius:26px 26px 0 0;background-size:auto;transform:none}
+.awn-welcome{font-size:10px;letter-spacing:.22em;opacity:.85}
+.awn-name{font-size:28px;letter-spacing:-.02em;position:relative;z-index:1}
+.shop-sign{align-items:flex-start;padding:0 20px;margin-top:-26px;position:relative;z-index:2}
+.detail-av{width:84px;height:84px;border-radius:24px;border:4px solid var(--paper);box-shadow:0 12px 26px rgba(0,0,0,.14);font-size:32px}
+.shop-sign>div:last-child{padding-top:30px}
+.shop-sign .store-name{font-size:20px;margin:0 0 6px}
+.store-badges span,.store-badges .dealpill,.store-badges .soonpill,.store-badges .founderpill,.store-badges .vendorpill,.store-badges .licpill,.store-badges .foodpill{background:transparent!important;border:1px solid var(--line);color:var(--mist)!important;font-size:10px!important;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px!important;border-radius:100px}
+.store-badges .dealpill,.store-badges .soonpill{border-color:color-mix(in srgb,var(--amber) 45%,#fff);color:#a5600f!important}
+.store-badges .licpill{border-color:#bfe3d2;color:#0b7f5b!important}
+.socialrow{padding:18px 20px 0}
+.soc{width:42px;height:42px;border-radius:14px;border-color:#eee7dc}
+.windows{padding:22px 20px 4px;gap:14px}
+.window{flex:0 0 72%;aspect-ratio:3/4;border:0;border-radius:28px;box-shadow:0 14px 30px rgba(20,16,28,.12);background:#e9e4db}
+.window::after{background:linear-gradient(to top,rgba(0,0,0,.55),transparent 55%)}
+.statrow{margin:20px 20px 4px;border-radius:24px;border-color:#efe9df;background:#faf7f2}
+.stat{padding:17px 8px;border-right-color:#efe9df}
+.block-t{font-size:14px;margin:22px 0 10px;letter-spacing:-.01em}
+.detail-body .svc{border-radius:18px;border-color:#efe9df;padding:14px 16px;box-shadow:0 1px 2px rgba(20,16,28,.04);margin-bottom:10px}
+.paych{background:#faf7f2!important;border:1px solid #efe9df;color:var(--ink)!important;border-radius:14px;padding:9px 14px;font-size:12.5px}
+.rev{border-radius:18px;border-color:#efe9df;padding:14px 16px}
+.detail-body{padding:0 20px 30px}
+.cta-bar{left:14px;right:14px;bottom:14px;border:1px solid rgba(20,16,28,.08);border-radius:26px;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 16px 40px rgba(20,16,28,.16);padding:10px}
+.btn{border-radius:18px;padding:15px}
+.btn-ghost{width:52px;background:transparent;border-color:transparent;color:var(--mist)}
+.btn-ghost.on,.btn-ghost:active{color:var(--violet)}
+.btn-primary{box-shadow:0 10px 22px rgba(20,16,28,.12)}
+.window{aspect-ratio:4/5;flex:0 0 66%}
+.win-hint{color:#fff;justify-content:flex-end;align-items:flex-start;text-align:left;padding:18px;z-index:2;text-shadow:0 1px 6px rgba(0,0,0,.4)}
+.win-hint span{opacity:.85;color:#fff}
+.detail-body{padding-bottom:120px}
+.awning{padding:38px 20px 50px}
 </style>
 </head>
 <body>
@@ -847,10 +886,9 @@ function detail(id){
   screen.innerHTML=`<div class="fade">
     <div class="storefront">
       <div class="roofline"><div class="backbtn" id="back">${icon('<path d="m15 18-6-6 6-6"/>')} Back</div></div>
-      <div class="awning" style="background:repeating-linear-gradient(90deg,${c} 0 24px,${shade(c,16)} 24px 48px);color:${tc};text-shadow:${tc==='#ffffff'?'0 1px 2px rgba(0,0,0,.25)':'none'};--awn:${c}">
+      <div class="awning" style="background:linear-gradient(160deg,${c},${shade(c,-10)});color:${tc};text-shadow:${tc==='#ffffff'?'0 1px 2px rgba(0,0,0,.25)':'none'};--awn:${c}">
         <div class="awn-welcome">Welcome to my VendU</div><div class="awn-name">${h.name}</div>
       </div>
-      <div class="windows">${windows}</div>
     </div>
     <div class="shop-sign">
       <div class="detail-av" style="${avStyle}">${h.me&&h.avatar?'':h.init}</div>
@@ -858,6 +896,7 @@ function detail(id){
       <div class="store-sub" style="color:var(--mist)">${h.v?`<span style="color:var(--violet);font-weight:600;display:inline-flex;align-items:center;gap:3px">${icon('<path d="M20 6 9 17l-5-5"/>',12)}Verified</span> · `:''}${h.cat}${h.me?'':` · ${pin} ${h.dist} mi`}</div></div>
     </div>
     <div class="socialrow">${socialHTML}</div>
+    <div class="windows">${windows}</div>
     <div class="statrow"><div class="stat"><div class="n">${h.rating}${h.me?'':'★'}</div><div class="l">${h.reviews} reviews</div></div><div class="stat"><div class="n">${h.jobs}${h.me?'':'+'}</div><div class="l">jobs done</div></div><div class="stat"><div class="n">${h.since}</div><div class="l">on campus</div></div></div>
     <div class="detail-body">
       <div class="block-t">About</div><div class="block-p">${h.bio}</div>
