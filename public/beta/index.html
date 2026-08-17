@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/beta/vendu-shared.css?v=3">
 <link rel="manifest" href="/beta/manifest.webmanifest">
-<meta name="theme-color" content="#5A2BE0">
+<meta name="theme-color" content="#9E2B7E">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="icon" type="image/png" href="/favicon.png">
@@ -16,7 +16,7 @@
 <script src="/beta/vendu-api.js?v=3"></script>
 <script src="/beta/vendu-tour.js?v=3"></script>
 <style>
-  :root{--paper:#FBF8F3;--ink:#1C1526;--mist:#6B6478;--line:#E7E0D6;--violet:#5A2BE0;--violet-soft:#EFE8FF;--amber:#FFB020;--rose:#FF5C8A;--green:#0E9F6E;--card:#FFFFFF;--school-a:#1D3A8A;--school-b:#F5C518;--shadow:0 6px 24px rgba(28,21,38,.08);--shadow-lg:0 14px 40px rgba(28,21,38,.16)}
+  :root{--paper:#FBF8F3;--ink:#1C1526;--mist:#6B6478;--line:#E7E0D6;--violet:#9E2B7E;--violet-soft:#EFE8FF;--amber:#FFB020;--rose:#FF5C8A;--green:#0E9F6E;--card:#FFFFFF;--school-a:#1D3A8A;--school-b:#F5C518;--shadow:0 6px 24px rgba(28,21,38,.08);--shadow-lg:0 14px 40px rgba(28,21,38,.16)}
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{background:#EDE7DD;color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   body{display:flex;justify-content:center;min-height:100vh}
@@ -256,7 +256,7 @@
 .spon-name{font-weight:700;font-size:14.5px}
 .spon-blurb{font-size:12.5px;color:var(--mist);line-height:1.4;margin-top:2px}
 .spon-note{font-size:11px;color:#a5810f;margin-top:9px}
-.boostpill{font-size:10px;font-weight:800;color:#fff;background:linear-gradient(90deg,#7C3AED,#5A2BE0);padding:2px 7px;border-radius:999px;letter-spacing:.02em}
+.boostpill{font-size:10px;font-weight:800;color:#fff;background:linear-gradient(90deg,#C0429E,#9E2B7E);padding:2px 7px;border-radius:999px;letter-spacing:.02em}
 .lst{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px}
 .lst-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
 .lst-title{font-weight:700;font-size:14.5px;line-height:1.25}
@@ -437,7 +437,7 @@
 @keyframes hatpop{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
 .lbrow{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 15px;margin-bottom:9px;box-shadow:var(--shadow)}
 .ceopill{font-size:10px;font-weight:800;color:#4a2ab5;background:#EDE7FF;padding:2px 7px;border-radius:999px;letter-spacing:.02em;white-space:nowrap}
-.vendorpill{font-size:10px;font-weight:800;color:#5A2BE0;background:#EFE9FF;padding:2px 7px;border-radius:999px;letter-spacing:.02em;white-space:nowrap}
+.vendorpill{font-size:10px;font-weight:800;color:#9E2B7E;background:#EFE9FF;padding:2px 7px;border-radius:999px;letter-spacing:.02em;white-space:nowrap}
 .dealpill{font-size:10px;font-weight:800;color:#B4262A;background:#FDE8E8;padding:2px 7px;border-radius:999px;white-space:nowrap}
 .soonpill{font-size:10px;font-weight:800;color:#8A5A00;background:#FFF0D6;padding:2px 7px;border-radius:999px;white-space:nowrap}
 .commpill{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;color:var(--ink);background:var(--line);padding:3px 9px;border-radius:999px;white-space:nowrap}
@@ -571,8 +571,8 @@
   </nav>
 </div>
 <script>
-const COLORS=['#5A2BE0','#FF5C8A','#0E9F6E','#F0873B','#2563EB','#C026D3','#0891B2','#E11D48','#7C3AED','#059669','#DB2777','#0D9488'];
-const THEME_COLORS=['#5A2BE0','#1D3A8A','#0E9F6E','#F0873B','#E11D48','#C026D3','#0891B2'];
+const COLORS=['#9E2B7E','#FF5C8A','#0E9F6E','#F0873B','#2563EB','#C026D3','#0891B2','#E11D48','#C0429E','#059669','#DB2777','#0D9488'];
+const THEME_COLORS=['#9E2B7E','#1D3A8A','#0E9F6E','#F0873B','#E11D48','#C026D3','#0891B2'];
 const CAMPUSES=[
  {id:'fvsu',name:'Fort Valley State University',short:'Fort Valley State',domain:'fvsu.edu',mascot:'Wildcats',lat:32.54,lng:-83.89},
  {id:'spelman',name:'Spelman College',short:'Spelman',domain:'spelman.edu',mascot:'Jaguars',lat:33.75,lng:-84.41},
@@ -598,9 +598,9 @@ function wmk(){var c=state.campus||CAMPUSES[0];return (c.short+' 🐾 '+c.mascot
 function payPh(app){if(app==='Apple Pay'||app==='Google Pay')return 'phone number (e.g. 555-123-4567)';if(app==='Zelle')return 'phone or email';if(app==='Cash App')return '$cashtag';if(app==='Venmo')return '@handle';if(app==='PayPal')return 'paypal.me handle';return 'handle or link';}
 function openCampusPick(){state.campusPick=true;render();}
 /* ===== Universal campuses: any .edu, real school names, per-campus theming ===== */
-function campusAccent(){return (state.campus&&state.campus.accent)||'#5A2BE0';}
+function campusAccent(){return (state.campus&&state.campus.accent)||'#9E2B7E';}
 function applyCampusTheme(){try{document.documentElement.style.setProperty('--campus-accent',campusAccent());document.documentElement.style.setProperty('--school-a',campusAccent());}catch(e){}}
-function makeCampus(c){var base=CAMPUSES[0];return {id:base.id,domain:c.domain,name:c.display_name,short:c.display_name,mascot:c.mascot||'',accent:c.accent_color||'#5A2BE0',dynamic:true,lat:c.lat||0,lng:c.lng||0};}
+function makeCampus(c){var base=CAMPUSES[0];return {id:base.id,domain:c.domain,name:c.display_name,short:c.display_name,mascot:c.mascot||'',accent:c.accent_color||'#9E2B7E',dynamic:true,lat:c.lat||0,lng:c.lng||0};}
 var CAMPUS_PREF_KEY='vendu_beta_campus_v1';
 function saveCampusPref(){try{var c=state.campus;if(!c)return;localStorage.setItem(CAMPUS_PREF_KEY,JSON.stringify({id:c.dynamic?'':c.id,domain:c.domain||'',name:c.name||''}));}catch(e){}}
 function restoreCampusPref(){try{var p=JSON.parse(localStorage.getItem(CAMPUS_PREF_KEY)||'null');if(!p)return;if(p.id){var k=campusById(p.id);if(k){state.campus=k;applyCampusTheme();loadCampusEvents();return;}}if(p.domain){var known=campusByDomain(p.domain);if(known){state.campus=known;applyCampusTheme();loadCampusEvents();return;}state.campus=makeCampus({domain:p.domain,display_name:p.name||p.domain,accent_color:''});applyCampusTheme();joinCampus(p.domain,p.name?{display_name:p.name}:null);}}catch(e){}}
@@ -727,7 +727,7 @@ const HUSTLES=[
   {id:11,name:'Paws by Val',init:'V',cat:'Other',v:1,lic:0,dist:1.4,offer:'Dog grooming & walking for campus pet parents.',price:'$20–45',rating:'4.9',reviews:16,jobs:38,since:'2024',c:10,pays:['Cash App','Venmo'],bio:"Animal-science major who loves dogs. Gentle with nervous pups.",services:[['Bath & brush','$25'],['Nail trim','$12'],['30-min walk','$15']]},
   {id:12,name:'Styled by Ken',init:'K',cat:'Other',v:1,lic:0,dist:0.8,offer:'Personal styling & closet edits for interviews, dates & photos.',price:'$30–70',rating:'4.8',reviews:12,jobs:24,since:'2024',c:11,pays:['Cash App','PayPal'],bio:"Fashion-merch major. I shop your closet first, then fill the gaps on a budget.",services:[['Closet edit','$30'],['Interview look','$45'],['Full styling','$70']]},
 ];
-const SEEDPICS={2:[pic('#5b6cff','#8a5bf0','💈','Fresh fade'),pic('#1d3a8a','#0891b2','✂️','Line-up'),pic('#232b39','#5a2be0','🧔','Beard trim')],3:[pic('#c026d3','#e11d48','💇🏾','Knotless'),pic('#7c3aed','#c026d3','👑','Cornrows'),pic('#e11d48','#f0873b','🌀','Twists')],5:[pic('#0e9f6e','#0891b2','📸','Grad shoot'),pic('#5a2be0','#2563eb','🎓','Portraits'),pic('#f0873b','#e11d48','🌅','Golden hour')],7:[pic('#e11d48','#c026d3','💅','Custom set'),pic('#f0873b','#e11d48','✨','Coffin'),pic('#5a2be0','#c026d3','🎨','Nail art')],10:[pic('#f0873b','#e11d48','🧁','Cupcakes'),pic('#0e9f6e','#0891b2','🍰','Cake jars'),pic('#c026d3','#7c3aed','🎂','Custom cake')]};
+const SEEDPICS={2:[pic('#5b6cff','#C86BB6','💈','Fresh fade'),pic('#1d3a8a','#0891b2','✂️','Line-up'),pic('#232b39','#9E2B7E','🧔','Beard trim')],3:[pic('#c026d3','#e11d48','💇🏾','Knotless'),pic('#C0429E','#c026d3','👑','Cornrows'),pic('#e11d48','#f0873b','🌀','Twists')],5:[pic('#0e9f6e','#0891b2','📸','Grad shoot'),pic('#9E2B7E','#2563eb','🎓','Portraits'),pic('#f0873b','#e11d48','🌅','Golden hour')],7:[pic('#e11d48','#c026d3','💅','Custom set'),pic('#f0873b','#e11d48','✨','Coffin'),pic('#9E2B7E','#c026d3','🎨','Nail art')],10:[pic('#f0873b','#e11d48','🧁','Cupcakes'),pic('#0e9f6e','#0891b2','🍰','Cake jars'),pic('#c026d3','#C0429E','🎂','Custom cake')]};
 HUSTLES.forEach(h=>{if(SEEDPICS[h.id])h.gallery=SEEDPICS[h.id];});var _b4=HUSTLES.find(h=>h.id===4);if(_b4)_b4.bm=2;var _b5=HUSTLES.find(h=>h.id===5);if(_b5){_b5.bm=1;_b5.link='calendly.com/shotbytay';}HUSTLES.forEach(function(h){var fn=(h.name.split(' ')[0]||'vendor').replace(/[^a-z]/gi,'').toLowerCase()||'vendor';h.pays=h.pays.map(function(p){if(typeof p!=='string')return p;var hh=p==='Cash App'?'$'+fn:(p==='Venmo'?'@'+fn:(p==='PayPal'?fn:'@'+fn));return {app:p,handle:hh};});});HUSTLES.forEach(function(h){if(!h.campus)h.campus='fvsu';});HUSTLES.push({id:21,name:'Slays by Simone',init:'S',cat:'Beauty',v:1,lic:1,dist:0.3,offer:'Makeup & lashes for events, shoots, and date nights.',price:'$40–90',rating:'5.0',reviews:22,jobs:60,since:'2024',c:5,pays:['Cash App','Venmo'],bio:'Booking glam for the whole yard. DM to lock your slot.',services:[['Soft glam','$45'],['Full glam','$70'],['Lash add-on','$20']],campus:'spelman'});HUSTLES.push({id:22,name:'Tutor Tori',init:'T',cat:'Tutoring',v:1,lic:0,dist:0.6,offer:'Bio, Chem & MCAT prep — group rates available.',price:'$25/hr',rating:'4.9',reviews:14,jobs:33,since:'2023',c:4,pays:['Venmo','Zelle'],bio:'Pre-med junior tutoring the sciences.',services:[['1-on-1 hour','$25'],['MCAT session','$40']],campus:'spelman'});var _rp=[['Alex R.',5,'Super reliable and easy to work with.'],['Jaz T.',5,'Highly recommend — great value.'],['Sam K.',4,'Solid experience, would book again.'],['Kay B.',5,'On time and professional.'],['Dev M.',5,'Exactly what I needed. Fast too.']];HUSTLES.forEach(function(h){if(!REVIEWS[h.id])REVIEWS[h.id]=[_rp[h.id%_rp.length]];});
 const FEED=[
   {id:1,s:2,promo:'20% OFF',when:'2h ago',text:"Finals week fade specials 💈 20% off all cuts through Friday. Text me to grab a slot before they're gone!",likes:34,liked:false,comments:[['Deon','bet, booking now']]},
@@ -765,7 +765,7 @@ function markBooked(id,svc){if(hasBooked(id))return;state.booked.push(id);saveBo
 try{if(window.VendU)VendU.consumeMagicLink();}catch(e){}
 var VERIFY_ERR='';try{if(/[?&]verify=expired/.test(location.search)){VERIFY_ERR='That link expired or was already used. Send yourself a new one.';history.replaceState(null,'',location.pathname);}if(location.hash==='#verified')history.replaceState(null,'',location.pathname);}catch(e){}
 var VERIFIED=!!(window.VendU&&VendU.student());
-let state={eduEmail:'',eduCodeSent:false,eduErr:VERIFY_ERR,tab:'home',home:'feed',cat:'All',q:'',near:false,mkt:'goods',formCat:'Food',foodType:'baked',eduOK:false,a1:false,a2:false,a3:false,submitted:false,avatar:'',gallery:[],themeColor:'#5A2BE0',book:null,openC:0,detail:0,isSeller:true,events:[],about:"Tell buyers about your storefront — what you make or do, your vibe, and how to work with you.",services:[],referrals:0,isFounder:false,addMode:null,svcEdit:false,newPhoto:null,reviewOpen:false,reviewStars:5,booked:[],leaderboard:false,storefrontSetup:false,avail:false,cheap:false,top:false,justReferred:-1,msgTo:0,openMC:0,bookSet:false,booking:{mode:'builtin',link:'',provider:'Calendly',days:{Mon:true,Tue:true,Wed:true,Thu:true,Fri:true,Sat:true,Sun:false},open:'09:00',close:'18:00',blackouts:[]},onboarded:false,tester:false,isCEO:false,isRealStudent:false,acctEmail:'',tourActive:false,userType:null,obStep:0,subscribed:false,subPrompt:false,eduDone:false,agree1:false,agree2:false,agree3:false,cardName:'',cardNum:'',cardExp:'',cardCvc:'',vname:'',bookMethod:0,pays:[],socials:[],saved:[],savedView:false,campus:campusById('fvsu'),campusPick:false,campusQ:'',hubView:'resources',openRes:-1,joinedOrgs:[],joinedGroups:[],intros:[],introText:'',classes:[{id:'c1',name:'BIOL 101',days:['Mon','Wed','Fri'],start:'09:00',end:'09:50',loc:'Founders Hall 204',c:0},{id:'c2',name:'MATH 241',days:['Tue','Thu'],start:'11:00',end:'12:15',loc:'Science Bldg 110',c:2},{id:'c3',name:'ENG 102',days:['Mon','Wed'],start:'14:00',end:'15:15',loc:'Humanities 3',c:4}],todos:[{id:'t1',text:'Finish BIOL lab report',done:false,due:'Today'},{id:'t2',text:'Email advisor about fall registration',done:false,due:'Tomorrow'},{id:'t3',text:'Read Chapter 5 for ENG',done:true,due:'None'}],plannerSub:'schedule',plannerDay:'',classForm:null,todoText:'',todoDue:'None',route:{stops:[],mode:'walk'},promo:{type:'none',pct:'20',ends:''},moreMenu:false,boosted:false,appTheme:'violet',themeView:false,myPostsView:false,thread:0,inboxView:false,joinedComm:[],groupView:null,userView:null,groupCreateView:false,assignMod:false,createGroup:null,groupPostText:'',gradYear:'',inbox:[{id:'ths1',name:'Fades by Marcus',init:'M',color:'#F0873B',unread:1,msgs:[['Fades by Marcus','Appreciate the booking! You want the usual taper this time? ✂️']]},{id:'ths2',name:'Tutor Tori',init:'T',color:'#C026D3',unread:0,msgs:[['You','Hey! Free to help with calc this week?'],['Tutor Tori','Yes! Thursday after 4 works 📚']]}]};
+let state={eduEmail:'',eduCodeSent:false,eduErr:VERIFY_ERR,tab:'home',home:'feed',cat:'All',q:'',near:false,mkt:'goods',formCat:'Food',foodType:'baked',eduOK:false,a1:false,a2:false,a3:false,submitted:false,avatar:'',gallery:[],themeColor:'#9E2B7E',book:null,openC:0,detail:0,isSeller:true,events:[],about:"Tell buyers about your storefront — what you make or do, your vibe, and how to work with you.",services:[],referrals:0,isFounder:false,addMode:null,svcEdit:false,newPhoto:null,reviewOpen:false,reviewStars:5,booked:[],leaderboard:false,storefrontSetup:false,avail:false,cheap:false,top:false,justReferred:-1,msgTo:0,openMC:0,bookSet:false,booking:{mode:'builtin',link:'',provider:'Calendly',days:{Mon:true,Tue:true,Wed:true,Thu:true,Fri:true,Sat:true,Sun:false},open:'09:00',close:'18:00',blackouts:[]},onboarded:false,tester:false,isCEO:false,isRealStudent:false,acctEmail:'',tourActive:false,userType:null,obStep:0,subscribed:false,subPrompt:false,eduDone:false,agree1:false,agree2:false,agree3:false,cardName:'',cardNum:'',cardExp:'',cardCvc:'',vname:'',bookMethod:0,pays:[],socials:[],saved:[],savedView:false,campus:campusById('fvsu'),campusPick:false,campusQ:'',hubView:'resources',openRes:-1,joinedOrgs:[],joinedGroups:[],intros:[],introText:'',classes:[{id:'c1',name:'BIOL 101',days:['Mon','Wed','Fri'],start:'09:00',end:'09:50',loc:'Founders Hall 204',c:0},{id:'c2',name:'MATH 241',days:['Tue','Thu'],start:'11:00',end:'12:15',loc:'Science Bldg 110',c:2},{id:'c3',name:'ENG 102',days:['Mon','Wed'],start:'14:00',end:'15:15',loc:'Humanities 3',c:4}],todos:[{id:'t1',text:'Finish BIOL lab report',done:false,due:'Today'},{id:'t2',text:'Email advisor about fall registration',done:false,due:'Tomorrow'},{id:'t3',text:'Read Chapter 5 for ENG',done:true,due:'None'}],plannerSub:'schedule',plannerDay:'',classForm:null,todoText:'',todoDue:'None',route:{stops:[],mode:'walk'},promo:{type:'none',pct:'20',ends:''},moreMenu:false,boosted:false,appTheme:'violet',themeView:false,myPostsView:false,thread:0,inboxView:false,joinedComm:[],groupView:null,userView:null,groupCreateView:false,assignMod:false,createGroup:null,groupPostText:'',gradYear:'',inbox:[{id:'ths1',name:'Fades by Marcus',init:'M',color:'#F0873B',unread:1,msgs:[['Fades by Marcus','Appreciate the booking! You want the usual taper this time? ✂️']]},{id:'ths2',name:'Tutor Tori',init:'T',color:'#C026D3',unread:0,msgs:[['You','Hey! Free to help with calc this week?'],['Tutor Tori','Yes! Thursday after 4 works 📚']]}]};
 const screen=document.getElementById('screen'),photo=document.getElementById('photo'),gphoto=document.getElementById('gphoto'),ephoto=document.getElementById('ephoto'),cphoto=document.getElementById('cphoto');
 const color=i=>COLORS[i%COLORS.length];
 const bg=h=>h.me?state.themeColor:color(h.c);
@@ -984,7 +984,7 @@ function notifyBooking(h,b){
   try{
     var when=b.date+' \u00b7 '+b.time;
     var th=(state.inbox||[]).filter(function(t){return t.name===h.name;})[0];
-    if(!th){th={id:'th'+(idc++),name:h.name,init:(h.name.trim()[0]||'?').toUpperCase(),color:'#5A2BE0',unread:0,msgs:[]};state.inbox.unshift(th);}
+    if(!th){th={id:'th'+(idc++),name:h.name,init:(h.name.trim()[0]||'?').toUpperCase(),color:'#9E2B7E',unread:0,msgs:[]};state.inbox.unshift(th);}
     th.msgs.push(['You','\uD83D\uDCC5 Booking request: '+b.svc+' \u2014 '+when]);
     th.msgs.push([h.name,'Confirmed! '+b.svc+' on '+when+'. You\u2019ll get a reminder 1 hour before \u23F0']);
     th.unread=(th.unread||0)+1;
@@ -1614,7 +1614,7 @@ function bookingSettings(){
   document.getElementById('bsave').onclick=()=>{state.bookSet=false;toast('Availability saved ✓');render();};
 }
 
-function demoSkip(){state.eduDone=true;state.onboarded=true;state.userType='vendor';state.isSeller=true;state.subscribed=true;state.agree1=true;state.agree2=true;state.agree3=true;state.formCat='Beauty';if(!state.services.length)state.services=[['Signature service','$25'],['Add-on','$10']];if(!state.gallery.length)state.gallery=[pic('#5a2be0','#8a5bf0','\u2728','Your work'),pic('#0e9f6e','#0891b2','\ud83d\udcf7','Your work'),pic('#c026d3','#e11d48','\ud83c\udfa8','Your work')];if(!state.socials.length)state.socials=[{type:'Instagram',url:'instagram.com/you'},{type:'TikTok',url:'tiktok.com/@you'}];if(!state.pays.length)state.pays=[{app:'Cash App',handle:'$you'},{app:'Venmo',handle:'@you'}];state.tab='home';state.tester=true;state.isCEO=false;state.isRealStudent=false;if(typeof refreshDemo==='function')refreshDemo();render();if(window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour(false);},350);}
+function demoSkip(){state.eduDone=true;state.onboarded=true;state.userType='vendor';state.isSeller=true;state.subscribed=true;state.agree1=true;state.agree2=true;state.agree3=true;state.formCat='Beauty';if(!state.services.length)state.services=[['Signature service','$25'],['Add-on','$10']];if(!state.gallery.length)state.gallery=[pic('#9E2B7E','#C86BB6','\u2728','Your work'),pic('#0e9f6e','#0891b2','\ud83d\udcf7','Your work'),pic('#c026d3','#e11d48','\ud83c\udfa8','Your work')];if(!state.socials.length)state.socials=[{type:'Instagram',url:'instagram.com/you'},{type:'TikTok',url:'tiktok.com/@you'}];if(!state.pays.length)state.pays=[{app:'Cash App',handle:'$you'},{app:'Venmo',handle:'@you'}];state.tab='home';state.tester=true;state.isCEO=false;state.isRealStudent=false;if(typeof refreshDemo==='function')refreshDemo();render();if(window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour(false);},350);}
 function finishOnboarding(){state.onboarded=true;state.tab='home';state.obStep=0;try{document.querySelectorAll('#nav .navitem').forEach(function(n){n.classList.toggle('on',n.dataset.tab==='home');});}catch(e){}render();}
 function onboarding(){
   /* Already verified (e.g. returning from the emailed sign-in link): drop straight
@@ -1793,7 +1793,7 @@ function pickNearest(){
   catch(e){useLocal(32.84,-83.63);}
 }
 const APP_THEMES=[
- {id:'violet',name:'Violet \u2014 Creative',primary:'#5A2BE0',dark:'#3d1c99',soft:'#EFE8FF',accent:'#FFB020',desc:'Energetic and youthful. Signals creativity and community \u2014 the current VendU look.'},
+ {id:'violet',name:'Violet \u2014 Creative',primary:'#9E2B7E',dark:'#3d1c99',soft:'#EFE8FF',accent:'#FFB020',desc:'Energetic and youthful. Signals creativity and community \u2014 the current VendU look.'},
  {id:'navy',name:'Navy \u2014 Trust',primary:'#1D3A8A',dark:'#132456',soft:'#E6ECFA',accent:'#F5C518',desc:'Calm and credible. Navy reads as trustworthy and established \u2014 think banks and universities.'},
  {id:'emerald',name:'Emerald \u2014 Growth',primary:'#0E7C5A',dark:'#08503b',soft:'#E3F5EE',accent:'#F0873B',desc:'Fresh and grounded. Green signals growth, money, and momentum for student founders.'}
 ];
@@ -1810,7 +1810,7 @@ function openInbox(){state.thread=0;state.inboxView=true;render();}
 function openThread(name,init,color){
   name=name||'a seller';
   var th=state.inbox.filter(function(t){return t.name===name;})[0];
-  if(!th){th={id:'th'+(idc++),name:name,init:(init||name.trim()[0]||'?').toUpperCase(),color:color||'#5A2BE0',unread:0,msgs:[[name,'Hey! Thanks for reaching out 👋 What can I do for you?']]};state.inbox.unshift(th);}
+  if(!th){th={id:'th'+(idc++),name:name,init:(init||name.trim()[0]||'?').toUpperCase(),color:color||'#9E2B7E',unread:0,msgs:[[name,'Hey! Thanks for reaching out 👋 What can I do for you?']]};state.inbox.unshift(th);}
   th.unread=0;state.thread=th.id;state.inboxView=true;state.userView=null;render();
 }
 function inboxScreen(){
@@ -1892,7 +1892,7 @@ function showInstall(){
       :'On desktop: click the install icon in your browser\u2019s address bar, or use the browser menu \u2192 \u201CInstall VendU\u201D.');
   var w=document.createElement('div');
   w.style.cssText='position:fixed;inset:0;background:rgba(15,12,30,.55);display:flex;align-items:flex-end;justify-content:center;z-index:9999';
-  w.innerHTML='<div style="background:var(--paper,#FBF8F3);border-radius:20px 20px 0 0;padding:22px 20px 26px;max-width:520px;width:100%"><div style="font-size:19px;font-weight:800;margin-bottom:6px">\uD83D\uDCF2 Install VendU</div><div style="font-size:14px;line-height:1.5;color:#5d5870">'+msg+'</div><button style="margin-top:16px;width:100%;padding:13px;border:0;border-radius:12px;background:#5A2BE0;color:#fff;font-weight:700;font-size:15px">Got it</button></div>';
+  w.innerHTML='<div style="background:var(--paper,#FBF8F3);border-radius:20px 20px 0 0;padding:22px 20px 26px;max-width:520px;width:100%"><div style="font-size:19px;font-weight:800;margin-bottom:6px">\uD83D\uDCF2 Install VendU</div><div style="font-size:14px;line-height:1.5;color:#5d5870">'+msg+'</div><button style="margin-top:16px;width:100%;padding:13px;border:0;border-radius:12px;background:#9E2B7E;color:#fff;font-weight:700;font-size:15px">Got it</button></div>';
   w.onclick=function(e){if(e.target===w||e.target.tagName==='BUTTON')w.remove();};
   document.body.appendChild(w);
 }
