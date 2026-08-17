@@ -538,21 +538,22 @@
 .awn-welcome{font-size:12.5px!important;letter-spacing:.20em;opacity:1;font-weight:800;color:#fff;
   text-shadow:0 1px 2px rgba(20,16,28,.35);margin-bottom:0;position:relative;z-index:1}
 
-/* translucent, glassy signal badges (tinted, see-through) */
+/* translucent, glassy signal badges (see-through tint, hairline outline) */
 .store-badges span,.store-badges .dealpill,.store-badges .soonpill,.store-badges .founderpill,.store-badges .vendorpill,.store-badges .licpill,.store-badges .foodpill,.store-badges .ceopill{
-  box-shadow:none!important;border:1px solid currentColor!important;
-  padding:4px 10px!important;font-weight:800;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
-.store-badges .dealpill,.store-badges .soonpill{color:#9A6108!important;background:rgba(251,210,126,.22)!important}
-.store-badges .founderpill{color:#7E2338!important;background:rgba(126,35,56,.14)!important}
-.store-badges .vendorpill{color:#4A22B8!important;background:rgba(74,34,184,.12)!important}
-.store-badges .licpill,.store-badges .foodpill{color:#0A6E50!important;background:rgba(10,110,80,.12)!important}
-.store-badges .ceopill{color:#8A6A10!important;background:rgba(138,106,16,.14)!important}
+  box-shadow:none!important;padding:4px 10px!important;font-weight:800;
+  backdrop-filter:blur(4px) saturate(1.1);-webkit-backdrop-filter:blur(4px) saturate(1.1)}
+.store-badges .dealpill,.store-badges .soonpill{color:#9A6108!important;background:rgba(251,210,126,.16)!important;border:1px solid rgba(154,97,8,.32)!important}
+.store-badges .founderpill{color:#7E2338!important;background:rgba(126,35,56,.09)!important;border:1px solid rgba(126,35,56,.30)!important}
+.store-badges .vendorpill{color:#4A22B8!important;background:rgba(74,34,184,.08)!important;border:1px solid rgba(74,34,184,.28)!important}
+.store-badges .licpill,.store-badges .foodpill{color:#0A6E50!important;background:rgba(10,110,80,.08)!important;border:1px solid rgba(10,110,80,.28)!important}
+.store-badges .ceopill{color:#8A6A10!important;background:rgba(138,106,16,.10)!important;border:1px solid rgba(138,106,16,.30)!important}
 
-/* avatar barely tucked under the awning valance */
-.awning{z-index:3}
+/* avatar barely tucked under the awning valance (ruffles pass in front of its top edge) */
+.awning{z-index:5}
+.awning::after{z-index:6}
 .shop-sign{z-index:1;margin-top:-6px;padding-top:16px;align-items:flex-start}
 .shop-sign>div:last-child{padding-top:0}
-.shop-sign .detail-av{margin-top:-22px;position:relative;z-index:0}
+.shop-sign .detail-av{margin-top:-24px;position:relative;z-index:0}
 </style>
 </head>
 <body>
