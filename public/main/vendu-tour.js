@@ -301,6 +301,7 @@
       boundEl = el;
       boundEvent = st.event || "click";
       onTargetClick = function () {
+        if (st.then) return waitThen(st);
         dir = 1;
         i++;
         cleanup();
@@ -308,6 +309,7 @@
       };
       el.addEventListener(boundEvent, onTargetClick);
     }
+
 
     boundTarget = el;
     position();
