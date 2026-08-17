@@ -116,7 +116,7 @@
         before: openThread,
         target: function () { return $("[data-user]"); },
         title: "Tap any student's name",
-        text: "Names are tappable everywhere — posts, comments, Market listings and communities. Tapping one opens that student's profile with their badges, communities, active listings and a message button.",
+        text: "Names are tappable everywhere — posts, comments and Market listings. Tapping one opens that student's profile with their badges, active listings and a message button.",
         doit: "Tap a student's name",
         click: true,
         place: "below",
@@ -125,7 +125,7 @@
         before: goFeed,
         target: postBadge,
         title: "Badges tell you who's who",
-        text: "Badges sit next to a name everywhere — on posts, profiles and storefronts. 🎓 Founder is one of the first 10 verified student vendors on a campus, 💠 Vendor means they sell, ★ marks VendU staff, and campus or community badges show the school, org and groups they belong to. Deal badges — 🏷️ Sale, 🏷️ 20% off, ⏳ Ending soon — show while a vendor is running a promo. Posts show up to two.",
+        text: "Badges sit next to a name everywhere — on posts, profiles and storefronts. 🎓 Founder is one of the first 10 verified student vendors on a campus, 💠 Vendor means they sell, ★ marks VendU staff, and the campus badge shows the school they belong to. Deal badges — 🏷️ Sale, 🏷️ 20% off, ⏳ Ending soon — show while a vendor is running a promo. Posts show up to two.",
         place: "below",
       },
       {
@@ -225,7 +225,7 @@
         before: goProfile,
         target: function () { return $("#viewmyprofile") || $(".detail-av.up") || $(".photo-av.up"); },
         title: "Your photo & public profile",
-        text: "Tap the camera on your photo to upload a picture and set your display name — students see both next to your posts and comments. View my profile shows your page exactly as other students see it: badges, communities and anything you have listed.",
+        text: "Tap the camera on your photo to upload a picture and set your display name — students see both next to your posts and comments. View my profile shows your page exactly as other students see it: badges and anything you have listed.",
         place: "above",
       },
       {
