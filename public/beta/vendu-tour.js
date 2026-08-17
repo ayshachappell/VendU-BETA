@@ -105,10 +105,10 @@
       },
       {
         before: goFeed,
-        target: function () { return $("[data-cmt]"); },
+        target: function () { return $(".p-name[data-open]") || $("[data-user]") || $(".p-name"); },
         title: "Like, comment & tap any name",
-        text: "Every post can be liked and commented on. Names are tappable everywhere and open that student's profile, badges and listings.",
-        doit: "Tap the comment icon",
+        text: "Every post can be liked and commented on with the ♡ and 💬 icons. Names are tappable everywhere — tapping one opens that student's profile, badges and listings, where you can message them directly.",
+        doit: "Tap the student's name",
         click: true,
         place: "below",
       },
@@ -129,12 +129,14 @@
       },
       {
         before: openStore,
-        target: function () { return $(".cta-bar"); },
+        target: function () { return $(".paychips") || $(".cta-bar"); },
         title: "Pay, save, message or book",
-        text: "Services and prices sit at the top, then photos and reviews. Under Accepts, tap Cash App, Venmo, Zelle or PayPal to pay the vendor directly. Down here you can save the storefront, message the student or book a time — messages live in Profile → Messages, and Back returns you where you were.",
-        lock: true,
+        text: "Services, prices, photos and reviews sit above. Under Accepts · tap to pay, tap Cash App, Venmo, Zelle or PayPal to pay the vendor directly. The bar at the bottom saves the storefront, messages the student or books a time — messages live in Profile → Messages, and Back returns you where you were.",
+        doit: "Tap a payment app under Accepts",
+        click: true,
         place: "above",
       },
+
       {
         before: goHome,
         target: function () { return nav("add"); },
