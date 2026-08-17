@@ -1908,8 +1908,13 @@ function deleteAccount(){
   setTimeout(function(){location.reload();},900);
 }
 
+// VendU stays installable through its web-app manifest. Offline app-shell
+// caching is intentionally disabled so published updates cannot be trapped
+// behind an older installed copy.
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/main/sw.js?v=6').catch(function(){});
+  navigator.serviceWorker.getRegistration('/main/').then(function (registration) {
+    if (registration) registration.update().catch(function () {});
+  }).catch(function () {});
 }
 </script>
 </body>
