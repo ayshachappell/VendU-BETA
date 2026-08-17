@@ -7,7 +7,15 @@
 <title>VendU — sell your stuff, book a service, get paid.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script>window.VENDU_ASSET_V=Math.floor(Date.now()/600000);document.write('<link rel="stylesheet" href="/main/vendu-shared.css?v='+window.VENDU_ASSET_V+'">');</script>
+<script>
+window.VENDU_ASSET_V=Date.now();
+document.write('<link rel="stylesheet" href="/main/vendu-shared.css?v='+window.VENDU_ASSET_V+'">');
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('/main/sw.js',{scope:'/main/',updateViaCache:'none'}).then(function(r){
+    return r.update().catch(function(){});
+  }).catch(function(){});
+}
+</script>
 <link rel="manifest" href="/main/manifest.webmanifest">
 <meta name="theme-color" content="#5A2BE0">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1735,10 +1743,16 @@ function cpSearch(val){
   if(!window.VendU||!VendU.searchSchools)return;
   var v=String(val||'').trim();
   if(v.length<2){state.campusResults=[];cpRenderList();return;}
+  state.campusSearching=true;state.campusSearchError=false;cpRenderList();
   VendU.searchSchools(v).then(function(r){
     if(String(state.campusQ||'').trim()!==v)return;
+    state.campusSearching=false;
     state.campusResults=(r&&r.ok&&r.results)?r.results:[];
+    state.campusSearchError=!(r&&r.ok);
     cpRenderList();
+  }).catch(function(){
+    if(String(state.campusQ||'').trim()!==v)return;
+    state.campusSearching=false;state.campusSearchError=true;state.campusResults=[];cpRenderList();
   });
 }
 function cpRenderList(){
@@ -1759,7 +1773,7 @@ function cpRenderList(){
     var on=state.campus&&state.campus.domain===r.domain;
     return row(r.name,(r.state?r.state+' \u00b7 ':'')+r.domain,'data-domain="'+r.domain+'" data-name="'+String(r.name).replace(/"/g,'&quot;')+'"',on);
   }).join('');
-  if(!html)html='<div class="prompt">'+(ql.length===1?'Keep typing\u2026':'Type your school name \u2014 every U.S. college, community college and trade school is searchable.')+'</div>';
+  if(!html)html='<div class="prompt">'+(state.campusSearching?'Searching every U.S. campus\u2026':state.campusSearchError?'School search could not connect. Check your connection and try again.':ql.length===1?'Keep typing\u2026':'Type your school name \u2014 every U.S. college, community college and trade school is searchable.')+'</div>';
   box.innerHTML=html;
   box.querySelectorAll('[data-camp]').forEach(function(el){el.onclick=function(){state.campus=campusById(el.dataset.camp);applyCampusTheme();loadCampusEvents();saveCampusPref();state.campusPick=false;state.campusQ='';state.campusResults=[];toast('Now viewing '+state.campus.short);render();};});
   box.querySelectorAll('[data-domain]').forEach(function(el){el.onclick=function(){
