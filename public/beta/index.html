@@ -865,7 +865,7 @@ function detail(id){
   let windows='';
   if(h.gallery&&h.gallery.length){windows=h.gallery.map(g=>`<div class="window"><img src="${g.src}" style="object-fit:${g.fit||'cover'}"></div>`).join('');}
   else if(h.me){windows=`<div class="window empty" style="background:${shade(c,62)}"><div class="win-hint">🪟 Add photos of your work<br><span>Profile → Set up your storefront</span></div></div><div class="window empty" style="background:${shade(c,62)}"></div>`;}
-  else{windows=`<div class="window empty" style="background:${shade(c,62)}"></div><div class="window empty" style="background:${shade(c,62)}"></div><div class="window empty" style="background:${shade(c,62)}"></div>`;}
+  else{const _svcw=(h.services||[]).filter(s=>s&&s[0]).slice(0,3);const _tiles=_svcw.length?_svcw:[['On campus','']];windows=_tiles.map(s=>`<div class="window empty" style="background:linear-gradient(160deg,${shade(c,45)},${shade(c,-15)})"><div class="win-hint">${s[0]}${s[1]?`<span>${s[1]}</span>`:''}</div></div>`).join('');}
   let socialHTML='';
   if(h.me){socialHTML=(state.socials&&state.socials.length)?state.socials.map(so=>`<a class="soc" href="${linkUrl(so.url)}" target="_blank" rel="noopener" title="${so.type}">${icon(SOCIAL_TYPES[so.type]||SOCIAL_TYPES.Website,18)}</a>`).join(''):`<div style="font-size:12.5px;color:var(--mist)">Add your socials under Set up your storefront →</div>`;}
   else{socialHTML=`<div class="soc" data-soc="Instagram">${icon(SOCIAL_TYPES.Instagram,18)}</div><div class="soc" data-soc="TikTok">${icon(SOCIAL_TYPES.TikTok,18)}</div><div class="soc" data-soc="Website">${icon(SOCIAL_TYPES.Website,18)}</div>`;}
