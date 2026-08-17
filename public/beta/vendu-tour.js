@@ -105,10 +105,10 @@
       },
       {
         before: goFeed,
-        target: function () { return $("[data-cmt]"); },
+        target: function () { return $(".p-name[data-open]") || $("[data-user]") || $(".p-name"); },
         title: "Like, comment & tap any name",
-        text: "Every post can be liked and commented on. Names are tappable everywhere and open that student's profile, badges and listings.",
-        doit: "Tap the comment icon",
+        text: "Every post can be liked and commented on with the ♡ and 💬 icons. Names are tappable everywhere — tapping one opens that student's profile, badges and listings, where you can message them directly.",
+        doit: "Tap the student's name",
         click: true,
         place: "below",
       },
@@ -129,12 +129,14 @@
       },
       {
         before: openStore,
-        target: function () { return $(".cta-bar"); },
+        target: function () { return $(".paychips") || $(".cta-bar"); },
         title: "Pay, save, message or book",
-        text: "Services and prices sit at the top, then photos and reviews. Under Accepts, tap Cash App, Venmo, Zelle or PayPal to pay the vendor directly. Down here you can save the storefront, message the student or book a time — messages live in Profile → Messages, and Back returns you where you were.",
-        lock: true,
+        text: "Services, prices, photos and reviews sit above. Under Accepts · tap to pay, tap Cash App, Venmo, Zelle or PayPal to pay the vendor directly. The bar at the bottom saves the storefront, messages the student or books a time — messages live in Profile → Messages, and Back returns you where you were.",
+        doit: "Tap a payment app under Accepts",
+        click: true,
         place: "above",
       },
+
       {
         before: goHome,
         target: function () { return nav("add"); },
@@ -158,9 +160,17 @@
         target: function () { return $("#startsell") || $('[data-menu="setup"]') || $("#moretoggle"); },
         title: "Your profile & storefront",
         text: "Upload your photo and display name, use View my profile or View my VendU to see yourself as students do, and check 🏆 Leaderboard for the top vendors this month. Set up your storefront is where you link socials, add and resize photos, list services and prices, set a sale with an end date, and add Cash App, Venmo, Zelle or PayPal handles. Selling is optional — switching between Student and Vendor view keeps the same account.",
+        place: "above",
+      },
+      {
+        before: goProfile,
+        target: function () { return $(".ref") || $("#startsell"); },
+        title: "Vendors referred → become a Founder",
+        text: "Copy your referral link and share it. Every vendor who signs up through it counts here — hit 3 and you become one of the 10 🎓 Founders on your campus, free forever with a monthly Boost and the Founder badge on your name. 🏆 Leaderboard ranks founders by referrals.",
         next: "Finish",
         place: "above",
       },
+
     ];
   }
 
@@ -339,11 +349,22 @@
       el.style.height = box.h + "px";
     });
     var ch = card.offsetHeight || 180;
+    var vh = window.innerHeight;
     var below = box.top + box.h + 14;
     var above = box.top - ch - 14;
-    var top = list[i].place === "above" || below + ch > window.innerHeight - 12 ? above : below;
+    var fitsBelow = below + ch <= vh - 12;
+    var fitsAbove = above >= 12;
+    var top;
+    if (list[i].place === "above") top = fitsAbove ? above : fitsBelow ? below : above;
+    else top = fitsBelow ? below : fitsAbove ? above : below;
+    if (!fitsAbove && !fitsBelow) {
+      // Never cover the highlighted control: sit in whichever gap is larger.
+      var roomAbove = box.top - 12;
+      var roomBelow = vh - (box.top + box.h) - 12;
+      top = roomBelow >= roomAbove ? box.top + box.h + 14 : Math.max(12, box.top - ch - 14);
+    }
     if (top < 12) top = 12;
-    if (top + ch > window.innerHeight - 12) top = Math.max(12, window.innerHeight - ch - 12);
+    if (top + ch > vh - 12) top = Math.max(12, vh - ch - 12);
     card.style.top = top + "px";
     var host = document.querySelector(".device") || document.body;
     var hr = host.getBoundingClientRect();
