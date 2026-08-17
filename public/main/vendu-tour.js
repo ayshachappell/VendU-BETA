@@ -236,6 +236,7 @@
   }
 
   function end(done) {
+    dbgLog("tour ended", { completed: done !== false });
     running = false;
     try { if (W.onTour) W.onTour(false); } catch (e) {}
     cleanup();
@@ -272,6 +273,7 @@
         }, 150);
       // Going backwards we never skip past steps — the user asked for the
       // previous step, so show its card centred instead of rewinding further.
+      dbgLog("target missing for step", i, st.title);
       if (dir < 0) return showCentered(st);
       i += dir;
       if (i >= list.length) return end();
@@ -318,6 +320,7 @@
 
 
     boundTarget = el;
+    dbgPaint();
     position();
     window.addEventListener("resize", position);
     window.addEventListener("scroll", position, true);
@@ -428,6 +431,7 @@
     card.innerHTML = cardHTML(st, false);
     document.body.appendChild(card);
     wireCard(st);
+    dbgPaint("target not found — centred card");
     var host = document.querySelector(".device") || document.body;
     var hr = host.getBoundingClientRect();
     var cw = card.offsetWidth || 320;
@@ -494,6 +498,7 @@
       st.next +
       "</button></div></div>";
     document.body.appendChild(modal);
+    dbgPaint();
     var mb = modal.querySelector('[data-tour="back"]');
     if (mb) mb.onclick = goBack;
     modal.querySelector('[data-tour="next"]').onclick = function () {
@@ -502,6 +507,108 @@
       show();
     };
   }
+
+
+  /* ---------- Tutorial debug mode ----------
+     Turn on with ?tourdebug=1 in the URL, or run VendU.tourDebug(true)
+     in the console. Shows a live panel with the build, current step,
+     total steps, whether the highlight target was found, and logs each
+     step transition to the console. Stays on across reloads until
+     VendU.tourDebug(false). */
+  var DBG_KEY = "vendu_tour_debug";
+  var DEBUG = false;
+  var dbgEl = null;
+  try {
+    DEBUG =
+      localStorage.getItem(DBG_KEY) === "1" ||
+      /[?&]tourdebug=1/.test(location.search);
+    if (/[?&]tourdebug=1/.test(location.search)) localStorage.setItem(DBG_KEY, "1");
+    if (/[?&]tourdebug=0/.test(location.search)) {
+      localStorage.removeItem(DBG_KEY);
+      DEBUG = false;
+    }
+  } catch (e) {}
+
+  function dbgLog() {
+    if (!DEBUG) return;
+    try {
+      var a = ["[VendU tour][MAIN]"].concat([].slice.call(arguments));
+      console.log.apply(console, a);
+    } catch (e) {}
+  }
+
+  function dbgPanel() {
+    if (!DEBUG) return null;
+    if (dbgEl && document.body.contains(dbgEl)) return dbgEl;
+    dbgEl = document.createElement("div");
+    dbgEl.id = "tour-debug";
+    dbgEl.setAttribute("style",
+      "position:fixed;left:8px;bottom:8px;z-index:2147483647;max-width:280px;" +
+      "font:11px/1.35 ui-monospace,Menlo,monospace;color:#fff;background:rgba(17,17,24,.92);" +
+      "border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:8px 10px;pointer-events:auto;" +
+      "white-space:pre-wrap;box-shadow:0 6px 22px rgba(0,0,0,.4)");
+    dbgEl.addEventListener("click", function () {
+      W.tourDebug(false);
+    });
+    document.body.appendChild(dbgEl);
+    return dbgEl;
+  }
+
+  function dbgPaint(note) {
+    if (!DEBUG) return;
+    var el = dbgPanel();
+    if (!el) return;
+    var st = list[i] || {};
+    var found = "n/a";
+    if (st.target) {
+      try {
+        found = st.target() ? "yes" : "NO";
+      } catch (e) {
+        found = "error";
+      }
+    }
+    el.textContent =
+      "TOUR DEBUG · MAIN\n" +
+      "running: " + running + "\n" +
+      "index: " + i + " / " + (list.length - 1) + "\n" +
+      "step: " + realIndex() + " of " + realSteps() + "\n" +
+      "title: " + (st.title || (st.intro ? "(intro)" : "-")) + "\n" +
+      "target found: " + found + "\n" +
+      "advance: " + (st.click ? "tap target" : "Next button") +
+      (st.then ? " + " + st.then : "") + "\n" +
+      "seen flag: " + (W.tourSeen() ? "1" : "0") +
+      (note ? "\n" + note : "") +
+      "\n(tap panel to disable)";
+  }
+
+  function dbgRemove() {
+    if (dbgEl && dbgEl.parentNode) dbgEl.parentNode.removeChild(dbgEl);
+    dbgEl = null;
+  }
+
+  W.tourDebug = function (on) {
+    DEBUG = on !== false;
+    try {
+      if (DEBUG) localStorage.setItem(DBG_KEY, "1");
+      else localStorage.removeItem(DBG_KEY);
+    } catch (e) {}
+    if (DEBUG) dbgPaint("enabled");
+    else dbgRemove();
+    return DEBUG;
+  };
+  W.tourInfo = function () {
+    return {
+      build: "MAIN",
+      running: running,
+      index: i,
+      total: list.length,
+      steps: list.map(function (s) {
+        return s.title || "(intro)";
+      }),
+      seen: W.tourSeen(),
+      debug: DEBUG,
+    };
+  };
 
   W.startTour = function (force) {
     try {
@@ -514,6 +621,8 @@
       return !s.requires || document.querySelector(s.requires);
     });
     i = 0;
+    dbgLog("tour started with", list.length, "cards");
+    dbgPaint("started");
     setTimeout(show, 500);
   };
   W.tourSeen = function () {
