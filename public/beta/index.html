@@ -1909,6 +1909,11 @@ function deleteAccount(){
 // VendU Beta stays installable through its web-app manifest. Offline app-shell
 // caching is intentionally disabled so published updates cannot be trapped
 // behind an older installed copy.
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistration('/beta/').then(function (registration) {
+    if (registration) registration.update().catch(function () {});
+  }).catch(function () {});
+}
 </script>
 </body>
 </html>
