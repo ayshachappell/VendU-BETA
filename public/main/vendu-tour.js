@@ -172,7 +172,10 @@
         target: function () { return $("#startsell") || $('[data-menu="setup"]') || $("#moretoggle"); },
         title: "Your profile & storefront",
         text: "Upload your photo and display name, use View my profile or View my VendU to see yourself as students do, and check 🏆 Leaderboard for the top vendors this month. Set up your storefront is where you link socials, add and resize photos, list services and prices, set a sale with an end date, and add Cash App, Venmo, Zelle or PayPal handles. Selling is optional — switching between Student and Vendor view keeps the same account.",
+        lock: true,
+        next: "Next",
         place: "above",
+
       },
       {
         before: goProfile,
