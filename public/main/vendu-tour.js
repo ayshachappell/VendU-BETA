@@ -169,9 +169,17 @@
         target: function () { return $("#startsell") || $('[data-menu="setup"]') || $("#moretoggle"); },
         title: "Your profile & storefront",
         text: "Upload your photo and display name, use View my profile or View my VendU to see yourself as students do, and check 🏆 Leaderboard for the top vendors this month. Set up your storefront is where you link socials, add and resize photos, list services and prices, set a sale with an end date, and add Cash App, Venmo, Zelle or PayPal handles. Selling is optional — switching between Student and Vendor view keeps the same account.",
+        place: "above",
+      },
+      {
+        before: goProfile,
+        target: function () { return $(".ref") || $("#startsell"); },
+        title: "Vendors referred → become a Founder",
+        text: "Copy your referral link and share it. Every vendor who signs up through it counts here — hit 3 and you become one of the 10 🎓 Founders on your campus, free forever with a monthly Boost and the Founder badge on your name. 🏆 Leaderboard ranks founders by referrals.",
         next: "Finish",
         place: "above",
       },
+
     ];
   }
 
