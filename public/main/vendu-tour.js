@@ -104,14 +104,17 @@
         place: "below",
       },
       {
-        before: goFeed,
-        target: function () { return $(".p-name[data-open]") || $("[data-user]") || $(".p-name"); },
+        before: openThread,
+        target: function () { return $(".p-comment [data-user]") || $("[data-user]") || $(".p-name"); },
         title: "Like, comment & tap any name",
-        text: "Every post can be liked and commented on with the ♡ and 💬 icons. Names are tappable everywhere — tapping one opens that student's profile, badges and listings, where you can message them directly.",
-        doit: "Tap the student's name",
+        text: "Every post can be liked and commented on with the ♡ and 💬 icons. Names are tappable everywhere — even in the comments. Tapping one opens that student's profile, badges and listings, where you can message them directly. Close it with ‹ Back.",
+        doit: "Tap the commenter's name",
         click: true,
+        then: "#upBack",
+        thenDoit: "Now tap ‹ Back to close their profile",
         place: "below",
       },
+
       {
         before: goFeed,
         target: postBadge,
