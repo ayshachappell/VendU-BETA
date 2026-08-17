@@ -113,11 +113,11 @@ export async function updateCampus(
   patch: { display_name?: string; mascot?: string; accent_color?: string },
 ): Promise<Campus | null> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const clean: Record<string, string> = {};
-  if (patch.display_name) clean["display_name"] = patch.display_name.slice(0, 90);
-  if (patch.mascot !== undefined) clean["mascot"] = String(patch.mascot).slice(0, 24);
+  const clean: { display_name?: string; mascot?: string; accent_color?: string } = {};
+  if (patch.display_name) clean.display_name = patch.display_name.slice(0, 90);
+  if (patch.mascot !== undefined) clean.mascot = String(patch.mascot).slice(0, 24);
   if (patch.accent_color && /^#[0-9a-f]{6}$/i.test(patch.accent_color)) {
-    clean["accent_color"] = patch.accent_color;
+    clean.accent_color = patch.accent_color;
   }
   if (!Object.keys(clean).length) return null;
   const { data } = await supabaseAdmin
