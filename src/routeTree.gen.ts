@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as BetaRouteImport } from './routes/beta'
 import { Route as ApiPublicAccountDeleteRouteImport } from './routes/api/public/account/delete'
+import { Route as ApiPublicCampusSearchRouteImport } from './routes/api/public/campus/search'
 import { Route as ApiPublicCommunityActivityRouteImport } from './routes/api/public/community/activity'
 import { Route as ApiPublicNotifyAppointmentRouteImport } from './routes/api/public/notify/appointment'
 import { Route as ApiPublicVerifyCheckRouteImport } from './routes/api/public/verify/check'
@@ -40,6 +41,11 @@ const BetaRoute = BetaRouteImport.update({
 const ApiPublicAccountDeleteRoute = ApiPublicAccountDeleteRouteImport.update({
   id: '/api/public/account/delete',
   path: '/api/public/account/delete',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicCampusSearchRoute = ApiPublicCampusSearchRouteImport.update({
+  id: '/api/public/campus/search',
+  path: '/api/public/campus/search',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicCommunityActivityRoute =
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
+  '/api/public/campus/search': typeof ApiPublicCampusSearchRoute
   '/api/public/community/activity': typeof ApiPublicCommunityActivityRoute
   '/api/public/notify/appointment': typeof ApiPublicNotifyAppointmentRoute
   '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
@@ -104,6 +111,7 @@ export interface FileRoutesByTo {
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
+  '/api/public/campus/search': typeof ApiPublicCampusSearchRoute
   '/api/public/community/activity': typeof ApiPublicCommunityActivityRoute
   '/api/public/notify/appointment': typeof ApiPublicNotifyAppointmentRoute
   '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
+  '/api/public/campus/search': typeof ApiPublicCampusSearchRoute
   '/api/public/community/activity': typeof ApiPublicCommunityActivityRoute
   '/api/public/notify/appointment': typeof ApiPublicNotifyAppointmentRoute
   '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
@@ -135,6 +144,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/beta'
     | '/api/public/account/delete'
+    | '/api/public/campus/search'
     | '/api/public/community/activity'
     | '/api/public/notify/appointment'
     | '/api/public/verify/check'
@@ -149,6 +159,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/beta'
     | '/api/public/account/delete'
+    | '/api/public/campus/search'
     | '/api/public/community/activity'
     | '/api/public/notify/appointment'
     | '/api/public/verify/check'
@@ -163,6 +174,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/beta'
     | '/api/public/account/delete'
+    | '/api/public/campus/search'
     | '/api/public/community/activity'
     | '/api/public/notify/appointment'
     | '/api/public/verify/check'
@@ -178,6 +190,7 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRoute
   BetaRoute: typeof BetaRoute
   ApiPublicAccountDeleteRoute: typeof ApiPublicAccountDeleteRoute
+  ApiPublicCampusSearchRoute: typeof ApiPublicCampusSearchRoute
   ApiPublicCommunityActivityRoute: typeof ApiPublicCommunityActivityRoute
   ApiPublicNotifyAppointmentRoute: typeof ApiPublicNotifyAppointmentRoute
   ApiPublicVerifyCheckRoute: typeof ApiPublicVerifyCheckRoute
@@ -216,6 +229,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/account/delete'
       fullPath: '/api/public/account/delete'
       preLoaderRoute: typeof ApiPublicAccountDeleteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/campus/search': {
+      id: '/api/public/campus/search'
+      path: '/api/public/campus/search'
+      fullPath: '/api/public/campus/search'
+      preLoaderRoute: typeof ApiPublicCampusSearchRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/community/activity': {
@@ -282,6 +302,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRoute,
   BetaRoute: BetaRoute,
   ApiPublicAccountDeleteRoute: ApiPublicAccountDeleteRoute,
+  ApiPublicCampusSearchRoute: ApiPublicCampusSearchRoute,
   ApiPublicCommunityActivityRoute: ApiPublicCommunityActivityRoute,
   ApiPublicNotifyAppointmentRoute: ApiPublicNotifyAppointmentRoute,
   ApiPublicVerifyCheckRoute: ApiPublicVerifyCheckRoute,
