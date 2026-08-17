@@ -337,8 +337,8 @@
       boundEl = el2;
       boundEvent = "click";
       if (card) {
-        var d = card.querySelector(".tour-doit");
-        if (d && st.thenDoit) d.textContent = st.thenDoit;
+        var d = card.querySelector(".tour-do");
+        if (d && st.thenDoit) d.textContent = "👆 " + st.thenDoit;
       }
       onTargetClick = function () {
         dir = 1;
