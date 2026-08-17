@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as BetaRouteImport } from './routes/beta'
 import { Route as ApiPublicAccountDeleteRouteImport } from './routes/api/public/account/delete'
+import { Route as ApiPublicCampusResolveRouteImport } from './routes/api/public/campus/resolve'
 import { Route as ApiPublicCampusSearchRouteImport } from './routes/api/public/campus/search'
 import { Route as ApiPublicCommunityActivityRouteImport } from './routes/api/public/community/activity'
 import { Route as ApiPublicNotifyAppointmentRouteImport } from './routes/api/public/notify/appointment'
@@ -41,6 +42,11 @@ const BetaRoute = BetaRouteImport.update({
 const ApiPublicAccountDeleteRoute = ApiPublicAccountDeleteRouteImport.update({
   id: '/api/public/account/delete',
   path: '/api/public/account/delete',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicCampusResolveRoute = ApiPublicCampusResolveRouteImport.update({
+  id: '/api/public/campus/resolve',
+  path: '/api/public/campus/resolve',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicCampusSearchRoute = ApiPublicCampusSearchRouteImport.update({
@@ -96,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
+  '/api/public/campus/resolve': typeof ApiPublicCampusResolveRoute
   '/api/public/campus/search': typeof ApiPublicCampusSearchRoute
   '/api/public/community/activity': typeof ApiPublicCommunityActivityRoute
   '/api/public/notify/appointment': typeof ApiPublicNotifyAppointmentRoute
@@ -111,6 +118,7 @@ export interface FileRoutesByTo {
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
+  '/api/public/campus/resolve': typeof ApiPublicCampusResolveRoute
   '/api/public/campus/search': typeof ApiPublicCampusSearchRoute
   '/api/public/community/activity': typeof ApiPublicCommunityActivityRoute
   '/api/public/notify/appointment': typeof ApiPublicNotifyAppointmentRoute
@@ -127,6 +135,7 @@ export interface FileRoutesById {
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
+  '/api/public/campus/resolve': typeof ApiPublicCampusResolveRoute
   '/api/public/campus/search': typeof ApiPublicCampusSearchRoute
   '/api/public/community/activity': typeof ApiPublicCommunityActivityRoute
   '/api/public/notify/appointment': typeof ApiPublicNotifyAppointmentRoute
@@ -144,6 +153,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/beta'
     | '/api/public/account/delete'
+    | '/api/public/campus/resolve'
     | '/api/public/campus/search'
     | '/api/public/community/activity'
     | '/api/public/notify/appointment'
@@ -159,6 +169,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/beta'
     | '/api/public/account/delete'
+    | '/api/public/campus/resolve'
     | '/api/public/campus/search'
     | '/api/public/community/activity'
     | '/api/public/notify/appointment'
@@ -174,6 +185,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/beta'
     | '/api/public/account/delete'
+    | '/api/public/campus/resolve'
     | '/api/public/campus/search'
     | '/api/public/community/activity'
     | '/api/public/notify/appointment'
@@ -190,6 +202,7 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRoute
   BetaRoute: typeof BetaRoute
   ApiPublicAccountDeleteRoute: typeof ApiPublicAccountDeleteRoute
+  ApiPublicCampusResolveRoute: typeof ApiPublicCampusResolveRoute
   ApiPublicCampusSearchRoute: typeof ApiPublicCampusSearchRoute
   ApiPublicCommunityActivityRoute: typeof ApiPublicCommunityActivityRoute
   ApiPublicNotifyAppointmentRoute: typeof ApiPublicNotifyAppointmentRoute
@@ -229,6 +242,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/account/delete'
       fullPath: '/api/public/account/delete'
       preLoaderRoute: typeof ApiPublicAccountDeleteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/campus/resolve': {
+      id: '/api/public/campus/resolve'
+      path: '/api/public/campus/resolve'
+      fullPath: '/api/public/campus/resolve'
+      preLoaderRoute: typeof ApiPublicCampusResolveRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/campus/search': {
@@ -302,6 +322,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRoute,
   BetaRoute: BetaRoute,
   ApiPublicAccountDeleteRoute: ApiPublicAccountDeleteRoute,
+  ApiPublicCampusResolveRoute: ApiPublicCampusResolveRoute,
   ApiPublicCampusSearchRoute: ApiPublicCampusSearchRoute,
   ApiPublicCommunityActivityRoute: ApiPublicCommunityActivityRoute,
   ApiPublicNotifyAppointmentRoute: ApiPublicNotifyAppointmentRoute,
