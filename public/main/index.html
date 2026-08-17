@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>VendU — sell your stuff, book a service, get paid.</title>
@@ -1908,14 +1909,30 @@ function deleteAccount(){
   setTimeout(function(){location.reload();},900);
 }
 
-// VendU stays installable through its web-app manifest. Offline app-shell
-// caching is intentionally disabled so published updates cannot be trapped
-// behind an older installed copy.
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.getRegistration('/main/').then(function (registration) {
-    if (registration) registration.update().catch(function () {});
-  }).catch(function () {});
-}
+// VendU stays installable through its web-app manifest. App-shell caching is
+// permanently disabled: on every load we remove any service worker registered
+// under this build's scope and delete its caches, so a published update can
+// never be trapped behind an older installed copy.
+(function () {
+  if (!('serviceWorker' in navigator)) return;
+  function purge() {
+    navigator.serviceWorker.getRegistrations().then(function (regs) {
+      regs.forEach(function (r) {
+        var scope = (r && r.scope) || '';
+        if (scope.indexOf('/main/') !== -1) r.unregister().catch(function () {});
+      });
+    }).catch(function () {});
+    if (window.caches && caches.keys) {
+      caches.keys().then(function (names) {
+        names.forEach(function (n) {
+          if (/^vendu-/.test(n)) caches.delete(n).catch(function () {});
+        });
+      }).catch(function () {});
+    }
+  }
+  purge();
+  window.addEventListener('pageshow', purge);
+})();
 </script>
 </body>
 </html>
