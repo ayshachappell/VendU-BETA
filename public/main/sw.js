@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vendu-main-v1';
+const CACHE_NAME = 'vendu-main-v3';
 const ASSETS = [
   '/main/index.html',
   '/main/vendu-shared.css',
@@ -12,7 +12,7 @@ const ASSETS = [
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).catch(() => {})
   );
   self.skipWaiting();
 });
@@ -26,11 +26,23 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+// Network-first for app code so every device always runs the latest build.
+// The cache is only a fallback for offline use.
 self.addEventListener('fetch', (event) => {
+  const req = event.request;
+  if (req.method !== 'GET') return;
+  const url = new URL(req.url);
+  if (url.origin !== self.location.origin) return;
+
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      if (response) return response;
-      return fetch(event.request).catch(() => caches.match('/main/index.html'));
-    })
+    fetch(req)
+      .then((res) => {
+        const copy = res.clone();
+        caches.open(CACHE_NAME).then((c) => c.put(req, copy)).catch(() => {});
+        return res;
+      })
+      .catch(() =>
+        caches.match(req).then((hit) => hit || caches.match('/main/index.html'))
+      )
   );
 });
