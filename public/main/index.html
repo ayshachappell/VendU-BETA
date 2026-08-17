@@ -45,7 +45,7 @@
   .seg{display:flex;gap:6px;background:rgba(239,234,225,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-radius:12px;padding:4px;margin:0 20px}
   .seg div{flex:1;text-align:center;padding:9px;border-radius:9px;font-size:13.5px;font-weight:600;color:var(--mist);cursor:pointer;transition:.15s}
   .seg div.on{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
-  .founder{margin:14px 20px 0;background:linear-gradient(100deg,rgba(90,43,224,.86),rgba(138,91,240,.86));backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);color:#fff;border-radius:16px;padding:13px 15px;font-size:13px;line-height:1.35;box-shadow:0 8px 22px rgba(90,43,224,.25);display:flex;gap:11px;align-items:center}
+  .founder{margin:14px 20px 0;background:linear-gradient(100deg,rgba(158,43,126,.86),rgba(192,66,158,.86));backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);color:#fff;border-radius:16px;padding:13px 15px;font-size:13px;line-height:1.35;box-shadow:0 8px 22px rgba(158,43,126,.25);display:flex;gap:11px;align-items:center}
   .founder .em{font-size:20px}.founder b{font-family:'Bricolage Grotesque',sans-serif;font-weight:700}
   .chips{display:flex;gap:9px;overflow-x:auto;padding:14px 20px 4px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
   .chip{flex:none;border:1px solid var(--line);background:rgba(255,255,255,.82);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);color:var(--ink);font-size:13px;font-weight:600;padding:9px 15px;border-radius:100px;cursor:pointer;transition:.15s;white-space:nowrap}
@@ -158,7 +158,7 @@
   .done{text-align:center;padding:48px 30px}
   .done .mark{width:74px;height:74px;border-radius:50%;background:var(--violet-soft);color:var(--violet);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;animation:pop .55s cubic-bezier(.2,.8,.3,1.3)}
   .done h3{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;margin-bottom:8px}.done p{color:var(--mist);font-size:14px;line-height:1.55;margin-bottom:22px}
-  .plan{margin:6px 0 16px;border-radius:20px;padding:20px;color:#fff;position:relative;overflow:hidden;box-shadow:0 12px 30px rgba(90,43,224,.28)}
+  .plan{margin:6px 0 16px;border-radius:20px;padding:20px;color:#fff;position:relative;overflow:hidden;box-shadow:0 12px 30px rgba(158,43,126,.28)}
   .plan::after{content:"";position:absolute;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.16),transparent 70%);top:-70px;right:-40px;pointer-events:none}
   .plan .p-lbl{font-size:12px;font-weight:600;opacity:.75;text-transform:uppercase;letter-spacing:.05em}.plan .p-big{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:22px;margin:4px 0 3px}.plan .p-sub{font-size:12.5px;opacity:.85}
   .cust{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:16px;box-shadow:var(--shadow)}
@@ -170,7 +170,7 @@
   .menu .svc{cursor:pointer}
   .nav{position:absolute;bottom:0;left:0;right:0;background:rgba(251,248,243,.94);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:flex;padding:8px 4px 12px;z-index:25}
   .navitem{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 1px;cursor:pointer;color:#A29BAD;font-size:9.5px;font-weight:600;transition:color .15s}.navitem.on{color:var(--violet)}
-  .navadd .plus{width:50px;height:50px;border-radius:16px;background:var(--violet);color:#fff;display:flex;align-items:center;justify-content:center;margin-top:-18px;box-shadow:0 8px 20px rgba(90,43,224,.4)}
+  .navadd .plus{width:50px;height:50px;border-radius:16px;background:var(--violet);color:#fff;display:flex;align-items:center;justify-content:center;margin-top:-18px;box-shadow:0 8px 20px rgba(158,43,126,.4)}
   .enter{animation:enter .3s ease}.fade{animation:fade .3s ease}
   @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
   @keyframes enter{from{opacity:0}to{opacity:1}}
@@ -1625,14 +1625,14 @@ function onboarding(){
   const s=state.obStep;
   if(s===0){screen.innerHTML=`<div class="ob">
     <div class="ob-top"><div class="ob-dots"><span class="obd on"></span><span class="obd"></span><span class="obd"></span></div></div>
-    <div class="ob-body"><img src="/icons/icon-192.png" alt="VendU app icon" width="92" height="92" style="border-radius:22px;box-shadow:0 10px 26px rgba(90,43,224,.28);margin-bottom:26px"><div class="ob-title">Welcome to <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WM}</span></div><div class="ob-text">Your campus marketplace \u2014 find & book student services, buy, sell & trade, join communities, and organize your school life. Always free.</div></div>
+    <div class="ob-body"><img src="/icons/icon-192.png" alt="VendU app icon" width="92" height="92" style="border-radius:22px;box-shadow:0 10px 26px rgba(158,43,126,.28);margin-bottom:26px"><div class="ob-title">Welcome to <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WM}</span></div><div class="ob-text">Your campus marketplace \u2014 find & book student services, buy, sell & trade, join communities, and organize your school life. Always free.</div></div>
     <button class="ob-btn" id="obnext">Get started</button><button class="ob-back" id="obskip">I\u2019m a tester \u2014 skip \u2192</button></div>`;
     document.getElementById('obnext').onclick=()=>{state.obStep=1;render();};
     var _sk0=document.getElementById('obskip');if(_sk0)_sk0.onclick=()=>demoSkip();
     return;}
   if(s===1){screen.innerHTML=`<div class="ob">
     <div class="ob-top"><div class="ob-dots"><span class="obd on"></span><span class="obd on"></span><span class="obd"></span></div></div>
-    <div class="ob-body" style="justify-content:flex-start;padding-top:24px"><img src="/icons/icon-192.png" alt="VendU logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(90,43,224,.26);margin-bottom:14px"><div class="ob-title" style="margin-bottom:6px">How will you use <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WM}</span>?</div><div class="ob-text" style="margin-bottom:24px">Everyone gets a free account. Becoming a vendor is completely optional \u2014 you can switch it on or off anytime.</div>
+    <div class="ob-body" style="justify-content:flex-start;padding-top:24px"><img src="/icons/icon-192.png" alt="VendU logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(158,43,126,.26);margin-bottom:14px"><div class="ob-title" style="margin-bottom:6px">How will you use <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WM}</span>?</div><div class="ob-text" style="margin-bottom:24px">Everyone gets a free account. Becoming a vendor is completely optional \u2014 you can switch it on or off anytime.</div>
       <div class="ob-choice" data-ut="regular"><div class="obc-em">\u{1F64B}\u{1F3FF}\u200D\u2640\uFE0F</div><div><div class="obc-t">Just browsing</div><div class="obc-d">Book vendors, buy, sell & barter items, message & comment. Always free.</div></div></div>
       <div class="ob-choice" data-ut="vendor"><div class="obc-em">\u{1F6CD}\uFE0F</div><div><div class="obc-t">I\u2019m a vendor</div><div class="obc-d">I offer a service and want a storefront with services, bookings & payments. Free \u2014 optional, and you can turn it off anytime.</div></div></div>
     </div><button class="ob-back" id="obback1">\u2039 Back</button></div>`;
@@ -1645,7 +1645,7 @@ function onboarding(){
     const err=state.eduErr?`<div class="edu-err">${state.eduErr}</div>`:'';
     screen.innerHTML=`<div class="ob">
     <div class="ob-top"><div class="ob-dots"><span class="obd on"></span><span class="obd on"></span><span class="obd on"></span></div></div>
-    <div class="ob-body"><img src="/icons/icon-192.png" alt="VendU logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(90,43,224,.26);margin-bottom:14px"><div class="ob-title">${sent?'Check your email':'Verify your school email'}</div>
+    <div class="ob-body"><img src="/icons/icon-192.png" alt="VendU logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(158,43,126,.26);margin-bottom:14px"><div class="ob-title">${sent?'Check your email':'Verify your school email'}</div>
     <div class="ob-text" style="margin-bottom:20px">${sent?('We emailed a secure sign-in link to <b>'+state.eduEmail+'</b>. Open it and VendU unlocks automatically.'):'VendU is students-only. Enter your college <b>.edu</b> email \u2014 any school works \u2014 and we\u2019ll email you a sign-in link. Your campus feed is set from this address.'}</div>
     ${sent?`<div class="edu-note" style="max-width:330px;font-size:14px">Open the email from VendU and tap <b>Verify Email</b>. This page unlocks as soon as you do.</div>${err}<div class="edu-note" style="margin-top:16px">Waiting for you to tap the link\u2026 this screen unlocks by itself.</div><div class="edu-note">Didn\u2019t get it? Check your spam folder, then <span id="eduResend" style="color:var(--violet);font-weight:700;cursor:pointer">resend the link</span> \u00b7 <span id="eduEdit" style="cursor:pointer;text-decoration:underline">use a different email</span></div>`:`<div class="edu-row" style="width:100%;max-width:330px"><input id="eduIn" type="email" inputmode="email" autocomplete="email" value="${state.eduEmail||''}" placeholder="you@yourschool.edu" style="flex:1;border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-family:inherit;font-size:15px;outline:0;background:#fff"><button class="verify-btn" id="eduBtn">Send link</button></div>${err}<div class="ob-text" style="margin:22px 0 9px;font-weight:600;color:var(--ink)">Expected graduation year</div><div class="pldays" style="justify-content:center;padding:0">${['2025','2026','2027','2028','2029'].map(y=>`<div class="plday ${state.gradYear===y?'on':''}" data-gradyear="${y}">\u2019${y.slice(2)}</div>`).join('')}</div><div class="edu-note">Any college works \u2014 we only use your school email to confirm you\u2019re a student and to show you your campus. No spam, ever.</div>`}
     </div>
