@@ -349,11 +349,22 @@
       el.style.height = box.h + "px";
     });
     var ch = card.offsetHeight || 180;
+    var vh = window.innerHeight;
     var below = box.top + box.h + 14;
     var above = box.top - ch - 14;
-    var top = list[i].place === "above" || below + ch > window.innerHeight - 12 ? above : below;
+    var fitsBelow = below + ch <= vh - 12;
+    var fitsAbove = above >= 12;
+    var top;
+    if (list[i].place === "above") top = fitsAbove ? above : fitsBelow ? below : above;
+    else top = fitsBelow ? below : fitsAbove ? above : below;
+    if (!fitsAbove && !fitsBelow) {
+      // Never cover the highlighted control: sit in whichever gap is larger.
+      var roomAbove = box.top - 12;
+      var roomBelow = vh - (box.top + box.h) - 12;
+      top = roomBelow >= roomAbove ? box.top + box.h + 14 : Math.max(12, box.top - ch - 14);
+    }
     if (top < 12) top = 12;
-    if (top + ch > window.innerHeight - 12) top = Math.max(12, window.innerHeight - ch - 12);
+    if (top + ch > vh - 12) top = Math.max(12, vh - ch - 12);
     card.style.top = top + "px";
     var host = document.querySelector(".device") || document.body;
     var hr = host.getBoundingClientRect();
