@@ -2,6 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { json } from "@/lib/edu-verification.server";
 import { searchSchools } from "@/lib/campus.server";
 
+const NO_STORE_HEADERS = {
+  "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+  Pragma: "no-cache",
+  Expires: "0",
+};
+
 /** Autocomplete school names from the bundled U.S. dataset. */
 export const Route = createFileRoute("/api/public/campus/search")({
   server: {
@@ -14,11 +20,11 @@ export const Route = createFileRoute("/api/public/campus/search")({
           /* empty body is fine */
         }
         const q = typeof body["q"] === "string" ? body["q"] : "";
-        return json({ ok: true, results: searchSchools(q) });
+        return json({ ok: true, results: searchSchools(q) }, { headers: NO_STORE_HEADERS });
       },
       GET: async ({ request }) => {
         const q = new URL(request.url).searchParams.get("q") ?? "";
-        return json({ ok: true, results: searchSchools(q) });
+        return json({ ok: true, results: searchSchools(q) }, { headers: NO_STORE_HEADERS });
       },
     },
   },

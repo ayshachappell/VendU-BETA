@@ -6,6 +6,7 @@
   function post(path, body) {
     return fetch(path, {
       method: "POST",
+      cache: "no-store",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body || {}),
     })
@@ -160,7 +161,18 @@
     return post("/api/public/campus/resolve", body);
   };
   W.searchSchools = function (q) {
-    return post("/api/public/campus/search", { q: q });
+    var query = String(q || "").trim();
+    var url = "/api/public/campus/search?q=" + encodeURIComponent(query) + "&_=" + Date.now();
+    return fetch(url, {
+      method: "GET",
+      cache: "no-store",
+      headers: { "Accept": "application/json", "Cache-Control": "no-cache" },
+    }).then(function (r) {
+      if (!r.ok) throw new Error("School search failed");
+      return r.json();
+    }).catch(function () {
+      return post("/api/public/campus/search", { q: query });
+    });
   };
   W.campusEvents = function (domain) {
     return post("/api/public/campus/events", { domain: domain });
