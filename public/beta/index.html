@@ -1602,7 +1602,41 @@ function savedScreen(){
 }
 function campusPicker(){
   var q=(state.campusQ||'').trim();
-  var ql=q.toLowerCase();
+  var myDomain=String(state.acctEmail||'').split('@')[1]||'';
+  screen.innerHTML='<div class="topbar"><div class="brandrow"><div class="wordmark">Choose your campus</div><div class="locpill" id="cpClose" style="cursor:pointer">\u2715 Close</div></div><div class="search">'+icon('<circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/>')+'<input id="cpq" autocomplete="off" autocorrect="off" autocapitalize="none" placeholder="Search your school\u2026" value="'+q.replace(/"/g,'&quot;')+'"></div></div><div class="enter" style="padding:12px 20px 20px"><button class="submit" id="cpNear" style="background:var(--ink);margin-bottom:14px">\uD83D\uDCCD Use my location \u2014 find nearest campus</button><div id="cpList"></div><div style="margin-top:16px;padding:14px;border:1px dashed var(--line);border-radius:14px"><div style="font-weight:700;font-size:13.5px">Can\u2019t find your school?</div><div style="font-size:12.5px;color:var(--mist);margin:4px 0 10px">Trade, tech and vocational schools aren\u2019t always listed. Continue with your .edu email and we\u2019ll create your campus.</div><button class="submit" id="cpEdu" style="margin:0">Continue with my .edu email</button></div></div>';
+  document.getElementById('cpClose').onclick=function(){state.campusPick=false;state.campusQ='';state.campusResults=[];state.themeView=false;state.myPostsView=false;state.thread=0;state.inboxView=false;state.groupView=null;state.userView=null;state.groupCreateView=false;state.assignMod=false;state.createGroup=null;render();};
+  var input=document.getElementById('cpq');
+  input.oninput=function(e){
+    var val=e.target.value;
+    state.campusQ=val;
+    cpRenderList();
+    clearTimeout(window._cpT);
+    window._cpT=setTimeout(function(){cpSearch(val);},160);
+  };
+  document.getElementById('cpNear').onclick=pickNearest;
+  document.getElementById('cpEdu').onclick=function(){
+    if(!myDomain){toast('Verify your school email first \u2014 that sets your campus.');return;}
+    state.campusPick=false;state.campusQ='';state.campusResults=[];
+    joinCampus(myDomain,null,function(c){toast('Now viewing '+c.short);});
+    render();
+  };
+  cpRenderList();
+  if(q)cpSearch(q);
+}
+function cpSearch(val){
+  if(!window.VendU||!VendU.searchSchools)return;
+  var v=String(val||'').trim();
+  if(v.length<2){state.campusResults=[];cpRenderList();return;}
+  VendU.searchSchools(v).then(function(r){
+    if(String(state.campusQ||'').trim()!==v)return;
+    state.campusResults=(r&&r.ok&&r.results)?r.results:[];
+    cpRenderList();
+  });
+}
+function cpRenderList(){
+  var box=document.getElementById('cpList');
+  if(!box)return;
+  var ql=String(state.campusQ||'').trim().toLowerCase();
   var local=CAMPUSES.filter(function(c){return !ql||c.name.toLowerCase().indexOf(ql)>-1||c.short.toLowerCase().indexOf(ql)>-1;});
   var remote=(state.campusResults||[]).filter(function(r){
     return !local.some(function(c){return c.domain===r.domain;});
@@ -1617,38 +1651,12 @@ function campusPicker(){
     var on=state.campus&&state.campus.domain===r.domain;
     return row(r.name,(r.state?r.state+' \u00b7 ':'')+r.domain,'data-domain="'+r.domain+'" data-name="'+String(r.name).replace(/"/g,'&quot;')+'"',on);
   }).join('');
-  if(!html)html='<div class="prompt">Type your school name \u2014 every U.S. college, community college and trade school is searchable.</div>';
-  var myDomain=String(state.acctEmail||'').split('@')[1]||'';
-  screen.innerHTML='<div class="topbar"><div class="brandrow"><div class="wordmark">Choose your campus</div><div class="locpill" id="cpClose" style="cursor:pointer">\u2715 Close</div></div><div class="search">'+icon('<circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/>')+'<input id="cpq" placeholder="Search your school\u2026" value="'+q.replace(/"/g,'&quot;')+'"></div></div><div class="enter" style="padding:12px 20px 20px"><button class="submit" id="cpNear" style="background:var(--ink);margin-bottom:14px">\uD83D\uDCCD Use my location \u2014 find nearest campus</button>'
-    +html
-    +'<div style="margin-top:16px;padding:14px;border:1px dashed var(--line);border-radius:14px"><div style="font-weight:700;font-size:13.5px">Can\u2019t find your school?</div><div style="font-size:12.5px;color:var(--mist);margin:4px 0 10px">Trade, tech and vocational schools aren\u2019t always listed. Continue with your .edu email and we\u2019ll create your campus.</div><button class="submit" id="cpEdu" style="margin:0">Continue with my .edu email</button></div></div>';
-  document.getElementById('cpClose').onclick=function(){state.campusPick=false;state.campusQ='';state.themeView=false;state.myPostsView=false;state.thread=0;state.inboxView=false;state.groupView=null;state.userView=null;state.groupCreateView=false;state.assignMod=false;state.createGroup=null;render();};
-  document.getElementById('cpq').oninput=function(e){
-    state.campusQ=e.target.value;
-    var val=state.campusQ;
-    clearTimeout(window._cpT);
-    window._cpT=setTimeout(function(){
-      if(!window.VendU||!VendU.searchSchools)return;
-      VendU.searchSchools(val).then(function(r){
-        if(state.campusQ!==val)return;
-        state.campusResults=(r&&r.ok&&r.results)?r.results:[];
-        if(state.campusPick){campusPicker();var q3=document.getElementById('cpq');if(q3){q3.focus();try{q3.setSelectionRange(q3.value.length,q3.value.length);}catch(er){}}}
-      });
-    },180);
-    campusPicker();
-    var q2=document.getElementById('cpq');if(q2){q2.focus();try{q2.setSelectionRange(q2.value.length,q2.value.length);}catch(er){}}
-  };
-  document.getElementById('cpNear').onclick=pickNearest;
-  document.getElementById('cpEdu').onclick=function(){
-    if(!myDomain){toast('Verify your school email first \u2014 that sets your campus.');return;}
-    state.campusPick=false;state.campusQ='';
-    joinCampus(myDomain,null,function(c){toast('Now viewing '+c.short);});
-    render();
-  };
-  screen.querySelectorAll('[data-camp]').forEach(function(el){el.onclick=function(){state.campus=campusById(el.dataset.camp);applyCampusTheme();loadCampusEvents();state.campusPick=false;state.campusQ='';toast('Now viewing '+state.campus.short);render();};});
-  screen.querySelectorAll('[data-domain]').forEach(function(el){el.onclick=function(){
+  if(!html)html='<div class="prompt">'+(ql.length===1?'Keep typing\u2026':'Type your school name \u2014 every U.S. college, community college and trade school is searchable.')+'</div>';
+  box.innerHTML=html;
+  box.querySelectorAll('[data-camp]').forEach(function(el){el.onclick=function(){state.campus=campusById(el.dataset.camp);applyCampusTheme();loadCampusEvents();state.campusPick=false;state.campusQ='';state.campusResults=[];toast('Now viewing '+state.campus.short);render();};});
+  box.querySelectorAll('[data-domain]').forEach(function(el){el.onclick=function(){
     var d=el.dataset.domain,n=el.dataset.name;
-    state.campusPick=false;state.campusQ='';
+    state.campusPick=false;state.campusQ='';state.campusResults=[];
     joinCampus(d,{display_name:n},function(c){toast('Now viewing '+c.short);});
     render();
   };});
