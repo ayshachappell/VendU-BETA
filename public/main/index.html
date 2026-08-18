@@ -7,7 +7,21 @@
 <title>VendU — sell your stuff, book a service, get paid.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/main/vendu-shared.css?v=8">
+<script>
+/* Always-fresh assets: every page load requests a unique URL, so no browser,
+   proxy or installed-app cache can ever serve an old stylesheet or tutorial. */
+(function(){
+  var B='/main/', V='v9-'+Date.now();
+  var l=document.createElement('link');
+  l.rel='stylesheet'; l.href=B+'vendu-shared.css?v='+V;
+  document.head.appendChild(l);
+  ['vendu-api.js','vendu-tour.js'].forEach(function(f){
+    var s=document.createElement('script');
+    s.src=B+f+'?v='+V; s.async=false;
+    document.head.appendChild(s);
+  });
+})();
+</script>
 <script>
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('/main/sw.js',{scope:'/main/',updateViaCache:'none'}).then(function(r){
@@ -15,14 +29,12 @@ if('serviceWorker' in navigator){
   }).catch(function(){});
 }
 </script>
-<link rel="manifest" href="/main/manifest.webmanifest">
+<link rel="manifest" href="/main/manifest.webmanifest?v=9">
 <meta name="theme-color" content="#5A2BE0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="icon" type="image/png" href="/favicon.png">
-<link rel="apple-touch-icon" href="/icons/icon-192.png">
-<script src="/main/vendu-api.js?v=8"></script>
-<script src="/main/vendu-tour.js?v=8"></script>
+<link rel="icon" type="image/png" href="/favicon.png?v=9">
+<link rel="apple-touch-icon" href="/icons/icon-192.png?v=9">
 <style>
   :root{--paper:#FBF8F3;--ink:#1C1526;--mist:#6B6478;--line:#E7E0D6;--violet:#5A2BE0;--violet-soft:#EFE8FF;--amber:#FFB020;--rose:#FF5C8A;--green:#0E9F6E;--card:#FFFFFF;--school-a:#1D3A8A;--school-b:#F5C518;--shadow:0 6px 24px rgba(28,21,38,.08);--shadow-lg:0 14px 40px rgba(28,21,38,.16)}
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
