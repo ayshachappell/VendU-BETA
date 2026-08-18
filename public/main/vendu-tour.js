@@ -134,7 +134,7 @@
         before: openStore,
         target: function () { return $(".paychips") || $(".cta-bar"); },
         title: "Pay, save, message or book",
-        text: "Services, prices, photos and reviews sit above. Under Accepts · tap to pay, tap Cash App, Venmo, Zelle or PayPal to pay the vendor directly. The bar at the bottom saves the storefront, messages the student or books a time — messages live in Profile → Messages, and Back returns you where you were.",
+        text: "Services, prices, photos and reviews sit above. Under Accepts · tap to pay, tap Cash App, Venmo, Zelle or PayPal to pay the vendor directly. The bar at the bottom saves the storefront, messages the student or books a time — messages live in Profile → Messages. Every storefront, chat, profile and menu has a ‹ Back or ✕ Close in the top corner — your phone's back gesture works too.",
         doit: "Tap a payment app under Accepts",
         click: true,
         place: "above",
