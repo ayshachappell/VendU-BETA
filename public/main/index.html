@@ -1422,10 +1422,11 @@ function addTab(){if(!state.addMode)return chooser();return miniForm(state.addMo
 function chooser(){
   const chev='<path d="m9 18 6-6-6-6"/>';
   const opts=[['item','📦','Sell or trade an item','Post to Buy & Trade'],['request','🙋','Post a request or barter','Ask the campus for what you need'],['event','🎉','Post an event','Share it on the Events board']];
-  screen.innerHTML=`<div class="topbar"><div class="brandrow"><div class="wordmark">Post to ${WM}</div></div></div>
+  screen.innerHTML=`<div class="topbar"><div class="brandrow"><div class="wordmark">Post to ${WM}</div><div class="locpill" id="addClose" style="cursor:pointer">\u2715 Close</div></div></div>
     <div class="form-wrap enter"><div class="form-h">What are you posting?</div><div class="form-sub">We'll add it to the right place on VendU.</div>
     ${opts.map(o=>`<div class="choose" data-mode="${o[0]}"><div class="ch-em">${o[1]}</div><div style="flex:1"><div class="ch-t">${o[2]}</div><div class="ch-d">${o[3]}</div></div>${icon('<path d="m9 18 6-6-6-6"/>',18)}</div>`).join('')}</div>`;
   screen.querySelectorAll('[data-mode]').forEach(el=>el.onclick=()=>{state.addMode=el.dataset.mode;state.newPhoto=null;render();});
+  var _ac=document.getElementById('addClose');if(_ac)_ac.onclick=function(){selectTab(state.prevTab||'home');};
 }
 function miniForm(mode){
   const back=`<div class="locpill" id="tochooser" style="cursor:pointer">‹ Back</div>`;
@@ -1900,8 +1901,53 @@ window.VendU=window.VendU||{};VendU.onTour=function(active){state.tourActive=!!a
 setDemoVisible(false);
 state.campusEvents=[];state.campusResults=[];applyCampusTheme();state.booked=loadBooked();try{state.phone=localStorage.getItem('vendu_phone')||'';}catch(e){state.phone='';}
 function render(){if(state.onboarded&&window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour();},300);if(!state.onboarded){if(state.storefrontSetup)return add();return onboarding();}if(state.moreMenu)return settingsScreen();if(state.campusPick)return campusPicker();if(state.themeView)return themeScreen();if(state.book)return bookingScreen();if(state.bookSet)return bookingSettings();if(state.userView)return userProfile();if(state.thread)return messageScreen();if(state.inboxView)return inboxScreen();if(state.groupCreateView)return createGroupScreen();if(state.groupView)return groupPage();if(state.detail)return detail(state.detail);if(state.leaderboard)return leaderboard();if(state.storefrontSetup)return add();if(state.savedView)return savedScreen();if(state.myPostsView)return myPostsScreen();if(state.svcEdit)return servicesEditor();if(state.tab==='add')return addTab();({home,market,venuU,profile}[state.tab]||home)();}
-document.getElementById('nav').querySelectorAll('.navitem').forEach(item=>{item.onclick=()=>{if(!state.onboarded)return;document.querySelectorAll('.navitem').forEach(n=>n.classList.remove('on'));item.classList.add('on');state.tab=item.dataset.tab;state.moreMenu=false;state.userView=null;state.thread=0;state.inboxView=false;state.groupView=null;state.groupCreateView=false;state.myPostsView=false;state.themeView=false;state.reviewOpen=false;state.cat='All';state.q='';state.near=false;state.detail=0;state.book=null;state.svcEdit=false;state.addMode=null;state.newPhoto=null;state.leaderboard=false;state.storefrontSetup=false;state.reviewOpen=false;state.msgTo=0;state.openMC=0;state.bookSet=false;state.subPrompt=false;state.savedView=false;state.campusPick=false;state.campusQ='';if(item.dataset.tab!=='add')state.submitted=false;render();screen.scrollTop=0;};});
+document.getElementById('nav').querySelectorAll('.navitem').forEach(item=>{item.onclick=()=>{if(!state.onboarded)return;document.querySelectorAll('.navitem').forEach(n=>n.classList.remove('on'));item.classList.add('on');if(item.dataset.tab==='add'&&state.tab!=='add')state.prevTab=state.tab;state.tab=item.dataset.tab;state.moreMenu=false;state.userView=null;state.thread=0;state.inboxView=false;state.groupView=null;state.groupCreateView=false;state.myPostsView=false;state.themeView=false;state.reviewOpen=false;state.cat='All';state.q='';state.near=false;state.detail=0;state.book=null;state.svcEdit=false;state.addMode=null;state.newPhoto=null;state.leaderboard=false;state.storefrontSetup=false;state.reviewOpen=false;state.msgTo=0;state.openMC=0;state.bookSet=false;state.subPrompt=false;state.savedView=false;state.campusPick=false;state.campusQ='';if(item.dataset.tab!=='add')state.submitted=false;render();screen.scrollTop=0;};});
 try{restoreCampusPref();}catch(e){}
+/* ---- universal Back: nav helper, layer-aware back, device/browser back ---- */
+function selectTab(tab){
+  var item=document.querySelector('#nav .navitem[data-tab="'+tab+'"]');
+  if(item){item.click();return;}
+  state.tab=tab||'home';render();
+}
+function venduBack(){
+  var s=state;
+  if(!s.onboarded)return false;
+  if(s.book)s.book=null;
+  else if(s.thread)s.thread=0;
+  else if(s.inboxView)s.inboxView=false;
+  else if(s.userView)s.userView=null;
+  else if(s.groupCreateView){s.groupCreateView=false;s.createGroup=null;}
+  else if(s.groupView)s.groupView=null;
+  else if(s.detail)s.detail=0;
+  else if(s.svcEdit)s.svcEdit=false;
+  else if(s.storefrontSetup){s.storefrontSetup=false;s.tab='profile';}
+  else if(s.campusPick)s.campusPick=false;
+  else if(s.themeView)s.themeView=false;
+  else if(s.bookSet)s.bookSet=false;
+  else if(s.leaderboard)s.leaderboard=false;
+  else if(s.savedView)s.savedView=false;
+  else if(s.myPostsView)s.myPostsView=false;
+  else if(s.moreMenu)s.moreMenu=false;
+  else if(s.tab==='add'){
+    if(s.addMode){s.addMode=null;s.newPhoto=null;}
+    else{selectTab(s.prevTab||'home');return true;}
+  }
+  else if(s.tab!=='home'){selectTab('home');return true;}
+  else return false;
+  render();
+  try{screen.scrollTop=0;}catch(e){}
+  return true;
+}
+try{history.replaceState({vendu:0},'');history.pushState({vendu:1},'');}catch(e){}
+window.addEventListener('popstate',function(){
+  var handled=false;
+  try{handled=venduBack();}catch(e){}
+  if(handled){try{history.pushState({vendu:1},'');}catch(e){}}
+});
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Escape')return;
+  try{if(venduBack())e.preventDefault();}catch(err){}
+});
 render();
 
 /* ---- installability, support & account deletion ---- */
