@@ -1782,7 +1782,7 @@ function onboarding(){
     if(sent){var _poll=setInterval(function(){if(state.eduDone){clearInterval(_poll);return;}var st=VendU.student();if(st&&st.email){clearInterval(_poll);submitCode();return;}if(state.eduEmail&&VendU.checkVerified)VendU.checkVerified(state.eduEmail).then(function(ok){if(ok&&!state.eduDone)submitCode();});},2500);window.addEventListener('storage',function(){var st=VendU.student();if(st&&st.email&&!state.eduDone)submitCode();});window.addEventListener('focus',function(){var st=VendU.student();if(st&&st.email&&!state.eduDone)submitCode();});}
     var rs=document.getElementById('eduResend');if(rs)rs.onclick=function(){VendU.sendCode(state.eduEmail,BUILD).then(function(r){toast(r&&r.ok?'New link sent \u{1F4EC}':((r&&r.message)||'Could not resend.'));});};
     var ed=document.getElementById('eduEdit');if(ed)ed.onclick=function(){state.eduCodeSent=false;state.eduErr='';onboarding();};
-    var sk=document.getElementById('eduSkip');if(sk)sk.onclick=function(){demoSkip();};
+    
     return;}
 }
 
