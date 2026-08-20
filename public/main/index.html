@@ -720,7 +720,7 @@ function joinCampus(domainOrEmail,patch,cb){
       if(known){known.accent=r.campus.accent_color;known.domain=r.campus.domain;if(r.campus.mascot)known.mascot=r.campus.mascot;state.campus=known;}
       else{state.campus=makeCampus(r.campus);}
       applyCampusTheme();loadCampusEvents();saveCampusPref();
-      if(cb)cb(state.campus);
+      if(cb)cb(state.campus,!!r.campus.known);
       try{render();}catch(e){}
     });
   }catch(e){}
@@ -920,7 +920,7 @@ function applyAccount(email){
   if(state.isCEO){state.isFounder=false;}
   if(state.isRealStudent||state.isCEO)creditReferral();
   loadReferrals();syncReferralsFromServer();syncServerStats();
-  var cc=campusByDomain(email||'');if(cc)state.campus=cc;if(cc){applyCampusTheme();}var _dom=String(email||'').split('@')[1]||'';if(_dom)joinCampus(_dom);if(!cc&&_dom){try{if(!localStorage.getItem('vendu_campus_confirmed'))setTimeout(function(){openCampusPick();},700);}catch(e){}}
+  var cc=campusByDomain(email||'');if(cc)state.campus=cc;if(cc){applyCampusTheme();}var _dom=String(email||'').split('@')[1]||'';if(_dom)joinCampus(_dom,null,function(c,known){/* live.mercer.edu -> Mercer University; only ask when we truly can't tell. */try{if(!known&&!localStorage.getItem('vendu_campus_confirmed'))setTimeout(function(){openCampusPick();},700);}catch(e){}});
   if(typeof refreshDemo==='function')refreshDemo();
 }
 
