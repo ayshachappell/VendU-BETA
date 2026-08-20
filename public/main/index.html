@@ -707,7 +707,7 @@ function campusAccent(){return (state.campus&&state.campus.accent)||'#5A2BE0';}
 function applyCampusTheme(){try{document.documentElement.style.setProperty('--campus-accent',campusAccent());document.documentElement.style.setProperty('--school-a',campusAccent());}catch(e){}}
 function makeCampus(c){var base=CAMPUSES[0];return {id:base.id,domain:c.domain,name:c.display_name,short:c.display_name,mascot:c.mascot||'',accent:c.accent_color||'#5A2BE0',dynamic:true,lat:c.lat||0,lng:c.lng||0};}
 var CAMPUS_PREF_KEY='vendu_campus_v1';
-function saveCampusPref(){try{var c=state.campus;if(!c)return;localStorage.setItem(CAMPUS_PREF_KEY,JSON.stringify({id:c.dynamic?'':c.id,domain:c.domain||'',name:c.name||''}));}catch(e){}}
+function saveCampusPref(){try{var c=state.campus;if(!c)return;localStorage.setItem('vendu_campus_confirmed','1');localStorage.setItem(CAMPUS_PREF_KEY,JSON.stringify({id:c.dynamic?'':c.id,domain:c.domain||'',name:c.name||''}));}catch(e){}}
 function restoreCampusPref(){try{var p=JSON.parse(localStorage.getItem(CAMPUS_PREF_KEY)||'null');if(!p)return;if(p.id){var k=campusById(p.id);if(k){state.campus=k;applyCampusTheme();loadCampusEvents();return;}}if(p.domain){var known=campusByDomain(p.domain);if(known){state.campus=known;applyCampusTheme();loadCampusEvents();return;}state.campus=makeCampus({domain:p.domain,display_name:p.name||p.domain,accent_color:''});applyCampusTheme();joinCampus(p.domain,p.name?{display_name:p.name}:null);}}catch(e){}}
 function campusMascot(){var m=(state.campus&&state.campus.mascot)||'';m=String(m);return m&&m.length<=3?m+' ':'';}
 function CAMPPILL(){return campusMascot()+CAMP();}
@@ -817,7 +817,7 @@ const MSGS={};
 const BOOKED={};
 
 const FOUNDER_CAP=10, FOUNDER_GOAL=3;
-let FOUNDERS=Math.min(FOUNDER_CAP,LEADERBOARD.length+1);
+let FOUNDERS=0; /* founder seats actually claimed at this school; filled live from the backend */
 function pic(a,b,e,t){var svg='<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+a+'"/><stop offset="1" stop-color="'+b+'"/></linearGradient></defs><rect width="320" height="240" fill="url(%23g)"/><text x="160" y="122" font-size="96" text-anchor="middle">'+e+'</text><text x="160" y="210" font-size="22" font-family="sans-serif" font-weight="700" fill="rgba(255,255,255,.92)" text-anchor="middle">'+t+'</text></svg>';return {src:'data:image/svg+xml;utf8,'+encodeURIComponent(svg),fit:'cover'};}
 const HUSTLES=[
   {id:1,name:"Nia's Kitchen",init:'N',avail:1,cat:'Food',food:'prepared',v:1,lic:1,dist:0.4,offer:'Home-cooked plates & weekly meal prep. Delivered to your dorm.',price:'$8–12',rating:'4.9',reviews:41,jobs:120,since:'2024',c:0,pays:['Cash App','Zelle'],bio:"Junior, business major. Order by 6pm for next-day plates.",services:[['Single plate','$10'],['Weekly prep (5 meals)','$45'],['Party tray','$60']]},
@@ -920,14 +920,14 @@ function applyAccount(email){
   if(state.isCEO){state.isFounder=false;}
   if(state.isRealStudent||state.isCEO)creditReferral();
   loadReferrals();syncReferralsFromServer();syncServerStats();
-  var cc=campusByDomain(email||'');if(cc)state.campus=cc;if(cc){applyCampusTheme();}var _dom=String(email||'').split('@')[1]||'';if(_dom)joinCampus(_dom);
+  var cc=campusByDomain(email||'');if(cc)state.campus=cc;if(cc){applyCampusTheme();}var _dom=String(email||'').split('@')[1]||'';if(_dom)joinCampus(_dom);if(!cc&&_dom){try{if(!localStorage.getItem('vendu_campus_confirmed'))setTimeout(function(){openCampusPick();},700);}catch(e){}}
   if(typeof refreshDemo==='function')refreshDemo();
 }
 
 /* ===== Referrals & founder spots (10 per school, 3 vendor referrals = founder) ===== */
 function myRefCode(){var e=String(state.acctEmail||'').toLowerCase();var s=(e.split('@')[0]||'').replace(/[^a-z0-9]/g,'');return (s||'vendu').slice(0,14);}
 function myRefLink(){try{return location.origin+location.pathname+'?ref='+myRefCode();}catch(e){return 'vendu.app/join?ref='+myRefCode();}}
-function founderNumber(){if(state.founderNum)return state.founderNum;var n=0;try{n=parseInt(localStorage.getItem('vendu_founder_num')||'0',10)||0;}catch(e){}if(!n){n=Math.min(FOUNDER_CAP,FOUNDERS);try{localStorage.setItem('vendu_founder_num',String(n));}catch(e){}}state.founderNum=n;return n;}
+function founderNumber(){if(state.founderNum)return state.founderNum;var n=0;try{n=parseInt(localStorage.getItem('vendu_founder_num')||'0',10)||0;}catch(e){}if(!n&&state.referrals>=FOUNDER_GOAL){n=Math.min(FOUNDER_CAP,(FOUNDERS||0)+1);try{localStorage.setItem('vendu_founder_num',String(n));}catch(e){}}state.founderNum=n;return n;}
 function founderCongrats(){var host=document.querySelector('.device')||document.body;if(document.getElementById('fcong'))return;var w=document.createElement('div');w.id='fcong';w.style.cssText='position:absolute;inset:0;background:rgba(20,12,40,.55);display:flex;align-items:center;justify-content:center;z-index:80;padding:24px';w.innerHTML='<div style="background:var(--card,#fff);border-radius:20px;padding:24px 20px;text-align:center;max-width:300px;box-shadow:0 20px 50px rgba(0,0,0,.3)">'+'<div style="font-size:40px">\uD83C\uDF93</div><div style="font-family:Bricolage Grotesque;font-weight:800;font-size:20px;margin-top:6px">You\u2019re a Founder!</div>'+'<div style="font-size:13.5px;color:var(--mist,#777);line-height:1.5;margin:8px 0 16px">Three vendors signed up with your link, so you claimed <b>Founder #'+founderNumber()+' of '+FOUNDER_CAP+'</b> at '+CAMP()+'. Your \uD83C\uDF93 Founder badge now shows everywhere you post, plus a monthly Boost.</div>'+'<button id="fcongok" class="submit" style="margin:0">Nice!</button></div>';host.appendChild(w);document.getElementById('fcongok').onclick=function(){w.remove();try{render();}catch(e){}};}
 function syncFounder(){var was=state.isFounder;state.isFounder=!state.isCEO&&state.referrals>=FOUNDER_GOAL;if(state.isFounder&&!was){founderNumber();var seen=false;try{seen=!!localStorage.getItem('vendu_founder_congrats');localStorage.setItem('vendu_founder_congrats','1');}catch(e){}if(!seen)setTimeout(founderCongrats,400);}}
 function loadReferrals(){try{state.referrals=parseInt(localStorage.getItem('vendu_refs_'+myRefCode())||'0',10)||0;}catch(e){state.referrals=0;}syncFounder();}
