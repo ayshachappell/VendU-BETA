@@ -137,6 +137,11 @@
     return activity({ action: "referralCount", email: myEmail(), refCode: refCode, build: build });
   };
 
+  /* ---- founder spots & leaderboard math (per school, live) ---- */
+  W.founderStats = function (domain, refCode, build) {
+    return activity({ action: "founders", domain: domain, refCode: refCode, build: build });
+  };
+
   /* ---- appointment notifications (SMS when a text provider is connected) ---- */
   W.notifyAppointment = function (appt) {
     return post("/api/public/notify/appointment", {
