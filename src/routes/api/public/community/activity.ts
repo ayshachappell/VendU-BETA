@@ -17,6 +17,7 @@ type Body = {
   refCode?: unknown;
   campus?: unknown;
   vendorIds?: unknown;
+  domain?: unknown;
 };
 
 function str(v: unknown, max = 400): string {
@@ -83,7 +84,7 @@ export const Route = createFileRoute("/api/public/community/activity")({
           const CAP = 10;
           const GOAL = 3;
           const domain =
-            str(raw["domain"], 120).toLowerCase().replace(/^.*@/, "") ||
+            str(raw.domain, 120).toLowerCase().replace(/^.*@/, "") ||
             str(raw.email, 254).toLowerCase().split("@")[1] ||
             "";
           if (!domain) return json({ ok: false, message: "Missing school." }, 400);
