@@ -719,7 +719,7 @@ function joinCampus(domainOrEmail,patch,cb){
       if(known){known.accent=r.campus.accent_color;known.domain=r.campus.domain;if(r.campus.mascot)known.mascot=r.campus.mascot;state.campus=known;}
       else{state.campus=makeCampus(r.campus);}
       applyCampusTheme();loadCampusEvents();saveCampusPref();
-      if(cb)cb(state.campus);
+      if(cb)cb(state.campus,!!r.campus.known);
       try{render();}catch(e){}
     });
   }catch(e){}
@@ -919,7 +919,7 @@ function applyAccount(email){
   if(state.isCEO){state.isFounder=false;}
   if(state.isRealStudent||state.isCEO)creditReferral();
   loadReferrals();syncReferralsFromServer();syncServerStats();
-  var cc=campusByDomain(email||'');if(cc)state.campus=cc;if(cc){applyCampusTheme();}var _dom=String(email||'').split('@')[1]||'';if(_dom)joinCampus(_dom);if(!cc&&_dom){try{if(!localStorage.getItem('vendu_campus_confirmed'))setTimeout(function(){openCampusPick();},700);}catch(e){}}
+  var cc=campusByDomain(email||'');if(cc)state.campus=cc;if(cc){applyCampusTheme();}var _dom=String(email||'').split('@')[1]||'';if(_dom)joinCampus(_dom,null,function(c,known){/* live.mercer.edu -> Mercer University; only ask when we truly can't tell. */try{if(!known&&!localStorage.getItem('vendu_campus_confirmed'))setTimeout(function(){openCampusPick();},700);}catch(e){}});
   if(typeof refreshDemo==='function')refreshDemo();
 }
 
@@ -1789,9 +1789,14 @@ function onboarding(){
     <div class="ob-text" style="margin-bottom:20px">${sent?('We emailed a secure sign-in link to <b>'+state.eduEmail+'</b>. Open it and VendU unlocks automatically.'):'VendU is students-only. Enter your college <b>.edu</b> email \u2014 any school works \u2014 and we\u2019ll email you a sign-in link. Your campus feed is set from this address.'}</div>
     ${sent?`<div class="edu-note" style="max-width:330px;font-size:14px">Open the email from VendU and tap <b>Verify Email</b>. This page unlocks as soon as you do.</div>${err}<div class="edu-note" style="margin-top:16px">Waiting for you to tap the link\u2026 this screen unlocks by itself.</div><div class="edu-note">Didn\u2019t get it? Check your spam folder, then <span id="eduResend" style="color:var(--violet);font-weight:700;cursor:pointer">resend the link</span> \u00b7 <span id="eduEdit" style="cursor:pointer;text-decoration:underline">use a different email</span></div>`:`<div class="edu-row" style="width:100%;max-width:330px"><input id="eduIn" type="email" inputmode="email" autocomplete="email" value="${state.eduEmail||''}" placeholder="you@yourschool.edu" style="flex:1;border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-family:inherit;font-size:15px;outline:0;background:#fff"><button class="verify-btn" id="eduBtn">Send link</button></div>${err}<div class="ob-text" style="margin:22px 0 9px;font-weight:600;color:var(--ink)">Expected graduation year</div><div class="pldays" style="justify-content:center;padding:0">${['2025','2026','2027','2028','2029'].map(y=>`<div class="plday ${state.gradYear===y?'on':''}" data-gradyear="${y}">\u2019${y.slice(2)}</div>`).join('')}</div><div class="edu-legal ${state.legalOK?'on':''}" id="eduLegal" role="checkbox" tabindex="0" aria-checked="${state.legalOK?'true':'false'}"><span class="lbox">\u2713</span><span>I have read and agree to VendU\u2019s <a href="/legal/terms.html?from=signin" target="_blank" rel="noopener">Terms &amp; Conditions</a>, <a href="/legal/privacy.html?from=signin" target="_blank" rel="noopener">Privacy Policy</a> and <a href="/legal/support.html?from=signin" target="_blank" rel="noopener">Community Guidelines</a>.</span></div><div class="edu-note">Any college works \u2014 we only use your school email to confirm you\u2019re a student and to show you your campus. No spam, ever.</div>`}
     </div>`;
-    screen.querySelectorAll('[data-gradyear]').forEach(function(el){el.onclick=function(){state.gradYear=el.dataset.gradyear;onboarding();};});
+    /* Keep whatever the student already typed, so picking a grad year or the
+       legal checkbox never wipes the email box. */
+    function keepEmail(){var i=document.getElementById('eduIn');if(i)state.eduEmail=(i.value||'').trim();}
+    var _eduIn=document.getElementById('eduIn');
+    if(_eduIn){_eduIn.oninput=function(){state.eduEmail=(_eduIn.value||'').trim();};}
+    screen.querySelectorAll('[data-gradyear]').forEach(function(el){el.onclick=function(){keepEmail();state.gradYear=el.dataset.gradyear;onboarding();var i=document.getElementById('eduIn');if(i)i.value=state.eduEmail||'';};});
     var busy=false;
-    function fail(m){state.eduErr=m;onboarding();}
+    function fail(m){keepEmail();state.eduErr=m;onboarding();var i=document.getElementById('eduIn');if(i)i.value=state.eduEmail||'';}
     function submitCode(){
       if(busy)return;
       var st=VendU.student();
@@ -1812,7 +1817,7 @@ function onboarding(){
     };
     if(sent){var _poll=setInterval(function(){if(state.eduDone){clearInterval(_poll);return;}var st=VendU.student();if(st&&st.email){clearInterval(_poll);submitCode();return;}if(state.eduEmail&&VendU.checkVerified)VendU.checkVerified(state.eduEmail).then(function(ok){if(ok&&!state.eduDone)submitCode();});},2500);window.addEventListener('storage',function(){var st=VendU.student();if(st&&st.email&&!state.eduDone)submitCode();});window.addEventListener('focus',function(){var st=VendU.student();if(st&&st.email&&!state.eduDone)submitCode();});}
     var lg=document.getElementById('eduLegal');
-    if(lg){var tog=function(){state.legalOK=!state.legalOK;onboarding();};lg.onclick=function(e){if(e.target&&e.target.tagName==='A')return;tog();};lg.onkeydown=function(e){if(e.key===' '||e.key==='Enter'){e.preventDefault();tog();}};}
+    if(lg){var tog=function(){keepEmail();state.legalOK=!state.legalOK;onboarding();var i=document.getElementById('eduIn');if(i)i.value=state.eduEmail||'';};lg.onclick=function(e){if(e.target&&e.target.tagName==='A')return;tog();};lg.onkeydown=function(e){if(e.key===' '||e.key==='Enter'){e.preventDefault();tog();}};}
     var rs=document.getElementById('eduResend');if(rs)rs.onclick=function(){VendU.sendCode(state.eduEmail,BUILD).then(function(r){toast(r&&r.ok?'New link sent \u{1F4EC}':((r&&r.message)||'Could not resend.'));});};
     var ed=document.getElementById('eduEdit');if(ed)ed.onclick=function(){state.eduCodeSent=false;state.eduErr='';onboarding();};
     

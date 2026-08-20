@@ -37,6 +37,30 @@ export function lookupSchool(domain: string): School | null {
   return null;
 }
 
+/** Common student-mail subdomains that are the SAME school as the parent.
+ *  live.mercer.edu / mail.mercer.edu -> mercer.edu */
+const SUB_PREFIXES = new Set([
+  "live", "mail", "email", "my", "mymail", "go", "u", "students", "student",
+  "stu", "alumni", "knights", "cougars", "eagles", "vols", "webmail", "smail",
+  "g", "gm", "gmail", "owl", "owls", "rams", "tigers", "bears", "lions",
+]);
+
+/** Collapse a school email domain to the one canonical campus domain, so every
+ *  student of a school lands in the same campus no matter their subdomain. */
+export function canonicalDomain(domain: string): string {
+  const idx = domainIndex();
+  if (idx.has(domain)) return domain;
+  const parts = domain.split(".");
+  for (let i = 1; i < parts.length - 1; i++) {
+    const parent = parts.slice(i).join(".");
+    if (idx.has(parent)) return parent;
+  }
+  // Unknown school: still strip a generic student-mail subdomain.
+  while (parts.length > 2 && SUB_PREFIXES.has(parts[0]!.toLowerCase())) parts.shift();
+  return parts.join(".");
+}
+
+
 /** mercer.edu -> "Mercer" when the dataset has no entry. */
 export function prettyFromDomain(domain: string): string {
   const core = domain.replace(/\.(edu|com|org|net)(\.[a-z]{2})?$/, "").split(".").pop() ?? domain;
@@ -86,7 +110,8 @@ export type Campus = {
 
 /** Join the campus for this domain, creating it the first time anyone from
  *  that school verifies. Guarantees every valid .edu works. */
-export async function ensureCampus(domain: string): Promise<Campus> {
+export async function ensureCampus(rawDomain: string): Promise<Campus> {
+  const domain = canonicalDomain(rawDomain);
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data: existing } = await supabaseAdmin
     .from("campuses")
@@ -109,9 +134,10 @@ export async function ensureCampus(domain: string): Promise<Campus> {
 
 /** Let a student correct their school name / mascot once. */
 export async function updateCampus(
-  domain: string,
+  rawDomain: string,
   patch: { display_name?: string; mascot?: string; accent_color?: string },
 ): Promise<Campus | null> {
+  const domain = canonicalDomain(rawDomain);
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const clean: { display_name?: string; mascot?: string; accent_color?: string } = {};
   if (patch.display_name) clean.display_name = patch.display_name.slice(0, 90);

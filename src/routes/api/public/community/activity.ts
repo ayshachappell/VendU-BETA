@@ -83,17 +83,19 @@ export const Route = createFileRoute("/api/public/community/activity")({
         if (action === "founders") {
           const CAP = 10;
           const GOAL = 3;
-          const domain =
+          const { canonicalDomain } = await import("@/lib/campus.server");
+          const rawDomain =
             str(raw.domain, 120).toLowerCase().replace(/^.*@/, "") ||
             str(raw.email, 254).toLowerCase().split("@")[1] ||
             "";
+          const domain = rawDomain ? canonicalDomain(rawDomain) : "";
           if (!domain) return json({ ok: false, message: "Missing school." }, 400);
           const myCode = str(raw.refCode, 64);
 
           const { data } = await supabaseAdmin
             .from("referrals")
             .select("ref_code,referred_email,created_at")
-            .ilike("referred_email", `%@${domain}`)
+            .ilike("referred_email", `%${domain}`)
             .order("created_at", { ascending: true });
 
           const counts = new Map<string, number>();
