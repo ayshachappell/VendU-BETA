@@ -110,7 +110,8 @@ export type Campus = {
 
 /** Join the campus for this domain, creating it the first time anyone from
  *  that school verifies. Guarantees every valid .edu works. */
-export async function ensureCampus(domain: string): Promise<Campus> {
+export async function ensureCampus(rawDomain: string): Promise<Campus> {
+  const domain = canonicalDomain(rawDomain);
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data: existing } = await supabaseAdmin
     .from("campuses")
@@ -133,9 +134,10 @@ export async function ensureCampus(domain: string): Promise<Campus> {
 
 /** Let a student correct their school name / mascot once. */
 export async function updateCampus(
-  domain: string,
+  rawDomain: string,
   patch: { display_name?: string; mascot?: string; accent_color?: string },
 ): Promise<Campus | null> {
+  const domain = canonicalDomain(rawDomain);
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const clean: { display_name?: string; mascot?: string; accent_color?: string } = {};
   if (patch.display_name) clean.display_name = patch.display_name.slice(0, 90);
