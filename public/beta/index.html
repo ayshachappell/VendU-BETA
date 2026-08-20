@@ -52,7 +52,7 @@ if('serviceWorker' in navigator){
   .gradcap{position:absolute;left:50%;top:-15px;transform:translateX(-50%);width:36px;height:auto;pointer-events:none;overflow:visible}
   .gradcap .tassel{transform-box:view-box;transform-origin:20px 9.5px}
   .wordmark.go .tassel{animation:gradturn 2.4s cubic-bezier(.45,.05,.55,.95)}
-  .locpill{display:inline-flex;align-items:center;gap:6px;background:var(--campus-accent,var(--ink));color:#fff;font-size:12px;font-weight:600;padding:7px 12px;border-radius:100px;cursor:pointer}
+  .locpill{display:inline-flex;align-items:center;gap:6px;background:var(--violet);color:#fff;font-size:12px;font-weight:600;padding:7px 12px;border-radius:100px;cursor:pointer}
   .locpill .dot{width:6px;height:6px;border-radius:50%;background:var(--amber)}
   .search{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow)}
   .search svg{flex:none}
@@ -815,7 +815,8 @@ let idc=1;
 const MSGS={};
 const BOOKED={};
 
-const FOUNDER_CAP=10, FOUNDER_GOAL=3, FOUNDERS=Math.min(FOUNDER_CAP,LEADERBOARD.length+1);
+const FOUNDER_CAP=10, FOUNDER_GOAL=3;
+let FOUNDERS=Math.min(FOUNDER_CAP,LEADERBOARD.length+1);
 function pic(a,b,e,t){var svg='<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+a+'"/><stop offset="1" stop-color="'+b+'"/></linearGradient></defs><rect width="320" height="240" fill="url(%23g)"/><text x="160" y="122" font-size="96" text-anchor="middle">'+e+'</text><text x="160" y="210" font-size="22" font-family="sans-serif" font-weight="700" fill="rgba(255,255,255,.92)" text-anchor="middle">'+t+'</text></svg>';return {src:'data:image/svg+xml;utf8,'+encodeURIComponent(svg),fit:'cover'};}
 const HUSTLES=[
   {id:1,name:"Nia's Kitchen",init:'N',avail:1,cat:'Food',food:'prepared',v:1,lic:1,dist:0.4,offer:'Home-cooked plates & weekly meal prep. Delivered to your dorm.',price:'$8–12',rating:'4.9',reviews:41,jobs:120,since:'2024',c:0,pays:['Cash App','Zelle'],bio:"Junior, business major. Order by 6pm for next-day plates.",services:[['Single plate','$10'],['Weekly prep (5 meals)','$45'],['Party tray','$60']]},
@@ -932,7 +933,30 @@ function loadReferrals(){try{state.referrals=parseInt(localStorage.getItem('vend
 function creditReferral(){try{var r=localStorage.getItem('vendu_ref_from');if(!r||localStorage.getItem('vendu_ref_done'))return;if(r===myRefCode())return;localStorage.setItem('vendu_ref_done','1');try{if(window.VendU&&VendU.recordReferral)VendU.recordReferral(r,(state.campus&&state.campus.name)||'',BUILD);}catch(e){}var k='vendu_refs_'+r;localStorage.setItem(k,String((parseInt(localStorage.getItem(k)||'0',10)||0)+1));}catch(e){}}
 /* Keep referrals, ratings and jobs-done in sync with the shared backend so they
    follow the student across devices. */
-function syncReferralsFromServer(){try{if(!window.VendU||!VendU.referralCount||!state.isRealStudent&&!state.isCEO)return;VendU.referralCount(myRefCode(),BUILD).then(function(r){if(r&&r.ok&&typeof r.referrals==='number'){state.referrals=r.referrals;try{localStorage.setItem('vendu_refs_'+myRefCode(),String(r.referrals));}catch(e){}syncFounder();try{render();}catch(e){}}});}catch(e){}}
+function syncReferralsFromServer(){try{if(!window.VendU||!VendU.referralCount||!state.isRealStudent&&!state.isCEO)return;VendU.referralCount(myRefCode(),BUILD).then(function(r){if(r&&r.ok&&typeof r.referrals==='number'){state.referrals=r.referrals;try{localStorage.setItem('vendu_refs_'+myRefCode(),String(r.referrals));}catch(e){}syncFounder();try{render();}catch(e){}}try{syncFounders();}catch(e){}});}catch(e){}}
+/* ===== Live founder math, per school (.edu domain) =====
+   Spots left, my founder number, my rank and the leaderboard all come from the
+   backend so every student at the same school sees the same numbers. */
+function schoolDomainOf(){var e=String(state.acctEmail||state.eduEmail||'').toLowerCase();var d=e.split('@')[1]||'';if(d)return d;return (state.campus&&state.campus.domain)||'';}
+function syncFounders(){
+  try{
+    if(!window.VendU||!VendU.founderStats)return;
+    var dom=schoolDomainOf();if(!dom)return;
+    if(!state.isRealStudent&&!state.isCEO)return;
+    VendU.founderStats(dom,myRefCode(),BUILD).then(function(r){
+      if(!r||!r.ok)return;
+      FOUNDERS=Math.min(FOUNDER_CAP,r.claimed||0);
+      state.founderTotal=r.total||0;
+      if(typeof r.myReferrals==='number'){state.referrals=r.myReferrals;try{localStorage.setItem('vendu_refs_'+myRefCode(),String(r.myReferrals));}catch(e){}}
+      if(r.founderNumber){state.founderNum=r.founderNumber;try{localStorage.setItem('vendu_founder_num',String(r.founderNumber));}catch(e){}}
+      state.lbRank=r.myRank||0;
+      state.lbRows=(r.leaderboard||[]).map(function(x){return [x.me?'You':('@'+x.code),x.referrals];});
+      syncFounder();
+      try{render();}catch(e){}
+    });
+  }catch(e){}
+}
+try{setInterval(function(){try{syncFounders();}catch(e){}},60000);}catch(e){}
 function syncServerStats(){try{if(!window.VendU||!VendU.vendorStats)return;var ids=HUSTLES.filter(function(h){return !h.me;}).map(function(h){return h.id;});if(!ids.length)return;VendU.vendorStats(ids,BUILD).then(function(r){if(!r||!r.ok||!r.stats)return;var changed=false;Object.keys(r.stats).forEach(function(id){var st=r.stats[id];var h=HUSTLES.find(function(x){return x.id===id;});if(!h||!st)return;if(st.jobs){h.jobs=(parseInt(h.jobs,10)||0)+st.jobs;changed=true;}if(st.avg){h.rating=st.avg;h.reviews=(parseInt(h.reviews,10)||0)+st.reviews;changed=true;}});if(changed){try{render();}catch(e){}}});}catch(e){}}
 try{var _rp=new URL(location.href).searchParams.get('ref');if(_rp)localStorage.setItem('vendu_ref_from',_rp);}catch(e){}
 function accountBadge(){return state.isCEO?'<span class="ceopill">\u2605 CEO</span>':(state.isFounder&&state.isRealStudent?'<span class="founderpill">\u{1F393} Founder</span>':'');}
@@ -1685,10 +1709,11 @@ function profile(){
   var _mt=document.getElementById('moretoggle');if(_mt)_mt.onclick=()=>{state.moreMenu=true;render();screen.scrollTop=0;};
   screen.querySelectorAll('[data-menu]').forEach(el=>el.onclick=()=>{const m=el.dataset.menu;if(m==='setup'){state.storefrontSetup=true;render();}else if(m==='bookings'){state.bookSet=true;render();}else if(m==='saved'){state.savedView=true;render();}else if(m==='me'){openDetail('me');}else if(m==='boost'){state.boosted=!state.boosted;toast(state.boosted?'⚡ Storefront boosted! Optional upgrade — listing is always free.':'Boost turned off. Your storefront stays free & live.');render();}else if(m==='theme'){state.themeView=true;render();}else if(m==='regular'){state.isSeller=false;state.tab='profile';toast('Vendor mode off — your storefront is saved. Switch back anytime.');render();}else if(m==='myposts'){state.myPostsView=true;render();}else if(m==='feedback'){try{window.location.href='mailto:'+BETA_EMAIL+'?subject='+encodeURIComponent('VendU Beta Feedback')+'&body='+encodeURIComponent('What I liked:\n\nWhat confused me:\n\nWhat I wish it did:\n');}catch(e){}toast('Opening email — tell us anything! 💬');}else if(m==='tour'){VendU.startTour(true);}else if(m==='install'){showInstall();}else if(m==='support'){window.open('/legal/support.html','_blank','noopener');}else if(m==='legal'){window.open('/legal/privacy.html','_blank','noopener');}else if(m==='delete'){deleteAccount();}else if(m==='logout'){doLogout();}else if(m==='inbox'){openInbox();}else toast('Opens in the real build ⚙️');});
 }
-function lbRank(refs){const rows=[...LEADERBOARD,['You',refs]].sort((a,b)=>b[1]-a[1]);return rows.findIndex(r=>r[0]==='You')+1;}
+function lbRows(){if(state.lbRows&&state.lbRows.length)return state.lbRows.slice();return [...LEADERBOARD,['You',state.referrals]].sort((a,b)=>b[1]-a[1]);}
+function lbRank(refs){if(state.lbRank)return state.lbRank;const rows=[...LEADERBOARD,['You',refs]].sort((a,b)=>b[1]-a[1]);return rows.findIndex(r=>r[0]==='You')+1;}
 function servicesEditor(){state.storefrontSetup=true;state.svcEdit=false;add();}
 function leaderboard(){
-  const rows=[...LEADERBOARD,['You',state.referrals]].sort((a,b)=>b[1]-a[1]);
+  const rows=lbRows();
   const medal=i=>['🥇','🥈','🥉'][i]||('#'+(i+1));
   screen.innerHTML=`<div class="topbar"><div class="brandrow"><div class="wordmark">🏆 Leaderboard</div><div class="locpill" id="lbClose" style="cursor:pointer">✕ Close</div></div></div>
     <div style="padding:8px 20px 20px" class="enter"><div class="form-sub">Founders ranked by vendors referred. Refer more with your link to climb.</div><div class="lb-summary">🎓 <b>${FOUNDERS}</b> of <b>${FOUNDER_CAP}</b> founder spots claimed · <b>${Math.max(0,FOUNDER_CAP-FOUNDERS)}</b> left</div>
@@ -1892,7 +1917,32 @@ function cpRenderList(){
     render();
   };});
 }
+function locationHelp(msg){
+  var host=document.querySelector('.device')||document.body;
+  var old=document.getElementById('locHelp');if(old)old.remove();
+  var ios=/iPad|iPhone|iPod/.test(navigator.userAgent);
+  var steps=ios
+    ? 'On iPhone: open <b>Settings \u203A Privacy &amp; Security \u203A Location Services</b>, turn it on, then scroll to <b>Safari Websites</b> (or the VendU app) and choose <b>While Using the App</b>. Reload VendU and tap the button again.'
+    : 'On Android: open <b>Settings \u203A Apps \u203A Chrome (or VendU) \u203A Permissions \u203A Location</b> and allow it. In Chrome you can also tap the \u{1F512} icon in the address bar \u203A <b>Permissions</b> \u203A <b>Location</b> \u203A Allow. Reload VendU and tap the button again.';
+  var w=document.createElement('div');w.id='locHelp';
+  w.style.cssText='position:absolute;inset:0;background:rgba(20,12,40,.55);display:flex;align-items:center;justify-content:center;z-index:90;padding:24px';
+  w.innerHTML='<div style="background:var(--card,#fff);border-radius:20px;padding:22px 20px;max-width:320px;box-shadow:0 20px 50px rgba(0,0,0,.3)">'+
+    '<div style="font-size:32px;text-align:center">\uD83D\uDCCD</div>'+
+    '<div style="font-family:Bricolage Grotesque;font-weight:800;font-size:18px;text-align:center;margin-top:4px">Turn on location</div>'+
+    '<div style="font-size:13px;color:var(--mist,#777);line-height:1.55;margin:10px 0 14px">'+(msg?msg+'<br><br>':'')+steps+'</div>'+
+    '<button class="submit" id="locHelpSearch" style="margin:0">Search my school instead</button>'+
+    '<button class="submit" id="locHelpRetry" style="margin:8px 0 0;background:var(--card,#fff);color:var(--ink);border:1px solid var(--line,#e5e5e5)">Try location again</button>'+
+    '<button class="submit" id="locHelpClose" style="margin:8px 0 0;background:transparent;color:var(--mist,#777)">Close</button></div>';
+  host.appendChild(w);
+  document.getElementById('locHelpClose').onclick=function(){w.remove();};
+  document.getElementById('locHelpRetry').onclick=function(){w.remove();pickNearest();};
+  document.getElementById('locHelpSearch').onclick=function(){w.remove();try{var i=document.getElementById('cpq');if(i)i.focus();}catch(e){}};
+}
 function pickNearest(){
+  if(!navigator.geolocation){locationHelp('This browser can\u2019t share location.');return;}
+  if(!window.isSecureContext&&location.protocol!=='https:'&&location.hostname!=='localhost'){
+    locationHelp('Location only works on the secure (https) VendU link.');return;
+  }
   toast('\uD83D\uDCCD Finding your nearest campus\u2026');
   var localBest=function(lat,lng){var best=CAMPUSES[0],bd=1e18;CAMPUSES.forEach(function(c){var dx=c.lat-lat,dy=c.lng-lng,d=dx*dx+dy*dy;if(d<bd){bd=d;best=c;}});return best;};
   var useLocal=function(lat,lng){var b=localBest(lat,lng);state.campus=b;applyCampusTheme();loadCampusEvents();saveCampusPref();state.campusPick=false;state.campusQ='';state.campusResults=[];toast('\uD83D\uDCCD Nearest campus: '+b.short);render();};
@@ -1915,8 +1965,8 @@ function pickNearest(){
         step(0);
       }).catch(function(){useLocal(lat,lng);});
   };
-  try{navigator.geolocation.getCurrentPosition(function(p){resolve(p.coords.latitude,p.coords.longitude);},function(){toast('Allow location access to find your nearest campus');},{timeout:8000});}
-  catch(e){useLocal(32.84,-83.63);}
+  try{navigator.geolocation.getCurrentPosition(function(p){resolve(p.coords.latitude,p.coords.longitude);},function(err){locationHelp(err&&err.code===1?'VendU doesn\u2019t have permission to use your location yet.':'We couldn\u2019t read your location.');},{enableHighAccuracy:true,timeout:12000,maximumAge:300000});}
+  catch(e){locationHelp('');}
 }
 const APP_THEMES=[
  {id:'violet',name:'Violet \u2014 Creative',primary:'#5A2BE0',dark:'#3d1c99',soft:'#EFE8FF',accent:'#FFB020',desc:'Energetic and youthful. Signals creativity and community \u2014 the current VendU look.'},

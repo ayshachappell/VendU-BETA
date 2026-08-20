@@ -17,6 +17,7 @@ type Body = {
   refCode?: unknown;
   campus?: unknown;
   vendorIds?: unknown;
+  domain?: unknown;
 };
 
 function str(v: unknown, max = 400): string {
@@ -75,6 +76,73 @@ export const Route = createFileRoute("/api/public/community/activity")({
           }
           return json({ ok: true, stats });
         }
+
+        /* Founder math for one school (.edu domain), computed live.
+           A founder = someone whose invite link brought in FOUNDER_GOAL (3)
+           vendors from that same school. Spots are capped at 10 per school. */
+        if (action === "founders") {
+          const CAP = 10;
+          const GOAL = 3;
+          const domain =
+            str(raw.domain, 120).toLowerCase().replace(/^.*@/, "") ||
+            str(raw.email, 254).toLowerCase().split("@")[1] ||
+            "";
+          if (!domain) return json({ ok: false, message: "Missing school." }, 400);
+          const myCode = str(raw.refCode, 64);
+
+          const { data } = await supabaseAdmin
+            .from("referrals")
+            .select("ref_code,referred_email,created_at")
+            .ilike("referred_email", `%@${domain}`)
+            .order("created_at", { ascending: true });
+
+          const counts = new Map<string, number>();
+          const firstAt = new Map<string, string>();
+          for (const row of data ?? []) {
+            const code = String(row.ref_code ?? "");
+            if (!code) continue;
+            counts.set(code, (counts.get(code) ?? 0) + 1);
+            if ((counts.get(code) ?? 0) === GOAL && !firstAt.has(code))
+              firstAt.set(code, String(row.created_at ?? ""));
+          }
+
+          const ranked = [...counts.entries()]
+            .map(([code, referrals]) => ({ code, referrals }))
+            .sort((a, b) => b.referrals - a.referrals || a.code.localeCompare(b.code));
+
+          // Founder seats go to the first accounts to reach the goal.
+          const qualified = [...firstAt.entries()]
+            .sort((a, b) => (a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0))
+            .map(([code]) => code);
+          const seated = qualified.slice(0, CAP);
+          const claimed = seated.length;
+
+          const myReferrals = myCode ? (counts.get(myCode) ?? 0) : 0;
+          const mySeat = myCode ? seated.indexOf(myCode) : -1;
+          const myRank = myCode ? ranked.findIndex((r) => r.code === myCode) + 1 : 0;
+
+          return json({
+            ok: true,
+            domain,
+            cap: CAP,
+            goal: GOAL,
+            claimed,
+            left: Math.max(0, CAP - claimed),
+            total: ranked.length,
+            myReferrals,
+            myRank: myRank || null,
+            founderNumber: mySeat >= 0 ? mySeat + 1 : null,
+            isFounder: mySeat >= 0,
+            leaderboard: ranked.slice(0, 20).map((r, i) => ({
+              rank: i + 1,
+              code: r.code,
+              referrals: r.referrals,
+              founder: seated.includes(r.code),
+              me: !!myCode && r.code === myCode,
+            })),
+          });
+        }
+
 
         const email = normalizeAccessEmail(raw.email);
         if (!email) return json({ ok: false, message: "Verify your school email first." }, 401);
