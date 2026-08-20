@@ -1,114 +1,41 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { handleMagicLinkReturn } from "@/lib/vendu-magic-link";
-
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "VendU — Sell Your Stuff, Book a Service, Get Paid" },
+      { title: "VendU Beta — Campus Marketplace" },
       {
         name: "description",
         content:
-          "VendU is the campus marketplace made for students at every college and trade school. Sell your stuff, book a classmate's service, and get paid. Free with your school email.",
+          "Open the VendU beta and join the campus marketplace for students at every college and trade school.",
       },
-      { property: "og:title", content: "VendU — sell your stuff, book a service, get paid." },
+      { property: "og:title", content: "VendU Beta — Campus Marketplace" },
       {
         property: "og:description",
         content:
-          "The campus marketplace for students. Sell your stuff, book a service, get paid — free to join with your .edu email.",
+          "Sell your stuff, book a service, get paid — try the VendU beta now.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "manifest", href: "/manifest.webmanifest" }],
   }),
-
-  component: Landing,
+  component: BetaRedirect,
 });
 
-const features = [
-  {
-    emoji: "🔎",
-    title: "Find & book",
-    text: "Braids, fades, tutoring, prints, meal preps — book real student vendors on your campus.",
-  },
-  {
-    emoji: "🛍️",
-    title: "Buy, sell & trade",
-    text: "Textbooks, dorm gear, sneakers. Post in seconds, trade with people you actually see.",
-  },
-  {
-    emoji: "🎓",
-    title: "VendUniversity",
-    text: "Communities, groups, class planner, campus routes and guides for starting a business.",
-  },
-];
-
-function Landing() {
-  const [returning, setReturning] = useState(false);
-
+function BetaRedirect() {
   useEffect(() => {
-    setReturning(handleMagicLinkReturn());
+    window.location.replace("/beta/index.html");
   }, []);
-
-  if (returning) {
-    return (
-      <main className="flex min-h-screen items-center justify-center bg-background px-6 text-center">
-        <p className="text-sm text-muted-foreground">Verifying your email — opening VendU…</p>
-      </main>
-    );
-  }
-
   return (
-
-    <main className="min-h-screen bg-background text-foreground">
-      <section className="mx-auto flex max-w-3xl flex-col items-center px-6 pt-20 pb-14 text-center">
-        <img
-          src="/icons/icon-192.png"
-          alt="VendU app icon"
-          width={72}
-          height={72}
-          className="rounded-2xl shadow-lg"
-        />
-        <h1 className="mt-7 text-4xl font-extrabold tracking-tight sm:text-5xl">
-          Sell your stuff. Book a service. Get paid.
-        </h1>
-        <p className="mt-4 max-w-xl text-base text-muted-foreground sm:text-lg">
-          VendU is the campus marketplace made for students — at every college and trade school.
-          Free to join with your school email. Verify with any{" "}
-          <strong className="text-foreground">.edu</strong> and you&rsquo;re in.
-        </p>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <a
-            href="/main/index.html"
-            className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Join your campus →
-          </a>
-
-          <a
-            href="/beta/index.html"
-            className="inline-flex items-center justify-center rounded-xl border border-input bg-card px-6 py-3 text-sm font-semibold transition-colors hover:bg-accent"
-          >
-            Open the Beta build
-          </a>
-        </div>
-        <p className="mt-4 text-xs text-muted-foreground">
-          Works in any browser. On your phone, tap Share &rarr; Add to Home Screen to install it
-          like an app.
-        </p>
-      </section>
-
-      <section className="mx-auto grid max-w-4xl gap-4 px-6 pb-24 sm:grid-cols-3">
-        {features.map((f) => (
-          <article key={f.title} className="rounded-2xl border border-border bg-card p-6">
-            <div className="text-3xl">{f.emoji}</div>
-            <h2 className="mt-3 text-lg font-bold">{f.title}</h2>
-            <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{f.text}</p>
-          </article>
-        ))}
-      </section>
+    <main className="flex min-h-screen items-center justify-center bg-background px-6 text-center">
+      <div>
+        <p className="text-sm text-muted-foreground">Opening VendU Beta…</p>
+        <a href="/beta/index.html" className="mt-3 inline-block text-sm font-semibold underline">
+          Tap here if nothing happens
+        </a>
+      </div>
     </main>
   );
 }
+
