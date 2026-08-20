@@ -659,7 +659,7 @@ if('serviceWorker' in navigator){
 .edu-legal.on .lbox{background:var(--violet);border-color:var(--violet);color:#fff}
 .edu-legal a{color:var(--violet);font-weight:700}
 /* ===== Storefront template v5 — white canvas, clean header, front live dot ===== */
-.screen:has(.storefront){background:#fff}
+.screen:has(.storefront){background:var(--paper)}
 .screen:has(.storefront) .statrow{background:#fff;border-color:#EFEFEF}
 .screen:has(.storefront) .detail-body .svc,.screen:has(.storefront) .rev{background:#fff;border-color:#EFEFEF}
 .screen:has(.storefront) .stat{border-right-color:#EFEFEF}
@@ -669,6 +669,7 @@ if('serviceWorker' in navigator){
 .detail-body{padding:0 20px 130px}
 .av-wrap .livedot{right:-3px;bottom:-3px;z-index:20;border:3px solid #fff}
 .av-wrap .detail-av{z-index:8}
+.awning{padding-top:calc(26px + env(safe-area-inset-top,0px))}
 </style>
 </head>
 <body>
@@ -991,7 +992,7 @@ try{
 /* ---- status bar tint: brand purple everywhere, off-white only on a storefront ---- */
 try{
   var _tm=document.querySelector('meta[name="theme-color"]');
-  var BRAND_TINT='#5A2BE0', STORE_TINT='#FFFFFF';
+  var BRAND_TINT='#5A2BE0', STORE_TINT='#5A2BE0';
   function venduTint(){
     if(!_tm)return;
     var onStore=!!document.querySelector('.storefront');
