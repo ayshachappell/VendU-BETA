@@ -1012,7 +1012,7 @@ function detail(id){
   let windows='';
   const DEMO_SHOTS=['https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=700&q=70','https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=700&q=70','https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=700&q=70','https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=700&q=70'];
   const demoOn=!!(state.tester||state.tourActive||state.demoContent);
-  const sfv=state.sfView||'window';
+  const sfv=state.sfView||(function(){try{return localStorage.getItem('vendu_sfview')||'';}catch(e){return '';}})()||'window';
   const tag=(t,p)=>(t||p)?`<div class="wtag"><span class="wt">${t||''}</span>${p?`<span class="wp">${p}</span>`:''}</div>`:'';
   let items=[];
   if(h.gallery&&h.gallery.length){items=h.gallery.map((g,i)=>({src:g.src,fit:g.fit||'cover',t:(svcs[i]&&svcs[i][0])||'',p:(svcs[i]&&svcs[i][1])||''}));}
@@ -1563,7 +1563,7 @@ function add(){
       <button class="submit" id="save">${onboard?'Save & enter VendU':'Save storefront'}</button>
     </div>`;
   screen.querySelector('.photo-av').onclick=()=>photo.click();
-  screen.querySelectorAll('[data-sfvopt]').forEach(el=>el.onclick=()=>{state.sfView=el.dataset.sfvopt;save();add();});
+  screen.querySelectorAll('[data-sfvopt]').forEach(el=>el.onclick=()=>{state.sfView=el.dataset.sfvopt;try{localStorage.setItem('vendu_sfview',state.sfView);}catch(e){}add();});
   screen.querySelectorAll('[data-promo]').forEach(el=>el.onclick=()=>{state.promo=Object.assign({type:'none',pct:'20',ends:''},state.promo,{type:el.dataset.promo});add();});
   var _pp=document.getElementById('promopct');if(_pp)_pp.oninput=e=>{state.promo.pct=e.target.value.replace(/\D/g,'');};
   var _pe=document.getElementById('promoends');if(_pe)_pe.onchange=e=>{state.promo.ends=e.target.value;add();};
