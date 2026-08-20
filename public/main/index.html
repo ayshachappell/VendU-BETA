@@ -30,7 +30,7 @@ if('serviceWorker' in navigator){
 }
 </script>
 <link rel="manifest" href="/main/manifest.webmanifest?v=9">
-<meta name="theme-color" content="#FAF7F2">
+<meta name="theme-color" content="#5A2BE0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="icon" type="image/png" href="/favicon.png?v=9">
@@ -970,6 +970,39 @@ function syncFounders(){
 }
 try{setInterval(function(){try{syncFounders();}catch(e){}},60000);}catch(e){}
 function syncServerStats(){try{if(!window.VendU||!VendU.vendorStats)return;var ids=HUSTLES.filter(function(h){return !h.me;}).map(function(h){return h.id;});if(!ids.length)return;VendU.vendorStats(ids,BUILD).then(function(r){if(!r||!r.ok||!r.stats)return;var changed=false;Object.keys(r.stats).forEach(function(id){var st=r.stats[id];var h=HUSTLES.find(function(x){return x.id===id;});if(!h||!st)return;if(st.jobs){h.jobs=(parseInt(h.jobs,10)||0)+st.jobs;changed=true;}if(st.avg){h.rating=st.avg;h.reviews=(parseInt(h.reviews,10)||0)+st.reviews;changed=true;}});if(changed){try{render();}catch(e){}}});}catch(e){}}
+
+/* ---- live sync: stats, founders, and any server-backed counts, in real time ---- */
+try{
+  var _liveBusy=false;
+  function venduLiveSync(){
+    if(_liveBusy||document.hidden)return;_liveBusy=true;
+    try{syncServerStats();}catch(e){}
+    try{syncFounders();}catch(e){}
+    try{if(typeof syncReferralsFromServer==='function')syncReferralsFromServer();}catch(e){}
+    setTimeout(function(){_liveBusy=false;},1500);
+  }
+  window.venduLiveSync=venduLiveSync;
+  setInterval(venduLiveSync,15000);
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)venduLiveSync();});
+  window.addEventListener('focus',venduLiveSync);
+  window.addEventListener('online',venduLiveSync);
+}catch(e){}
+
+/* ---- status bar tint: brand purple everywhere, off-white only on a storefront ---- */
+try{
+  var _tm=document.querySelector('meta[name="theme-color"]');
+  var BRAND_TINT='#5A2BE0', STORE_TINT='#FFFFFF';
+  function venduTint(){
+    if(!_tm)return;
+    var onStore=!!document.querySelector('.storefront');
+    var want=onStore?STORE_TINT:BRAND_TINT;
+    if(_tm.getAttribute('content')!==want)_tm.setAttribute('content',want);
+  }
+  window.venduTint=venduTint;
+  new MutationObserver(venduTint).observe(document.documentElement,{childList:true,subtree:true});
+  venduTint();
+}catch(e){}
+
 try{var _rp=new URL(location.href).searchParams.get('ref');if(_rp)localStorage.setItem('vendu_ref_from',_rp);}catch(e){}
 function accountBadge(){return state.isCEO?'<span class="ceopill">\u2605 CEO</span>':(state.isFounder&&state.isRealStudent?'<span class="founderpill">\u{1F393} Founder</span>':'');}
 function doLogout(){try{VendU.signOut();}catch(e){}try{localStorage.removeItem('vendu_return_build');}catch(e){}location.reload();}
