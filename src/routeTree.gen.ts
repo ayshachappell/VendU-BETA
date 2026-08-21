@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as BetaRouteImport } from './routes/beta'
+import { Route as ApiPublicReportRouteImport } from './routes/api/public/report'
 import { Route as ApiPublicAccountDeleteRouteImport } from './routes/api/public/account/delete'
 import { Route as ApiPublicCampusEventsRouteImport } from './routes/api/public/campus/events'
 import { Route as ApiPublicCampusResolveRouteImport } from './routes/api/public/campus/resolve'
@@ -38,6 +39,11 @@ const AppRoute = AppRouteImport.update({
 const BetaRoute = BetaRouteImport.update({
   id: '/beta',
   path: '/beta',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicReportRoute = ApiPublicReportRouteImport.update({
+  id: '/api/public/report',
+  path: '/api/public/report',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicAccountDeleteRoute = ApiPublicAccountDeleteRouteImport.update({
@@ -107,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
+  '/api/public/report': typeof ApiPublicReportRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
   '/api/public/campus/events': typeof ApiPublicCampusEventsRoute
   '/api/public/campus/resolve': typeof ApiPublicCampusResolveRoute
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
+  '/api/public/report': typeof ApiPublicReportRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
   '/api/public/campus/events': typeof ApiPublicCampusEventsRoute
   '/api/public/campus/resolve': typeof ApiPublicCampusResolveRoute
@@ -142,6 +150,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
+  '/api/public/report': typeof ApiPublicReportRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
   '/api/public/campus/events': typeof ApiPublicCampusEventsRoute
   '/api/public/campus/resolve': typeof ApiPublicCampusResolveRoute
@@ -161,6 +170,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/beta'
+    | '/api/public/report'
     | '/api/public/account/delete'
     | '/api/public/campus/events'
     | '/api/public/campus/resolve'
@@ -178,6 +188,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/beta'
+    | '/api/public/report'
     | '/api/public/account/delete'
     | '/api/public/campus/events'
     | '/api/public/campus/resolve'
@@ -195,6 +206,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/beta'
+    | '/api/public/report'
     | '/api/public/account/delete'
     | '/api/public/campus/events'
     | '/api/public/campus/resolve'
@@ -213,6 +225,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRoute
   BetaRoute: typeof BetaRoute
+  ApiPublicReportRoute: typeof ApiPublicReportRoute
   ApiPublicAccountDeleteRoute: typeof ApiPublicAccountDeleteRoute
   ApiPublicCampusEventsRoute: typeof ApiPublicCampusEventsRoute
   ApiPublicCampusResolveRoute: typeof ApiPublicCampusResolveRoute
@@ -248,6 +261,13 @@ declare module '@tanstack/react-router' {
       path: '/beta'
       fullPath: '/beta'
       preLoaderRoute: typeof BetaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/report': {
+      id: '/api/public/report'
+      path: '/api/public/report'
+      fullPath: '/api/public/report'
+      preLoaderRoute: typeof ApiPublicReportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/account/delete': {
@@ -341,6 +361,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRoute,
   BetaRoute: BetaRoute,
+  ApiPublicReportRoute: ApiPublicReportRoute,
   ApiPublicAccountDeleteRoute: ApiPublicAccountDeleteRoute,
   ApiPublicCampusEventsRoute: ApiPublicCampusEventsRoute,
   ApiPublicCampusResolveRoute: ApiPublicCampusResolveRoute,
