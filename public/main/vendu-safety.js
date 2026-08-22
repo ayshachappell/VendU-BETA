@@ -18,23 +18,21 @@
 
   /* ---------- report ---------- */
   W.reportContent = function (payload) {
-    return fetch("/api/public/report", {
-      method: "POST",
-      cache: "no-store",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: myEmail(),
-        build: BUILD,
-        kind: payload.kind,
-        targetId: payload.targetId,
-        targetName: payload.targetName || "",
-        campus: payload.campus || "",
-        reason: payload.reason,
-        details: payload.details || "",
-      }),
-    })
+    var body = {
+      build: BUILD,
+      kind: payload.kind,
+      targetId: payload.targetId,
+      targetName: payload.targetName || "",
+      campus: payload.campus || "",
+      reason: payload.reason,
+      details: payload.details || "",
+    };
+    /* Reports are filed as the signed-in student: the session token proves who
+       is reporting, so no email is sent in the body. */
+    if (W.authPost) return W.authPost("/api/public/report", body);
+    return Promise.resolve({ ok: false, message: "Sign in to report content." })
       .then(function (r) {
-        return r.json();
+        return r;
       })
       .catch(function () {
         return { ok: false, message: "No connection. Try again." };
