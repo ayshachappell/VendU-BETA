@@ -1,10 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  isVerifiedStudent,
-  json,
-  normalizeAccessEmail,
-  normalizeBuild,
-} from "@/lib/edu-verification.server";
+import { json, normalizeBuild, requireStudent } from "@/lib/edu-verification.server";
 
 type Body = {
   action?: unknown;
@@ -146,10 +141,12 @@ export const Route = createFileRoute("/api/public/community/activity")({
         }
 
 
-        const email = normalizeAccessEmail(raw.email);
-        if (!email) return json({ ok: false, message: "Verify your school email first." }, 401);
-        if (!(await isVerifiedStudent(email)))
-          return json({ ok: false, message: "Verify your school email first." }, 401);
+        /* Everything below writes on behalf of a student, so the identity must
+           come from the signed session issued at verification — a client-sent
+           "email" field is not proof of anything and is ignored. */
+        const auth = await requireStudent(request);
+        if ("response" in auth) return auth.response;
+        const email = auth.email;
 
         if (action === "book") {
           const vendorId = str(raw.vendorId, 64);

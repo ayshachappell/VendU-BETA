@@ -255,3 +255,67 @@ export async function emailFromLinkParams(params: {
   if (!accessToken) return null;
   return emailFromAccessToken(accessToken);
 }
+
+/* ------------------------------------------------------------------ *
+ * Session-bound identity.
+ *
+ * A student's identity is the signed session issued at verification —
+ * never an email typed into a JSON body. Every endpoint that writes or
+ * deletes on behalf of a student must go through requireStudent().
+ * ------------------------------------------------------------------ */
+
+/** Pull the verified email out of the request's `Authorization: Bearer` token. */
+export async function sessionEmail(request: Request): Promise<string | null> {
+  const header = request.headers.get("authorization") ?? "";
+  const match = /^Bearer\s+(.+)$/i.exec(header.trim());
+  if (!match) return null;
+  const token = (match[1] ?? "").trim();
+  if (!token || token.length > 4096) return null;
+  const raw = await emailFromAccessToken(token);
+  return raw ? normalizeAccessEmail(raw) : null;
+}
+
+/** Either the signed-in student's email, or a ready-to-return 401 Response. */
+export async function requireStudent(
+  request: Request,
+): Promise<{ email: string } | { response: Response }> {
+  const email = await sessionEmail(request);
+  if (!email) {
+    return {
+      response: json(
+        { ok: false, needsAuth: true, message: "Sign in with your school email to continue." },
+        401,
+      ),
+    };
+  }
+  if (!(await isVerifiedStudent(email))) {
+    return {
+      response: json(
+        { ok: false, needsAuth: true, message: "Verify your school email first." },
+        401,
+      ),
+    };
+  }
+  return { email };
+}
+
+/** Swap a refresh token for a fresh session so long-lived devices stay signed in. */
+export async function refreshSession(refreshToken: string) {
+  const { url, key } = authBase();
+  const res = await fetch(`${url}/auth/v1/token?grant_type=refresh_token`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", apikey: key },
+    body: JSON.stringify({ refresh_token: refreshToken }),
+  });
+  const body = (await res.json().catch(() => ({}))) as {
+    access_token?: string;
+    refresh_token?: string;
+    expires_at?: number;
+  };
+  if (!res.ok || !body.access_token) return null;
+  return {
+    access_token: body.access_token,
+    refresh_token: body.refresh_token ?? refreshToken,
+    expires_at: body.expires_at ?? 0,
+  };
+}

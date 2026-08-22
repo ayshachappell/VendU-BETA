@@ -2176,7 +2176,7 @@ function deleteAccount(){
   if(!confirm('Delete your VendU account?\n\nThis removes your profile, storefront, posts, bookings and reviews. This cannot be undone.'))return;
   if(!confirm('Last check \u2014 permanently delete your VendU account?'))return;
   var em='';try{var s=window.VendU&&VendU.student&&VendU.student();em=(s&&s.email)||'';}catch(e){}
-  fetch('/api/public/account/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em,build:BUILD})}).catch(function(){});
+  try{if(window.VendU&&VendU.deleteAccount)VendU.deleteAccount(BUILD).catch(function(){});}catch(e){}
   try{localStorage.clear();}catch(e){}
   toast('Your account was deleted. Goodbye \uD83D\uDC4B');
   setTimeout(function(){location.reload();},900);
