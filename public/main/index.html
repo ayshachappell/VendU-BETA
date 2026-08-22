@@ -15,7 +15,7 @@
   var l=document.createElement('link');
   l.rel='stylesheet'; l.href=B+'vendu-shared.css?v='+V;
   document.head.appendChild(l);
-  ['vendu-api.js','vendu-tour.js'].forEach(function(f){
+  ['vendu-api.js','vendu-tour.js','vendu-safety.js'].forEach(function(f){
     var s=document.createElement('script');
     s.src=B+f+'?v='+V; s.async=false;
     document.head.appendChild(s);
