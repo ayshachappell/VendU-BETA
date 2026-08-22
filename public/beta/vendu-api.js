@@ -3,22 +3,102 @@
   var W = (window.VendU = window.VendU || {});
   var KEY = "vendu_beta_student_v1";
 
-  function post(path, body) {
-    return fetch(path, {
+  var SKEY = "vendu_session_v1";
+
+  /* ---- signed session (proof of identity for every write) ---- */
+  function saveSession(session) {
+    if (!session || !session.access_token) return;
+    try {
+      localStorage.setItem(SKEY, JSON.stringify(session));
+    } catch (e) {}
+  }
+  function session() {
+    try {
+      return JSON.parse(localStorage.getItem(SKEY) || "null");
+    } catch (e) {
+      return null;
+    }
+  }
+  function clearSession() {
+    try {
+      localStorage.removeItem(SKEY);
+    } catch (e) {}
+  }
+  W.saveSession = saveSession;
+  W.session = session;
+
+  function refreshSession() {
+    var s = session();
+    if (!s || !s.refresh_token) return Promise.resolve(null);
+    return fetch("/api/public/verify/refresh", {
       method: "POST",
       cache: "no-store",
       headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refresh_token: s.refresh_token }),
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (res && res.ok && res.session) {
+          saveSession(res.session);
+          return res.session.access_token;
+        }
+        clearSession();
+        return null;
+      })
+      .catch(function () { return null; });
+  }
+
+  function request(path, body, token, retried) {
+    var headers = { "Content-Type": "application/json" };
+    if (token) headers.Authorization = "Bearer " + token;
+    return fetch(path, {
+      method: "POST",
+      cache: "no-store",
+      headers: headers,
       body: JSON.stringify(body || {}),
     })
       .then(function (r) {
         return r.json().catch(function () {
           return { ok: false, message: "Something went wrong. Try again." };
+        }).then(function (data) {
+          if (r.status === 401 && data && data.needsAuth && !retried) {
+            return refreshSession().then(function (fresh) {
+              if (!fresh) return data;
+              return request(path, body, fresh, true);
+            });
+          }
+          return data;
         });
       })
       .catch(function () {
         return { ok: false, message: "No connection. Check your internet and try again." };
       });
   }
+
+  /* Unauthenticated call (public reads: search, campus lookup, verification). */
+  function post(path, body) {
+    return request(path, body, null, true);
+  }
+
+  /* Authenticated call — sends the session token issued at verification.
+     The server trusts that token, not any email in the body. */
+  function authPost(path, body) {
+    var s = session();
+    if (!s || !s.access_token) {
+      return refreshSession().then(function (fresh) {
+        if (!fresh) {
+          return {
+            ok: false,
+            needsAuth: true,
+            message: "Sign in with your school email to continue.",
+          };
+        }
+        return request(path, body, fresh, true);
+      });
+    }
+    return request(path, body, s.access_token, false);
+  }
+  W.authPost = authPost;
 
   W.looksLikeEdu = function (email) {
     return /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(String(email || "").trim().toLowerCase()) &&
@@ -53,6 +133,11 @@
       var payload = JSON.parse(atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
       if (!payload.email) return null;
       localStorage.setItem(KEY, JSON.stringify({ email: payload.email, at: Date.now() }));
+      saveSession({
+        access_token: token,
+        refresh_token: params.get("refresh_token") || "",
+        expires_at: Number(params.get("expires_at") || 0),
+      });
       return payload.email;
     } catch (e) {
       return null;
@@ -67,6 +152,7 @@
       gradYear: gradYear,
     }).then(function (res) {
       if (res && res.ok) {
+        saveSession(res.session);
         try {
           localStorage.setItem(
             KEY,
@@ -107,6 +193,7 @@
     try {
       localStorage.removeItem(KEY);
     } catch (e) {}
+    clearSession();
   };
 
   /* ---- shared activity: bookings, reviews, referrals (cross-device) ---- */
@@ -117,24 +204,27 @@
   function activity(payload) {
     return post("/api/public/community/activity", payload);
   }
+  function myActivity(payload) {
+    return authPost("/api/public/community/activity", payload);
+  }
   W.recordBooking = function (vendorId, service, build) {
     if (!myEmail()) return Promise.resolve({ ok: false });
-    return activity({ action: "book", email: myEmail(), vendorId: vendorId, service: service, build: build });
+    return myActivity({ action: "book", vendorId: vendorId, service: service, build: build });
   };
   W.postReview = function (vendorId, stars, body, build) {
     if (!myEmail()) return Promise.resolve({ ok: false });
-    return activity({ action: "review", email: myEmail(), vendorId: vendorId, stars: stars, body: body, build: build });
+    return myActivity({ action: "review", vendorId: vendorId, stars: stars, body: body, build: build });
   };
   W.vendorStats = function (vendorIds, build) {
     return activity({ action: "stats", vendorIds: vendorIds, build: build });
   };
   W.recordReferral = function (refCode, campus, build) {
     if (!myEmail() || !refCode) return Promise.resolve({ ok: false });
-    return activity({ action: "referral", email: myEmail(), refCode: refCode, campus: campus, build: build });
+    return myActivity({ action: "referral", refCode: refCode, campus: campus, build: build });
   };
   W.referralCount = function (refCode, build) {
     if (!myEmail()) return Promise.resolve({ ok: false });
-    return activity({ action: "referralCount", email: myEmail(), refCode: refCode, build: build });
+    return myActivity({ action: "referralCount", refCode: refCode, build: build });
   };
 
   /* ---- founder spots & leaderboard math (per school, live) ---- */
@@ -144,15 +234,17 @@
 
   /* ---- appointment notifications (SMS when a text provider is connected) ---- */
   W.notifyAppointment = function (appt) {
-    return post("/api/public/notify/appointment", {
-      email: myEmail(),
-      vendor: appt.vendor,
+    return authPost("/api/public/notify/appointment", {
       vendorId: appt.vendorId,
-      service: appt.service,
       when: appt.when,
       phone: appt.phone,
       build: appt.build,
     });
+  };
+
+  /* ---- account deletion (only ever deletes the signed-in student) ---- */
+  W.deleteAccount = function (build) {
+    return authPost("/api/public/account/delete", { build: build });
   };
 
   /* ---- campuses: universal .edu support, search, theming, events ---- */
@@ -163,7 +255,7 @@
       if (patch.mascot !== undefined) body.mascot = patch.mascot;
       if (patch.accent_color) body.accent_color = patch.accent_color;
     }
-    return post("/api/public/campus/resolve", body);
+    return (patch ? authPost : post)("/api/public/campus/resolve", body);
   };
   W.searchSchools = function (q) {
     var query = String(q || "").trim();

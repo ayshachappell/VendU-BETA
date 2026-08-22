@@ -25,6 +25,7 @@ import { Route as ApiPublicVerifyCheckRouteImport } from './routes/api/public/ve
 import { Route as ApiPublicVerifyConfirmRouteImport } from './routes/api/public/verify/confirm'
 import { Route as ApiPublicVerifyLinkRouteImport } from './routes/api/public/verify/link'
 import { Route as ApiPublicVerifyLookupRouteImport } from './routes/api/public/verify/lookup'
+import { Route as ApiPublicVerifyRefreshRouteImport } from './routes/api/public/verify/refresh'
 import { Route as ApiPublicVerifySendRouteImport } from './routes/api/public/verify/send'
 import { Route as ApiPublicVerifyStatusRouteImport } from './routes/api/public/verify/status'
 
@@ -110,6 +111,11 @@ const ApiPublicVerifyLookupRoute = ApiPublicVerifyLookupRouteImport.update({
   path: '/api/public/verify/lookup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicVerifyRefreshRoute = ApiPublicVerifyRefreshRouteImport.update({
+  id: '/api/public/verify/refresh',
+  path: '/api/public/verify/refresh',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicVerifySendRoute = ApiPublicVerifySendRouteImport.update({
   id: '/api/public/verify/send',
   path: '/api/public/verify/send',
@@ -138,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/api/public/verify/confirm': typeof ApiPublicVerifyConfirmRoute
   '/api/public/verify/link': typeof ApiPublicVerifyLinkRoute
   '/api/public/verify/lookup': typeof ApiPublicVerifyLookupRoute
+  '/api/public/verify/refresh': typeof ApiPublicVerifyRefreshRoute
   '/api/public/verify/send': typeof ApiPublicVerifySendRoute
   '/api/public/verify/status': typeof ApiPublicVerifyStatusRoute
 }
@@ -158,6 +165,7 @@ export interface FileRoutesByTo {
   '/api/public/verify/confirm': typeof ApiPublicVerifyConfirmRoute
   '/api/public/verify/link': typeof ApiPublicVerifyLinkRoute
   '/api/public/verify/lookup': typeof ApiPublicVerifyLookupRoute
+  '/api/public/verify/refresh': typeof ApiPublicVerifyRefreshRoute
   '/api/public/verify/send': typeof ApiPublicVerifySendRoute
   '/api/public/verify/status': typeof ApiPublicVerifyStatusRoute
 }
@@ -179,6 +187,7 @@ export interface FileRoutesById {
   '/api/public/verify/confirm': typeof ApiPublicVerifyConfirmRoute
   '/api/public/verify/link': typeof ApiPublicVerifyLinkRoute
   '/api/public/verify/lookup': typeof ApiPublicVerifyLookupRoute
+  '/api/public/verify/refresh': typeof ApiPublicVerifyRefreshRoute
   '/api/public/verify/send': typeof ApiPublicVerifySendRoute
   '/api/public/verify/status': typeof ApiPublicVerifyStatusRoute
 }
@@ -201,6 +210,7 @@ export interface FileRouteTypes {
     | '/api/public/verify/confirm'
     | '/api/public/verify/link'
     | '/api/public/verify/lookup'
+    | '/api/public/verify/refresh'
     | '/api/public/verify/send'
     | '/api/public/verify/status'
   fileRoutesByTo: FileRoutesByTo
@@ -221,6 +231,7 @@ export interface FileRouteTypes {
     | '/api/public/verify/confirm'
     | '/api/public/verify/link'
     | '/api/public/verify/lookup'
+    | '/api/public/verify/refresh'
     | '/api/public/verify/send'
     | '/api/public/verify/status'
   id:
@@ -241,6 +252,7 @@ export interface FileRouteTypes {
     | '/api/public/verify/confirm'
     | '/api/public/verify/link'
     | '/api/public/verify/lookup'
+    | '/api/public/verify/refresh'
     | '/api/public/verify/send'
     | '/api/public/verify/status'
   fileRoutesById: FileRoutesById
@@ -262,6 +274,7 @@ export interface RootRouteChildren {
   ApiPublicVerifyConfirmRoute: typeof ApiPublicVerifyConfirmRoute
   ApiPublicVerifyLinkRoute: typeof ApiPublicVerifyLinkRoute
   ApiPublicVerifyLookupRoute: typeof ApiPublicVerifyLookupRoute
+  ApiPublicVerifyRefreshRoute: typeof ApiPublicVerifyRefreshRoute
   ApiPublicVerifySendRoute: typeof ApiPublicVerifySendRoute
   ApiPublicVerifyStatusRoute: typeof ApiPublicVerifyStatusRoute
 }
@@ -380,6 +393,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicVerifyLookupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/verify/refresh': {
+      id: '/api/public/verify/refresh'
+      path: '/api/public/verify/refresh'
+      fullPath: '/api/public/verify/refresh'
+      preLoaderRoute: typeof ApiPublicVerifyRefreshRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/verify/send': {
       id: '/api/public/verify/send'
       path: '/api/public/verify/send'
@@ -414,6 +434,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicVerifyConfirmRoute: ApiPublicVerifyConfirmRoute,
   ApiPublicVerifyLinkRoute: ApiPublicVerifyLinkRoute,
   ApiPublicVerifyLookupRoute: ApiPublicVerifyLookupRoute,
+  ApiPublicVerifyRefreshRoute: ApiPublicVerifyRefreshRoute,
   ApiPublicVerifySendRoute: ApiPublicVerifySendRoute,
   ApiPublicVerifyStatusRoute: ApiPublicVerifyStatusRoute,
 }
