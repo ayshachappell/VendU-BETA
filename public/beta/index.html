@@ -870,7 +870,7 @@ const EVENTS_SEED=[
   {title:'Spring Fling Yard Show',inDays:45,hour:18,loc:'Amphitheater',c:1,tag:'Popular'},
 ];
 GOODS.forEach(function(g){if(!g.campus)g.campus='fvsu';});REQUESTS.forEach(function(r){if(!r.campus)r.campus='fvsu';});FEED.forEach(function(p){if(!p.campus)p.campus='fvsu';});EVENTS_SEED.forEach(function(e){if(!e.campus)e.campus='fvsu';});GOODS.push({emoji:'📕',name:'Bio 101 textbook (like new)',price:'$30',tag:'Sell',c:2,by:'Nia W.',bi:'N',bc:5,campus:'spelman'});REQUESTS.push({who:'Maya',in:'M',c:6,barter:1,txt:'Trading my mini fridge for a desk lamp + snacks',campus:'spelman'});FEED.push({id:41,s:21,promo:'BOOKING',when:'3h ago',text:'Homecoming glam slots are filling fast 💄 book early!',likes:31,liked:false,comments:[],campus:'spelman'});EVENTS_SEED.push({title:'Spelhouse Fashion Showcase',inDays:5,hour:18,loc:'Sisters Chapel',c:6,tag:'Popular',campus:'spelman'});[1,2,3,5,6].forEach(function(_id){var _v=HUSTLES.find(function(x){return x.id===_id;});if(_v)_v.founder=1;});
-const BETA_EMAIL='youremail@example.com';/* ← set your email for beta feedback */
+const BETA_EMAIL='support@venduapp.com';/* beta feedback inbox */
 var BUILD=(location.pathname.indexOf('/beta')===0)?'beta':'main';
 var VENDU_BOOKED_KEY='vendu_booked_'+BUILD;
 function loadBooked(){try{return JSON.parse(localStorage.getItem(VENDU_BOOKED_KEY)||'[]')||[];}catch(e){return [];}}

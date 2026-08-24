@@ -44,7 +44,7 @@ export function handleMagicLinkReturn(): boolean {
   const build = targetBuild(query.has("build") ? query : hash);
   const base = `/${build}/index.html`;
 
-  const unlock = (email: string) => {
+  const unlock = (email: string, forward?: string) => {
     try {
       localStorage.setItem(
         STUDENT_KEY[build],
@@ -53,8 +53,9 @@ export function handleMagicLinkReturn(): boolean {
     } catch {
       /* storage blocked */
     }
-    window.location.replace(`${base}#verified`);
+    window.location.replace(`${base}#verified${forward ? `&${forward}` : ""}`);
   };
+
 
   if (token) {
     const email = emailFromJwt(token);

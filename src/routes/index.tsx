@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { handleMagicLinkReturn } from "@/lib/vendu-magic-link";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -25,6 +26,8 @@ export const Route = createFileRoute("/")({
 
 function BetaRedirect() {
   useEffect(() => {
+    // A verification link lands here first — consume the token before leaving.
+    if (handleMagicLinkReturn()) return;
     window.location.replace("/beta/index.html");
   }, []);
   return (
