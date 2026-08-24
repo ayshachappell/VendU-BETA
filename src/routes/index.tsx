@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { handleMagicLinkReturn } from "@/lib/vendu-magic-link";
 
 export const Route = createFileRoute("/")({
   head: () => ({
