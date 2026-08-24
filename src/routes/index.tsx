@@ -26,6 +26,8 @@ export const Route = createFileRoute("/")({
 
 function BetaRedirect() {
   useEffect(() => {
+    // A verification link lands here first — consume the token before leaving.
+    if (handleMagicLinkReturn()) return;
     window.location.replace("/beta/index.html");
   }, []);
   return (
