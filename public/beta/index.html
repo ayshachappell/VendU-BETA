@@ -4,7 +4,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>VendU — sell your stuff, book a service, get paid.</title>
+<title>The VendU App — sell your stuff, book a service, get paid.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script>
@@ -764,7 +764,7 @@ function calPad(n){return (n<10?'0':'')+n;}
 function calStamp(d){return d.getUTCFullYear()+calPad(d.getUTCMonth()+1)+calPad(d.getUTCDate())+'T'+calPad(d.getUTCHours())+calPad(d.getUTCMinutes())+'00Z';}
 function calEvent(title,startTs,endTs,loc,details){
   var s=new Date(startTs),e=new Date(endTs||(startTs+60*60*1000));
-  return {t:String(title||'VendU event'),s:s.getTime(),e:e.getTime(),l:String(loc||''),d:String(details||'')};
+  return {t:String(title||'The VendU App event'),s:s.getTime(),e:e.getTime(),l:String(loc||''),d:String(details||'')};
 }
 function calGoogleUrl(ev){
   return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(ev.t)
@@ -812,13 +812,14 @@ document.addEventListener('click',function(e){
 
 const CAP=`<svg class="gradcap" viewBox="0 0 40 30" xmlns="http://www.w3.org/2000/svg"><polygon points="20,2 38,9.5 20,17 2,9.5" fill="#14101c"/><polygon points="20,2 38,9.5 20,12.6 2,9.5" fill="#2b2140"/><circle cx="20" cy="9.5" r="1.7" fill="#FFB020"/><g class="tassel"><path d="M20,9.5 L33,9.5 L33,18.5" stroke="#FFB020" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="31.5" y="18" width="3" height="3.6" rx="1.3" fill="#FFB020"/><circle cx="33" cy="22.4" r="2.4" fill="#FFB020"/></g></svg>`;
 const WM=`Vend<span class="u">U${CAP}</span>`;
+const WMFULL=`<span class="wm-pre">The</span>${WM}<span class="wm-post">App</span>`;
 const CHECK='<span class="verif"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5"/></svg></span>';
 
 const CATS=['All','Food','Beauty','Tutoring','Creative','Tech','Fitness','Errands','Other'];
 const PAY_APPS=['Cash App','Venmo','Zelle','PayPal','Apple Pay','Google Pay','Chime'];
 const SOCIAL_TYPES={Instagram:'<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/>',TikTok:'<path d="M9 3v12.5a3.5 3.5 0 1 1-3-3.46"/><path d="M9 7c1.5 2 3.5 2.5 6 2.5"/>',Website:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18"/>','X/Twitter':'<path d="M4 4l7 8-7 8h2l6-6.8L18 20h2l-7-8 7-8h-2l-6 6.8L6 4z"/>',Facebook:'<path d="M15 3h-3a4 4 0 0 0-4 4v3H5v4h3v7h4v-7h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>',YouTube:'<rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z"/>',Snapchat:'<path d="M12 3c3 0 4.3 2 4.3 5 0 1.8.6 2.8 2 3.2-1 1.8-2 2.3-3 2.6.4 1.4 1.8 1.9 3.2 1.9-1.4 1.4-3.7 2.3-6.5 2.3s-5.1-.9-6.5-2.3c1.4 0 2.8-.5 3.2-1.9-1-.3-2-.8-3-2.6 1.4-.4 2-1.4 2-3.2 0-3 1.3-5 4.3-5z"/>'};
 function linkUrl(u){u=(u||'').trim();if(!u||u.charAt(0)==='@')return '#';if(u.indexOf('http')===0)return u;return 'https://'+u.replace(/^\/+/,'');}
-function payUrl(app,handle){var h=(handle||'').trim();if(app==='Cash App'){var x=h.replace(/^\$/,'');return x?'https://cash.app/$'+x:'#';}if(app==='Venmo'){var x=h.replace(/^@/,'');return x?'https://venmo.com/u/'+x:'#';}if(app==='PayPal'){var x=h.replace(/^@/,'');return x?'https://paypal.me/'+x:'#';}if(app==='Apple Pay'||app==='Google Pay'||app==='Zelle'){var d=h.replace(/[^0-9]/g,'');if(d.length>=10)return 'sms:'+d+'?&body='+encodeURIComponent('Hi! Sending your '+app+' payment for my VendU order');return '#';}return '#';}
+function payUrl(app,handle){var h=(handle||'').trim();if(app==='Cash App'){var x=h.replace(/^\$/,'');return x?'https://cash.app/$'+x:'#';}if(app==='Venmo'){var x=h.replace(/^@/,'');return x?'https://venmo.com/u/'+x:'#';}if(app==='PayPal'){var x=h.replace(/^@/,'');return x?'https://paypal.me/'+x:'#';}if(app==='Apple Pay'||app==='Google Pay'||app==='Zelle'){var d=h.replace(/[^0-9]/g,'');if(d.length>=10)return 'sms:'+d+'?&body='+encodeURIComponent('Hi! Sending your '+app+' payment for my The VendU App order');return '#';}return '#';}
 const REGULATED=['Beauty','Food','Fitness'];
 const AVAIL=[2,4,5,7,9,11];
 const REVIEWS={2:[['Deon',5,'Cleanest fade on campus, always on time.'],['Maya',5,'Booked twice — never disappointed.']],3:[['Bri',5,'My braids lasted 8 weeks!']],5:[['Chris',5,'Grad photos came out unreal.']],10:[['Aisha',5,'The cake jars are dangerous. So good.']]};
@@ -860,7 +861,7 @@ const LEARN=[
   {ic:'M22 10 12 5 2 10l10 5 10-5z',title:'Is my hustle legal here?',desc:"Some services (hair, nails, food) need a license depending on your state. Braiding is license-free in many, including Georgia. A quick check keeps you safe.",src:'Your state licensing board'},
   {ic:'M6 2h13a1 1 0 0 1 1 1v3H5V4a2 2 0 0 1 1-2zM4 8h16v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z',title:'Sell your baked goods legally (GA)',desc:"Georgia dropped the cottage food license in 2025 — no fee, no cap. Take one ~$10 food-handler course, label ingredients & allergens, and sell breads, cookies & cakes. Meat/dairy meals need a licensed kitchen.",src:'GA Dept. of Agriculture'},
   {ic:'M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM9 12h6M9 16h6',title:'Form your LLC in Georgia',desc:"Ready to make it official? An LLC separates your business from your personal money. Georgia online filing runs about $100.",src:'Georgia Secretary of State'},
-  {ic:'M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6',title:'Get paid safely',desc:"Meet in public, agree on price before you start, use a payment app with a record. Never accept overpayment or checks from strangers.",src:'VendU safety guide'},
+  {ic:'M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6',title:'Get paid safely',desc:"Meet in public, agree on price before you start, use a payment app with a record. Never accept overpayment or checks from strangers.",src:'The VendU App safety guide'},
   {ic:'M3 3v18h18M18 9l-5 5-3-3-4 4',title:'Taxes for your side hustle',desc:"Made more than $400 this year? Track income and expenses from day one — it saves you at tax time.",src:'IRS Self-Employed'},
   {ic:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',title:'Free 1-on-1 mentoring',desc:"SCORE pairs new founders with experienced mentors, at no cost. Great before you scale.",src:'SCORE.org'},
 ];
@@ -1013,7 +1014,7 @@ function founderBanner(){if(FOUNDERS>=FOUNDER_CAP)return '';const left=FOUNDER_C
 function home(){
   screen.innerHTML=`
     <div class="topbar"><div class="brandrow"><div style="display:flex;align-items:center;gap:8px"><div class="wordmark go" id="logo"><span class="wm-pre">The</span>${WM}<span class="wm-post">App</span></div><span class="beta-tag">BETA</span></div><div style="display:flex;align-items:center;gap:10px">${bellHTML()}<div class="locpill" id="loc" onclick="openCampusPick()"><span class="dot"></span>${CAMPPILL()}</div></div></div>
-      <div class="search">${icon('<circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/>')}<input id="q" placeholder="${state.home==='browse'?'Search hustles, services, people…':'Search VendU…'}" value="${state.q}"></div></div>
+      <div class="search">${icon('<circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/>')}<input id="q" placeholder="${state.home==='browse'?'Search hustles, services, people…':'Search The VendU App…'}" value="${state.q}"></div></div>
     <div class="campus-wrap"><div class="campus-bg">${wmk()}</div><div class="campus-content">
       <div class="seg"><div class="${state.home==='feed'?'on':''}" data-home="feed">Feed</div><div class="${state.home==='browse'?'on':''}" data-home="browse">Browse</div><div class="${state.home==='events'?'on':''}" data-home="events">Events</div></div>
       <div id="homebody"></div>
@@ -1063,7 +1064,7 @@ function eventsBody(){
   const mine=[...state.events,...seed].filter(e=>e.campus===state.campus.id);
   const all=[...mine,...official].filter(e=>e.ts>now-3*3600*1000).sort((a,b)=>a.ts-b.ts);
   if(!all.length)return `<div class="empty" style="padding-top:50px">No upcoming events right now.<br>Tap the ＋ to post one.</div>`;
-  return `<div class="events">${all.map((e,i)=>{const cc=(e.c!=null?e.c:0);const ev=calEvent(e.title,e.ts,e.end,e.loc,e.official?(e.desc||'')+(e.link?'\n'+e.link:''):'Posted on VendU');return `<div class="eflyer" style="${e.img?'':'background:'+bannerGrad(color(cc))};animation-delay:${i*40}ms">${e.img?`<img src="${e.img}">`:''}${e.tag?`<span class="etag">${e.tag}</span>`:''}<div class="eover"><div class="etitle">${e.title}</div><div class="emeta">${icon(cal,13)} ${fmtDate(e.ts)}</div><div class="emeta">${pin} ${e.loc}</div><div style="display:flex;gap:8px;margin-top:11px;flex-wrap:wrap">${e.official?'':`<button class="eint" data-int="${i}">Interested</button>`}${calBtn(ev)}<a class="eint" style="text-decoration:none" href="${mapsUrl(e.loc)}" target="_blank" rel="noopener">${icon('<path d="M9 20l-6-2V4l6 2 6-2 6 2v14l-6-2-6 2zM9 6v14M15 4v14"/>',13)} Directions</a></div></div></div>`;}).join('')}</div>`;
+  return `<div class="events">${all.map((e,i)=>{const cc=(e.c!=null?e.c:0);const ev=calEvent(e.title,e.ts,e.end,e.loc,e.official?(e.desc||'')+(e.link?'\n'+e.link:''):'Posted on The VendU App');return `<div class="eflyer" style="${e.img?'':'background:'+bannerGrad(color(cc))};animation-delay:${i*40}ms">${e.img?`<img src="${e.img}">`:''}${e.tag?`<span class="etag">${e.tag}</span>`:''}<div class="eover"><div class="etitle">${e.title}</div><div class="emeta">${icon(cal,13)} ${fmtDate(e.ts)}</div><div class="emeta">${pin} ${e.loc}</div><div style="display:flex;gap:8px;margin-top:11px;flex-wrap:wrap">${e.official?'':`<button class="eint" data-int="${i}">Interested</button>`}${calBtn(ev)}<a class="eint" style="text-decoration:none" href="${mapsUrl(e.loc)}" target="_blank" rel="noopener">${icon('<path d="M9 20l-6-2V4l6 2 6-2 6 2v14l-6-2-6 2zM9 6v14M15 4v14"/>',13)} Directions</a></div></div></div>`;}).join('')}</div>`;
 }
 function wireHome(){
   screen.querySelectorAll('.chips').forEach(function(el,i){conveyorHint(el,'homechips'+i);});
@@ -1075,7 +1076,7 @@ function wireHome(){
   screen.querySelectorAll('[data-cat]').forEach(el=>el.onclick=()=>{state.cat=el.dataset.cat;document.getElementById('homebody').innerHTML=browseBody();wireHome();});
   screen.querySelectorAll('[data-f]').forEach(el=>el.onclick=()=>{state[el.dataset.f]=!state[el.dataset.f];document.getElementById('homebody').innerHTML=browseBody();wireHome();});
   screen.querySelectorAll('[data-open]').forEach(el=>el.onclick=()=>openDetail(+el.dataset.open));
-  screen.querySelectorAll('[data-sponsor]').forEach(el=>el.onclick=()=>toast('Sponsored — local businesses pay to reach students, which keeps VendU free.'));
+  screen.querySelectorAll('[data-sponsor]').forEach(el=>el.onclick=()=>toast('Sponsored — local businesses pay to reach students, which keeps The VendU App free.'));
   screen.querySelectorAll('[data-user]').forEach(function(el){el.onclick=function(){var p=el.dataset.user.split('␟');openUser(p[0],p[1],+p[2]);};});
   screen.querySelectorAll('[data-like]').forEach(el=>el.onclick=()=>{const p=FEED.find(x=>x.id==el.dataset.like);p.liked=!p.liked;p.likes+=p.liked?1:-1;refreshFeed();});
   screen.querySelectorAll('[data-cmt]').forEach(el=>el.onclick=()=>{const id=+el.dataset.cmt;state.openC=state.openC===id?0:id;refreshFeed();setTimeout(()=>{const i=document.getElementById('ci'+id);if(i)i.focus();},30);});
@@ -1181,8 +1182,8 @@ function bookingScreen(){
     const price=(h.services.find(s=>s[0]===b.svc)||['',''])[1];
     screen.innerHTML=`<div class="fade"><div class="topbar"><div class="brandrow"><div class="wordmark">Booked!</div></div></div>
       <div class="book-wrap"><div class="done" style="padding:24px 0 8px"><div class="mark">${icon('<path d="M20 6 9 17l-5-5"/>',34)}</div><h3>You're booked with ${h.name}!</h3><p>A confirmation text just went out, and we'll remind you 1 hour before.</p></div>
-      <div class="sms"><div class="sms-h">${icon('<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',15)} Confirmation text</div><b>VendU ✓ You're booked with ${h.name}</b><br>Service: ${b.svc} (${price})<br>When: ${b.date} · ${b.time}<br>Where: on campus — they'll confirm the spot<br>Pay: ${h.pays.join(', ')} · you keep 100%<br><span style="opacity:.7">We'll text a reminder 1 hour before. Reply STOP to opt out.</span></div>
-      <a class="submit" href="${mapsUrl('Fort Valley State University')}" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;margin-top:14px;background:var(--violet)">Get directions</a>${calBtn(calEvent(h.name+" — "+b.svc,bookTs(b.date,b.time),null,"On campus","Booked on VendU with "+h.name),"Add to calendar")}<button class="submit" id="bdone" style="margin-top:10px;background:var(--ink)">Done</button><button class="submit" id="leaveRev" style="margin-top:10px;background:transparent;color:var(--violet);border:1px solid var(--violet)">Leave a review for ${h.name}</button></div></div>`;
+      <div class="sms"><div class="sms-h">${icon('<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',15)} Confirmation text</div><b>The VendU App ✓ You're booked with ${h.name}</b><br>Service: ${b.svc} (${price})<br>When: ${b.date} · ${b.time}<br>Where: on campus — they'll confirm the spot<br>Pay: ${h.pays.join(', ')} · you keep 100%<br><span style="opacity:.7">We'll text a reminder 1 hour before. Reply STOP to opt out.</span></div>
+      <a class="submit" href="${mapsUrl('Fort Valley State University')}" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;margin-top:14px;background:var(--violet)">Get directions</a>${calBtn(calEvent(h.name+" — "+b.svc,bookTs(b.date,b.time),null,"On campus","Booked on The VendU App with "+h.name),"Add to calendar")}<button class="submit" id="bdone" style="margin-top:10px;background:var(--ink)">Done</button><button class="submit" id="leaveRev" style="margin-top:10px;background:transparent;color:var(--violet);border:1px solid var(--violet)">Leave a review for ${h.name}</button></div></div>`;
     document.getElementById('bdone').onclick=()=>{state.book=null;render();};var lr=document.getElementById('leaveRev');if(lr)lr.onclick=()=>{var sid=b.id;state.book=null;state.detail=sid;state.reviewOpen=true;detail(sid);screen.scrollTop=0;};return;
   }
   const dates=['Today','Tomorrow','Sat May 3'],times=['10:00 AM','2:00 PM','4:30 PM','6:00 PM'];
@@ -1212,7 +1213,7 @@ const HOUSING=[
  {title:'1BR near the AUC',price:'$1,100/mo',meta:'1 bed \u00b7 walk to campus',by:'Westside Rentals',tag:'Sponsored',campus:'spelman'}
 ];
 const JOBS=[
- {title:'Campus ambassador',pay:'$14/hr',meta:'On-campus \u00b7 10 hrs/wk',by:'VendU',tag:'Featured',campus:'fvsu'},
+ {title:'Campus ambassador',pay:'$14/hr',meta:'On-campus \u00b7 10 hrs/wk',by:'The VendU App',tag:'Featured',campus:'fvsu'},
  {title:'Barista (part-time)',pay:'$12/hr + tips',meta:'Local caf\u00e9 \u00b7 flexible hours',by:'Daily Grind Coffee',tag:'Sponsored',campus:'fvsu'},
  {title:'Peer tutor \u2014 intro biology',pay:'$18/hr',meta:'Academic Success Center',by:'On-campus',tag:'',campus:'fvsu'},
  {title:'Social media intern',pay:'$15/hr',meta:'Remote \u00b7 8 hrs/wk',by:'Local startup',tag:'',campus:'spelman'}
@@ -1221,7 +1222,7 @@ function sponsoredCard(){
   var list=SPONSORS.filter(function(x){return x.campus===state.campus.id;});
   if(!list.length)return '';
   var s=list[0];
-  return '<div class="spon" data-sponsor="1"><div class="spon-lbl">Sponsored \u00b7 Local business</div><div class="spon-row"><div class="spon-ic">'+s.emoji+'</div><div style="flex:1;min-width:0"><div class="spon-name">'+s.name+'</div><div class="spon-blurb">'+s.blurb+'</div></div></div><div class="spon-note">Ads like this keep VendU free for students.</div></div>';
+  return '<div class="spon" data-sponsor="1"><div class="spon-lbl">Sponsored \u00b7 Local business</div><div class="spon-row"><div class="spon-ic">'+s.emoji+'</div><div style="flex:1;min-width:0"><div class="spon-name">'+s.name+'</div><div class="spon-blurb">'+s.blurb+'</div></div></div><div class="spon-note">Ads like this keep The VendU App free for students.</div></div>';
 }
 function housingHTML(){
   var list=HOUSING.filter(function(x){return x.campus===state.campus.id;});
@@ -1311,14 +1312,14 @@ function resourcesHTML(){
   var info='<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>';
   var ext='<path d="M15 3h6v6M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>';
   return '<div class="learn-hero" style="margin-top:8px"><div class="learn-h">Turn your hustle into a business.</div><div class="learn-sub">Free guides & real links — stay legal, get paid, and get help.</div></div>'
-   +'<div class="disc">'+icon(info,16)+' Educational only — not legal or tax advice. Rules vary by state; confirm with an official source.</div>'+'<div class="res-aff">Some links may earn VendU a small commission at no extra cost to you — it helps keep VendU free.</div>'
+   +'<div class="disc">'+icon(info,16)+' Educational only — not legal or tax advice. Rules vary by state; confirm with an official source.</div>'+'<div class="res-aff">Some links may earn The VendU App a small commission at no extra cost to you — it helps keep The VendU App free.</div>'
    +RESOURCES.map(function(r,i){var open=state.openRes===i;return '<div class="rescard"><div class="res-head" data-res="'+i+'"><div class="lc-ic">'+icon(r.ic,20)+'</div><div style="flex:1"><div class="lc-title">'+r.title+'</div><div class="lc-desc" style="margin:2px 0 0">'+r.blurb+'</div></div><div class="res-chev '+(open?'open':'')+'">'+icon('<path d="m6 9 6 6 6-6"/>',18)+'</div></div>'
      +(open?'<div class="res-body">'+(r.links||[]).map(function(l){return '<a class="res-link" href="'+l.url+'" target="_blank" rel="noopener"><span>'+l.label+(l.note?'<span class="res-note">'+l.note+'</span>':'')+'</span>'+icon(ext,14)+'</a>';}).join('')+(r.safety||[]).map(function(t){return '<div class="res-safe">• '+t+'</div>';}).join('')+(r.tip?'<div class="res-tip">💡 '+r.tip+'</div>':'')+'</div>':'')
      +'</div>';}).join('')+'<div style="height:12px"></div>';
 }
 function hubPlaceholder(v){
   var m={community:['🫂','Community','Meet classmates, find campus orgs, and wellness support.'],planner:['📅','Planner','Organize your class schedule and to-dos.'],routes:['🗺️','Routes','Plan the fastest way to get across campus.']}[v];
-  return '<div class="empty" style="padding:64px 30px 0;text-align:center"><div style="font-size:44px;margin-bottom:10px">'+m[0]+'</div><div style="font-family:\'Bricolage Grotesque\',sans-serif;font-weight:800;font-size:19px;color:var(--ink);margin-bottom:6px">'+m[1]+'</div><div style="font-size:13.5px;color:var(--mist);line-height:1.5">'+m[2]+'<br><br>Coming to VendU soon 🚧</div></div>';
+  return '<div class="empty" style="padding:64px 30px 0;text-align:center"><div style="font-size:44px;margin-bottom:10px">'+m[0]+'</div><div style="font-family:\'Bricolage Grotesque\',sans-serif;font-weight:800;font-size:19px;color:var(--ink);margin-bottom:6px">'+m[1]+'</div><div style="font-size:13.5px;color:var(--mist);line-height:1.5">'+m[2]+'<br><br>Coming to The VendU App soon 🚧</div></div>';
 }
 const ORGS=[
  {id:1,name:'Student Government (SGA)',type:'Leadership',members:210,emoji:'🏛️',blurb:'Represent the student body and shape campus-wide events.',campus:'fvsu'},
@@ -1578,7 +1579,7 @@ function venuU(){
   screen.querySelectorAll('[data-rtdown]').forEach(function(el){el.onclick=function(){var i=+el.dataset.rtdown,a=state.route.stops,t=a[i];a[i]=a[i+1];a[i+1]=t;venuU();};});
   wireLogo();
 }
-function foodAtt(){if(state.formCat==='Food'){return state.foodType==='baked'?"My items are <b>shelf-stable</b> (cottage-food eligible) and I completed a food-handler course. I'll list ingredients & allergens. <b>VendUniversity</b> shows how.":"I prepare in a <b>licensed or commissary kitchen</b> — not a dorm — and hold any required permit. VendU may ask for proof.";}return state.formCat+" can be a <b>regulated category.</b> I hold the required license/permit (or it's license-exempt in my state), and VendU may ask for proof.";}
+function foodAtt(){if(state.formCat==='Food'){return state.foodType==='baked'?"My items are <b>shelf-stable</b> (cottage-food eligible) and I completed a food-handler course. I'll list ingredients & allergens. <b>VendUniversity</b> shows how.":"I prepare in a <b>licensed or commissary kitchen</b> — not a dorm — and hold any required permit. The VendU App may ask for proof.";}return state.formCat+" can be a <b>regulated category.</b> I hold the required license/permit (or it's license-exempt in my state), and The VendU App may ask for proof.";}
 function addTab(){if(!state.addMode)return chooser();return miniForm(state.addMode);}
 function chooser(){
   const chev='<path d="m9 18 6-6-6-6"/>';
@@ -1616,7 +1617,7 @@ function miniForm(mode){
     if(mode==='item'){GOODS.unshift({name:v('f1')||'New item',price:v('f2')||'$—',tag:tag,img:state.newPhoto,emoji:'📦',c:rc(),by:(state.vname||'You'),bi:((state.vname||'Y').trim()[0]||'Y').toUpperCase(),bc:0,uc:state.themeColor,mine:true,id:'mp'+(idc++),campus:state.campus.id});state.tab='market';state.mkt='goods';}
     else if(mode==='request'){REQUESTS.unshift({img:state.newPhoto,who:(state.vname||'You'),in:((state.vname||'Y').trim()[0]||'Y').toUpperCase(),c:rc(),uc:state.themeColor,mine:true,id:'mp'+(idc++),barter:tag==='1'?1:0,txt:v('f1')||'New request',campus:state.campus.id});state.tab='market';state.mkt='requests';}
     else{let ts=Date.now()+2*86400000;const d=v('f2'),t=v('f3');if(d){const p=new Date(d+'T'+(t||'12:00')).getTime();if(!isNaN(p))ts=p;}state.events.unshift({title:v('f1')||'New event',loc:v('f4')||'Campus',ts:ts,img:state.newPhoto,tag:'New',c:rc(),mine:true,id:'mp'+(idc++),by:(state.vname||'You'),campus:state.campus.id});state.tab='home';state.home='events';}
-    state.addMode=null;state.newPhoto=null;render();toast('Posted to VendU! 🎉');
+    state.addMode=null;state.newPhoto=null;render();toast('Posted to The VendU App! 🎉');
   };
 }
 
@@ -1627,7 +1628,7 @@ function add(){
   const cam='<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>';
   const x='<path d="M18 6 6 18M6 6l12 12"/>';
   const av=state.avatar?`background-image:url(${state.avatar})`:'';
-  const bms=['VendU booking + reminders','My own link','Just message me'];
+  const bms=['The VendU App booking + reminders','My own link','Just message me'];
   screen.innerHTML=`<div class="topbar"><div class="brandrow"><div class="wordmark">Set up your storefront</div>${onboard?'':'<div class="locpill" id="sfClose" style="cursor:pointer">✕ Close</div>'}</div></div>
     <div class="form-wrap enter">
       <div class="form-sub">This is your storefront — students at ${CAMP()} will find you here. Add your info, style, photos, and prices, then Save.</div>
@@ -1648,11 +1649,11 @@ function add(){
         <div class="catgrid">${[['none','No promo'],['sale','Sale'],['off','% off'],['bogo','BOGO']].map(o=>`<div class="catpick ${((state.promo&&state.promo.type)||'none')===o[0]?'on':''}" data-promo="${o[0]}">${o[1]}</div>`).join('')}</div>
         ${(state.promo&&state.promo.type==='off')?`<div class="svc-row" style="margin-top:8px"><input id="promopct" value="${state.promo.pct||''}" placeholder="20" style="max-width:96px"><span style="align-self:center;color:var(--mist);font-size:13px">% off</span></div>`:''}
         ${(state.promo&&state.promo.type&&state.promo.type!=='none')?`<div style="margin-top:8px"><label style="font-size:12.5px;color:var(--mist)">Ends on</label><input id="promoends" type="date" value="${state.promo.ends||''}"></div>`:''}
-        <div style="font-size:12px;color:var(--mist);margin-top:8px">${promoNote()||'Set it here and VendU shows the right badge — it switches to ⏳ Ending soon in the last 48 hours and disappears on its own when the sale ends. Posts you write can still trigger a badge automatically.'}</div></div>
+        <div style="font-size:12px;color:var(--mist);margin-top:8px">${promoNote()||'Set it here and The VendU App shows the right badge — it switches to ⏳ Ending soon in the last 48 hours and disappears on its own when the sale ends. Posts you write can still trigger a badge automatically.'}</div></div>
       <div class="field"><label>Booking method</label><div class="catgrid">${bms.map((o,i)=>`<div class="catpick ${state.bookMethod===i?'on':''}" data-bk="${i}">${o}</div>`).join('')}</div><div style="font-size:12px;color:var(--mist);margin-top:8px">${['Students book you in-app — set your hours under Bookings & calendar.','Add your booking site under Bookings & calendar — your Book button opens it.','No calendar — your Book button becomes Message so students can reach you.'][state.bookMethod||0]}</div></div>
       <div class="field"><label>Link your socials (optional)</label><div id="socrows">${state.socials.map((so,i)=>`<div class="dyn-row"><select class="dyn-sel" data-soi="${i}">${Object.keys(SOCIAL_TYPES).map(t=>`<option ${so.type===t?'selected':''}>${t}</option>`).join('')}</select><input data-sou="${i}" value="${so.url}" placeholder="link or @handle"><button class="svc-rm" data-sod="${i}">${icon(x,16)}</button></div>`).join('')}</div><button class="catpick" id="addsoc" style="width:100%;padding:11px;justify-content:center;margin-top:4px">＋ Add a social link</button></div>
       <div class="field"><label>How do you get paid? <span style="color:var(--mist);font-weight:500">· shows under "Accepts" on your storefront</span></label><div id="payrows">${state.pays.map((p,i)=>`<div class="dyn-row"><select class="dyn-sel" data-poi="${i}">${PAY_APPS.map(a=>`<option ${p.app===a?'selected':''}>${a}</option>`).join('')}</select><input data-pou="${i}" value="${p.handle}" placeholder="${payPh(p.app)}"><button class="svc-rm" data-pod="${i}">${icon(x,16)}</button></div>`).join('')}</div><button class="catpick" id="addpay" style="width:100%;padding:11px;justify-content:center;margin-top:4px">＋ Add a payment handle</button></div>
-      <button class="submit" id="save">${onboard?'Save & enter VendU':'Save storefront'}</button>
+      <button class="submit" id="save">${onboard?'Save & enter The VendU App':'Save storefront'}</button>
     </div>`;
   screen.querySelector('.photo-av').onclick=()=>photo.click();
   screen.querySelectorAll('[data-sfvopt]').forEach(el=>el.onclick=()=>{state.sfView=el.dataset.sfvopt;try{localStorage.setItem('vendu_sfview',state.sfView);}catch(e){}add();});
@@ -1708,7 +1709,7 @@ function myPostsScreen(){
   screen.querySelectorAll('[data-photopost]').forEach(function(el){el.onclick=function(){state.photoTarget={id:el.dataset.photopost,type:el.dataset.ptype};cphoto.value='';cphoto.click();};});
 }
 function settingsScreen(){
-  var items=[['\u25B6\uFE0E Replay tutorial','tour'],['\uD83D\uDCF2 Install VendU on this device','install'],['\uD83D\uDCAC Send beta feedback','feedback'],['\uD83D\uDEDF Help & support','support'],['\uD83D\uDCC4 Privacy & terms','legal'],['\uD83D\uDDD1\uFE0F Delete my account','delete'],['\u23FB Log out','logout']];
+  var items=[['\u25B6\uFE0E Replay tutorial','tour'],['\uD83D\uDCF2 Install The VendU App on this device','install'],['\uD83D\uDCAC Send beta feedback','feedback'],['\uD83D\uDEDF Help & support','support'],['\uD83D\uDCC4 Privacy & terms','legal'],['\uD83D\uDDD1\uFE0F Delete my account','delete'],['\u23FB Log out','logout']];
   screen.innerHTML='<div class="topbar"><div class="brandrow"><div class="wordmark">Settings</div><div class="locpill" id="setBack" style="cursor:pointer">\u2039 Back</div></div></div>'
     +'<div class="enter" style="padding:10px 20px 20px"><div style="font-size:13px;color:var(--mist);line-height:1.5;margin:2px 0 14px">Tutorial, install, help and account controls.</div>'
     +'<div class="menu">'+items.map(function(x){return '<div class="svc" data-smenu="'+x[1]+'">'+x[0]+'<span>'+icon('<path d="m9 18 6-6-6-6"/>',18)+'</span></div>';}).join('')+'</div></div>';
@@ -1716,7 +1717,7 @@ function settingsScreen(){
   screen.querySelectorAll('[data-smenu]').forEach(function(el){el.onclick=function(){var m=el.dataset.smenu;
     if(m==='tour'){state.moreMenu=false;render();VendU.startTour(true);}
     else if(m==='install'){showInstall();}
-    else if(m==='feedback'){try{window.location.href='mailto:'+BETA_EMAIL+'?subject='+encodeURIComponent('VendU Beta Feedback')+'&body='+encodeURIComponent('What I liked:\n\nWhat confused me:\n\nWhat I wish it did:\n');}catch(e){}toast('Opening email — tell us anything! \uD83D\uDCAC');}
+    else if(m==='feedback'){try{window.location.href='mailto:'+BETA_EMAIL+'?subject='+encodeURIComponent('The VendU App Beta Feedback')+'&body='+encodeURIComponent('What I liked:\n\nWhat confused me:\n\nWhat I wish it did:\n');}catch(e){}toast('Opening email — tell us anything! \uD83D\uDCAC');}
     else if(m==='support'){window.open('/legal/support.html','_blank','noopener');}
     else if(m==='legal'){window.open('/legal/privacy.html','_blank','noopener');}
     else if(m==='delete'){deleteAccount();}
@@ -1733,7 +1734,7 @@ function profile(){
       <button class="ref-demo" id="lbBtn" style="margin-top:10px">🏆 Leaderboard</button></div></div>`;
   const regularCard=`<div class="cust"><div class="cust-h">${icon('<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/>',18)} Your account</div><div style="font-size:13px;color:var(--mist);line-height:1.5;margin:2px 0 14px">Browse, buy, barter, book vendors, and post to the Market — all free. Set a name and color so classmates recognize you in posts and comments.</div><div class="field"><label>Display name</label><input id="rname" placeholder="e.g. Jordan T." value="${state.vname||''}"></div><div class="cust-lbl">Your color</div><div class="swatches">${THEME_COLORS.map(c=>`<div class="sw ${state.themeColor===c?'on':''}" data-color="${c}" style="background:${c}"></div>`).join('')}</div><div class="cust-lbl" style="margin-top:16px">Class year</div><div class="pldays" style="padding:0">${['2025','2026','2027','2028','2029'].map(y=>`<div class="plday ${state.gradYear===y?'on':''}" data-gradyear="${y}">’${y.slice(2)}</div>`).join('')}</div>${myCommunities().length?`<div class="cust-lbl" style="margin-top:16px">Your communities</div><div class="up-chips">${myCommunities().map(c=>`<div class="up-chip" data-opencomm="${c.key}">${c.emoji} ${c.name}</div>`).join('')}</div>`:''}<button class="submit" id="viewmyprofile" style="background:var(--card);color:var(--ink);border:1px solid var(--line);margin-top:16px">👤 View my profile</button><button class="submit" id="startsell" style="background:var(--violet);margin-top:10px">Become a vendor</button><div style="font-size:12px;color:var(--mist);text-align:center;margin-top:12px;line-height:1.5">Want a storefront, socials, booking & payments? Turn on vendor mode.</div></div>`;
   const menuItems=state.isSeller?[['Set up your storefront','setup'],['Bookings & calendar','bookings'],['✉️ Messages','inbox'],['Saved hustles','saved']]:[['Saved & booked','saved'],['✉️ Messages','inbox'],['My marketplace posts','myposts']];
-  const moreItems=[['\uD83D\uDCAC Send beta feedback','feedback'],['▶︎ Replay tutorial','tour'],['\uD83D\uDCF2 Install VendU on this device','install'],['\uD83D\uDEDF Help & support','support'],['\uD83D\uDCC4 Privacy & terms','legal'],['\uD83D\uDDD1\uFE0F Delete my account','delete'],['⏻ Log out','logout']];
+  const moreItems=[['\uD83D\uDCAC Send beta feedback','feedback'],['▶︎ Replay tutorial','tour'],['\uD83D\uDCF2 Install The VendU App on this device','install'],['\uD83D\uDEDF Help & support','support'],['\uD83D\uDCC4 Privacy & terms','legal'],['\uD83D\uDDD1\uFE0F Delete my account','delete'],['⏻ Log out','logout']];
   screen.innerHTML=`<div class="topbar"><div class="brandrow"><div class="wordmark">Profile</div>${bellHTML()}</div></div>
     <div style="padding:6px 20px 20px" class="enter">
       <div class="store-row" style="margin:6px 0 16px"><div class="detail-av up" style="${av};position:relative;box-shadow:0 0 0 3px var(--paper),0 0 0 6px ${state.themeColor}">${state.avatar?'':'A'}<div class="cam" style="position:absolute;right:-4px;bottom:-4px;width:26px;height:26px;border-radius:50%;background:var(--violet);color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid var(--paper)">${icon('<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',12)}</div></div>
@@ -1754,7 +1755,7 @@ function profile(){
   const lb=document.getElementById('lbBtn');if(lb)lb.onclick=()=>{state.leaderboard=true;render();};
   const vm=document.getElementById('viewme');if(vm)vm.onclick=()=>openDetail('me');
   var _mt=document.getElementById('moretoggle');if(_mt)_mt.onclick=()=>{state.moreMenu=true;render();screen.scrollTop=0;};
-  screen.querySelectorAll('[data-menu]').forEach(el=>el.onclick=()=>{const m=el.dataset.menu;if(m==='setup'){state.storefrontSetup=true;render();}else if(m==='bookings'){state.bookSet=true;render();}else if(m==='saved'){state.savedView=true;render();}else if(m==='me'){openDetail('me');}else if(m==='boost'){state.boosted=!state.boosted;toast(state.boosted?'⚡ Storefront boosted! Optional upgrade — listing is always free.':'Boost turned off. Your storefront stays free & live.');render();}else if(m==='theme'){state.themeView=true;render();}else if(m==='regular'){state.isSeller=false;state.tab='profile';toast('Vendor mode off — your storefront is saved. Switch back anytime.');render();}else if(m==='myposts'){state.myPostsView=true;render();}else if(m==='feedback'){try{window.location.href='mailto:'+BETA_EMAIL+'?subject='+encodeURIComponent('VendU Beta Feedback')+'&body='+encodeURIComponent('What I liked:\n\nWhat confused me:\n\nWhat I wish it did:\n');}catch(e){}toast('Opening email — tell us anything! 💬');}else if(m==='tour'){VendU.startTour(true);}else if(m==='install'){showInstall();}else if(m==='support'){window.open('/legal/support.html','_blank','noopener');}else if(m==='legal'){window.open('/legal/privacy.html','_blank','noopener');}else if(m==='delete'){deleteAccount();}else if(m==='logout'){doLogout();}else if(m==='inbox'){openInbox();}else toast('Opens in the real build ⚙️');});
+  screen.querySelectorAll('[data-menu]').forEach(el=>el.onclick=()=>{const m=el.dataset.menu;if(m==='setup'){state.storefrontSetup=true;render();}else if(m==='bookings'){state.bookSet=true;render();}else if(m==='saved'){state.savedView=true;render();}else if(m==='me'){openDetail('me');}else if(m==='boost'){state.boosted=!state.boosted;toast(state.boosted?'⚡ Storefront boosted! Optional upgrade — listing is always free.':'Boost turned off. Your storefront stays free & live.');render();}else if(m==='theme'){state.themeView=true;render();}else if(m==='regular'){state.isSeller=false;state.tab='profile';toast('Vendor mode off — your storefront is saved. Switch back anytime.');render();}else if(m==='myposts'){state.myPostsView=true;render();}else if(m==='feedback'){try{window.location.href='mailto:'+BETA_EMAIL+'?subject='+encodeURIComponent('The VendU App Beta Feedback')+'&body='+encodeURIComponent('What I liked:\n\nWhat confused me:\n\nWhat I wish it did:\n');}catch(e){}toast('Opening email — tell us anything! 💬');}else if(m==='tour'){VendU.startTour(true);}else if(m==='install'){showInstall();}else if(m==='support'){window.open('/legal/support.html','_blank','noopener');}else if(m==='legal'){window.open('/legal/privacy.html','_blank','noopener');}else if(m==='delete'){deleteAccount();}else if(m==='logout'){doLogout();}else if(m==='inbox'){openInbox();}else toast('Opens in the real build ⚙️');});
 }
 function lbRows(){if(state.lbRows&&state.lbRows.length)return state.lbRows.slice();if(state.tester||state.tourActive)return [...LEADERBOARD.map(r=>[r[0],r[1],true]),['You',state.referrals,state.referrals>=FOUNDER_GOAL]].filter(r=>r[1]>0).sort((a,b)=>b[1]-a[1]);return [];}
 function lbRank(refs){if(state.lbRank)return state.lbRank;if(!refs)return 0;const rows=lbRows();const i=rows.findIndex(r=>r[0]==='You');return i<0?0:i+1;}
@@ -1813,13 +1814,13 @@ function onboarding(){
   const s=state.obStep;
   if(s===0){screen.innerHTML=`<div class="ob">
     <div class="ob-top"><div class="ob-dots"><span class="obd on"></span><span class="obd"></span><span class="obd"></span></div></div>
-    <div class="ob-body"><img src="/icons/icon-192.png" alt="VendU app icon" width="92" height="92" style="border-radius:22px;box-shadow:0 10px 26px rgba(90,43,224,.28);margin-bottom:26px"><div class="ob-title">Welcome to <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WM}</span></div><div class="ob-text">Your campus marketplace \u2014 find & book student services, buy, sell & trade. Always free.</div></div>
+    <div class="ob-body"><img src="/icons/icon-192.png" alt="The VendU App icon" width="92" height="92" style="border-radius:22px;box-shadow:0 10px 26px rgba(90,43,224,.28);margin-bottom:26px"><div class="ob-title">Welcome to <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WMFULL}</span></div><div class="ob-text">Your campus marketplace \u2014 find & book student services, buy, sell & trade. Always free.</div></div>
     <button class="ob-btn" id="obnext">Get started</button></div>`;
     document.getElementById('obnext').onclick=()=>{state.obStep=1;render();};
     return;}
   if(s===1){screen.innerHTML=`<div class="ob">
     <div class="ob-top"><div class="ob-dots"><span class="obd on"></span><span class="obd on"></span><span class="obd"></span></div></div>
-    <div class="ob-body" style="justify-content:flex-start;padding-top:24px"><img src="/icons/icon-192.png" alt="VendU logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(90,43,224,.26);margin-bottom:14px"><div class="ob-title" style="margin-bottom:6px">How will you use <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WM}</span>?</div><div class="ob-text" style="margin-bottom:24px">Everyone gets a free account. Becoming a vendor is completely optional \u2014 you can switch it on or off anytime.</div>
+    <div class="ob-body" style="justify-content:flex-start;padding-top:24px"><img src="/icons/icon-192.png" alt="The VendU App logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(90,43,224,.26);margin-bottom:14px"><div class="ob-title" style="margin-bottom:6px">How will you use <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WMFULL}</span>?</div><div class="ob-text" style="margin-bottom:24px">Everyone gets a free account. Becoming a vendor is completely optional \u2014 you can switch it on or off anytime.</div>
       <div class="ob-choice" data-ut="regular"><div class="obc-em">\u{1F64B}\u{1F3FF}\u200D\u2640\uFE0F</div><div><div class="obc-t">Just browsing</div><div class="obc-d">Book vendors, buy, sell & barter items, message & comment. Always free.</div></div></div>
       <div class="ob-choice" data-ut="vendor"><div class="obc-em">\u{1F6CD}\uFE0F</div><div><div class="obc-t">I\u2019m a vendor</div><div class="obc-d">I offer a service and want a storefront with services, bookings & payments. Free \u2014 optional, and you can turn it off anytime.</div></div></div>
     </div><button class="ob-back" id="obback1">\u2039 Back</button></div>`;
@@ -1832,9 +1833,9 @@ function onboarding(){
     const err=state.eduErr?`<div class="edu-err">${state.eduErr}</div>`:'';
     screen.innerHTML=`<div class="ob">
     <div class="ob-top"><div class="ob-dots"><span class="obd on"></span><span class="obd on"></span><span class="obd on"></span></div></div>
-    <div class="ob-body"><img src="/icons/icon-192.png" alt="VendU logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(90,43,224,.26);margin-bottom:14px"><div class="ob-title">${sent?'Check your email':'Verify your school email'}</div>
-    <div class="ob-text" style="margin-bottom:20px">${sent?('We emailed a secure sign-in link to <b>'+state.eduEmail+'</b>. Open it and VendU unlocks automatically.'):'VendU is students-only. Enter your college <b>.edu</b> email \u2014 any school works \u2014 and we\u2019ll email you a sign-in link. Your campus feed is set from this address.'}</div>
-    ${sent?`<div class="edu-note" style="max-width:330px;font-size:14px">Open the email from VendU and tap <b>Verify Email</b>. This page unlocks as soon as you do.</div>${err}<div class="edu-note" style="margin-top:16px">Waiting for you to tap the link\u2026 this screen unlocks by itself.</div><div class="edu-note">Didn\u2019t get it? Check your spam folder, then <span id="eduResend" style="color:var(--violet);font-weight:700;cursor:pointer">resend the link</span> \u00b7 <span id="eduEdit" style="cursor:pointer;text-decoration:underline">use a different email</span></div>`:`<div class="edu-row" style="width:100%;max-width:330px"><input id="eduIn" type="email" inputmode="email" autocomplete="email" value="${state.eduEmail||''}" placeholder="you@yourschool.edu" style="flex:1;border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-family:inherit;font-size:15px;outline:0;background:#fff"><button class="verify-btn" id="eduBtn">Send link</button></div>${err}<div class="ob-text" style="margin:22px 0 9px;font-weight:600;color:var(--ink)">Expected graduation year</div><div class="pldays" style="justify-content:center;padding:0">${['2025','2026','2027','2028','2029'].map(y=>`<div class="plday ${state.gradYear===y?'on':''}" data-gradyear="${y}">\u2019${y.slice(2)}</div>`).join('')}</div><div class="edu-legal ${state.legalOK?'on':''}" id="eduLegal" role="checkbox" tabindex="0" aria-checked="${state.legalOK?'true':'false'}"><span class="lbox">\u2713</span><span>I have read and agree to VendU\u2019s <a href="/legal/terms.html?from=signin" target="_blank" rel="noopener">Terms &amp; Conditions</a>, <a href="/legal/privacy.html?from=signin" target="_blank" rel="noopener">Privacy Policy</a> and <a href="/legal/support.html?from=signin" target="_blank" rel="noopener">Community Guidelines</a>.</span></div><div class="edu-note">Any college works \u2014 we only use your school email to confirm you\u2019re a student and to show you your campus. No spam, ever.</div>`}
+    <div class="ob-body"><img src="/icons/icon-192.png" alt="The VendU App logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(90,43,224,.26);margin-bottom:14px"><div class="ob-title">${sent?'Check your email':'Verify your school email'}</div>
+    <div class="ob-text" style="margin-bottom:20px">${sent?('We emailed a secure sign-in link to <b>'+state.eduEmail+'</b>. Open it and The VendU App unlocks automatically.'):'The VendU App is students-only. Enter your college <b>.edu</b> email \u2014 any school works \u2014 and we\u2019ll email you a sign-in link. Your campus feed is set from this address.'}</div>
+    ${sent?`<div class="edu-note" style="max-width:330px;font-size:14px">Open the email from The VendU App and tap <b>Verify Email</b>. This page unlocks as soon as you do.</div>${err}<div class="edu-note" style="margin-top:16px">Waiting for you to tap the link\u2026 this screen unlocks by itself.</div><div class="edu-note">Didn\u2019t get it? Check your spam folder, then <span id="eduResend" style="color:var(--violet);font-weight:700;cursor:pointer">resend the link</span> \u00b7 <span id="eduEdit" style="cursor:pointer;text-decoration:underline">use a different email</span></div>`:`<div class="edu-row" style="width:100%;max-width:330px"><input id="eduIn" type="email" inputmode="email" autocomplete="email" value="${state.eduEmail||''}" placeholder="you@yourschool.edu" style="flex:1;border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-family:inherit;font-size:15px;outline:0;background:#fff"><button class="verify-btn" id="eduBtn">Send link</button></div>${err}<div class="ob-text" style="margin:22px 0 9px;font-weight:600;color:var(--ink)">Expected graduation year</div><div class="pldays" style="justify-content:center;padding:0">${['2025','2026','2027','2028','2029'].map(y=>`<div class="plday ${state.gradYear===y?'on':''}" data-gradyear="${y}">\u2019${y.slice(2)}</div>`).join('')}</div><div class="edu-legal ${state.legalOK?'on':''}" id="eduLegal" role="checkbox" tabindex="0" aria-checked="${state.legalOK?'true':'false'}"><span class="lbox">\u2713</span><span>I have read and agree to The VendU App\u2019s <a href="/legal/terms.html?from=signin" target="_blank" rel="noopener">Terms &amp; Conditions</a>, <a href="/legal/privacy.html?from=signin" target="_blank" rel="noopener">Privacy Policy</a> and <a href="/legal/support.html?from=signin" target="_blank" rel="noopener">Community Guidelines</a>.</span></div><div class="edu-note">Any college works \u2014 we only use your school email to confirm you\u2019re a student and to show you your campus. No spam, ever.</div>`}
     </div>`;
     /* Keep whatever the student already typed, so picking a grad year or the
        legal checkbox never wipes the email box. */
@@ -1847,7 +1848,7 @@ function onboarding(){
     function submitCode(){
       if(busy)return;
       var st=VendU.student();
-      if(st&&st.email){state.eduErr='';state.eduEmail=st.email;state.eduDone=true;state.eduCodeSent=false;applyAccount(st.email);toast('Verified \u2713 Welcome to VendU');finishOnboarding();return;}
+      if(st&&st.email){state.eduErr='';state.eduEmail=st.email;state.eduDone=true;state.eduCodeSent=false;applyAccount(st.email);toast('Verified \u2713 Welcome to The VendU App');finishOnboarding();return;}
       return;
     }
     var sendBtn=document.getElementById('eduBtn');
@@ -1882,8 +1883,8 @@ function obPayment(){
     <div class="field"><label>Card number</label><input id="cardnum" value="${state.cardNum||''}" placeholder="1234 5678 9012 3456" inputmode="numeric"></div>
     <div style="display:flex;gap:10px"><div class="field" style="flex:1"><label>Expiry</label><input id="cardexp" value="${state.cardExp||''}" placeholder="MM/YY"></div><div class="field" style="flex:1"><label>CVC</label><input id="cardcvc" value="${state.cardCvc||''}" placeholder="123" inputmode="numeric"></div></div>
     <div class="attest ${state.agree1?'on':''}" data-ag="1"><div class="box">${icon(chk)}</div><span>I confirm my services are <b>legal where I offer them</b> and I hold any license or permit required for my category.</span></div>
-    <div class="attest ${state.agree2?'on':''}" data-ag="2"><div class="box">${icon(chk)}</div><span>I understand VendU is a <b>listing platform, not my employer.</b> I'm responsible for my own work, taxes, and customers.</span></div>
-    <div class="attest ${state.agree3?'on':''}" data-ag="3"><div class="box">${icon(chk)}</div><span>I accept VendU's <a href="/legal/terms.html" target="_blank" rel="noopener"><b>Terms & Conditions</b></a> and <a href="/legal/privacy.html" target="_blank" rel="noopener"><b>Privacy Policy</b></a> — I will only upload my own photos and content, and I take responsibility for anything I post that isn’t mine.</span></div>
+    <div class="attest ${state.agree2?'on':''}" data-ag="2"><div class="box">${icon(chk)}</div><span>I understand The VendU App is a <b>listing platform, not my employer.</b> I'm responsible for my own work, taxes, and customers.</span></div>
+    <div class="attest ${state.agree3?'on':''}" data-ag="3"><div class="box">${icon(chk)}</div><span>I accept The VendU App's <a href="/legal/terms.html" target="_blank" rel="noopener"><b>Terms & Conditions</b></a> and <a href="/legal/privacy.html" target="_blank" rel="noopener"><b>Privacy Policy</b></a> — I will only upload my own photos and content, and I take responsibility for anything I post that isn’t mine.</span></div>
     <button class="submit" id="obsub">Subscribe & set up storefront</button><div style="font-size:11.5px;color:var(--mist);text-align:center;margin-top:9px">Enter your card and accept all 3 boxes to continue.</div></div>`;
 }
 function bindCards(){['cardname:cardName','cardnum:cardNum','cardexp:cardExp','cardcvc:cardCvc'].forEach(p=>{const a=p.split(':');const e=document.getElementById(a[0]);if(e)e.oninput=ev=>{state[a[1]]=ev.target.value;};});}
@@ -1974,8 +1975,8 @@ function locationHelp(msg){
   var old=document.getElementById('locHelp');if(old)old.remove();
   var ios=/iPad|iPhone|iPod/.test(navigator.userAgent);
   var steps=ios
-    ? 'On iPhone: open <b>Settings \u203A Privacy &amp; Security \u203A Location Services</b>, turn it on, then scroll to <b>Safari Websites</b> (or the VendU app) and choose <b>While Using the App</b>. Reload VendU and tap the button again.'
-    : 'On Android: open <b>Settings \u203A Apps \u203A Chrome (or VendU) \u203A Permissions \u203A Location</b> and allow it. In Chrome you can also tap the \u{1F512} icon in the address bar \u203A <b>Permissions</b> \u203A <b>Location</b> \u203A Allow. Reload VendU and tap the button again.';
+    ? 'On iPhone: open <b>Settings \u203A Privacy &amp; Security \u203A Location Services</b>, turn it on, then scroll to <b>Safari Websites</b> (or the VendU App App) and choose <b>While Using the App</b>. Reload The VendU App and tap the button again.'
+    : 'On Android: open <b>Settings \u203A Apps \u203A Chrome (or The VendU App) \u203A Permissions \u203A Location</b> and allow it. In Chrome you can also tap the \u{1F512} icon in the address bar \u203A <b>Permissions</b> \u203A <b>Location</b> \u203A Allow. Reload The VendU App and tap the button again.';
   var w=document.createElement('div');w.id='locHelp';
   w.style.cssText='position:absolute;inset:0;background:rgba(20,12,40,.55);display:flex;align-items:center;justify-content:center;z-index:90;padding:24px';
   w.innerHTML='<div style="background:var(--card,#fff);border-radius:20px;padding:22px 20px;max-width:320px;box-shadow:0 20px 50px rgba(0,0,0,.3)">'+
@@ -1993,7 +1994,7 @@ function locationHelp(msg){
 function pickNearest(){
   if(!navigator.geolocation){locationHelp('This browser can\u2019t share location.');return;}
   if(!window.isSecureContext&&location.protocol!=='https:'&&location.hostname!=='localhost'){
-    locationHelp('Location only works on the secure (https) VendU link.');return;
+    locationHelp('Location only works on the secure (https) The VendU App link.');return;
   }
   toast('\uD83D\uDCCD Finding your nearest campus\u2026');
   var localBest=function(lat,lng){var best=CAMPUSES[0],bd=1e18;CAMPUSES.forEach(function(c){var dx=c.lat-lat,dy=c.lng-lng,d=dx*dx+dy*dy;if(d<bd){bd=d;best=c;}});return best;};
@@ -2017,17 +2018,17 @@ function pickNearest(){
         step(0);
       }).catch(function(){useLocal(lat,lng);});
   };
-  try{navigator.geolocation.getCurrentPosition(function(p){resolve(p.coords.latitude,p.coords.longitude);},function(err){locationHelp(err&&err.code===1?'VendU doesn\u2019t have permission to use your location yet.':'We couldn\u2019t read your location.');},{enableHighAccuracy:true,timeout:12000,maximumAge:300000});}
+  try{navigator.geolocation.getCurrentPosition(function(p){resolve(p.coords.latitude,p.coords.longitude);},function(err){locationHelp(err&&err.code===1?'The VendU App doesn\u2019t have permission to use your location yet.':'We couldn\u2019t read your location.');},{enableHighAccuracy:true,timeout:12000,maximumAge:300000});}
   catch(e){locationHelp('');}
 }
 const APP_THEMES=[
- {id:'violet',name:'Violet \u2014 Creative',primary:'#5A2BE0',dark:'#3d1c99',soft:'#EFE8FF',accent:'#FFB020',desc:'Energetic and youthful. Signals creativity and community \u2014 the current VendU look.'},
+ {id:'violet',name:'Violet \u2014 Creative',primary:'#5A2BE0',dark:'#3d1c99',soft:'#EFE8FF',accent:'#FFB020',desc:'Energetic and youthful. Signals creativity and community \u2014 the current The VendU App look.'},
  {id:'navy',name:'Navy \u2014 Trust',primary:'#1D3A8A',dark:'#132456',soft:'#E6ECFA',accent:'#F5C518',desc:'Calm and credible. Navy reads as trustworthy and established \u2014 think banks and universities.'},
  {id:'emerald',name:'Emerald \u2014 Growth',primary:'#0E7C5A',dark:'#08503b',soft:'#E3F5EE',accent:'#F0873B',desc:'Fresh and grounded. Green signals growth, money, and momentum for student founders.'}
 ];
 function applyTheme(id){var t=APP_THEMES.filter(function(x){return x.id===id;})[0]||APP_THEMES[0];var r=document.documentElement.style;r.setProperty('--violet',t.primary);r.setProperty('--violet-soft',t.soft);r.setProperty('--amber',t.accent);}
 function themeScreen(){
-  screen.innerHTML='<div class="topbar"><div class="brandrow"><div class="wordmark">App theme</div><div class="locpill" id="thBack" style="cursor:pointer">\u2715 Close</div></div></div><div class="enter" style="padding:6px 20px 20px"><div style="font-size:13.5px;color:var(--mist);line-height:1.5;margin-bottom:14px">Pick a direction for VendU\u2019s look. This changes the app\u2019s primary color and accents \u2014 tap any to preview it live across the whole app.</div>'+APP_THEMES.map(function(t){var on=state.appTheme===t.id;return '<div class="thcard '+(on?'on':'')+'" data-theme="'+t.id+'"><div class="thband" style="background:linear-gradient(100deg,'+t.primary+','+t.dark+')"><span>'+t.name+'</span>'+(on?'<span class="thcur">\u2713 Current</span>':'')+'</div><div class="thbody"><div class="thdesc">'+t.desc+'</div><div class="thsw"><span style="background:'+t.primary+'"></span><span style="background:'+t.soft+'"></span><span style="background:'+t.accent+'"></span><span style="background:var(--ink)"></span></div></div></div>';}).join('')+'<div style="font-size:11.5px;color:var(--mist);line-height:1.45;margin-top:6px;text-align:center">In the full build, every screen is fully harmonized to the chosen direction.</div></div>';
+  screen.innerHTML='<div class="topbar"><div class="brandrow"><div class="wordmark">App theme</div><div class="locpill" id="thBack" style="cursor:pointer">\u2715 Close</div></div></div><div class="enter" style="padding:6px 20px 20px"><div style="font-size:13.5px;color:var(--mist);line-height:1.5;margin-bottom:14px">Pick a direction for The VendU App\u2019s look. This changes the app\u2019s primary color and accents \u2014 tap any to preview it live across the whole app.</div>'+APP_THEMES.map(function(t){var on=state.appTheme===t.id;return '<div class="thcard '+(on?'on':'')+'" data-theme="'+t.id+'"><div class="thband" style="background:linear-gradient(100deg,'+t.primary+','+t.dark+')"><span>'+t.name+'</span>'+(on?'<span class="thcur">\u2713 Current</span>':'')+'</div><div class="thbody"><div class="thdesc">'+t.desc+'</div><div class="thsw"><span style="background:'+t.primary+'"></span><span style="background:'+t.soft+'"></span><span style="background:'+t.accent+'"></span><span style="background:var(--ink)"></span></div></div></div>';}).join('')+'<div style="font-size:11.5px;color:var(--mist);line-height:1.45;margin-top:6px;text-align:center">In the full build, every screen is fully harmonized to the chosen direction.</div></div>';
   document.getElementById('thBack').onclick=function(){state.themeView=false;render();};
   screen.querySelectorAll('[data-theme]').forEach(function(el){el.onclick=function(){state.appTheme=el.dataset.theme;applyTheme(el.dataset.theme);toast('Theme applied 🎨');themeScreen();};});
 }
@@ -2154,24 +2155,24 @@ var _deferredInstall=null;
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();_deferredInstall=e;});
 function isStandalone(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;}
 function showInstall(){
-  if(isStandalone()){toast('VendU is already installed on this device \u2713');return;}
-  if(_deferredInstall){_deferredInstall.prompt();_deferredInstall.userChoice.then(function(c){if(c&&c.outcome==='accepted')toast('Installing VendU\u2026 check your home screen \uD83D\uDCF2');_deferredInstall=null;});return;}
+  if(isStandalone()){toast('The VendU App is already installed on this device \u2713');return;}
+  if(_deferredInstall){_deferredInstall.prompt();_deferredInstall.userChoice.then(function(c){if(c&&c.outcome==='accepted')toast('Installing The VendU App\u2026 check your home screen \uD83D\uDCF2');_deferredInstall=null;});return;}
   var ua=navigator.userAgent||'';
   var ios=/iPhone|iPad|iPod/i.test(ua);
   var msg=ios
     ?'On iPhone/iPad: tap the Share button \u2191 in Safari, then \u201CAdd to Home Screen\u201D.'
     :(/Android/i.test(ua)
       ?'On Android: tap the \u22EE menu in Chrome, then \u201CInstall app\u201D or \u201CAdd to Home screen\u201D.'
-      :'On desktop: click the install icon in your browser\u2019s address bar, or use the browser menu \u2192 \u201CInstall VendU\u201D.');
+      :'On desktop: click the install icon in your browser\u2019s address bar, or use the browser menu \u2192 \u201CInstall The VendU App\u201D.');
   var w=document.createElement('div');
   w.style.cssText='position:fixed;inset:0;background:rgba(15,12,30,.55);display:flex;align-items:flex-end;justify-content:center;z-index:9999';
-  w.innerHTML='<div style="background:var(--paper,#FBF8F3);border-radius:20px 20px 0 0;padding:22px 20px 26px;max-width:520px;width:100%"><div style="font-size:19px;font-weight:800;margin-bottom:6px">\uD83D\uDCF2 Install VendU</div><div style="font-size:14px;line-height:1.5;color:#5d5870">'+msg+'</div><button style="margin-top:16px;width:100%;padding:13px;border:0;border-radius:12px;background:#5A2BE0;color:#fff;font-weight:700;font-size:15px">Got it</button></div>';
+  w.innerHTML='<div style="background:var(--paper,#FBF8F3);border-radius:20px 20px 0 0;padding:22px 20px 26px;max-width:520px;width:100%"><div style="font-size:19px;font-weight:800;margin-bottom:6px">\uD83D\uDCF2 Install The VendU App</div><div style="font-size:14px;line-height:1.5;color:#5d5870">'+msg+'</div><button style="margin-top:16px;width:100%;padding:13px;border:0;border-radius:12px;background:#5A2BE0;color:#fff;font-weight:700;font-size:15px">Got it</button></div>';
   w.onclick=function(e){if(e.target===w||e.target.tagName==='BUTTON')w.remove();};
   document.body.appendChild(w);
 }
 function deleteAccount(){
-  if(!confirm('Delete your VendU account?\n\nThis removes your profile, storefront, posts, bookings and reviews. This cannot be undone.'))return;
-  if(!confirm('Last check \u2014 permanently delete your VendU account?'))return;
+  if(!confirm('Delete your The VendU App account?\n\nThis removes your profile, storefront, posts, bookings and reviews. This cannot be undone.'))return;
+  if(!confirm('Last check \u2014 permanently delete your The VendU App account?'))return;
   var em='';try{var s=window.VendU&&VendU.student&&VendU.student();em=(s&&s.email)||'';}catch(e){}
   try{if(window.VendU&&VendU.deleteAccount)VendU.deleteAccount(BUILD).catch(function(){});}catch(e){}
   try{localStorage.clear();}catch(e){}
@@ -2179,7 +2180,7 @@ function deleteAccount(){
   setTimeout(function(){location.reload();},900);
 }
 
-// VendU stays installable through its web-app manifest. App-shell caching is
+// The VendU App stays installable through its web-app manifest. App-shell caching is
 // permanently disabled: on every load we remove any service worker registered
 // under this build's scope and delete its caches, so a published update can
 // never be trapped behind an older installed copy.
