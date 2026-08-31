@@ -60,6 +60,12 @@ export function handleMagicLinkReturn(): boolean {
   if (token) {
     const email = emailFromJwt(token);
     if (email) {
+      // Forward the tokens to the build so it can save a signed session.
+      const forward = new URLSearchParams({
+        access_token: token,
+        refresh_token: hash.get("refresh_token") ?? "",
+        expires_at: hash.get("expires_at") ?? "",
+      }).toString();
       // Record it server-side too, so the device that requested the link can
       // unlock even when the email opened in a different browser.
       void fetch("/api/public/verify/confirm", {
@@ -68,10 +74,11 @@ export function handleMagicLinkReturn(): boolean {
         body: JSON.stringify({ token, build }),
       })
         .catch(() => undefined)
-        .finally(() => unlock(email));
+        .finally(() => unlock(email, forward));
       return true;
     }
   }
+
 
   if (tokenHash || code) {
     void fetch("/api/public/verify/link", {
