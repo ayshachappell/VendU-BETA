@@ -46,3 +46,14 @@
 
 .store-badges{display:inline-flex;align-items:center;gap:6px;vertical-align:middle;margin-left:6px}
 .tour-card-center{position:fixed}
+
+/* ---- brand lockup legibility + header fit (v9) ---- */
+.brandrow{gap:10px;min-width:0;flex-wrap:nowrap}
+.brandrow>*{min-width:0}
+.wordmark{font-size:21px;white-space:nowrap;gap:5px;align-items:baseline;padding-top:.5em}
+.wm-pre,.wm-post{font-size:.62em;font-weight:600}
+.gradcap{width:1.35em;height:auto;top:-.64em}
+.locpill{flex:0 1 auto;max-width:46vw;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.beta-tag{flex:none}
+.ob-title{line-height:1.45}
+.ob-title .wordmark{padding-top:0;white-space:nowrap}
