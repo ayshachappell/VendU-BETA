@@ -1,4 +1,4 @@
-/* VendU — mandatory interactive guided tour of the real app.
+/* The VendU App — mandatory interactive guided tour of the real app.
    Highlights real controls, lets the student tap them, and advances.
    Identical steps in the Main and BETA builds; steps whose target does not
    exist in a build (e.g. VendUniversity in BETA) are skipped automatically. */
@@ -118,7 +118,7 @@
         before: goFeed,
         target: postBadge,
         title: "Badges tell you who's who",
-        text: "🎓 Founder is one of the first 10 verified vendors on a campus, 💠 Vendor sells, ★ is VendU staff, and the campus badge shows their school. 🏷️ Sale, 🏷️ 20% off and ⏳ Ending soon show while a promo is running. Posts show up to two.",
+        text: "🎓 Founder is one of the first 10 verified vendors on a campus, 💠 Vendor sells, ★ is The VendU App staff, and the campus badge shows their school. 🏷️ Sale, 🏷️ 20% off and ⏳ Ending soon show while a promo is running. Posts show up to two.",
         place: "below",
       },
       {
@@ -161,7 +161,7 @@
         before: goProfile,
         target: function () { return $("#startsell") || $('[data-menu="setup"]') || $("#moretoggle"); },
         title: "Your profile & storefront",
-        text: "Upload your photo and display name, use View my profile or View my VendU to see yourself as students do, and check 🏆 Leaderboard for the top vendors this month. Set up your storefront is where you link socials, add and resize photos, list services and prices, set a sale with an end date, and add Cash App, Venmo, Zelle or PayPal handles. Selling is optional — switching between Student and Vendor view keeps the same account.",
+        text: "Upload your photo and display name, use View my profile or View my The VendU App to see yourself as students do, and check 🏆 Leaderboard for the top vendors this month. Set up your storefront is where you link socials, add and resize photos, list services and prices, set a sale with an end date, and add Cash App, Venmo, Zelle or PayPal handles. Selling is optional — switching between Student and Vendor view keeps the same account.",
         lock: true,
         next: "Next",
         place: "above",
@@ -520,7 +520,7 @@
   function dbgLog() {
     if (!DEBUG) return;
     try {
-      var a = ["[VendU tour][BETA]"].concat([].slice.call(arguments));
+      var a = ["[The VendU App tour][BETA]"].concat([].slice.call(arguments));
       console.log.apply(console, a);
     } catch (e) {}
   }
