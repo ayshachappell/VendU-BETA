@@ -47,7 +47,8 @@ if('serviceWorker' in navigator){
   .screen::-webkit-scrollbar{display:none}
   .topbar{position:sticky;top:0;z-index:20;background:rgba(251,248,243,.9);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:22px 20px 10px}
   .brandrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-  .wordmark{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:26px;letter-spacing:-.02em;line-height:1;display:flex;align-items:baseline;gap:1px;cursor:pointer}
+  .wordmark{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:26px;letter-spacing:-.02em;line-height:1;display:flex;align-items:baseline;gap:4px;cursor:pointer}
+  .wm-pre,.wm-post{font-family:'Inter',sans-serif;font-weight:500;color:var(--mist);font-size:15px;letter-spacing:0}
   .wordmark .u{position:relative;color:var(--violet)}
   .gradcap{position:absolute;left:50%;top:-15px;transform:translateX(-50%);width:36px;height:auto;pointer-events:none;overflow:visible}
   .gradcap .tassel{transform-box:view-box;transform-origin:20px 9.5px}
@@ -62,9 +63,9 @@ if('serviceWorker' in navigator){
   .campus-wrap{position:relative;overflow:hidden}
   .campus-bg{position:absolute;top:-70px;left:-50px;right:-50px;bottom:-70px;z-index:0;pointer-events:none;overflow:hidden;color:var(--school-a);opacity:.035;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:19px;line-height:2.5;letter-spacing:.03em;transform:rotate(-6deg);word-break:keep-all;user-select:none}
   .campus-content{position:relative;z-index:1;padding-top:12px}
-  .seg{display:flex;gap:6px;background:#EFEAE1;border-radius:12px;padding:4px;margin:0 20px}
+  .seg{display:flex;gap:6px;background:#F1ECE2;border-radius:12px;padding:4px;margin:0 20px}
   .seg div{flex:1;text-align:center;padding:9px;border-radius:9px;font-size:13.5px;font-weight:600;color:var(--mist);cursor:pointer;transition:.15s}
-  .seg div.on{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+  .seg div.on{background:#fff;color:var(--ink);box-shadow:0 2px 6px rgba(28,21,38,.08)}
   .founder{margin:14px 20px 0;background:linear-gradient(100deg,rgba(90,43,224,.86),rgba(138,91,240,.86));backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);color:#fff;border-radius:16px;padding:13px 15px;font-size:13px;line-height:1.35;box-shadow:0 8px 22px rgba(90,43,224,.25);display:flex;gap:11px;align-items:center}
   .founder .em{font-size:20px}.founder b{font-family:'Bricolage Grotesque',sans-serif;font-weight:700}
   .chips{display:flex;gap:9px;overflow-x:auto;padding:14px 20px 4px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
@@ -1011,7 +1012,7 @@ function founderBanner(){if(FOUNDERS>=FOUNDER_CAP)return '';const left=FOUNDER_C
 
 function home(){
   screen.innerHTML=`
-    <div class="topbar"><div class="brandrow"><div style="display:flex;align-items:center;gap:8px"><div class="wordmark go" id="logo">${WM}</div><span class="beta-tag">BETA</span></div><div style="display:flex;align-items:center;gap:10px">${bellHTML()}<div class="locpill" id="loc" onclick="openCampusPick()"><span class="dot"></span>${CAMPPILL()}</div></div></div>
+    <div class="topbar"><div class="brandrow"><div style="display:flex;align-items:center;gap:8px"><div class="wordmark go" id="logo"><span class="wm-pre">The</span>${WM}<span class="wm-post">App</span></div><span class="beta-tag">BETA</span></div><div style="display:flex;align-items:center;gap:10px">${bellHTML()}<div class="locpill" id="loc" onclick="openCampusPick()"><span class="dot"></span>${CAMPPILL()}</div></div></div>
       <div class="search">${icon('<circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/>')}<input id="q" placeholder="${state.home==='browse'?'Search hustles, services, people…':'Search VendU…'}" value="${state.q}"></div></div>
     <div class="campus-wrap"><div class="campus-bg">${wmk()}</div><div class="campus-content">
       <div class="seg"><div class="${state.home==='feed'?'on':''}" data-home="feed">Feed</div><div class="${state.home==='browse'?'on':''}" data-home="browse">Browse</div><div class="${state.home==='events'?'on':''}" data-home="events">Events</div></div>
