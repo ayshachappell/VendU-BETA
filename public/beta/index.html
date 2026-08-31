@@ -812,6 +812,7 @@ document.addEventListener('click',function(e){
 
 const CAP=`<svg class="gradcap" viewBox="0 0 40 30" xmlns="http://www.w3.org/2000/svg"><polygon points="20,2 38,9.5 20,17 2,9.5" fill="#14101c"/><polygon points="20,2 38,9.5 20,12.6 2,9.5" fill="#2b2140"/><circle cx="20" cy="9.5" r="1.7" fill="#FFB020"/><g class="tassel"><path d="M20,9.5 L33,9.5 L33,18.5" stroke="#FFB020" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="31.5" y="18" width="3" height="3.6" rx="1.3" fill="#FFB020"/><circle cx="33" cy="22.4" r="2.4" fill="#FFB020"/></g></svg>`;
 const WM=`Vend<span class="u">U${CAP}</span>`;
+const WMFULL=`<span class="wm-pre">The</span>${WM}<span class="wm-post">App</span>`;
 const CHECK='<span class="verif"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5"/></svg></span>';
 
 const CATS=['All','Food','Beauty','Tutoring','Creative','Tech','Fitness','Errands','Other'];
@@ -1813,13 +1814,13 @@ function onboarding(){
   const s=state.obStep;
   if(s===0){screen.innerHTML=`<div class="ob">
     <div class="ob-top"><div class="ob-dots"><span class="obd on"></span><span class="obd"></span><span class="obd"></span></div></div>
-    <div class="ob-body"><img src="/icons/icon-192.png" alt="VendU app icon" width="92" height="92" style="border-radius:22px;box-shadow:0 10px 26px rgba(90,43,224,.28);margin-bottom:26px"><div class="ob-title">Welcome to <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WM}</span></div><div class="ob-text">Your campus marketplace \u2014 find & book student services, buy, sell & trade. Always free.</div></div>
+    <div class="ob-body"><img src="/icons/icon-192.png" alt="VendU app icon" width="92" height="92" style="border-radius:22px;box-shadow:0 10px 26px rgba(90,43,224,.28);margin-bottom:26px"><div class="ob-title">Welcome to <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WMFULL}</span></div><div class="ob-text">Your campus marketplace \u2014 find & book student services, buy, sell & trade. Always free.</div></div>
     <button class="ob-btn" id="obnext">Get started</button></div>`;
     document.getElementById('obnext').onclick=()=>{state.obStep=1;render();};
     return;}
   if(s===1){screen.innerHTML=`<div class="ob">
     <div class="ob-top"><div class="ob-dots"><span class="obd on"></span><span class="obd on"></span><span class="obd"></span></div></div>
-    <div class="ob-body" style="justify-content:flex-start;padding-top:24px"><img src="/icons/icon-192.png" alt="VendU logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(90,43,224,.26);margin-bottom:14px"><div class="ob-title" style="margin-bottom:6px">How will you use <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WM}</span>?</div><div class="ob-text" style="margin-bottom:24px">Everyone gets a free account. Becoming a vendor is completely optional \u2014 you can switch it on or off anytime.</div>
+    <div class="ob-body" style="justify-content:flex-start;padding-top:24px"><img src="/icons/icon-192.png" alt="VendU logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(90,43,224,.26);margin-bottom:14px"><div class="ob-title" style="margin-bottom:6px">How will you use <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WMFULL}</span>?</div><div class="ob-text" style="margin-bottom:24px">Everyone gets a free account. Becoming a vendor is completely optional \u2014 you can switch it on or off anytime.</div>
       <div class="ob-choice" data-ut="regular"><div class="obc-em">\u{1F64B}\u{1F3FF}\u200D\u2640\uFE0F</div><div><div class="obc-t">Just browsing</div><div class="obc-d">Book vendors, buy, sell & barter items, message & comment. Always free.</div></div></div>
       <div class="ob-choice" data-ut="vendor"><div class="obc-em">\u{1F6CD}\uFE0F</div><div><div class="obc-t">I\u2019m a vendor</div><div class="obc-d">I offer a service and want a storefront with services, bookings & payments. Free \u2014 optional, and you can turn it off anytime.</div></div></div>
     </div><button class="ob-back" id="obback1">\u2039 Back</button></div>`;
