@@ -1090,7 +1090,7 @@ function refreshFeed(){const s=screen.scrollTop;document.getElementById('homebod
 function toggleNear(){state.near=!state.near;state.home='browse';if(state.near){try{navigator.geolocation.getCurrentPosition(()=>toast('📍 Showing hustles nearest you'),()=>toast('Allow location to sort by your real distance'),{timeout:5000});}catch(e){toast('Location works on the live site 📍');}}home();}
 
 function openDetail(id){state.detail=id;state.reviewOpen=false;detail(id);screen.scrollTop=0;}
-function meObj(){return {me:true,avatar:state.avatar,name:(state.vname||'Your The VendU App'),init:(state.vname?state.vname.trim()[0].toUpperCase():'A'),v:1,cat:(state.formCat||'Your storefront'),dist:0,rating:'New',reviews:0,jobs:0,since:'2026',pays:(state.pays&&state.pays.length?state.pays:[{app:'Cash App',handle:'$you'}]),bio:state.about,services:state.services,gallery:state.gallery,bm:state.bookMethod||0,link:state.booking.link};}
+function meObj(){return {me:true,avatar:state.avatar,name:(state.vname||'Your VendU'),init:(state.vname?state.vname.trim()[0].toUpperCase():'A'),v:1,cat:(state.formCat||'Your storefront'),dist:0,rating:'New',reviews:0,jobs:0,since:'2026',pays:(state.pays&&state.pays.length?state.pays:[{app:'Cash App',handle:'$you'}]),bio:state.about,services:state.services,gallery:state.gallery,bm:state.bookMethod||0,link:state.booking.link};}
 function detail(id){
   const h=id==='me'?meObj():HUSTLES.find(x=>x.id===id);
   const c=bg(h), tc=textOn(c);
@@ -1816,7 +1816,7 @@ function onboarding(){
   const s=state.obStep;
   if(s===0){screen.innerHTML=`<div class="ob">
     <div class="ob-top"><div class="ob-dots"><span class="obd on"></span><span class="obd"></span><span class="obd"></span></div></div>
-    <div class="ob-body"><img src="/icons/icon-192.png" alt="The VendU App App icon" width="92" height="92" style="border-radius:22px;box-shadow:0 10px 26px rgba(90,43,224,.28);margin-bottom:26px"><div class="ob-title">Welcome to <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WMFULL}</span></div><div class="ob-text">Your campus marketplace \u2014 find & book student services, buy, sell & trade, join communities, and organize your school life. Always free.</div></div>
+    <div class="ob-body"><img src="/icons/icon-192.png" alt="The VendU App icon" width="92" height="92" style="border-radius:22px;box-shadow:0 10px 26px rgba(90,43,224,.28);margin-bottom:26px"><div class="ob-title">Welcome to <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WMFULL}</span></div><div class="ob-text">Your campus marketplace \u2014 find & book student services, buy, sell & trade, join communities, and organize your school life. Always free.</div></div>
     <button class="ob-btn" id="obnext">Get started</button><button class="ob-back" id="obskip">I\u2019m a tester \u2014 skip \u2192</button></div>`;
     document.getElementById('obnext').onclick=()=>{state.obStep=1;render();};
     var _sk0=document.getElementById('obskip');if(_sk0)_sk0.onclick=()=>demoSkip();
