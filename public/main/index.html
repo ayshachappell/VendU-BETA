@@ -2206,13 +2206,6 @@ function deleteAccount(){
   setTimeout(function(){location.reload();},900);
 }
 
-// Network-first service worker keeps installed copies current and provides an
-// app shell if a phone briefly loses its connection.
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function () {
-    navigator.serviceWorker.register('/main/sw.js', { scope: '/main/' }).catch(function () {});
-  });
-}
 </script>
 </body>
 </html>
