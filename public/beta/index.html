@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>The VendU App — sell your stuff, book a service, get paid.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script>
 /* Always-fresh assets: every page load requests a unique URL, so no browser,
    proxy or installed-app cache can ever serve an old stylesheet or tutorial. */
@@ -1013,7 +1013,7 @@ function founderBanner(){if(FOUNDERS>=FOUNDER_CAP)return '';const left=FOUNDER_C
 
 function home(){
   screen.innerHTML=`
-    <div class="topbar"><div class="brandrow"><div style="display:flex;align-items:center;gap:8px"><div class="wordmark go" id="logo"><span class="wm-pre">The</span>${WM}<span class="wm-post">App</span></div><span class="beta-tag">BETA</span></div><div style="display:flex;align-items:center;gap:10px">${bellHTML()}<div class="locpill" id="loc" onclick="openCampusPick()"><span class="dot"></span>${CAMPPILL()}</div></div></div>
+    <div class="topbar"><div class="brandrow"><div class="wordmark header-logo go" id="logo">${WMFULL}</div><div class="header-actions">${bellHTML()}<div class="locpill" id="loc" onclick="openCampusPick()"><span class="dot"></span><span class="locpill-label">${CAMPPILL()}</span></div></div></div>
       <div class="search">${icon('<circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/>')}<input id="q" placeholder="${state.home==='browse'?'Search hustles, services, people…':'Search The VendU App…'}" value="${state.q}"></div></div>
     <div class="campus-wrap"><div class="campus-bg">${wmk()}</div><div class="campus-content">
       <div class="seg"><div class="${state.home==='feed'?'on':''}" data-home="feed">Feed</div><div class="${state.home==='browse'?'on':''}" data-home="browse">Browse</div><div class="${state.home==='events'?'on':''}" data-home="events">Events</div></div>
@@ -1814,7 +1814,7 @@ function onboarding(){
   const s=state.obStep;
   if(s===0){screen.innerHTML=`<div class="ob">
     <div class="ob-top"><div class="ob-dots"><span class="obd on"></span><span class="obd"></span><span class="obd"></span></div></div>
-    <div class="ob-body"><img src="/icons/icon-192.png" alt="The VendU App icon" width="92" height="92" style="border-radius:22px;box-shadow:0 10px 26px rgba(90,43,224,.28);margin-bottom:26px"><div class="ob-title">Welcome to <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WMFULL}</span></div><div class="ob-text">Your campus marketplace \u2014 find & book student services, buy, sell & trade. Always free.</div></div>
+    <div class="ob-body"><img src="/icons/icon-192.png" alt="The VendU App icon" width="92" height="92" style="border-radius:22px;box-shadow:0 10px 26px rgba(90,43,224,.28);margin-bottom:26px"><div class="ob-title welcome-title">Welcome to <span class="wordmark welcome-wordmark">${WMFULL}</span></div><div class="ob-text">Your campus marketplace \u2014 find & book student services, buy, sell & trade. Always free.</div></div>
     <button class="ob-btn" id="obnext">Get started</button></div>`;
     document.getElementById('obnext').onclick=()=>{state.obStep=1;render();};
     return;}
@@ -2034,7 +2034,7 @@ function themeScreen(){
 }
 const BELL_PATH='<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>';
 function unreadTotal(){return state.inbox.reduce(function(n,t){return n+(t.unread||0);},0);}
-function bellHTML(){var n=unreadTotal();return '<button class="bell" onclick="openInbox()" aria-label="Messages">'+icon(BELL_PATH,20)+(n?'<span class="bell-dot">'+(n>9?'9+':n)+'</span>':'')+'</button>';}
+function bellHTML(){var n=unreadTotal();return '<button class="bell" onclick="openInbox()" aria-label="Notifications'+(n?' — '+n+' unread':'')+'">'+icon(BELL_PATH,20)+(n?'<span class="bell-dot">'+(n>9?'9+':n)+'</span>':'')+'</button>';}
 function openInbox(){state.thread=0;state.inboxView=true;render();}
 function openThread(name,init,color){
   name=name||'a seller';
