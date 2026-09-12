@@ -47,14 +47,16 @@ if('serviceWorker' in navigator){
   .screen::-webkit-scrollbar{display:none}
   .topbar{position:sticky;top:0;z-index:20;background:rgba(251,248,243,.9);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:22px 20px 10px}
   .brandrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-  .wordmark{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:26px;letter-spacing:-.02em;line-height:1;display:flex;align-items:baseline;gap:1px;cursor:pointer}
+  .wordmark{font-family:'Inter',sans-serif;font-weight:800;font-size:26px;letter-spacing:-.02em;line-height:1;display:flex;align-items:baseline;gap:1px;cursor:pointer}
   .wordmark .u{position:relative;color:var(--violet)}
   .wm-pre,.wm-post{font-family:'Inter',sans-serif;font-weight:500;color:var(--mist);font-size:15px;letter-spacing:0}
   .gradcap{position:absolute;left:50%;top:-15px;transform:translateX(-50%);width:36px;height:auto;pointer-events:none;overflow:visible}
   .gradcap .tassel{transform-box:view-box;transform-origin:20px 9.5px}
   .wordmark.go .tassel{animation:gradturn 2.4s cubic-bezier(.45,.05,.55,.95)}
   .locpill{display:inline-flex;align-items:center;gap:6px;background:var(--violet);color:#fff;font-size:12px;font-weight:600;padding:7px 12px;border-radius:100px;cursor:pointer}
-  .locpill .dot{width:6px;height:6px;border-radius:50%;background:var(--amber)}
+  .locpill.campus{background:#6D28D9;max-width:170px;min-width:0}
+  .locpill.campus .lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+  .locpill .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);flex:none}
   .search{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow)}
   .search svg{flex:none}
   .search input{border:0;outline:0;font-size:15px;font-family:inherit;width:100%;color:var(--ink);background:transparent}
@@ -1014,7 +1016,7 @@ function founderBanner(){if(FOUNDERS>=FOUNDER_CAP)return '';const left=FOUNDER_C
 
 function home(){
   screen.innerHTML=`
-    <div class="topbar"><div class="brandrow"><div class="wordmark go" id="logo">${WMFULL}</div><div style="display:flex;align-items:center;gap:10px">${bellHTML()}<div class="locpill" id="loc" onclick="openCampusPick()"><span class="dot"></span>${CAMPPILL()}</div></div></div>
+    <div class="topbar"><div class="brandrow"><div class="wordmark go" id="logo">${WMFULL}</div><div style="display:flex;align-items:center;gap:10px">${bellHTML()}<div class="locpill campus" id="loc" onclick="openCampusPick()"><span class="dot"></span><span class="lbl">${CAMPPILL()}</span></div></div></div>
       <div class="search">${icon('<circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/>')}<input id="q" placeholder="${state.home==='browse'?'Search hustles, services, people…':'Search The VendU App…'}" value="${state.q}"></div></div>
     <div class="campus-wrap"><div class="campus-bg">${wmk()}</div><div class="campus-content">
       <div class="seg"><div class="${state.home==='feed'?'on':''}" data-home="feed">Feed</div><div class="${state.home==='browse'?'on':''}" data-home="browse">Browse</div><div class="${state.home==='events'?'on':''}" data-home="events">Events</div></div>
@@ -1243,7 +1245,7 @@ function market(){
   const goods=state.mkt==='goods';
   const acts=o=>`<div class="mkt-act"><span class="p-act ${o.liked?'liked':''}" data-mlike="${o.id}">${heart(o.liked)} ${o.likes}</span><span class="p-act ${state.openMC===o.id?'liked':''}" data-mcmt="${o.id}">${icon(com,16)} ${o.comments.length}${o.comments.length?(state.openMC===o.id?' · hide':' · view'):''}</span>${!o.mine?`<span class="p-act" data-mmsg="${o.id}">✉ Message</span>`:''}</div>`;
   const panel=(o,who)=>`<div class="mkt-comments"><div class="mkt-ch">Comments <span style="color:var(--mist);font-weight:500">· go to ${who}</span></div>${o.comments.length?o.comments.map(c=>`<div class="p-comment"><b class="gp-author" data-user="${c[0]}␟${c[0].charAt(0)}␟0" style="cursor:pointer">${c[0]}</b> ${c[1]}</div>`).join(''):'<div style="font-size:12.5px;color:var(--mist)">No comments yet — be the first.</div>'}<div class="p-cbox"><input id="mci" placeholder="Add a comment…"><button id="mcsend">Post</button></div></div>`;
-  screen.innerHTML=`<div class="topbar"><div class="brandrow"><div class="wordmark go" id="logo">${WM} <span style="font-size:.7em;color:var(--ink)">Market</span></div><div style="display:flex;align-items:center;gap:10px">${bellHTML()}<div class="locpill" onclick="openCampusPick()"><span class="dot"></span>${CAMPPILL()}</div></div></div><div class="search">${icon('<circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/>')}<input placeholder="${goods?'Search supplies…':'Search requests…'}"></div></div>
+  screen.innerHTML=`<div class="topbar"><div class="brandrow"><div class="wordmark go" id="logo">${WM} <span style="font-size:.7em;color:var(--ink)">Market</span></div><div style="display:flex;align-items:center;gap:10px">${bellHTML()}<div class="locpill campus" onclick="openCampusPick()"><span class="dot"></span><span class="lbl">${CAMPPILL()}</span></div></div></div><div class="search">${icon('<circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/>')}<input placeholder="${goods?'Search supplies…':'Search requests…'}"></div></div>
     <div class="campus-wrap"><div class="campus-bg">${wmk()}</div><div class="campus-content">
     <div class="hubseg" style="padding-top:2px">${[['goods','Buy & Trade'],['requests','Requests'],['housing','🏠 Housing'],['jobs','💼 Jobs']].map(x=>`<div class="hchip ${state.mkt===x[0]?'on':''}" data-mkt="${x[0]}">${x[1]}</div>`).join('')}</div>
     ${state.mkt==='housing'?housingHTML():state.mkt==='jobs'?jobsHTML():goods?`<div class="list" style="padding-top:16px">${GOODS.map((g,i)=>g.campus!==state.campus.id?'':`<div class="card" style="display:block;animation-delay:${i*40}ms"><div style="display:flex;gap:13px"><div style="width:78px;height:78px;border-radius:14px;overflow:hidden;background:${color(g.c)}22;display:flex;align-items:center;justify-content:center;font-size:32px;flex:none">${g.img?`<img src="${g.img}" style="width:100%;height:100%;object-fit:cover">`:g.emoji}</div><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:15px;line-height:1.2">${g.name}</div><div style="font-family:Bricolage Grotesque;font-weight:700;font-size:16px;margin-top:2px">${g.price}</div><div style="font-size:11.5px;font-weight:600;color:var(--mist);margin-top:1px">${g.tag}${g.sold?' · <span style="color:#E11D48;font-weight:800">SOLD</span>':''}</div><div class="mkt-by"><span class="mkt-avatar" style="background:${color(g.bc||0)}">${g.bi||'?'}</span><span class="gp-author" data-user="${g.by||'Student'}␟${g.bi||'?'}␟${g.bc||0}" style="cursor:pointer">${g.by||'Student'}</span></div></div></div>${acts(g)}${state.openMC===g.id?panel(g,g.by||'the seller'):''}</div>`).join('')}</div>`
@@ -1816,7 +1818,7 @@ function onboarding(){
   const s=state.obStep;
   if(s===0){screen.innerHTML=`<div class="ob">
     <div class="ob-top"><div class="ob-dots"><span class="obd on"></span><span class="obd"></span><span class="obd"></span></div></div>
-    <div class="ob-body"><img src="/icons/icon-192.png" alt="The VendU App icon" width="92" height="92" style="border-radius:22px;box-shadow:0 10px 26px rgba(90,43,224,.28);margin-bottom:26px"><div class="ob-title">Welcome to <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WMFULL}</span></div><div class="ob-text">Your campus marketplace \u2014 find & book student services, buy, sell & trade, join communities, and organize your school life. Always free.</div></div>
+    <div class="ob-body"><img src="/icons/icon-192.png" alt="The VendU App icon" width="92" height="92" style="border-radius:22px;box-shadow:0 10px 26px rgba(90,43,224,.28);margin-bottom:26px"><div class="ob-title" style="font-family:'Inter',sans-serif">Welcome to <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WMFULL}</span></div><div class="ob-text">Your campus marketplace \u2014 find & book student services, buy, sell & trade, join communities, and organize your school life. Always free.</div></div>
     <button class="ob-btn" id="obnext">Get started</button><button class="ob-back" id="obskip">I\u2019m a tester \u2014 skip \u2192</button></div>`;
     document.getElementById('obnext').onclick=()=>{state.obStep=1;render();};
     var _sk0=document.getElementById('obskip');if(_sk0)_sk0.onclick=()=>demoSkip();
