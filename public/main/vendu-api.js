@@ -42,11 +42,26 @@
           saveSession(res.session);
           return res.session.access_token;
         }
-        clearSession();
+        /* Keep the remembered sign-in on temporary refresh failures. A user
+           remains signed in until they explicitly choose Log out. */
         return null;
       })
       .catch(function () { return null; });
   }
+
+  /* Refresh long-lived sessions before their short access token expires.
+     The rotating refresh token remains in localStorage across app restarts. */
+  function keepSessionAlive() {
+    var s = session();
+    if (!s || !s.refresh_token) return;
+    var expiresAt = Number(s.expires_at || 0) * 1000;
+    if (!expiresAt || expiresAt - Date.now() < 10 * 60 * 1000) refreshSession();
+  }
+  keepSessionAlive();
+  setInterval(keepSessionAlive, 5 * 60 * 1000);
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "visible") keepSessionAlive();
+  });
 
   function request(path, body, token, retried) {
     var headers = { "Content-Type": "application/json" };

@@ -1814,7 +1814,7 @@ function onboarding(){
   const s=state.obStep;
   if(s===0){screen.innerHTML=`<div class="ob">
     <div class="ob-top"><div class="ob-dots"><span class="obd on"></span><span class="obd"></span><span class="obd"></span></div></div>
-    <div class="ob-body"><img src="/icons/icon-192.png" alt="The VendU App icon" width="92" height="92" style="border-radius:22px;box-shadow:0 10px 26px rgba(90,43,224,.28);margin-bottom:26px"><div class="ob-title welcome-title">Welcome to <span class="wordmark welcome-wordmark">${WMFULL}</span></div><div class="ob-text">Your campus marketplace \u2014 find & book student services, buy, sell & trade. Always free.</div></div>
+    <div class="ob-body"><img src="/icons/icon-192.png" alt="The VendU App icon" width="92" height="92" style="border-radius:22px;box-shadow:0 10px 26px rgba(90,43,224,.28);margin-bottom:26px"><div class="ob-title welcome-title"><span class="welcome-kicker">Welcome to</span><span class="wordmark welcome-wordmark">${WMFULL}</span></div><div class="ob-text welcome-subtitle">Campus Booking &amp; Marketplace</div></div>
     <button class="ob-btn" id="obnext">Get started</button></div>`;
     document.getElementById('obnext').onclick=()=>{state.obStep=1;render();};
     return;}
