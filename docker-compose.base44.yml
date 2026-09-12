@@ -1,0 +1,26 @@
+services:
+  web:
+    image: oven/bun:1
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: sh -c "bun install && bunx vite dev --port 3000 --host 0.0.0.0"
+    environment:
+      - PORT=3000
+      - HOST=0.0.0.0
+      # Vite >= 6.1 appends this to allowedHosts so the preview proxy is accepted
+      - __VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS
+      - BASE44_PUBLIC_HOST_SUFFIX
+      - BASE44_SANDBOX_HOST_DOMAIN
+    env_file:
+      - ./.env
+      - /run/base44/app.env
+    healthcheck:
+      test: ["CMD", "bun", "-e", "fetch('http://localhost:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
