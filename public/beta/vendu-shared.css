@@ -69,6 +69,17 @@
 .welcome-subtitle{margin-top:1px;color:var(--ink);font-family:Georgia,'Times New Roman',serif;font-size:13px;font-weight:500;line-height:1.25;letter-spacing:0}
 .headline-wordmark{display:flex!important;justify-content:center;align-items:baseline!important;width:max-content;max-width:100%;margin:10px auto 0;padding-top:.88em!important;line-height:1.1!important;white-space:nowrap}
 .headline-wordmark .gradcap{width:1em;top:0}
+.role-body{justify-content:flex-start!important;min-height:0;overflow-y:auto;padding:16px 0 8px;scrollbar-width:none}
+.role-body::-webkit-scrollbar{display:none}
+.role-icon{flex:0 0 auto;border-radius:18px;box-shadow:0 8px 22px rgba(90,43,224,.26);margin-bottom:14px}
+.ob-title.role-title{max-width:330px;margin:0 auto 8px;font-size:25px;line-height:1.18;letter-spacing:0;text-wrap:balance}
+.role-brand{white-space:nowrap;color:var(--violet)}
+.role-copy{margin:0 auto 20px;line-height:1.5;text-wrap:pretty}
+.role-body .ob-choice{flex:0 0 auto;min-width:0;padding:16px;margin-bottom:12px}
+.role-body .ob-choice>div:last-child{min-width:0}
+.role-body .obc-d{overflow-wrap:anywhere}
+.ob:has(.role-body){padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))}
+.ob:has(.role-body)+.nav,.device:has(.role-body)>.nav{display:none!important}
 .internal-account .founder{display:none!important}
 .topbar{padding:20px 18px 11px}
 .search{border-radius:999px!important;padding:7px 14px!important;box-shadow:0 4px 14px rgba(28,21,38,.09)!important}
@@ -87,6 +98,9 @@
   .locpill{max-width:42vw;padding-left:9px;padding-right:9px}
   .ob-title.welcome-title{font-size:23px}
   .ob-title .wordmark.welcome-wordmark{font-size:27px}
+  .ob-title.role-title{font-size:23px}
+  .role-copy{font-size:14px;margin-bottom:16px}
+  .role-body .ob-choice{padding:14px}
 }
 
 /* ================= native mobile layer (iOS / Android webview) ================= */
