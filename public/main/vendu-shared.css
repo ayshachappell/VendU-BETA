@@ -75,3 +75,34 @@
   .ob-title.welcome-title{font-size:23px}
   .ob-title .wordmark.welcome-wordmark{font-size:27px}
 }
+
+/* ================= native mobile layer (iOS / Android webview) ================= */
+html,body{overscroll-behavior:none;-webkit-text-size-adjust:100%;touch-action:manipulation}
+body{-webkit-user-select:none;user-select:none}
+input,textarea,select,[contenteditable="true"]{-webkit-user-select:text!important;user-select:text!important}
+#screen,.screen,.sheet,.detail-body{-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.device{max-width:393px}
+@media(max-width:439px){.device{height:100dvh;max-height:none;border-radius:0;border:0}}
+
+/* fixed bottom navigation with iOS home-indicator safe area */
+.nav{padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))!important}
+.navitem{min-height:44px;justify-content:center}
+.navadd .plus{min-width:50px;min-height:50px}
+
+/* 44px minimum touch targets */
+button,.submit,.btn,.locpill,.catpick,.choose,.tour-next,.tour-back,.tour-skip{min-height:44px}
+input:not([type=checkbox]):not([type=radio]),select{min-height:44px}
+textarea{min-height:88px}
+input,textarea,select{font-size:16px} /* stops iOS zoom-on-focus */
+.otp-box{min-height:56px}
+
+/* bottom sheets / modals slide up like native */
+@keyframes vuSheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes vuFadeIn{from{opacity:0}to{opacity:1}}
+.sheet{animation:vuSheetUp .26s cubic-bezier(.32,.72,0,1);padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))!important}
+.sheet-bg{animation:vuFadeIn .2s ease}
+
+/* AI product auto-fill */
+.aifill{display:block;width:100%;margin:2px 0 6px;border:0;border-radius:14px;background:var(--violet);color:#fff;font-family:inherit;font-size:15px;font-weight:700;padding:13px 16px;cursor:pointer}
+.aifill:disabled{background:var(--violet-soft);color:var(--violet);cursor:default}
+.ai-note{font-size:12.5px;line-height:1.5;color:var(--mist);margin:0 0 14px}
