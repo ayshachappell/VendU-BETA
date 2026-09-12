@@ -5,13 +5,13 @@ import { handleMagicLinkReturn } from "@/lib/vendu-magic-link";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "VendU Beta — Campus Marketplace" },
+      { title: "The VendU App Beta — Campus Marketplace" },
       {
         name: "description",
         content:
           "Open the VendU beta and join the campus marketplace for students at every college and trade school.",
       },
-      { property: "og:title", content: "VendU Beta — Campus Marketplace" },
+      { property: "og:title", content: "The VendU App Beta — Campus Marketplace" },
       {
         property: "og:description",
         content:

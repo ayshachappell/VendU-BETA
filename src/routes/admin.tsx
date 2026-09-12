@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
-      { title: "VendU Moderation Console" },
+      { title: "The VendU App Moderation Console" },
       { name: "description", content: "Admin-only console to review reported VendU profiles and listings." },
       { name: "robots", content: "noindex" },
-      { property: "og:title", content: "VendU Moderation Console" },
+      { property: "og:title", content: "The VendU App Moderation Console" },
       { property: "og:description", content: "Admin-only console for VendU trust & safety." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

@@ -2202,30 +2202,13 @@ function deleteAccount(){
   setTimeout(function(){location.reload();},900);
 }
 
-// The VendU App stays installable through its web-app manifest. App-shell caching is
-// permanently disabled: on every load we remove any service worker registered
-// under this build's scope and delete its caches, so a published update can
-// never be trapped behind an older installed copy.
-(function () {
-  if (!('serviceWorker' in navigator)) return;
-  function purge() {
-    navigator.serviceWorker.getRegistrations().then(function (regs) {
-      regs.forEach(function (r) {
-        var scope = (r && r.scope) || '';
-        if (scope.indexOf('/beta/') !== -1) r.unregister().catch(function () {});
-      });
-    }).catch(function () {});
-    if (window.caches && caches.keys) {
-      caches.keys().then(function (names) {
-        names.forEach(function (n) {
-          if (/^vendu-/.test(n)) caches.delete(n).catch(function () {});
-        });
-      }).catch(function () {});
-    }
-  }
-  purge();
-  window.addEventListener('pageshow', purge);
-})();
+// Network-first service worker keeps installed copies current and provides an
+// app shell if a phone briefly loses its connection.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('/beta/sw.js', { scope: '/beta/' }).catch(function () {});
+  });
+}
 </script>
 </body>
 </html>

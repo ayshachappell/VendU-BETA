@@ -5,13 +5,13 @@ import { useEffect } from "react";
 export const Route = createFileRoute("/app")({
   head: () => ({
     meta: [
-      { title: "Open VendU — Campus Marketplace App" },
+      { title: "Open The VendU App — Campus Marketplace" },
       {
         name: "description",
         content:
           "Launch the VendU app: book student vendors, buy and trade goods, and run your campus life.",
       },
-      { property: "og:title", content: "Open VendU — Campus Marketplace App" },
+      { property: "og:title", content: "Open The VendU App — Campus Marketplace" },
       {
         property: "og:description",
         content: "Launch the VendU campus marketplace app in your browser.",

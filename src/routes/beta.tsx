@@ -5,13 +5,13 @@ import { useEffect } from "react";
 export const Route = createFileRoute("/beta")({
   head: () => ({
     meta: [
-      { title: "VendU Beta — Test the Campus Marketplace" },
+      { title: "The VendU App Beta — Test the Marketplace" },
       {
         name: "description",
         content:
           "Open the VendU beta build, verify your .edu email and send feedback straight from the app.",
       },
-      { property: "og:title", content: "VendU Beta — Test the Campus Marketplace" },
+      { property: "og:title", content: "The VendU App Beta — Test the Marketplace" },
       {
         property: "og:description",
         content: "Open the VendU beta build and help test the students-only campus marketplace.",
