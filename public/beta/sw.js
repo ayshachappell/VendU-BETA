@@ -22,12 +22,14 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET" || new URL(event.request.url).origin !== self.location.origin) return;
+  const requestUrl = new URL(event.request.url);
+  const cacheKey = new Request(requestUrl.origin + requestUrl.pathname);
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        if (response.ok) caches.open(CACHE).then((cache) => cache.put(event.request, response.clone()));
+        if (response.ok) caches.open(CACHE).then((cache) => cache.put(cacheKey, response.clone()));
         return response;
       })
-      .catch(() => caches.match(event.request).then((cached) => cached || caches.match("/beta/index.html"))),
+      .catch(() => caches.match(cacheKey).then((cached) => cached || caches.match("/beta/index.html"))),
   );
 });
