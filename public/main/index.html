@@ -932,6 +932,7 @@ function applyAccount(email){
   state.tester=false;
   if((state.isCEO||state.isRealStudent)&&state.demoContent){state.gallery=[];state.services=[];state.socials=[];state.pays=[];state.demoContent=false;}
   if(state.isCEO){state.isFounder=false;}
+  try{document.body.classList.toggle('internal-account',!!state.isCEO);}catch(e){}
   if(state.isRealStudent||state.isCEO)creditReferral();
   loadReferrals();syncReferralsFromServer();syncServerStats();
   var cc=campusByDomain(email||'');if(state.isCEO){state.campus=campusById('fvsu');try{localStorage.removeItem(CAMPUS_PREF_KEY);localStorage.removeItem('vendu_campus_confirmed');}catch(e){}applyCampusTheme();}else{if(cc)state.campus=cc;if(cc){applyCampusTheme();}var _dom=String(email||'').split('@')[1]||'';if(_dom)joinCampus(_dom,null,function(c,known){try{if(!known&&!localStorage.getItem('vendu_campus_confirmed'))setTimeout(function(){openCampusPick();},700);}catch(e){}});}
