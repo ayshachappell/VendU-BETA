@@ -61,7 +61,7 @@
 .welcome-icon{margin-bottom:12px!important}
 .ob-title.welcome-title{display:flex;flex-direction:column;align-items:center;margin-bottom:4px;font-family:Georgia,'Times New Roman',serif;font-size:25px;font-weight:400;line-height:1.02;letter-spacing:0;color:var(--ink);overflow:visible}
 .welcome-kicker{display:block;position:relative;z-index:2;font:400 23px/1.05 Georgia,'Times New Roman',serif}
-.ob-title .wordmark.welcome-wordmark{display:inline-flex;align-items:baseline;position:relative;font-family:Georgia,'Times New Roman',serif;font-size:29px;font-weight:400;line-height:1.08;letter-spacing:0;vertical-align:baseline;cursor:default;gap:4px;padding-top:4px;white-space:nowrap;overflow:visible}
+.ob-title .wordmark.welcome-wordmark{display:inline-flex;align-items:baseline;position:relative;font-family:Georgia,'Times New Roman',serif;font-size:29px;font-weight:400;line-height:1.08;letter-spacing:0;vertical-align:baseline;cursor:default;gap:4px;margin-top:12px;padding-top:8px;white-space:nowrap;overflow:visible}
 .ob-title .wordmark.welcome-wordmark .wm-pre,.ob-title .wordmark.welcome-wordmark .wm-post{font-family:inherit;font-size:1em;font-weight:400;letter-spacing:0;color:var(--ink)}
 .ob-title .wordmark.welcome-wordmark .u{font-family:Georgia,'Times New Roman',serif;font-weight:700}
 .ob-title .wordmark.welcome-wordmark .gradcap{width:1.06em;height:auto;top:-.42em}
