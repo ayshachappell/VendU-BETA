@@ -5,6 +5,9 @@ import RAW from "@/data/us-schools.json";
 
 export type School = { n: string; d: string[]; s: string | null };
 
+export const INTERNAL_COMPANY_DOMAIN = "integroservicegroup.com";
+export const INTERNAL_DEFAULT_CAMPUS_DOMAIN = "fvsu.edu";
+
 const SCHOOLS = RAW as School[];
 
 /** Built once per worker instance and reused (the dataset is static). */
@@ -60,6 +63,13 @@ export function canonicalDomain(domain: string): string {
   return parts.join(".");
 }
 
+export function campusDomainForAccount(rawDomain: string): string {
+  const domain = normalizeDomain(rawDomain);
+  if (!domain) throw new Error("Invalid campus domain");
+  if (domain === INTERNAL_COMPANY_DOMAIN) return INTERNAL_DEFAULT_CAMPUS_DOMAIN;
+  return canonicalDomain(domain);
+}
+
 
 /** mercer.edu -> "Mercer" when the dataset has no entry. */
 export function prettyFromDomain(domain: string): string {
@@ -111,7 +121,7 @@ export type Campus = {
 /** Join the campus for this domain, creating it the first time anyone from
  *  that school verifies. Guarantees every valid .edu works. */
 export async function ensureCampus(rawDomain: string): Promise<Campus> {
-  const domain = canonicalDomain(rawDomain);
+  const domain = campusDomainForAccount(rawDomain);
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data: existing } = await supabaseAdmin
     .from("campuses")
@@ -121,6 +131,10 @@ export async function ensureCampus(rawDomain: string): Promise<Campus> {
 
   const school = lookupSchool(domain);
   if (existing) return { ...existing, known: !!school };
+
+  if (!school && !domain.endsWith(".edu")) {
+    throw new Error("Campus accounts require a valid .edu domain");
+  }
 
   const row = {
     domain,

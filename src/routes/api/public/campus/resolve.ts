@@ -18,7 +18,12 @@ export const Route = createFileRoute("/api/public/campus/resolve")({
         const domain = normalizeDomain(body["domain"] ?? body["email"]);
         if (!domain) return json({ ok: false, message: "Need a school email domain." }, 400);
 
-        let campus = await ensureCampus(domain);
+        let campus;
+        try {
+          campus = await ensureCampus(domain);
+        } catch {
+          return json({ ok: false, message: "Choose a valid U.S. school or use a .edu email." }, 400);
+        }
 
         const name = typeof body["display_name"] === "string" ? body["display_name"] : undefined;
         const mascot = typeof body["mascot"] === "string" ? body["mascot"] : undefined;

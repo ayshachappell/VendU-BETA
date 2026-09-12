@@ -85,6 +85,9 @@ export const Route = createFileRoute("/api/public/community/activity")({
             "";
           const domain = rawDomain ? canonicalDomain(rawDomain) : "";
           if (!domain) return json({ ok: false, message: "Missing school." }, 400);
+          if (!domain.endsWith(".edu")) {
+            return json({ ok: false, message: "Founder standings are only available for school campuses." }, 400);
+          }
           const myCode = str(raw.refCode, 64);
 
           const { data } = await supabaseAdmin

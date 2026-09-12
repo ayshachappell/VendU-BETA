@@ -1,6 +1,6 @@
 {
-  "name": "VendU — Campus Marketplace",
-  "short_name": "VendU",
+  "name": "The VendU App — Campus Marketplace",
+  "short_name": "The VendU App",
   "description": "Sell your stuff, book a service, get paid. The campus marketplace for students at every college and trade school.",
   "start_url": "/main/index.html",
   "scope": "/main/",

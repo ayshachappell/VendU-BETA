@@ -933,7 +933,7 @@ function applyAccount(email){
   if(state.isCEO){state.isFounder=false;}
   if(state.isRealStudent||state.isCEO)creditReferral();
   loadReferrals();syncReferralsFromServer();syncServerStats();
-  var cc=campusByDomain(email||'');if(cc)state.campus=cc;if(cc){applyCampusTheme();}var _dom=String(email||'').split('@')[1]||'';if(_dom)joinCampus(_dom,null,function(c,known){/* live.mercer.edu -> Mercer University; only ask when we truly can't tell. */try{if(!known&&!localStorage.getItem('vendu_campus_confirmed'))setTimeout(function(){openCampusPick();},700);}catch(e){}});
+  var cc=campusByDomain(email||'');if(state.isCEO){state.campus=campusById('fvsu');try{localStorage.removeItem(CAMPUS_PREF_KEY);localStorage.removeItem('vendu_campus_confirmed');}catch(e){}applyCampusTheme();}else{if(cc)state.campus=cc;if(cc){applyCampusTheme();}var _dom=String(email||'').split('@')[1]||'';if(_dom)joinCampus(_dom,null,function(c,known){try{if(!known&&!localStorage.getItem('vendu_campus_confirmed'))setTimeout(function(){openCampusPick();},700);}catch(e){}});}
   if(typeof refreshDemo==='function')refreshDemo();
 }
 
@@ -954,6 +954,7 @@ function syncReferralsFromServer(){try{if(!window.VendU||!VendU.referralCount||!
 function schoolDomainOf(){var e=String(state.acctEmail||state.eduEmail||'').toLowerCase();var d=e.split('@')[1]||'';if(d)return d;return (state.campus&&state.campus.domain)||'';}
 function syncFounders(){
   try{
+    if(state.isCEO)return;
     if(!window.VendU||!VendU.founderStats)return;
     var dom=schoolDomainOf();if(!dom)return;
     if(!state.isRealStudent&&!state.isCEO)return;
@@ -1009,13 +1010,13 @@ try{var _rp=new URL(location.href).searchParams.get('ref');if(_rp)localStorage.s
 function accountBadge(){return state.isCEO?'<span class="ceopill">\u2605 CEO</span>':(state.isFounder&&state.isRealStudent?'<span class="founderpill">\u{1F393} Founder</span>':'');}
 function doLogout(){try{VendU.signOut();}catch(e){}try{localStorage.removeItem('vendu_return_build');}catch(e){}location.reload();}
 
-function founderBanner(){if(FOUNDERS>=FOUNDER_CAP)return '';const left=FOUNDER_CAP-FOUNDERS;return `<div class="founder"><span class="em">🎓</span><div>Only <b>${left} founder spot${left>1?'s':''}</b> left at ${CAMP()}.</div></div>`;}
+function founderBanner(){if(state.isCEO||FOUNDERS>=FOUNDER_CAP)return '';const left=FOUNDER_CAP-FOUNDERS;return `<div class="founder"><span class="em">🎓</span><div>Only <b>${left} founder spot${left>1?'s':''}</b> left at ${CAMP()}.</div></div>`;}
 
 function home(){
   screen.innerHTML=`
-    <div class="topbar"><div class="brandrow"><div class="wordmark header-logo go" id="logo">${WMFULL}</div><div class="header-actions">${bellHTML()}<div class="locpill" id="loc" onclick="openCampusPick()"><span class="dot"></span><span class="locpill-label">${CAMPPILL()}</span></div></div></div>
+    <div class="topbar"><div class="brandrow"><div class="wordmark header-logo go" id="logo">${WMFULL}<span class="beta-mark">BETA</span></div><div class="header-actions">${bellHTML()}${state.isCEO?'':`<div class="locpill" id="loc" onclick="openCampusPick()"><span class="dot"></span><span class="locpill-label">${CAMPPILL()}</span></div>`}</div></div>
       <div class="search">${icon('<circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/>')}<input id="q" placeholder="${state.home==='browse'?'Search hustles, services, people…':'Search The VendU App…'}" value="${state.q}"></div></div>
-    <div class="campus-wrap"><div class="campus-bg">${wmk()}</div><div class="campus-content">
+    <div class="campus-wrap ${state.isCEO?'internal-account':''}"><div class="campus-bg">${wmk()}</div><div class="campus-content">
       <div class="seg"><div class="${state.home==='feed'?'on':''}" data-home="feed">Feed</div><div class="${state.home==='browse'?'on':''}" data-home="browse">Browse</div><div class="${state.home==='events'?'on':''}" data-home="events">Events</div></div>
       <div id="homebody"></div>
     </div></div>`;
@@ -1835,13 +1836,13 @@ function onboarding(){
   const s=state.obStep;
   if(s===0){screen.innerHTML=`<div class="ob">
     <div class="ob-top"><div class="ob-dots"><span class="obd on"></span><span class="obd"></span><span class="obd"></span></div></div>
-    <div class="ob-body welcome-body"><img class="welcome-icon" src="/icons/icon-192.png" alt="The VendU App icon" width="92" height="92" style="border-radius:22px;box-shadow:0 10px 26px rgba(90,43,224,.28);margin-bottom:26px"><div class="ob-title welcome-title"><span class="welcome-kicker">Welcome to</span><span class="wordmark welcome-wordmark">${WMFULL}</span></div><div class="ob-text welcome-subtitle">Campus Booking &amp; Marketplace</div></div>
+    <div class="ob-body welcome-body"><img class="welcome-icon" src="/icons/icon-192.png" alt="The VendU App icon" width="92" height="92" style="border-radius:22px;box-shadow:0 10px 26px rgba(90,43,224,.28);margin-bottom:26px"><div class="ob-title welcome-title"><span class="welcome-kicker">Welcome to</span><span class="wordmark welcome-wordmark">${WMFULL}</span></div><div class="ob-text welcome-subtitle">Sell your stuff, book a service, get paid.</div></div>
     <button class="ob-btn" id="obnext">Get started</button></div>`;
     document.getElementById('obnext').onclick=()=>{state.obStep=1;render();};
     return;}
   if(s===1){screen.innerHTML=`<div class="ob">
     <div class="ob-top"><div class="ob-dots"><span class="obd on"></span><span class="obd on"></span><span class="obd"></span></div></div>
-    <div class="ob-body" style="justify-content:flex-start;padding-top:24px"><img src="/icons/icon-192.png" alt="The VendU App logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(90,43,224,.26);margin-bottom:14px"><div class="ob-title" style="margin-bottom:6px">How will you use <span class="wordmark" style="display:inline-flex;font-size:inherit;font-weight:800;letter-spacing:-.02em;vertical-align:baseline;cursor:default">${WMFULL}</span>?</div><div class="ob-text" style="margin-bottom:24px">Everyone gets a free account. Becoming a vendor is completely optional \u2014 you can switch it on or off anytime.</div>
+    <div class="ob-body" style="justify-content:flex-start;padding-top:24px"><img src="/icons/icon-192.png" alt="The VendU App logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(90,43,224,.26);margin-bottom:14px"><div class="ob-title" style="margin-bottom:6px">How will you use<span class="wordmark headline-wordmark">${WMFULL}</span>?</div><div class="ob-text" style="margin-bottom:24px">Everyone gets a free account. Becoming a vendor is completely optional \u2014 you can switch it on or off anytime.</div>
       <div class="ob-choice" data-ut="regular"><div class="obc-em">\u{1F64B}\u{1F3FF}\u200D\u2640\uFE0F</div><div><div class="obc-t">Just browsing</div><div class="obc-d">Book vendors, buy, sell & barter items, message & comment. Always free.</div></div></div>
       <div class="ob-choice" data-ut="vendor"><div class="obc-em">\u{1F6CD}\uFE0F</div><div><div class="obc-t">I\u2019m a vendor</div><div class="obc-d">I offer a service and want a storefront with services, bookings & payments. Free \u2014 optional, and you can turn it off anytime.</div></div></div>
     </div><button class="ob-back" id="obback1">\u2039 Back</button></div>`;
