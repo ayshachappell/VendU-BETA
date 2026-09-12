@@ -49,7 +49,7 @@
 
 /* ---- focused welcome typography + collision-safe primary header (v10) ---- */
 .brandrow{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;flex-wrap:nowrap}
-.header-logo{flex:0 1 auto;min-width:0;font-family:'Inter',system-ui,sans-serif;font-size:20px;font-weight:800;line-height:1.15;letter-spacing:0;gap:4px;padding-top:.48em;white-space:nowrap}
+.wordmark.header-logo{flex:0 1 auto;min-width:0;font-family:'Inter',system-ui,sans-serif;font-size:20px;font-weight:800;line-height:1.15;letter-spacing:0;gap:4px;padding-top:.48em;white-space:nowrap}
 .header-logo .wm-pre,.header-logo .wm-post{font-family:inherit;font-size:.6em;font-weight:600;letter-spacing:0}
 .header-logo .gradcap{width:1.28em;height:auto;top:-.62em}
 .header-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;min-width:0;flex:1 1 auto}
@@ -69,7 +69,7 @@
 @media(max-width:370px){
   .topbar{padding-left:15px;padding-right:15px}
   .brandrow{gap:8px}
-  .header-logo{font-size:18px}
+  .wordmark.header-logo{font-size:18px}
   .header-actions{gap:5px}
   .locpill{max-width:42vw;padding-left:9px;padding-right:9px}
   .ob-title.welcome-title{font-size:23px}
