@@ -1,24 +1,35 @@
-// One-release cleanup worker. It replaces every older VendU Beta worker,
-// removes only this build's app-shell caches and then
-// permanently unregisters itself. Installability remains manifest-based.
-function isBetaAppCache(name) {
-  return /^vendu-beta-v\d+$/.test(name);
-}
+const CACHE = "vendu-beta-shell-v1";
+const SHELL = [
+  "/beta/index.html",
+  "/beta/vendu-shared.css?v=mobile1",
+  "/beta/vendu-api.js?v=13",
+  "/beta/vendu-tour.js?v=21",
+  "/icons/icon-192.png",
+  "/icons/icon-512.png",
+];
 
-self.addEventListener('install', () => self.skipWaiting());
+self.addEventListener("install", (event) => {
+  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)).then(() => self.skipWaiting()));
+});
 
-self.addEventListener('activate', (event) =>
+self.addEventListener("activate", (event) => {
   event.waitUntil(
-    (async () => {
-      try {
-        const cacheNames = await caches.keys();
-        await Promise.allSettled(
-          cacheNames.filter(isBetaAppCache).map((name) => caches.delete(name)),
-        );
-        await self.clients.claim();
-      } finally {
-        await self.registration.unregister();
-      }
-    })(),
-  ),
-);
+    caches.keys()
+      .then((names) => Promise.all(names.filter((name) => name.startsWith("vendu-beta-") && name !== CACHE).map((name) => caches.delete(name))))
+      .then(() => self.clients.claim()),
+  );
+});
+
+self.addEventListener("fetch", (event) => {
+  if (event.request.method !== "GET" || new URL(event.request.url).origin !== self.location.origin) return;
+  const requestUrl = new URL(event.request.url);
+  const cacheKey = new Request(requestUrl.origin + requestUrl.pathname);
+  event.respondWith(
+    fetch(event.request)
+      .then((response) => {
+        if (response.ok) caches.open(CACHE).then((cache) => cache.put(cacheKey, response.clone()));
+        return response;
+      })
+      .catch(() => caches.match(cacheKey).then((cached) => cached || caches.match("/beta/index.html"))),
+  );
+});
