@@ -1595,8 +1595,12 @@ function miniForm(mode){
   const photoBox=`<div class="photo-up"><div class="up2" style="${state.newPhoto?`background-image:url(${state.newPhoto})`:''}">${state.newPhoto?'':icon('<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',24)}</div><div style="font-size:13px;color:var(--mist)">Add a photo (optional)</div></div>`;
   let title='',body='';
   if(mode==='item'){title='Sell or trade an item';body=`${photoBox}
+    <button class="aifill" id="aifill" type="button"${state.newPhoto?'':' disabled'}>\u2728 Auto-fill with AI${state.newPhoto?'':' \u2014 add a photo first'}</button>
+    <div class="ai-note" id="ainote">AI reads your photo and drafts the title, category, description and a fair price. Check it before you post.</div>
     <div class="field"><label>Item name</label><input id="f1" placeholder="e.g. Mini fridge"></div>
     <div class="field"><label>Price</label><input id="f2" placeholder="$25"></div>
+    <div class="field"><label>Category</label><input id="f4" placeholder="e.g. Dorm & home"></div>
+    <div class="field"><label>Description</label><textarea id="f3" placeholder="Condition, size, why you're selling it"></textarea></div>
     <div class="field"><label>Type</label><div class="catgrid">${['Sell','Trade or sell','Move-out'].map((t,i)=>`<div class="catpick ${i===0?'on':''}" data-tag="${t}">${t}</div>`).join('')}</div></div>`;}
   else if(mode==='request'){title='Post a request or barter';body=`${photoBox}
     <div class="field"><label>What do you need?</label><textarea id="f1" placeholder="e.g. ISO a photographer for grad photos — can pay ~$100"></textarea></div>
@@ -1609,12 +1613,29 @@ function miniForm(mode){
     <div class="form-wrap enter"><div class="form-h">${title}</div>${body}<button class="submit" id="postmini">Post it</button></div>`;
   document.getElementById('tochooser').onclick=()=>{state.addMode=null;state.newPhoto=null;render();};
   const up=screen.querySelector('.up2');if(up)up.onclick=()=>cphoto.click();
+  var aib=document.getElementById('aifill');
+  if(aib)aib.onclick=function(){
+    if(!state.newPhoto){toast('Add a photo of the item first \ud83d\udcf8');return;}
+    var note=document.getElementById('ainote');
+    aib.disabled=true;aib.textContent='\u2728 Reading your photo\u2026';
+    fetch('/api/public/ai/autofill',{method:'POST',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:state.newPhoto})})
+      .then(function(r){return r.json();})
+      .catch(function(){return {ok:false,message:'No connection. Try again.'};})
+      .then(function(res){
+        aib.disabled=false;aib.textContent='\u2728 Auto-fill with AI';
+        if(!res||!res.ok){if(note)note.textContent=(res&&res.message)||'Auto-fill didn\u2019t work. Fill it in yourself.';return;}
+        var set=function(id,val){var e=document.getElementById(id);if(e&&val&&!e.value.trim())e.value=val;};
+        set('f1',res.title);set('f2',res.price);set('f4',res.category);set('f3',res.description);
+        if(note)note.textContent=res.confidence==='low'?'AI wasn\u2019t sure about this photo \u2014 double-check every field before posting.':'Drafted by AI \u2014 edit anything before you post.';
+        toast('Auto-filled \u2728');
+      });
+  };
   let tag=mode==='item'?'Sell':(mode==='request'?'0':'');
   screen.querySelectorAll('[data-tag]').forEach(el=>el.onclick=()=>{screen.querySelectorAll('[data-tag]').forEach(x=>x.classList.remove('on'));el.classList.add('on');tag=el.dataset.tag;});
   document.getElementById('postmini').onclick=()=>{
     const v=id=>{const e=document.getElementById(id);return e?e.value.trim():'';};
     const rc=()=>Math.floor(Math.random()*12);
-    if(mode==='item'){GOODS.unshift({name:v('f1')||'New item',price:v('f2')||'$—',tag:tag,img:state.newPhoto,emoji:'📦',c:rc(),by:(state.vname||'You'),bi:((state.vname||'Y').trim()[0]||'Y').toUpperCase(),bc:0,uc:state.themeColor,mine:true,id:'mp'+(idc++),campus:state.campus.id});state.tab='market';state.mkt='goods';}
+    if(mode==='item'){GOODS.unshift({name:v('f1')||'New item',price:v('f2')||'$—',desc:v('f3'),cat:v('f4'),tag:tag,img:state.newPhoto,emoji:'📦',c:rc(),by:(state.vname||'You'),bi:((state.vname||'Y').trim()[0]||'Y').toUpperCase(),bc:0,uc:state.themeColor,mine:true,id:'mp'+(idc++),campus:state.campus.id});state.tab='market';state.mkt='goods';}
     else if(mode==='request'){REQUESTS.unshift({img:state.newPhoto,who:(state.vname||'You'),in:((state.vname||'Y').trim()[0]||'Y').toUpperCase(),c:rc(),uc:state.themeColor,mine:true,id:'mp'+(idc++),barter:tag==='1'?1:0,txt:v('f1')||'New request',campus:state.campus.id});state.tab='market';state.mkt='requests';}
     else{let ts=Date.now()+2*86400000;const d=v('f2'),t=v('f3');if(d){const p=new Date(d+'T'+(t||'12:00')).getTime();if(!isNaN(p))ts=p;}state.events.unshift({title:v('f1')||'New event',loc:v('f4')||'Campus',ts:ts,img:state.newPhoto,tag:'New',c:rc(),mine:true,id:'mp'+(idc++),by:(state.vname||'You'),campus:state.campus.id});state.tab='home';state.home='events';}
     state.addMode=null;state.newPhoto=null;render();toast('Posted to The VendU App! 🎉');
