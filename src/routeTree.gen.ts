@@ -15,6 +15,7 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as BetaRouteImport } from './routes/beta'
 import { Route as ApiPublicProfileRouteImport } from './routes/api/public/profile'
 import { Route as ApiPublicReportRouteImport } from './routes/api/public/report'
+import { Route as ApiPublicVendorRouteImport } from './routes/api/public/vendor'
 import { Route as ApiPublicAccountDeleteRouteImport } from './routes/api/public/account/delete'
 import { Route as ApiPublicAdminModerateRouteImport } from './routes/api/public/admin/moderate'
 import { Route as ApiPublicCampusEventsRouteImport } from './routes/api/public/campus/events'
@@ -59,6 +60,11 @@ const ApiPublicProfileRoute = ApiPublicProfileRouteImport.update({
 const ApiPublicReportRoute = ApiPublicReportRouteImport.update({
   id: '/api/public/report',
   path: '/api/public/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicVendorRoute = ApiPublicVendorRouteImport.update({
+  id: '/api/public/vendor',
+  path: '/api/public/vendor',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicAccountDeleteRoute = ApiPublicAccountDeleteRouteImport.update({
@@ -146,6 +152,7 @@ export interface FileRoutesByFullPath {
   '/beta': typeof BetaRoute
   '/api/public/profile': typeof ApiPublicProfileRoute
   '/api/public/report': typeof ApiPublicReportRoute
+  '/api/public/vendor': typeof ApiPublicVendorRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
   '/api/public/admin/moderate': typeof ApiPublicAdminModerateRoute
   '/api/public/campus/events': typeof ApiPublicCampusEventsRoute
@@ -169,6 +176,7 @@ export interface FileRoutesByTo {
   '/beta': typeof BetaRoute
   '/api/public/profile': typeof ApiPublicProfileRoute
   '/api/public/report': typeof ApiPublicReportRoute
+  '/api/public/vendor': typeof ApiPublicVendorRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
   '/api/public/admin/moderate': typeof ApiPublicAdminModerateRoute
   '/api/public/campus/events': typeof ApiPublicCampusEventsRoute
@@ -193,6 +201,7 @@ export interface FileRoutesById {
   '/beta': typeof BetaRoute
   '/api/public/profile': typeof ApiPublicProfileRoute
   '/api/public/report': typeof ApiPublicReportRoute
+  '/api/public/vendor': typeof ApiPublicVendorRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
   '/api/public/admin/moderate': typeof ApiPublicAdminModerateRoute
   '/api/public/campus/events': typeof ApiPublicCampusEventsRoute
@@ -218,6 +227,7 @@ export interface FileRouteTypes {
     | '/beta'
     | '/api/public/profile'
     | '/api/public/report'
+    | '/api/public/vendor'
     | '/api/public/account/delete'
     | '/api/public/admin/moderate'
     | '/api/public/campus/events'
@@ -241,6 +251,7 @@ export interface FileRouteTypes {
     | '/beta'
     | '/api/public/profile'
     | '/api/public/report'
+    | '/api/public/vendor'
     | '/api/public/account/delete'
     | '/api/public/admin/moderate'
     | '/api/public/campus/events'
@@ -264,6 +275,7 @@ export interface FileRouteTypes {
     | '/beta'
     | '/api/public/profile'
     | '/api/public/report'
+    | '/api/public/vendor'
     | '/api/public/account/delete'
     | '/api/public/admin/moderate'
     | '/api/public/campus/events'
@@ -288,6 +300,7 @@ export interface RootRouteChildren {
   BetaRoute: typeof BetaRoute
   ApiPublicProfileRoute: typeof ApiPublicProfileRoute
   ApiPublicReportRoute: typeof ApiPublicReportRoute
+  ApiPublicVendorRoute: typeof ApiPublicVendorRoute
   ApiPublicAccountDeleteRoute: typeof ApiPublicAccountDeleteRoute
   ApiPublicAdminModerateRoute: typeof ApiPublicAdminModerateRoute
   ApiPublicCampusEventsRoute: typeof ApiPublicCampusEventsRoute
@@ -347,6 +360,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/report'
       fullPath: '/api/public/report'
       preLoaderRoute: typeof ApiPublicReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/vendor': {
+      id: '/api/public/vendor'
+      path: '/api/public/vendor'
+      fullPath: '/api/public/vendor'
+      preLoaderRoute: typeof ApiPublicVendorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/account/delete': {
@@ -464,6 +484,7 @@ const rootRouteChildren: RootRouteChildren = {
   BetaRoute: BetaRoute,
   ApiPublicProfileRoute: ApiPublicProfileRoute,
   ApiPublicReportRoute: ApiPublicReportRoute,
+  ApiPublicVendorRoute: ApiPublicVendorRoute,
   ApiPublicAccountDeleteRoute: ApiPublicAccountDeleteRoute,
   ApiPublicAdminModerateRoute: ApiPublicAdminModerateRoute,
   ApiPublicCampusEventsRoute: ApiPublicCampusEventsRoute,

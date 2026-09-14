@@ -171,7 +171,7 @@ export const Route = createFileRoute("/api/public/vendor")({
 
           const { data: saved, error } = await supabaseAdmin
             .from("vendors")
-            .upsert(row, { onConflict: "owner_email,build" })
+            .upsert(row as never, { onConflict: "owner_email,build" })
             .select("*")
             .maybeSingle();
           if (error || !saved)
