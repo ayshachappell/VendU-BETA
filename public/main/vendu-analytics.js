@@ -9,7 +9,7 @@
 (function () {
   var W = (window.VendU = window.VendU || {});
   var CKEY = "vendu_privacy_v1";
-  var GA_ID = window.VENDU_GA_ID || ""; /* set once Google Analytics is connected */
+  var GA_ID = window.VENDU_GA_ID || "G-6Y989TQH7D"; /* set once Google Analytics is connected */
 
   /* Countries/regions that require opt-in consent before analytics cookies. */
   var CONSENT_COUNTRIES = ("AT BE BG HR CY CZ DK EE FI FR DE GR HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE " +
