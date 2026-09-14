@@ -1,4 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { requireStudent } from "@/lib/edu-verification.server";
+
+/** Per-student daily cap so the paid AI gateway can't be drained. */
+const DAILY_AUTOFILL_CAP = 40;
 
 /** AI product auto-fill: a seller's photo becomes a title, category, description and price. */
 const CATEGORIES = [
