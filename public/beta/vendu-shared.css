@@ -162,3 +162,14 @@ input,textarea,select{font-size:16px} /* stops iOS zoom-on-focus */
 /* ---- pull-to-refresh indicator ---- */
 .ptr{position:fixed;top:6px;left:50%;transform:translate(-50%,0);z-index:8000;background:var(--card,#fff);color:var(--mist,#6B6480);border:1px solid var(--line,#e6e1d8);border-radius:100px;padding:7px 14px;font:700 12px/1 'Inter',system-ui,sans-serif;box-shadow:0 6px 18px rgba(27,22,38,.16);opacity:0;pointer-events:none;transition:opacity .15s ease}
 .ptr.on{opacity:1}
+
+/* --- profile / brand / market refinements --- */
+.viewbtn{width:100%;white-space:nowrap}
+.viewbtn .viewwm,.viewwm{white-space:nowrap;display:inline-flex;align-items:baseline}
+.viewwm .u{position:relative}
+.viewwm .gradcap{position:absolute;left:50%;top:-8px;transform:translateX(-50%);width:20px;height:auto;overflow:visible}
+.brandu{color:var(--violet,#5A2BE0)}
+.store-name .brandu{color:var(--violet,#5A2BE0)}
+.mktseg{overflow:visible}
+.mktseg .hchip{flex:1 0 auto;text-align:center;padding-left:18px;padding-right:18px}
+.p-moreC{font-size:12.5px;font-weight:600;color:var(--mist,#6b6580);padding:4px 2px 2px;cursor:pointer}
