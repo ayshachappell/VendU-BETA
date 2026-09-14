@@ -13,3 +13,4 @@
 - [x] Complete mobile, tester, session, and installability verification
 
 - [ ] Make events live in both builds: persist manual events and interest counts, notify event creators, and merge configured school calendars
+- [x] Align event actions, header branding/order, profile cap, storefront photos, and pasted account links in both builds
