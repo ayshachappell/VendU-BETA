@@ -171,7 +171,10 @@ export async function recordStudent(email: string, build: Build, gradYear: strin
   await supabaseAdmin.from("students").upsert(
     {
       email,
-      school_domain: isCeoEmail(email) ? INTERNAL_DEFAULT_CAMPUS_DOMAIN : schoolDomain(email),
+      school_domain:
+        isCeoEmail(email) || isTesterEmail(email)
+          ? INTERNAL_DEFAULT_CAMPUS_DOMAIN
+          : schoolDomain(email),
       grad_year: gradYear,
       build,
       verified_at: now,
