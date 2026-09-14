@@ -1854,6 +1854,7 @@ function bookingSettings(){
 }
 
 
+function demoSkip(){state.eduDone=true;state.onboarded=true;state.userType='vendor';state.isSeller=true;state.subscribed=true;state.agree1=true;state.agree2=true;state.agree3=true;state.formCat='Beauty';if(!state.services.length)state.services=[['Signature service','$25'],['Add-on','$10']];if(!state.gallery.length)state.gallery=[pic('#5A2BE0','#8a5bf0','\u2728','Your work'),pic('#0e9f6e','#0891b2','\ud83d\udcf7','Your work'),pic('#c026d3','#e11d48','\ud83c\udfa8','Your work')];if(!state.socials.length)state.socials=[{type:'Instagram',url:'instagram.com/you'},{type:'TikTok',url:'tiktok.com/@you'}];if(!state.pays.length)state.pays=[{app:'Cash App',handle:'$you'},{app:'Venmo',handle:'@you'}];state.demoContent=true;state.tab='home';state.tester=true;state.isCEO=false;state.isRealStudent=false;if(typeof refreshDemo==='function')refreshDemo();render();if(window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour(false);},350);}
 function finishOnboarding(){state.onboarded=true;state.tab='home';state.obStep=0;try{document.querySelectorAll('#nav .navitem').forEach(function(n){n.classList.toggle('on',n.dataset.tab==='home');});}catch(e){}render();}
 function onboarding(){
   /* Already verified (e.g. returning from the emailed sign-in link): drop straight
