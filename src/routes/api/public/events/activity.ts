@@ -125,6 +125,25 @@ export const Route = createFileRoute("/api/public/events/activity")({
           return json({ ok: true, id: data.id });
         }
 
+        if (action === "notifications") {
+          const { data } = await supabaseAdmin
+            .from("event_notifications")
+            .select("id,event_id,message,read_at,created_at")
+            .eq("recipient_email", email)
+            .order("created_at", { ascending: false })
+            .limit(50);
+          return json({ ok: true, notifications: data ?? [] });
+        }
+
+        if (action === "markNotificationsRead") {
+          await supabaseAdmin
+            .from("event_notifications")
+            .update({ read_at: new Date().toISOString() })
+            .eq("recipient_email", email)
+            .is("read_at", null);
+          return json({ ok: true });
+        }
+
         const eventId = str(raw.eventId, 64);
         if (!/^[0-9a-f-]{36}$/i.test(eventId))
           return json({ ok: false, message: "Invalid event." }, 400);
@@ -181,25 +200,6 @@ export const Route = createFileRoute("/api/public/events/activity")({
             .select("id", { count: "exact", head: true })
             .eq("event_id", eventId);
           return json({ ok: true, interested, count: count ?? 0 });
-        }
-
-        if (action === "notifications") {
-          const { data } = await supabaseAdmin
-            .from("event_notifications")
-            .select("id,event_id,message,read_at,created_at")
-            .eq("recipient_email", email)
-            .order("created_at", { ascending: false })
-            .limit(50);
-          return json({ ok: true, notifications: data ?? [] });
-        }
-
-        if (action === "markNotificationsRead") {
-          await supabaseAdmin
-            .from("event_notifications")
-            .update({ read_at: new Date().toISOString() })
-            .eq("recipient_email", email)
-            .is("read_at", null);
-          return json({ ok: true });
         }
 
         return json({ ok: false, message: "Unknown action." }, 400);
