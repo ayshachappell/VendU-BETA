@@ -295,4 +295,70 @@
     return authPost("/api/public/events/activity", payload || {});
   };
 
+  /* ---- real profiles (saved on the server, follow you to any device) ---- */
+  W.myProfile = function () { return authPost("/api/public/profile", { action: "me" }); };
+  W.saveProfile = function (patch) {
+    var body = patch || {};
+    body.action = "save";
+    return authPost("/api/public/profile", body);
+  };
+  W.getProfile = function (email) { return post("/api/public/profile", { action: "get", email: email }); };
+  W.presencePing = function () { return authPost("/api/public/profile", { action: "ping" }); };
+
+  /* ---- real storefronts ---- */
+  W.listVendors = function (domain, build) {
+    return post("/api/public/vendor", { action: "list", domain: domain, build: build });
+  };
+  W.getVendor = function (id, build) {
+    return post("/api/public/vendor", { action: "get", id: id, build: build });
+  };
+  W.myVendor = function (build) {
+    return authPost("/api/public/vendor", { action: "mine", build: build });
+  };
+  W.publishVendor = function (vendor, build) {
+    var body = vendor || {};
+    body.action = "publish";
+    body.build = build;
+    return authPost("/api/public/vendor", body);
+  };
+
+  /* ---- real feed: posts, likes, comments ---- */
+  W.listFeed = function (domain, build) {
+    var s = W.student();
+    return post("/api/public/feed", {
+      action: "list", domain: domain, build: build, me: (s && s.email) || "",
+    });
+  };
+  W.createPost = function (post_, build) {
+    var body = post_ || {};
+    body.action = "post";
+    body.build = build;
+    return authPost("/api/public/feed", body);
+  };
+  W.likePost = function (postId, build) {
+    return authPost("/api/public/feed", { action: "like", postId: postId, build: build });
+  };
+  W.commentPost = function (postId, text, build) {
+    return authPost("/api/public/feed", { action: "comment", postId: postId, body: text, build: build });
+  };
+  W.deletePost = function (postId, build) {
+    return authPost("/api/public/feed", { action: "delete", postId: postId, build: build });
+  };
+  W.markSold = function (postId, sold, build) {
+    return authPost("/api/public/feed", { action: "sold", postId: postId, sold: sold, build: build });
+  };
+
+  /* ---- referrals: one permanent code per account ---- */
+  W.referralMe = function (build) {
+    return authPost("/api/public/referral", { action: "me", build: build });
+  };
+  W.creditReferral = function (code, build) {
+    return authPost("/api/public/referral", { action: "credit", code: code, build: build });
+  };
+
+  /* Keep the green "using the app now" dot honest. */
+  setInterval(function () {
+    if (document.visibilityState === "visible" && W.student()) W.presencePing();
+  }, 60000);
+
 })();
