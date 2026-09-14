@@ -1661,7 +1661,7 @@ function miniForm(mode){
     if(!state.newPhoto){toast('Add a photo of the item first \ud83d\udcf8');return;}
     var note=document.getElementById('ainote');
     aib.disabled=true;aib.textContent='\u2728 Reading your photo\u2026';
-    fetch('/api/public/ai/autofill',{method:'POST',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:state.newPhoto})})
+    VendU.aiAutofill(state.newPhoto)
       .then(function(r){return r.json();})
       .catch(function(){return {ok:false,message:'No connection. Try again.'};})
       .then(function(res){
