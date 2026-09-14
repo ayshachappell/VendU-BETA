@@ -679,7 +679,7 @@ if('serviceWorker' in navigator){
   <input type="file" id="photo" accept="image/*" style="display:none">
   <input type="file" id="gphoto" accept="image/*" multiple style="display:none">
   <input type="file" id="ephoto" accept="image/*" style="display:none">
-  <input type="file" id="cphoto" accept="image/*" style="display:none">
+  <input type="file" id="cphoto" accept="image/*,application/pdf,.pdf,.doc,.docx" style="display:none">
   <nav class="nav" id="nav">
     <div class="navitem on" data-tab="home"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5V21H3z"/></svg>Home</div>
     <div class="navitem" data-tab="market"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18l-1.5 12.5a1 1 0 0 1-1 .5H5.5a1 1 0 0 1-1-.5z"/><path d="M8 7a4 4 0 0 1 8 0"/></svg>Market</div>
@@ -1637,7 +1637,7 @@ function chooser(){
 }
 function miniForm(mode){
   const back=`<div class="locpill" id="tochooser" style="cursor:pointer">‹ Back</div>`;
-  const photoBox=`<div class="photo-up"><div class="up2" style="${state.newPhoto?`background-image:url(${state.newPhoto})`:''}">${state.newPhoto?'':icon('<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',24)}</div><div style="font-size:13px;color:var(--mist)">Add a photo (optional)</div></div>`;
+  const photoBox=`<div class="photo-up"><div class="up2" style="${state.newPhoto?`background-image:url(${state.newPhoto})`:''}">${state.newPhoto?'':icon('<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',24)}</div><div style="font-size:13px;color:var(--mist)">Add a photo or file (optional)</div></div>`;
   let title='',body='';
   if(mode==='item'){title='Sell or trade an item';body=`${photoBox}
     <div class="field"><label>Item name</label><input id="f1" placeholder="e.g. Mini fridge"></div>
@@ -1823,7 +1823,8 @@ function wireLogo(){const l=document.getElementById('logo');if(l)l.onclick=()=>{
 photo.onchange=e=>{const f=e.target.files[0];if(f){const r=new FileReader();r.onload=()=>{state.avatar=r.result;render();};r.readAsDataURL(f);}};
 gphoto.onchange=e=>{const files=[...e.target.files];let n=files.length;if(!n)return;files.forEach(f=>{const r=new FileReader();r.onload=()=>{state.gallery.push({src:r.result,fit:'cover'});if(--n===0)render();};r.readAsDataURL(f);});};
 ephoto.onchange=e=>{const f=e.target.files[0];if(f){const r=new FileReader();r.onload=()=>{state.events.unshift(r.result);state.home='events';render();};r.readAsDataURL(f);}};
-cphoto.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const t=state.photoTarget;if(t){const arr=t.type==='item'?GOODS:(t.type==='request'?REQUESTS:state.events);const o=arr.filter(function(x){return String(x.id)===t.id;})[0];if(o){o.img=r.result;}state.photoTarget=null;toast('Photo added \u2713');myPostsScreen();return;}state.newPhoto=r.result;render();};r.readAsDataURL(f);};
+function fileThumb(name){var label=(name||'Document').replace(/[<>&]/g,'').slice(0,22);var svg='<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="400" height="300" fill="#efe9fb"/><rect x="150" y="70" width="100" height="120" rx="10" fill="#5A2BE0"/><text x="200" y="145" font-family="Arial" font-size="26" fill="#fff" text-anchor="middle">DOC</text><text x="200" y="230" font-family="Arial" font-size="18" fill="#4a4358" text-anchor="middle">'+label+'</text></svg>';return 'data:image/svg+xml;utf8,'+encodeURIComponent(svg);}
+cphoto.onchange=e=>{const f=e.target.files[0];if(!f)return;if(f.size>10485760){toast('That file is too large \u2014 keep it under 10MB');e.target.value='';return;}const isImg=/^image\//.test(f.type||'');const r=new FileReader();r.onload=()=>{const data=isImg?r.result:fileThumb(f.name);const t=state.photoTarget;if(t){const arr=t.type==='item'?GOODS:(t.type==='request'?REQUESTS:state.events);const o=arr.filter(function(x){return String(x.id)===t.id;})[0];if(o){o.img=data;}state.photoTarget=null;toast(isImg?'Photo added \u2713':'File added \u2713');myPostsScreen();return;}state.newPhoto=data;render();};r.readAsDataURL(f);};
 function bookingSettings(){
   const b=state.booking;const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
   const info='<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>';
