@@ -20,6 +20,7 @@ import { Route as ApiPublicCampusEventsRouteImport } from './routes/api/public/c
 import { Route as ApiPublicCampusResolveRouteImport } from './routes/api/public/campus/resolve'
 import { Route as ApiPublicCampusSearchRouteImport } from './routes/api/public/campus/search'
 import { Route as ApiPublicCommunityActivityRouteImport } from './routes/api/public/community/activity'
+import { Route as ApiPublicEventsActivityRouteImport } from './routes/api/public/events/activity'
 import { Route as ApiPublicNotifyAppointmentRouteImport } from './routes/api/public/notify/appointment'
 import { Route as ApiPublicVerifyCheckRouteImport } from './routes/api/public/verify/check'
 import { Route as ApiPublicVerifyConfirmRouteImport } from './routes/api/public/verify/confirm'
@@ -85,6 +86,11 @@ const ApiPublicCommunityActivityRoute =
     path: '/api/public/community/activity',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicEventsActivityRoute = ApiPublicEventsActivityRouteImport.update({
+  id: '/api/public/events/activity',
+  path: '/api/public/events/activity',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicNotifyAppointmentRoute =
   ApiPublicNotifyAppointmentRouteImport.update({
     id: '/api/public/notify/appointment',
@@ -139,6 +145,7 @@ export interface FileRoutesByFullPath {
   '/api/public/campus/resolve': typeof ApiPublicCampusResolveRoute
   '/api/public/campus/search': typeof ApiPublicCampusSearchRoute
   '/api/public/community/activity': typeof ApiPublicCommunityActivityRoute
+  '/api/public/events/activity': typeof ApiPublicEventsActivityRoute
   '/api/public/notify/appointment': typeof ApiPublicNotifyAppointmentRoute
   '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
   '/api/public/verify/confirm': typeof ApiPublicVerifyConfirmRoute
@@ -160,6 +167,7 @@ export interface FileRoutesByTo {
   '/api/public/campus/resolve': typeof ApiPublicCampusResolveRoute
   '/api/public/campus/search': typeof ApiPublicCampusSearchRoute
   '/api/public/community/activity': typeof ApiPublicCommunityActivityRoute
+  '/api/public/events/activity': typeof ApiPublicEventsActivityRoute
   '/api/public/notify/appointment': typeof ApiPublicNotifyAppointmentRoute
   '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
   '/api/public/verify/confirm': typeof ApiPublicVerifyConfirmRoute
@@ -182,6 +190,7 @@ export interface FileRoutesById {
   '/api/public/campus/resolve': typeof ApiPublicCampusResolveRoute
   '/api/public/campus/search': typeof ApiPublicCampusSearchRoute
   '/api/public/community/activity': typeof ApiPublicCommunityActivityRoute
+  '/api/public/events/activity': typeof ApiPublicEventsActivityRoute
   '/api/public/notify/appointment': typeof ApiPublicNotifyAppointmentRoute
   '/api/public/verify/check': typeof ApiPublicVerifyCheckRoute
   '/api/public/verify/confirm': typeof ApiPublicVerifyConfirmRoute
@@ -205,6 +214,7 @@ export interface FileRouteTypes {
     | '/api/public/campus/resolve'
     | '/api/public/campus/search'
     | '/api/public/community/activity'
+    | '/api/public/events/activity'
     | '/api/public/notify/appointment'
     | '/api/public/verify/check'
     | '/api/public/verify/confirm'
@@ -226,6 +236,7 @@ export interface FileRouteTypes {
     | '/api/public/campus/resolve'
     | '/api/public/campus/search'
     | '/api/public/community/activity'
+    | '/api/public/events/activity'
     | '/api/public/notify/appointment'
     | '/api/public/verify/check'
     | '/api/public/verify/confirm'
@@ -247,6 +258,7 @@ export interface FileRouteTypes {
     | '/api/public/campus/resolve'
     | '/api/public/campus/search'
     | '/api/public/community/activity'
+    | '/api/public/events/activity'
     | '/api/public/notify/appointment'
     | '/api/public/verify/check'
     | '/api/public/verify/confirm'
@@ -269,6 +281,7 @@ export interface RootRouteChildren {
   ApiPublicCampusResolveRoute: typeof ApiPublicCampusResolveRoute
   ApiPublicCampusSearchRoute: typeof ApiPublicCampusSearchRoute
   ApiPublicCommunityActivityRoute: typeof ApiPublicCommunityActivityRoute
+  ApiPublicEventsActivityRoute: typeof ApiPublicEventsActivityRoute
   ApiPublicNotifyAppointmentRoute: typeof ApiPublicNotifyAppointmentRoute
   ApiPublicVerifyCheckRoute: typeof ApiPublicVerifyCheckRoute
   ApiPublicVerifyConfirmRoute: typeof ApiPublicVerifyConfirmRoute
@@ -358,6 +371,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicCommunityActivityRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/events/activity': {
+      id: '/api/public/events/activity'
+      path: '/api/public/events/activity'
+      fullPath: '/api/public/events/activity'
+      preLoaderRoute: typeof ApiPublicEventsActivityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/notify/appointment': {
       id: '/api/public/notify/appointment'
       path: '/api/public/notify/appointment'
@@ -429,6 +449,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicCampusResolveRoute: ApiPublicCampusResolveRoute,
   ApiPublicCampusSearchRoute: ApiPublicCampusSearchRoute,
   ApiPublicCommunityActivityRoute: ApiPublicCommunityActivityRoute,
+  ApiPublicEventsActivityRoute: ApiPublicEventsActivityRoute,
   ApiPublicNotifyAppointmentRoute: ApiPublicNotifyAppointmentRoute,
   ApiPublicVerifyCheckRoute: ApiPublicVerifyCheckRoute,
   ApiPublicVerifyConfirmRoute: ApiPublicVerifyConfirmRoute,
