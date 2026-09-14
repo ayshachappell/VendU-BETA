@@ -96,7 +96,7 @@ export const Route = createFileRoute("/api/public/community/activity")({
           const { data } = await supabaseAdmin
             .from("referrals")
             .select("ref_code,referred_email,created_at")
-            .ilike("referred_email", `%@${domain}`)
+            .ilike("referred_email", `%${domain}`)
             .order("created_at", { ascending: true });
 
           const counts = new Map<string, number>();
