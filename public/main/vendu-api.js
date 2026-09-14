@@ -290,4 +290,9 @@
     return post("/api/public/campus/events", { domain: domain });
   };
 
+  /* ---- live student events, interest counts, and creator notifications ---- */
+  W.eventActivity = function (payload) {
+    return authPost("/api/public/events/activity", payload || {});
+  };
+
 })();
