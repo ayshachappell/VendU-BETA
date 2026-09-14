@@ -72,6 +72,10 @@
     return new Promise(function (resolve) {
       var done = false;
       var t = setTimeout(function () { if (!done) { done = true; resolve(null); } }, 2000);
+      var host = location.hostname;
+      if (host === "localhost" || host === "127.0.0.1" || location.protocol === "file:") {
+        done = true; clearTimeout(t); resolve(null); return;
+      }
       fetch("/cdn-cgi/trace", { cache: "no-store" })
         .then(function (r) { return r.ok ? r.text() : ""; })
         .then(function (txt) {
