@@ -356,12 +356,228 @@ export type Database = {
         }
         Relationships: []
       }
+      post_comments: {
+        Row: {
+          author_name: string | null
+          body: string
+          created_at: string
+          id: string
+          post_id: string
+          student_email: string
+        }
+        Insert: {
+          author_name?: string | null
+          body: string
+          created_at?: string
+          id?: string
+          post_id: string
+          student_email: string
+        }
+        Update: {
+          author_name?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+          post_id?: string
+          student_email?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      post_likes: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string
+          student_email: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id: string
+          student_email: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string
+          student_email?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      posts: {
+        Row: {
+          author_email: string
+          author_name: string | null
+          auto: boolean
+          badges: Json
+          body: string | null
+          build: string
+          campus_domain: string
+          created_at: string
+          event_id: string | null
+          id: string
+          image_url: string | null
+          kind: string
+          price_label: string | null
+          sold: boolean
+          title: string
+          updated_at: string
+          vendor_id: string | null
+        }
+        Insert: {
+          author_email: string
+          author_name?: string | null
+          auto?: boolean
+          badges?: Json
+          body?: string | null
+          build?: string
+          campus_domain: string
+          created_at?: string
+          event_id?: string | null
+          id?: string
+          image_url?: string | null
+          kind?: string
+          price_label?: string | null
+          sold?: boolean
+          title: string
+          updated_at?: string
+          vendor_id?: string | null
+        }
+        Update: {
+          author_email?: string
+          author_name?: string | null
+          auto?: boolean
+          badges?: Json
+          body?: string | null
+          build?: string
+          campus_domain?: string
+          created_at?: string
+          event_id?: string | null
+          id?: string
+          image_url?: string | null
+          kind?: string
+          price_label?: string | null
+          sold?: boolean
+          title?: string
+          updated_at?: string
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "posts_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "campus_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "posts_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          campus_domain: string | null
+          campus_name: string | null
+          created_at: string
+          display_name: string | null
+          email: string
+          id: string
+          last_seen_at: string
+          notify: Json
+          payments: Json
+          phone: string | null
+          socials: Json
+          updated_at: string
+          vendor_mode: boolean
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          campus_domain?: string | null
+          campus_name?: string | null
+          created_at?: string
+          display_name?: string | null
+          email: string
+          id?: string
+          last_seen_at?: string
+          notify?: Json
+          payments?: Json
+          phone?: string | null
+          socials?: Json
+          updated_at?: string
+          vendor_mode?: boolean
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          campus_domain?: string | null
+          campus_name?: string | null
+          created_at?: string
+          display_name?: string | null
+          email?: string
+          id?: string
+          last_seen_at?: string
+          notify?: Json
+          payments?: Json
+          phone?: string | null
+          socials?: Json
+          updated_at?: string
+          vendor_mode?: boolean
+        }
+        Relationships: []
+      }
+      referral_codes: {
+        Row: {
+          code: string
+          created_at: string
+          email: string
+          id: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          email: string
+          id?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          email?: string
+          id?: string
+        }
+        Relationships: []
+      }
       referrals: {
         Row: {
           build: string
           campus: string | null
           created_at: string
           id: string
+          qualified: boolean
+          qualified_at: string | null
           ref_code: string
           referred_email: string
         }
@@ -370,6 +586,8 @@ export type Database = {
           campus?: string | null
           created_at?: string
           id?: string
+          qualified?: boolean
+          qualified_at?: string | null
           ref_code: string
           referred_email: string
         }
@@ -378,6 +596,8 @@ export type Database = {
           campus?: string | null
           created_at?: string
           id?: string
+          qualified?: boolean
+          qualified_at?: string | null
           ref_code?: string
           referred_email?: string
         }
@@ -470,6 +690,161 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      vendor_photos: {
+        Row: {
+          caption: string | null
+          created_at: string
+          id: string
+          service_id: string | null
+          sort_order: number
+          url: string
+          vendor_id: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          service_id?: string | null
+          sort_order?: number
+          url: string
+          vendor_id: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          service_id?: string | null
+          sort_order?: number
+          url?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendor_photos_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "vendor_services"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vendor_photos_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vendor_services: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          price_cents: number | null
+          price_label: string | null
+          promo: string | null
+          promo_ends_at: string | null
+          sort_order: number
+          title: string
+          updated_at: string
+          vendor_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          price_cents?: number | null
+          price_label?: string | null
+          promo?: string | null
+          promo_ends_at?: string | null
+          sort_order?: number
+          title: string
+          updated_at?: string
+          vendor_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          price_cents?: number | null
+          price_label?: string | null
+          promo?: string | null
+          promo_ends_at?: string | null
+          sort_order?: number
+          title?: string
+          updated_at?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendor_services_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vendors: {
+        Row: {
+          accent_color: string | null
+          availability: string | null
+          avatar_url: string | null
+          badges: Json
+          boosted: boolean
+          build: string
+          campus_domain: string
+          category: string | null
+          created_at: string
+          id: string
+          layout: string
+          owner_email: string
+          payments: Json
+          published: boolean
+          shop_name: string
+          tagline: string | null
+          updated_at: string
+        }
+        Insert: {
+          accent_color?: string | null
+          availability?: string | null
+          avatar_url?: string | null
+          badges?: Json
+          boosted?: boolean
+          build?: string
+          campus_domain: string
+          category?: string | null
+          created_at?: string
+          id?: string
+          layout?: string
+          owner_email: string
+          payments?: Json
+          published?: boolean
+          shop_name: string
+          tagline?: string | null
+          updated_at?: string
+        }
+        Update: {
+          accent_color?: string | null
+          availability?: string | null
+          avatar_url?: string | null
+          badges?: Json
+          boosted?: boolean
+          build?: string
+          campus_domain?: string
+          category?: string | null
+          created_at?: string
+          id?: string
+          layout?: string
+          owner_email?: string
+          payments?: Json
+          published?: boolean
+          shop_name?: string
+          tagline?: string | null
+          updated_at?: string
         }
         Relationships: []
       }

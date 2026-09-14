@@ -13,7 +13,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as BetaRouteImport } from './routes/beta'
+import { Route as ApiPublicFeedRouteImport } from './routes/api/public/feed'
+import { Route as ApiPublicProfileRouteImport } from './routes/api/public/profile'
+import { Route as ApiPublicReferralRouteImport } from './routes/api/public/referral'
 import { Route as ApiPublicReportRouteImport } from './routes/api/public/report'
+import { Route as ApiPublicVendorRouteImport } from './routes/api/public/vendor'
 import { Route as ApiPublicAccountDeleteRouteImport } from './routes/api/public/account/delete'
 import { Route as ApiPublicAdminModerateRouteImport } from './routes/api/public/admin/moderate'
 import { Route as ApiPublicCampusEventsRouteImport } from './routes/api/public/campus/events'
@@ -50,9 +54,29 @@ const BetaRoute = BetaRouteImport.update({
   path: '/beta',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicFeedRoute = ApiPublicFeedRouteImport.update({
+  id: '/api/public/feed',
+  path: '/api/public/feed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicProfileRoute = ApiPublicProfileRouteImport.update({
+  id: '/api/public/profile',
+  path: '/api/public/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicReferralRoute = ApiPublicReferralRouteImport.update({
+  id: '/api/public/referral',
+  path: '/api/public/referral',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicReportRoute = ApiPublicReportRouteImport.update({
   id: '/api/public/report',
   path: '/api/public/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicVendorRoute = ApiPublicVendorRouteImport.update({
+  id: '/api/public/vendor',
+  path: '/api/public/vendor',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicAccountDeleteRoute = ApiPublicAccountDeleteRouteImport.update({
@@ -138,7 +162,11 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
+  '/api/public/feed': typeof ApiPublicFeedRoute
+  '/api/public/profile': typeof ApiPublicProfileRoute
+  '/api/public/referral': typeof ApiPublicReferralRoute
   '/api/public/report': typeof ApiPublicReportRoute
+  '/api/public/vendor': typeof ApiPublicVendorRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
   '/api/public/admin/moderate': typeof ApiPublicAdminModerateRoute
   '/api/public/campus/events': typeof ApiPublicCampusEventsRoute
@@ -160,7 +188,11 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
+  '/api/public/feed': typeof ApiPublicFeedRoute
+  '/api/public/profile': typeof ApiPublicProfileRoute
+  '/api/public/referral': typeof ApiPublicReferralRoute
   '/api/public/report': typeof ApiPublicReportRoute
+  '/api/public/vendor': typeof ApiPublicVendorRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
   '/api/public/admin/moderate': typeof ApiPublicAdminModerateRoute
   '/api/public/campus/events': typeof ApiPublicCampusEventsRoute
@@ -183,7 +215,11 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
+  '/api/public/feed': typeof ApiPublicFeedRoute
+  '/api/public/profile': typeof ApiPublicProfileRoute
+  '/api/public/referral': typeof ApiPublicReferralRoute
   '/api/public/report': typeof ApiPublicReportRoute
+  '/api/public/vendor': typeof ApiPublicVendorRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
   '/api/public/admin/moderate': typeof ApiPublicAdminModerateRoute
   '/api/public/campus/events': typeof ApiPublicCampusEventsRoute
@@ -207,7 +243,11 @@ export interface FileRouteTypes {
     | '/admin'
     | '/app'
     | '/beta'
+    | '/api/public/feed'
+    | '/api/public/profile'
+    | '/api/public/referral'
     | '/api/public/report'
+    | '/api/public/vendor'
     | '/api/public/account/delete'
     | '/api/public/admin/moderate'
     | '/api/public/campus/events'
@@ -229,7 +269,11 @@ export interface FileRouteTypes {
     | '/admin'
     | '/app'
     | '/beta'
+    | '/api/public/feed'
+    | '/api/public/profile'
+    | '/api/public/referral'
     | '/api/public/report'
+    | '/api/public/vendor'
     | '/api/public/account/delete'
     | '/api/public/admin/moderate'
     | '/api/public/campus/events'
@@ -251,7 +295,11 @@ export interface FileRouteTypes {
     | '/admin'
     | '/app'
     | '/beta'
+    | '/api/public/feed'
+    | '/api/public/profile'
+    | '/api/public/referral'
     | '/api/public/report'
+    | '/api/public/vendor'
     | '/api/public/account/delete'
     | '/api/public/admin/moderate'
     | '/api/public/campus/events'
@@ -274,7 +322,11 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AppRoute: typeof AppRoute
   BetaRoute: typeof BetaRoute
+  ApiPublicFeedRoute: typeof ApiPublicFeedRoute
+  ApiPublicProfileRoute: typeof ApiPublicProfileRoute
+  ApiPublicReferralRoute: typeof ApiPublicReferralRoute
   ApiPublicReportRoute: typeof ApiPublicReportRoute
+  ApiPublicVendorRoute: typeof ApiPublicVendorRoute
   ApiPublicAccountDeleteRoute: typeof ApiPublicAccountDeleteRoute
   ApiPublicAdminModerateRoute: typeof ApiPublicAdminModerateRoute
   ApiPublicCampusEventsRoute: typeof ApiPublicCampusEventsRoute
@@ -322,11 +374,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BetaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/feed': {
+      id: '/api/public/feed'
+      path: '/api/public/feed'
+      fullPath: '/api/public/feed'
+      preLoaderRoute: typeof ApiPublicFeedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/profile': {
+      id: '/api/public/profile'
+      path: '/api/public/profile'
+      fullPath: '/api/public/profile'
+      preLoaderRoute: typeof ApiPublicProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/referral': {
+      id: '/api/public/referral'
+      path: '/api/public/referral'
+      fullPath: '/api/public/referral'
+      preLoaderRoute: typeof ApiPublicReferralRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/report': {
       id: '/api/public/report'
       path: '/api/public/report'
       fullPath: '/api/public/report'
       preLoaderRoute: typeof ApiPublicReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/vendor': {
+      id: '/api/public/vendor'
+      path: '/api/public/vendor'
+      fullPath: '/api/public/vendor'
+      preLoaderRoute: typeof ApiPublicVendorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/account/delete': {
@@ -442,7 +522,11 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   AppRoute: AppRoute,
   BetaRoute: BetaRoute,
+  ApiPublicFeedRoute: ApiPublicFeedRoute,
+  ApiPublicProfileRoute: ApiPublicProfileRoute,
+  ApiPublicReferralRoute: ApiPublicReferralRoute,
   ApiPublicReportRoute: ApiPublicReportRoute,
+  ApiPublicVendorRoute: ApiPublicVendorRoute,
   ApiPublicAccountDeleteRoute: ApiPublicAccountDeleteRoute,
   ApiPublicAdminModerateRoute: ApiPublicAdminModerateRoute,
   ApiPublicCampusEventsRoute: ApiPublicCampusEventsRoute,
