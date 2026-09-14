@@ -121,9 +121,6 @@ input,textarea,select{font-size:16px} /* stops iOS zoom-on-focus */
 .sheet-bg{animation:vuFadeIn .2s ease}
 
 /* AI product auto-fill */
-.aifill{display:block;width:100%;margin:2px 0 6px;border:0;border-radius:14px;background:var(--violet);color:#fff;font-family:inherit;font-size:15px;font-weight:700;padding:13px 16px;cursor:pointer}
-.aifill:disabled{background:var(--violet-soft);color:var(--violet);cursor:default}
-.ai-note{font-size:12.5px;line-height:1.5;color:var(--mist);margin:0 0 14px}
 
 /* ---- privacy choices banner ---- */
 #venduPrivacyBar{position:fixed;left:0;right:0;bottom:0;z-index:99999;display:flex;justify-content:center;padding:10px 10px calc(10px + env(safe-area-inset-bottom,0px));pointer-events:none}
