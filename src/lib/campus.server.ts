@@ -67,6 +67,7 @@ export function campusDomainForAccount(rawDomain: string): string {
   const domain = normalizeDomain(rawDomain);
   if (!domain) throw new Error("Invalid campus domain");
   if (domain === INTERNAL_COMPANY_DOMAIN) return INTERNAL_DEFAULT_CAMPUS_DOMAIN;
+  if (domain === "venduapp.com") return INTERNAL_DEFAULT_CAMPUS_DOMAIN;
   return canonicalDomain(domain);
 }
 
