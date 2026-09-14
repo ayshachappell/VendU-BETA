@@ -14,3 +14,7 @@
 
 - [ ] Make events live in both builds: persist manual events and interest counts, notify event creators, and merge configured school calendars
 - [x] Align event actions, header branding/order, profile cap, storefront photos, and pasted account links in both builds
+
+- [x] Live accounts, storefronts, feed and referrals wired into Main + Beta (vendu-live.js)
+- [ ] Seed official campus calendar feeds per launch school (needs school list)
+- [ ] Native store wrappers (needs Apple/Google developer accounts)
