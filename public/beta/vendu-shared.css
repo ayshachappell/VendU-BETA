@@ -124,3 +124,14 @@ input,textarea,select{font-size:16px} /* stops iOS zoom-on-focus */
 .aifill{display:block;width:100%;margin:2px 0 6px;border:0;border-radius:14px;background:var(--violet);color:#fff;font-family:inherit;font-size:15px;font-weight:700;padding:13px 16px;cursor:pointer}
 .aifill:disabled{background:var(--violet-soft);color:var(--violet);cursor:default}
 .ai-note{font-size:12.5px;line-height:1.5;color:var(--mist);margin:0 0 14px}
+
+/* ---- privacy choices banner ---- */
+#venduPrivacyBar{position:fixed;left:0;right:0;bottom:0;z-index:99999;display:flex;justify-content:center;padding:10px 10px calc(10px + env(safe-area-inset-bottom,0px));pointer-events:none}
+#venduPrivacyBar .vpb-card{pointer-events:auto;width:100%;max-width:373px;background:#fff;border:1px solid #e6e1d8;border-radius:16px;box-shadow:0 12px 34px rgba(27,22,38,.22);padding:14px 15px}
+#venduPrivacyBar .vpb-t{font-weight:800;font-size:15px;margin-bottom:5px;color:#1B1626}
+#venduPrivacyBar .vpb-c{font-size:12.5px;line-height:1.45;color:#6B6480}
+#venduPrivacyBar .vpb-row{display:flex;gap:8px;margin-top:11px}
+#venduPrivacyBar .vpb-btn{flex:1;min-height:44px;border-radius:12px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;border:1px solid #e6e1d8}
+#venduPrivacyBar .vpb-ok{background:#5A2BE0;color:#fff;border-color:#5A2BE0}
+#venduPrivacyBar .vpb-no{background:#fff;color:#1B1626}
+#venduPrivacyBar .vpb-link{display:block;margin-top:9px;font-size:12px;color:#5A2BE0;text-align:center;text-decoration:underline}
