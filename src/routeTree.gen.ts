@@ -16,7 +16,6 @@ import { Route as BetaRouteImport } from './routes/beta'
 import { Route as ApiPublicReportRouteImport } from './routes/api/public/report'
 import { Route as ApiPublicAccountDeleteRouteImport } from './routes/api/public/account/delete'
 import { Route as ApiPublicAdminModerateRouteImport } from './routes/api/public/admin/moderate'
-import { Route as ApiPublicAiAutofillRouteImport } from './routes/api/public/ai/autofill'
 import { Route as ApiPublicCampusEventsRouteImport } from './routes/api/public/campus/events'
 import { Route as ApiPublicCampusResolveRouteImport } from './routes/api/public/campus/resolve'
 import { Route as ApiPublicCampusSearchRouteImport } from './routes/api/public/campus/search'
@@ -63,11 +62,6 @@ const ApiPublicAccountDeleteRoute = ApiPublicAccountDeleteRouteImport.update({
 const ApiPublicAdminModerateRoute = ApiPublicAdminModerateRouteImport.update({
   id: '/api/public/admin/moderate',
   path: '/api/public/admin/moderate',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicAiAutofillRoute = ApiPublicAiAutofillRouteImport.update({
-  id: '/api/public/ai/autofill',
-  path: '/api/public/ai/autofill',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicCampusEventsRoute = ApiPublicCampusEventsRouteImport.update({
@@ -141,7 +135,6 @@ export interface FileRoutesByFullPath {
   '/api/public/report': typeof ApiPublicReportRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
   '/api/public/admin/moderate': typeof ApiPublicAdminModerateRoute
-  '/api/public/ai/autofill': typeof ApiPublicAiAutofillRoute
   '/api/public/campus/events': typeof ApiPublicCampusEventsRoute
   '/api/public/campus/resolve': typeof ApiPublicCampusResolveRoute
   '/api/public/campus/search': typeof ApiPublicCampusSearchRoute
@@ -163,7 +156,6 @@ export interface FileRoutesByTo {
   '/api/public/report': typeof ApiPublicReportRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
   '/api/public/admin/moderate': typeof ApiPublicAdminModerateRoute
-  '/api/public/ai/autofill': typeof ApiPublicAiAutofillRoute
   '/api/public/campus/events': typeof ApiPublicCampusEventsRoute
   '/api/public/campus/resolve': typeof ApiPublicCampusResolveRoute
   '/api/public/campus/search': typeof ApiPublicCampusSearchRoute
@@ -186,7 +178,6 @@ export interface FileRoutesById {
   '/api/public/report': typeof ApiPublicReportRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
   '/api/public/admin/moderate': typeof ApiPublicAdminModerateRoute
-  '/api/public/ai/autofill': typeof ApiPublicAiAutofillRoute
   '/api/public/campus/events': typeof ApiPublicCampusEventsRoute
   '/api/public/campus/resolve': typeof ApiPublicCampusResolveRoute
   '/api/public/campus/search': typeof ApiPublicCampusSearchRoute
@@ -210,7 +201,6 @@ export interface FileRouteTypes {
     | '/api/public/report'
     | '/api/public/account/delete'
     | '/api/public/admin/moderate'
-    | '/api/public/ai/autofill'
     | '/api/public/campus/events'
     | '/api/public/campus/resolve'
     | '/api/public/campus/search'
@@ -232,7 +222,6 @@ export interface FileRouteTypes {
     | '/api/public/report'
     | '/api/public/account/delete'
     | '/api/public/admin/moderate'
-    | '/api/public/ai/autofill'
     | '/api/public/campus/events'
     | '/api/public/campus/resolve'
     | '/api/public/campus/search'
@@ -254,7 +243,6 @@ export interface FileRouteTypes {
     | '/api/public/report'
     | '/api/public/account/delete'
     | '/api/public/admin/moderate'
-    | '/api/public/ai/autofill'
     | '/api/public/campus/events'
     | '/api/public/campus/resolve'
     | '/api/public/campus/search'
@@ -277,7 +265,6 @@ export interface RootRouteChildren {
   ApiPublicReportRoute: typeof ApiPublicReportRoute
   ApiPublicAccountDeleteRoute: typeof ApiPublicAccountDeleteRoute
   ApiPublicAdminModerateRoute: typeof ApiPublicAdminModerateRoute
-  ApiPublicAiAutofillRoute: typeof ApiPublicAiAutofillRoute
   ApiPublicCampusEventsRoute: typeof ApiPublicCampusEventsRoute
   ApiPublicCampusResolveRoute: typeof ApiPublicCampusResolveRoute
   ApiPublicCampusSearchRoute: typeof ApiPublicCampusSearchRoute
@@ -341,13 +328,6 @@ declare module '@tanstack/react-router' {
       path: '/api/public/admin/moderate'
       fullPath: '/api/public/admin/moderate'
       preLoaderRoute: typeof ApiPublicAdminModerateRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/ai/autofill': {
-      id: '/api/public/ai/autofill'
-      path: '/api/public/ai/autofill'
-      fullPath: '/api/public/ai/autofill'
-      preLoaderRoute: typeof ApiPublicAiAutofillRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/campus/events': {
@@ -445,7 +425,6 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicReportRoute: ApiPublicReportRoute,
   ApiPublicAccountDeleteRoute: ApiPublicAccountDeleteRoute,
   ApiPublicAdminModerateRoute: ApiPublicAdminModerateRoute,
-  ApiPublicAiAutofillRoute: ApiPublicAiAutofillRoute,
   ApiPublicCampusEventsRoute: ApiPublicCampusEventsRoute,
   ApiPublicCampusResolveRoute: ApiPublicCampusResolveRoute,
   ApiPublicCampusSearchRoute: ApiPublicCampusSearchRoute,

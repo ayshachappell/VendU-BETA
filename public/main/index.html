@@ -1640,8 +1640,6 @@ function miniForm(mode){
   const photoBox=`<div class="photo-up"><div class="up2" style="${state.newPhoto?`background-image:url(${state.newPhoto})`:''}">${state.newPhoto?'':icon('<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',24)}</div><div style="font-size:13px;color:var(--mist)">Add a photo (optional)</div></div>`;
   let title='',body='';
   if(mode==='item'){title='Sell or trade an item';body=`${photoBox}
-    <button class="aifill" id="aifill" type="button"${state.newPhoto?'':' disabled'}>\u2728 Auto-fill with AI${state.newPhoto?'':' \u2014 add a photo first'}</button>
-    <div class="ai-note" id="ainote">AI reads your photo and drafts the title, category, description and a fair price. Check it before you post.</div>
     <div class="field"><label>Item name</label><input id="f1" placeholder="e.g. Mini fridge"></div>
     <div class="field"><label>Price</label><input id="f2" placeholder="$25"></div>
     <div class="field"><label>Category</label><input id="f4" placeholder="e.g. Dorm & home"></div>
@@ -1658,22 +1656,6 @@ function miniForm(mode){
     <div class="form-wrap enter"><div class="form-h">${title}</div>${body}<button class="submit" id="postmini">Post it</button></div>`;
   document.getElementById('tochooser').onclick=()=>{state.addMode=null;state.newPhoto=null;render();};
   const up=screen.querySelector('.up2');if(up)up.onclick=()=>cphoto.click();
-  var aib=document.getElementById('aifill');
-  if(aib)aib.onclick=function(){
-    if(!state.newPhoto){toast('Add a photo of the item first \ud83d\udcf8');return;}
-    var note=document.getElementById('ainote');
-    aib.disabled=true;aib.textContent='\u2728 Reading your photo\u2026';
-    VendU.aiAutofill(state.newPhoto)
-      .catch(function(){return {ok:false,message:'No connection. Try again.'};})
-      .then(function(res){
-        aib.disabled=false;aib.textContent='\u2728 Auto-fill with AI';
-        if(!res||!res.ok){if(note)note.textContent=(res&&res.message)||'Auto-fill didn\u2019t work. Fill it in yourself.';return;}
-        var set=function(id,val){var e=document.getElementById(id);if(e&&val&&!e.value.trim())e.value=val;};
-        set('f1',res.title);set('f2',res.price);set('f4',res.category);set('f3',res.description);
-        if(note)note.textContent=res.confidence==='low'?'AI wasn\u2019t sure about this photo \u2014 double-check every field before posting.':'Drafted by AI \u2014 edit anything before you post.';
-        toast('Auto-filled \u2728');
-      });
-  };
   let tag=mode==='item'?'Sell':(mode==='request'?'0':'');
   screen.querySelectorAll('[data-tag]').forEach(el=>el.onclick=()=>{screen.querySelectorAll('[data-tag]').forEach(x=>x.classList.remove('on'));el.classList.add('on');tag=el.dataset.tag;});
   document.getElementById('postmini').onclick=()=>{
