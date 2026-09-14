@@ -84,7 +84,7 @@ export const Route = createFileRoute("/api/public/profile")({
 
           const { data, error } = await supabaseAdmin
             .from("profiles")
-            .update(patch)
+            .update(patch as never)
             .eq("email", email)
             .select("*")
             .maybeSingle();
