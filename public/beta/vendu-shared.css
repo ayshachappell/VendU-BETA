@@ -51,7 +51,7 @@
 .brandrow{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;flex-wrap:nowrap}
 .wordmark.header-logo{flex:0 1 auto;min-width:0;font-family:Georgia,'Times New Roman',serif;font-size:21px;font-weight:700;line-height:1.15;letter-spacing:0;gap:3px;padding-top:.5em;white-space:nowrap}
 .header-logo .wm-pre,.header-logo .wm-post{font-family:inherit;font-size:.82em;font-weight:400;letter-spacing:0;color:var(--mist)}
-.header-logo .gradcap{width:1.16em;height:auto;top:-.58em}
+.header-logo .gradcap{width:1.16em;height:auto;top:0}
 .beta-mark{align-self:center;margin-left:3px;padding:4px 7px;border-radius:6px;background:var(--violet-soft);color:var(--violet);font:700 9px/1 'Inter',system-ui,sans-serif}
 .header-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;min-width:0;flex:1 1 auto}
 .header-actions .bell{flex:0 0 30px;width:30px;height:30px;padding:4px}
@@ -65,10 +65,10 @@
 .ob-title .wordmark.welcome-wordmark{display:inline-flex;align-items:baseline;position:relative;font-family:Georgia,'Times New Roman',serif;font-size:29px;font-weight:400;line-height:1.08;letter-spacing:0;vertical-align:baseline;cursor:default;gap:4px;margin-top:10px;padding-top:1.5em;white-space:nowrap;overflow:visible}
 .ob-title .wordmark.welcome-wordmark .wm-pre,.ob-title .wordmark.welcome-wordmark .wm-post{font-family:inherit;font-size:1em;font-weight:400;letter-spacing:0;color:var(--ink)}
 .ob-title .wordmark.welcome-wordmark .u{font-family:Georgia,'Times New Roman',serif;font-weight:700}
-.ob-title .wordmark.welcome-wordmark .gradcap{width:1.02em;height:auto;top:-.58em}
+.ob-title .wordmark.welcome-wordmark .gradcap{width:1.02em;height:auto;top:0}
 .welcome-subtitle{margin-top:1px;color:var(--ink);font-family:Georgia,'Times New Roman',serif;font-size:13px;font-weight:500;line-height:1.25;letter-spacing:0}
 .headline-wordmark{display:flex!important;justify-content:center;align-items:baseline!important;width:max-content;max-width:100%;margin:10px auto 0;padding-top:1.5em!important;line-height:1.1!important;white-space:nowrap}
-.headline-wordmark .gradcap{width:1em;top:-.58em}
+.headline-wordmark .gradcap{width:1em;top:0}
 .ob-title.role-title{margin-bottom:12px}
 .role-title-line{display:block;white-space:nowrap}
 .headline-wordmark.role-title-brand{display:flex!important;margin-top:8px;white-space:nowrap}
