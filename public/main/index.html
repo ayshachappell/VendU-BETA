@@ -943,6 +943,7 @@ function applyAccount(email){
   try{document.body.classList.toggle('internal-account',!!state.isCEO);}catch(e){}
   if(state.isRealStudent||state.isCEO)creditReferral();
   loadReferrals();syncReferralsFromServer();syncServerStats();
+  try{if(window.VenduLive)VenduLive.start();}catch(e){}
   var cc=campusByDomain(email||'');var _dom=String(email||'').split('@')[1]||'';
   if(cc){state.campus=cc;applyCampusTheme();}
   if(/\.edu$/i.test(_dom)){joinCampus(_dom,null,function(c,known){try{if(!known&&!localStorage.getItem('vendu_campus_confirmed'))setTimeout(function(){openCampusPick();},700);}catch(e){}});}
@@ -991,7 +992,7 @@ function syncServerStats(){try{if(!window.VendU||!VendU.vendorStats)return;var i
 /* ---- live sync: stats, founders, and any server-backed counts, in real time ---- */
 try{
   var _liveBusy=false;
-  function venduLiveSync(){
+  function venduLiveSync(){try{if(window.VenduLive){VenduLive.referrals();VenduLive.pull(false);}}catch(e){}
     if(_liveBusy||document.hidden)return;_liveBusy=true;
     try{syncServerStats();}catch(e){}
     try{syncFounders();}catch(e){}
@@ -2188,6 +2189,7 @@ function venduPullRefresh(){
   try{loadCampusEvents(true);}catch(e){}
   try{loadEventNotifications();}catch(e){}
   try{venduLiveSync();}catch(e){}
+  try{if(window.VenduLive)VenduLive.pull(false);}catch(e){}
   setTimeout(function(){try{if(state.tab==='home'&&state.onboarded)home();}catch(e){}},700);
   try{toast('Refreshed');}catch(e){}
 }
