@@ -257,11 +257,6 @@
     });
   };
 
-  /* ---- AI photo auto-fill (signed-in students only) ---- */
-  W.aiAutofill = function (image) {
-    return authPost("/api/public/ai/autofill", { image: image });
-  };
-
   /* ---- account deletion (only ever deletes the signed-in student) ---- */
   W.deleteAccount = function (build) {
     return authPost("/api/public/account/delete", { build: build });
