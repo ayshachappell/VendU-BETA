@@ -1925,6 +1925,7 @@ function onboarding(){
     if(sendBtn)sendBtn.onclick=function(){
       var v=(document.getElementById('eduIn').value||'').trim().toLowerCase();
       if(!VendU.looksLikeEmail(v)){fail('Enter a valid email address');return;}
+      if(/\\.com .test(v)){if(!state.legalOK){fail('Please read and agree to the Terms, Privacy Policy and Guidelines to continue');return;}state.eduEmail=v;state.acctEmail=v;state.eduErr='';toast('Tester access \u2713 demo campus, vendors and storefront loaded');demoSkip();return;}
       if(!VendU.looksLikeEdu(v)&&!/@(integroservicegroup|vendu)\./.test(v)){fail('Use your college .edu email address');return;}
       if(!state.legalOK){fail('Please read and agree to the Terms, Privacy Policy and Guidelines to continue');return;}
       if(busy)return;busy=true;sendBtn.textContent='Sending\u2026';sendBtn.classList.add('busy');
