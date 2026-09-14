@@ -12,4 +12,4 @@
 - [x] Restore onboarding tagline and remove headline cap collisions
 - [x] Complete mobile, tester, session, and installability verification
 
-- [ ] Seed real campuses (school name + email domain + public calendar link) — waiting on the owner's school list; each campus page then shows feed + services + calendar events
+- [ ] Make events live in both builds: persist manual events and interest counts, notify event creators, and merge configured school calendars
