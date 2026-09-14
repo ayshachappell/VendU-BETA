@@ -15,6 +15,7 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as BetaRouteImport } from './routes/beta'
 import { Route as ApiPublicFeedRouteImport } from './routes/api/public/feed'
 import { Route as ApiPublicProfileRouteImport } from './routes/api/public/profile'
+import { Route as ApiPublicReferralRouteImport } from './routes/api/public/referral'
 import { Route as ApiPublicReportRouteImport } from './routes/api/public/report'
 import { Route as ApiPublicVendorRouteImport } from './routes/api/public/vendor'
 import { Route as ApiPublicAccountDeleteRouteImport } from './routes/api/public/account/delete'
@@ -61,6 +62,11 @@ const ApiPublicFeedRoute = ApiPublicFeedRouteImport.update({
 const ApiPublicProfileRoute = ApiPublicProfileRouteImport.update({
   id: '/api/public/profile',
   path: '/api/public/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicReferralRoute = ApiPublicReferralRouteImport.update({
+  id: '/api/public/referral',
+  path: '/api/public/referral',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicReportRoute = ApiPublicReportRouteImport.update({
@@ -158,6 +164,7 @@ export interface FileRoutesByFullPath {
   '/beta': typeof BetaRoute
   '/api/public/feed': typeof ApiPublicFeedRoute
   '/api/public/profile': typeof ApiPublicProfileRoute
+  '/api/public/referral': typeof ApiPublicReferralRoute
   '/api/public/report': typeof ApiPublicReportRoute
   '/api/public/vendor': typeof ApiPublicVendorRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
@@ -183,6 +190,7 @@ export interface FileRoutesByTo {
   '/beta': typeof BetaRoute
   '/api/public/feed': typeof ApiPublicFeedRoute
   '/api/public/profile': typeof ApiPublicProfileRoute
+  '/api/public/referral': typeof ApiPublicReferralRoute
   '/api/public/report': typeof ApiPublicReportRoute
   '/api/public/vendor': typeof ApiPublicVendorRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
@@ -209,6 +217,7 @@ export interface FileRoutesById {
   '/beta': typeof BetaRoute
   '/api/public/feed': typeof ApiPublicFeedRoute
   '/api/public/profile': typeof ApiPublicProfileRoute
+  '/api/public/referral': typeof ApiPublicReferralRoute
   '/api/public/report': typeof ApiPublicReportRoute
   '/api/public/vendor': typeof ApiPublicVendorRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
@@ -236,6 +245,7 @@ export interface FileRouteTypes {
     | '/beta'
     | '/api/public/feed'
     | '/api/public/profile'
+    | '/api/public/referral'
     | '/api/public/report'
     | '/api/public/vendor'
     | '/api/public/account/delete'
@@ -261,6 +271,7 @@ export interface FileRouteTypes {
     | '/beta'
     | '/api/public/feed'
     | '/api/public/profile'
+    | '/api/public/referral'
     | '/api/public/report'
     | '/api/public/vendor'
     | '/api/public/account/delete'
@@ -286,6 +297,7 @@ export interface FileRouteTypes {
     | '/beta'
     | '/api/public/feed'
     | '/api/public/profile'
+    | '/api/public/referral'
     | '/api/public/report'
     | '/api/public/vendor'
     | '/api/public/account/delete'
@@ -312,6 +324,7 @@ export interface RootRouteChildren {
   BetaRoute: typeof BetaRoute
   ApiPublicFeedRoute: typeof ApiPublicFeedRoute
   ApiPublicProfileRoute: typeof ApiPublicProfileRoute
+  ApiPublicReferralRoute: typeof ApiPublicReferralRoute
   ApiPublicReportRoute: typeof ApiPublicReportRoute
   ApiPublicVendorRoute: typeof ApiPublicVendorRoute
   ApiPublicAccountDeleteRoute: typeof ApiPublicAccountDeleteRoute
@@ -373,6 +386,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/profile'
       fullPath: '/api/public/profile'
       preLoaderRoute: typeof ApiPublicProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/referral': {
+      id: '/api/public/referral'
+      path: '/api/public/referral'
+      fullPath: '/api/public/referral'
+      preLoaderRoute: typeof ApiPublicReferralRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/report': {
@@ -504,6 +524,7 @@ const rootRouteChildren: RootRouteChildren = {
   BetaRoute: BetaRoute,
   ApiPublicFeedRoute: ApiPublicFeedRoute,
   ApiPublicProfileRoute: ApiPublicProfileRoute,
+  ApiPublicReferralRoute: ApiPublicReferralRoute,
   ApiPublicReportRoute: ApiPublicReportRoute,
   ApiPublicVendorRoute: ApiPublicVendorRoute,
   ApiPublicAccountDeleteRoute: ApiPublicAccountDeleteRoute,
