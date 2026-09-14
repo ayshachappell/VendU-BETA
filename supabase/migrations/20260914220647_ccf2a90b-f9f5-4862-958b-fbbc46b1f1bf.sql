@@ -1,0 +1,3 @@
+CREATE POLICY "Backend services manage campus events" ON public.campus_events FOR ALL TO service_role USING (true) WITH CHECK (true);
+CREATE POLICY "Backend services manage event interests" ON public.event_interests FOR ALL TO service_role USING (true) WITH CHECK (true);
+CREATE POLICY "Backend services manage event notifications" ON public.event_notifications FOR ALL TO service_role USING (true) WITH CHECK (true);
