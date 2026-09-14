@@ -171,35 +171,40 @@ export const Route = createFileRoute("/api/public/events/activity")({
           let interested = false;
           if (existing) {
             await supabaseAdmin.from("event_interests").delete().eq("id", existing.id);
-            await supabaseAdmin
-              .from("event_notifications")
-              .delete()
-              .eq("event_id", eventId)
-              .eq("actor_email", email)
-              .eq("kind", "event_interest");
           } else {
             await supabaseAdmin.from("event_interests").insert({ event_id: eventId, student_email: email });
             interested = true;
-            if (event.creator_email !== email) {
-              const actorName = str(raw.actorName, 100) || "A student";
-              await supabaseAdmin.from("event_notifications").upsert(
-                {
-                  recipient_email: event.creator_email,
-                  event_id: eventId,
-                  actor_email: email,
-                  message: `${actorName} is interested in “${event.title}”.`,
-                  build,
-                  read_at: null,
-                },
-                { onConflict: "recipient_email,event_id,actor_email,kind" },
-              );
-            }
           }
           const { count } = await supabaseAdmin
             .from("event_interests")
             .select("id", { count: "exact", head: true })
             .eq("event_id", eventId);
-          return json({ ok: true, interested, count: count ?? 0 });
+          const total = count ?? 0;
+
+          // One rolling notification per event for the poster: the count updates in place.
+          if (event.creator_email !== email) {
+            await supabaseAdmin
+              .from("event_notifications")
+              .delete()
+              .eq("recipient_email", event.creator_email)
+              .eq("event_id", eventId)
+              .eq("kind", "event_interest");
+            if (total > 0) {
+              await supabaseAdmin.from("event_notifications").insert({
+                recipient_email: event.creator_email,
+                event_id: eventId,
+                actor_email: null,
+                kind: "event_interest",
+                message:
+                  total === 1
+                    ? `1 person is interested in “${event.title}”.`
+                    : `${total} people are interested in “${event.title}”.`,
+                build,
+                read_at: null,
+              });
+            }
+          }
+          return json({ ok: true, interested, count: total });
         }
 
         return json({ ok: false, message: "Unknown action." }, 400);
