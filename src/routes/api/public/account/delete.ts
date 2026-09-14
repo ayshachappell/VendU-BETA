@@ -30,6 +30,10 @@ export const Route = createFileRoute("/api/public/account/delete")({
           supabaseAdmin.from("event_notifications").delete().eq("actor_email", email),
         ]);
         if (ownedEventIds.length) {
+          await Promise.all([
+            supabaseAdmin.from("event_interests").delete().in("event_id", ownedEventIds),
+            supabaseAdmin.from("event_notifications").delete().in("event_id", ownedEventIds),
+          ]);
           await supabaseAdmin.from("campus_events").delete().in("id", ownedEventIds);
         }
         await supabaseAdmin.from("students").delete().eq("email", email);
