@@ -56,12 +56,19 @@ function normalizeAnyEmail(raw: unknown): string | null {
   return email;
 }
 
-/** A .edu student address, or a CEO / invited-tester address. */
+/** Tester domain: demo-only access, never an admin and never a real student. */
+export const TESTER_DOMAIN = "venduapp.com";
+export function isTesterEmail(email: string): boolean {
+  return email.endsWith(`@${TESTER_DOMAIN}`);
+}
+
+/** A .edu student address, or a CEO / tester / invited-tester address. */
 export function normalizeAccessEmail(raw: unknown): string | null {
   const edu = normalizeEduEmail(raw);
   if (edu) return edu;
   const any = normalizeAnyEmail(raw);
-  return any && isCeoEmail(any) ? any : null;
+  if (!any) return null;
+  return isCeoEmail(any) || isTesterEmail(any) ? any : null;
 }
 
 
