@@ -79,6 +79,57 @@ export type Database = {
           },
         ]
       }
+      campus_events: {
+        Row: {
+          active: boolean
+          build: string
+          created_at: string
+          creator_email: string
+          creator_name: string
+          description: string | null
+          domain: string
+          ends_at: string | null
+          id: string
+          image_url: string | null
+          location: string | null
+          starts_at: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          build?: string
+          created_at?: string
+          creator_email: string
+          creator_name: string
+          description?: string | null
+          domain: string
+          ends_at?: string | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          starts_at: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          build?: string
+          created_at?: string
+          creator_email?: string
+          creator_name?: string
+          description?: string | null
+          domain?: string
+          ends_at?: string | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          starts_at?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       campuses: {
         Row: {
           accent_color: string
@@ -156,6 +207,79 @@ export type Database = {
           target_name?: string | null
         }
         Relationships: []
+      }
+      event_interests: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          student_email: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          student_email: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          student_email?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_interests_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "campus_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_notifications: {
+        Row: {
+          actor_email: string | null
+          build: string
+          created_at: string
+          event_id: string | null
+          id: string
+          kind: string
+          message: string
+          read_at: string | null
+          recipient_email: string
+        }
+        Insert: {
+          actor_email?: string | null
+          build?: string
+          created_at?: string
+          event_id?: string | null
+          id?: string
+          kind?: string
+          message: string
+          read_at?: string | null
+          recipient_email: string
+        }
+        Update: {
+          actor_email?: string | null
+          build?: string
+          created_at?: string
+          event_id?: string | null
+          id?: string
+          kind?: string
+          message?: string
+          read_at?: string | null
+          recipient_email?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_notifications_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "campus_events"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       events_cache: {
         Row: {
