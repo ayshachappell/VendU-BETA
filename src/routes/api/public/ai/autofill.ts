@@ -1,4 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { requireStudent } from "@/lib/edu-verification.server";
+
+/** Per-student daily cap so the paid AI gateway can't be drained. */
+const DAILY_AUTOFILL_CAP = 40;
 
 /** AI product auto-fill: a seller's photo becomes a title, category, description and price. */
 const CATEGORIES = [
@@ -25,6 +29,11 @@ export const Route = createFileRoute("/api/public/ai/autofill")({
   server: {
     handlers: {
       POST: async ({ request }) => {
+        // Signed-in students only: this route spends paid AI credits.
+        const auth = await requireStudent(request);
+        if ("response" in auth) return auth.response;
+        const email = auth.email;
+
         let body: Record<string, unknown>;
         try {
           body = (await request.json()) as Record<string, unknown>;
@@ -39,6 +48,22 @@ export const Route = createFileRoute("/api/public/ai/autofill")({
         if (image.length > 8_000_000) {
           return json({ ok: false, message: "That photo is too large. Try a smaller one." }, 400);
         }
+
+        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+        const { count } = await supabaseAdmin
+          .from("verification_attempts")
+          .select("id", { count: "exact", head: true })
+          .eq("email", email)
+          .eq("kind", "ai_autofill")
+          .gte("created_at", since);
+        if ((count ?? 0) >= DAILY_AUTOFILL_CAP) {
+          return json(
+            { ok: false, message: "You've used AI auto-fill a lot today. Try again tomorrow." },
+            429,
+          );
+        }
+        await supabaseAdmin.from("verification_attempts").insert({ email, kind: "ai_autofill" });
 
         const apiKey = process.env["LOVABLE_API_KEY"];
         if (!apiKey) {

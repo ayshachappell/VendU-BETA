@@ -85,7 +85,10 @@ export const Route = createFileRoute("/api/public/community/activity")({
             "";
           const domain = rawDomain ? canonicalDomain(rawDomain) : "";
           if (!domain) return json({ ok: false, message: "Missing school." }, 400);
-          if (!domain.endsWith(".edu")) {
+          // Strict allow-list: letters, digits, dots and hyphens only. This also
+          // rejects LIKE wildcards (% and _) so the pattern below can never be
+          // widened to match other schools.
+          if (!/^[a-z0-9-]+(\.[a-z0-9-]+)*\.edu$/.test(domain)) {
             return json({ ok: false, message: "Founder standings are only available for school campuses." }, 400);
           }
           const myCode = str(raw.refCode, 64);
