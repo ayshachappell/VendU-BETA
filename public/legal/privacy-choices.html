@@ -1,0 +1,75 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Your Privacy Choices — The VendU App</title>
+<meta name="description" content="Opt out of the sale or sharing of your personal information and manage analytics and advertising choices in The VendU App.">
+<link rel="icon" href="/icons/icon-192.png">
+<style>
+:root{--violet:#5A2BE0;--ink:#1B1626;--mist:#6B6480;--paper:#FBF8F3}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:40px 22px 80px}
+a{color:var(--violet)}
+h1{font-size:30px;letter-spacing:-.02em;margin:0 0 6px}
+h2{font-size:19px;margin:30px 0 8px}
+.sub{color:var(--mist);font-size:14px;margin-bottom:26px}
+.brand{font-weight:800;font-size:20px;color:var(--violet);text-decoration:none}
+nav{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;margin:30px 0 0;padding-top:20px;border-top:1px solid #e6e1d8}
+.row{background:#fff;border:1px solid #e6e1d8;border-radius:14px;padding:16px 18px;margin:14px 0;display:flex;gap:14px;align-items:flex-start;justify-content:space-between}
+.row h3{margin:0 0 4px;font-size:16px}
+.row p{margin:0;font-size:14px;color:var(--mist)}
+button.t{min-width:96px;min-height:44px;border-radius:999px;border:1px solid #e6e1d8;background:#fff;font:inherit;font-weight:700;font-size:14px;cursor:pointer;color:var(--ink)}
+button.t.on{background:var(--violet);border-color:var(--violet);color:#fff}
+.save{margin-top:10px;width:100%;min-height:48px;border-radius:14px;border:0;background:var(--violet);color:#fff;font:inherit;font-weight:800;font-size:16px;cursor:pointer}
+.ok{display:none;margin-top:10px;color:#0e7c5a;font-weight:700;font-size:14px}
+.backlink{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid #e6e1d8;border-radius:999px;padding:8px 14px;font-size:14px;font-weight:700;color:var(--violet);text-decoration:none;cursor:pointer;margin-bottom:18px}
+</style></head><body><div class="wrap"><a class="brand" href="/main/index.html">The VendU App</a><br>
+<a class="backlink" href="#" onclick="if(history.length>1){history.back();}else{location.href='/main/index.html';}return false;">&#8592; Back</a>
+
+<h1>Your Privacy Choices</h1><div class="sub">Last updated: September 14, 2026</div>
+
+<p>Use the controls below to decide how The VendU App uses your information. Your choice is saved on this device and applies immediately. If your browser sends a Global Privacy Control signal, we treat it as an opt-out of sale and sharing automatically.</p>
+
+<div class="row"><div><h3>Do not sell or share my personal information</h3><p>Stops us from selling or sharing your information with advertising or data partners, including for cross-context behavioral advertising.</p></div><button class="t" id="sale" type="button">On</button></div>
+
+<div class="row"><div><h3>Analytics</h3><p>Lets us measure how the app is used (pages, features, crashes) with Google Analytics.</p></div><button class="t" id="analytics" type="button">On</button></div>
+
+<div class="row"><div><h3>Targeted advertising</h3><p>Lets partners use your activity to personalize ads shown to you elsewhere.</p></div><button class="t" id="ads" type="button">On</button></div>
+
+<button class="save" id="save" type="button">Save my choices</button>
+<div class="ok" id="ok">Saved. Your choices apply right away.</div>
+
+<h2>State privacy rights</h2>
+<p>If you live in California, Virginia, Colorado, Connecticut, Utah, Texas, Oregon, Montana, Delaware, Iowa, Nebraska, New Hampshire, New Jersey, Minnesota, Maryland, Tennessee, Indiana, Kentucky, Rhode Island or any other state with a comprehensive privacy law, you may request access to, correction of, a copy of, or deletion of your personal information, and you may opt out of sale, sharing, targeted advertising and profiling. We will not discriminate against you for exercising these rights.</p>
+<p>To make a request, email <a href="mailto:privacy@venduapp.com">privacy@venduapp.com</a> from your account email, or delete your account at any time at <a href="/legal/delete-account.html">this page</a>. We respond within 45 days and may extend once when allowed by law. You may appeal a denied request by replying to our decision; authorized agents may submit requests with written permission.</p>
+<p>Nevada residents may submit a verified request not to sell covered information to the same address. We do not knowingly sell the personal information of anyone under 16.</p>
+
+<nav><a href="/legal/privacy.html">Privacy</a><a href="/legal/terms.html">Terms</a><a href="/legal/support.html">Support</a><a href="/legal/delete-account.html">Delete account</a><a href="/main/index.html">Open the app</a></nav>
+</div>
+<script>
+(function(){
+  var KEY='vendu_privacy_v1';
+  function read(){try{return JSON.parse(localStorage.getItem(KEY)||'null')||{};}catch(e){return {};}}
+  var gpc = navigator.globalPrivacyControl===true;
+  var c=read();
+  var st={sale: gpc?false:(c.sale!==false), analytics: !!c.analytics, ads: !!c.ads};
+  var map={sale:'sale',analytics:'analytics',ads:'ads'};
+  function paint(){
+    Object.keys(map).forEach(function(k){
+      var b=document.getElementById(k);
+      var on = k==='sale' ? !st.sale : st[k];      /* sale row is worded as an opt-out */
+      b.textContent = k==='sale' ? (st.sale?'Off':'On') : (st[k]?'On':'Off');
+      b.className='t'+(on?' on':'');
+    });
+  }
+  Object.keys(map).forEach(function(k){
+    document.getElementById(k).onclick=function(){st[k]=!st[k];if(k==='sale'&&st.sale===false){st.ads=false;}paint();};
+  });
+  document.getElementById('save').onclick=function(){
+    var next={decided:true,analytics:st.analytics,ads:st.ads&&st.sale,sale:gpc?false:st.sale,at:new Date().toISOString(),notice:'vendu-privacy-2026-09'};
+    try{localStorage.setItem(KEY,JSON.stringify(next));}catch(e){}
+    document.getElementById('ok').style.display='block';
+  };
+  paint();
+})();
+</script>
+</body></html>
