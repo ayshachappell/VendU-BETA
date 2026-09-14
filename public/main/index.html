@@ -1068,7 +1068,8 @@ function home(){
 
 function feedBody(){
   const q=state.q.toLowerCase();
-  const posts=FEED.filter(p=>{const h=HUSTLES.find(x=>x.id===p.s);return h&&h.campus===state.campus.id&&(!q||(h.name+p.text).toLowerCase().includes(q))});
+  const showSeededEverywhere=!!(state.tester||state.demoContent||state.tourActive);
+  const posts=FEED.filter(p=>{const h=HUSTLES.find(x=>x.id===p.s);return h&&(showSeededEverywhere||h.campus===state.campus.id)&&(!q||(h.name+p.text).toLowerCase().includes(q))});
   if(!posts.length)return founderBanner()+`<div class="empty" style="padding-top:50px">Nothing in the feed yet.<br>Add a service or switch on a promo and it posts here automatically.</div>`;
   return founderBanner()+`<div class="feed">${posts.map((p,i)=>{const h=HUSTLES.find(x=>x.id===p.s);const open=state.openC===p.id;return `
     <div class="post" style="animation-delay:${i*40}ms">
