@@ -142,8 +142,21 @@ input,textarea,select{font-size:16px} /* stops iOS zoom-on-focus */
 
 /* ---- event cards: all three actions fit on one flyer ---- */
 .eflyer .eover>div:last-child{gap:6px!important}
-.eflyer .eint{height:33px!important;padding:0 10px!important;font-size:11.5px!important;gap:4px!important}
+.eflyer .eover>div:last-child{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));flex-wrap:nowrap!important}
+.eflyer .eint{width:100%;height:36px!important;min-height:36px!important;padding:0 4px!important;font-size:11px!important;gap:3px!important;justify-content:center;box-sizing:border-box}
+.eflyer .eint svg{width:12px;height:12px;flex:0 0 12px}
 .eflyer .eint.on{background:var(--violet)!important;color:#fff!important}
+
+/* consistent header order, profile wordmark, and storefront editor sizing */
+.header-actions .locpill{order:1}
+.header-actions .bell{order:2;margin-right:0}
+.viewwm .u{position:relative;padding-top:7px}
+.viewwm .gradcap{top:-8px!important;width:28px!important}
+.ggrid{align-items:start}
+.gcell,.gadd2{min-width:0;width:100%}
+.gwrap,.gadd2{aspect-ratio:1/1;height:auto}
+.sf-close{display:inline-flex;align-items:center;gap:3px;min-height:44px;padding:0 10px;border:0;border-radius:999px;background:var(--violet);color:var(--primary-foreground,#fff);font:700 11px/1 Inter,system-ui,sans-serif;cursor:pointer}
+.dyn-row input{min-width:0;flex:1}
 
 /* ---- pull-to-refresh indicator ---- */
 .ptr{position:fixed;top:6px;left:50%;transform:translate(-50%,0);z-index:8000;background:var(--card,#fff);color:var(--mist,#6B6480);border:1px solid var(--line,#e6e1d8);border-radius:100px;padding:7px 14px;font:700 12px/1 'Inter',system-ui,sans-serif;box-shadow:0 6px 18px rgba(27,22,38,.16);opacity:0;pointer-events:none;transition:opacity .15s ease}
