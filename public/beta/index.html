@@ -968,10 +968,8 @@ function syncReferralsFromServer(){try{if(!window.VendU||!VendU.referralCount||!
 function schoolDomainOf(){var e=String(state.acctEmail||state.eduEmail||'').toLowerCase();var d=e.split('@')[1]||'';if(d)return d;return (state.campus&&state.campus.domain)||'';}
 function syncFounders(){
   try{
-    if(state.isCEO)return;
     if(!window.VendU||!VendU.founderStats)return;
     var dom=schoolDomainOf();if(!dom)return;
-    if(!state.isRealStudent&&!state.isCEO)return;
     VendU.founderStats(dom,myRefCode(),BUILD).then(function(r){
       if(!r||!r.ok)return;
       FOUNDERS=Math.min(FOUNDER_CAP,r.claimed||0);
@@ -1810,12 +1808,12 @@ function profile(){
   screen.querySelectorAll('[data-gradyear]').forEach(el=>el.onclick=()=>{state.gradYear=el.dataset.gradyear;render();});
   screen.querySelectorAll('[data-opencomm]').forEach(el=>el.onclick=()=>{openGroup(el.dataset.opencomm);});
   const cr=document.getElementById('copyref');if(cr)cr.onclick=()=>{try{navigator.clipboard&&navigator.clipboard.writeText(refLink);}catch(e){}toast('Referral link copied! 🔗');};
-  const lb=document.getElementById('lbBtn');if(lb)lb.onclick=()=>{state.leaderboard=true;render();};
+  const lb=document.getElementById('lbBtn');if(lb)lb.onclick=()=>{state.leaderboard=true;render();try{syncFounders();}catch(e){}};
   const vm=document.getElementById('viewme');if(vm)vm.onclick=()=>openDetail('me');
   var _mt=document.getElementById('moretoggle');if(_mt)_mt.onclick=()=>{state.moreMenu=true;render();screen.scrollTop=0;};
   screen.querySelectorAll('[data-menu]').forEach(el=>el.onclick=()=>{const m=el.dataset.menu;if(m==='setup'){state.storefrontSetup=true;render();}else if(m==='bookings'){state.bookSet=true;render();}else if(m==='saved'){state.savedView=true;render();}else if(m==='me'){openDetail('me');}else if(m==='boost'){state.boosted=!state.boosted;toast(state.boosted?'⚡ Storefront boosted! Optional upgrade — listing is always free.':'Boost turned off. Your storefront stays free & live.');render();}else if(m==='theme'){state.themeView=true;render();}else if(m==='regular'){state.isSeller=false;state.tab='profile';toast('Vendor mode off — your storefront is saved. Switch back anytime.');render();}else if(m==='myposts'){state.myPostsView=true;render();}else if(m==='feedback'){try{window.location.href='mailto:'+BETA_EMAIL+'?subject='+encodeURIComponent('The VendU App Beta Feedback')+'&body='+encodeURIComponent('What I liked:\n\nWhat confused me:\n\nWhat I wish it did:\n');}catch(e){}toast('Opening email — tell us anything! 💬');}else if(m==='tour'){VendU.startTour(true);}else if(m==='install'){showInstall();}else if(m==='support'){window.open('/legal/support.html','_blank','noopener');}else if(m==='legal'){window.open('/legal/privacy.html','_blank','noopener');}else if(m==='delete'){deleteAccount();}else if(m==='logout'){doLogout();}else if(m==='inbox'){openInbox();}else toast('Opens in the real build ⚙️');});
 }
-function lbRows(){if(state.lbRows&&state.lbRows.length)return state.lbRows.slice();if(state.tester||state.tourActive)return [...LEADERBOARD.map(r=>[r[0],r[1],true]),['You',state.referrals,state.referrals>=FOUNDER_GOAL]].filter(r=>r[1]>0).sort((a,b)=>b[1]-a[1]);return [];}
+function lbRows(){return state.lbRows&&state.lbRows.length?state.lbRows.slice():[];}
 function lbRank(refs){if(state.lbRank)return state.lbRank;if(!refs)return 0;const rows=lbRows();const i=rows.findIndex(r=>r[0]==='You');return i<0?0:i+1;}
 function servicesEditor(){state.storefrontSetup=true;state.svcEdit=false;add();}
 function leaderboard(){
@@ -2180,13 +2178,13 @@ try{(function(){
   var sc=document.getElementById('screen');if(!sc)return;
   var startY=0,dist=0,pulling=false,ind=null;
   function bar(){if(!ind){ind=document.createElement('div');ind.className='ptr';document.body.appendChild(ind);}return ind;}
-  sc.addEventListener('touchstart',function(e){if(sc.scrollTop<=0&&e.touches.length===1){startY=e.touches[0].clientY;dist=0;pulling=true;}},{passive:true});
+  sc.addEventListener('touchstart',function(e){if(state.tab==='home'&&sc.scrollTop<=0&&e.touches.length===1){startY=e.touches[0].clientY;dist=0;pulling=true;}else{pulling=false;}},{passive:true});
   sc.addEventListener('touchmove',function(e){if(!pulling)return;dist=e.touches[0].clientY-startY;if(dist>4&&sc.scrollTop<=0){var t=bar();t.classList.add('on');t.style.transform='translate(-50%,'+Math.min(dist*0.5,54)+'px)';t.textContent=dist>70?'Release to refresh':'Pull to refresh';}},{passive:true});
   sc.addEventListener('touchend',function(){if(!pulling)return;pulling=false;var go=dist>70;if(ind){ind.classList.remove('on');ind.style.transform='';}dist=0;if(go)venduPullRefresh();},{passive:true});
 })();}catch(e){}
 
 function render(){if(state.onboarded&&window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour();},300);if(!state.onboarded){if(state.storefrontSetup)return add();return onboarding();}if(state.moreMenu)return settingsScreen();if(state.campusPick)return campusPicker();if(state.themeView)return themeScreen();if(state.book)return bookingScreen();if(state.bookSet)return bookingSettings();if(state.userView)return userProfile();if(state.thread)return messageScreen();if(state.inboxView)return inboxScreen();if(state.groupCreateView)return createGroupScreen();if(state.groupView)return groupPage();if(state.detail)return detail(state.detail);if(state.leaderboard)return leaderboard();if(state.storefrontSetup)return add();if(state.savedView)return savedScreen();if(state.myPostsView)return myPostsScreen();if(state.svcEdit)return servicesEditor();if(state.tab==='add')return addTab();({home,market,venuU,profile}[state.tab]||home)();}
-document.getElementById('nav').querySelectorAll('.navitem').forEach(item=>{item.onclick=()=>{if(!state.onboarded)return;document.querySelectorAll('.navitem').forEach(n=>n.classList.remove('on'));item.classList.add('on');if(item.dataset.tab==='add'&&state.tab!=='add')state.prevTab=state.tab;state.tab=item.dataset.tab;state.moreMenu=false;state.userView=null;state.thread=0;state.inboxView=false;state.groupView=null;state.groupCreateView=false;state.myPostsView=false;state.themeView=false;state.reviewOpen=false;state.cat='All';state.q='';state.near=false;state.detail=0;state.book=null;state.svcEdit=false;state.addMode=null;state.newPhoto=null;state.leaderboard=false;state.storefrontSetup=false;state.reviewOpen=false;state.msgTo=0;state.openMC=0;state.bookSet=false;state.subPrompt=false;state.savedView=false;state.campusPick=false;state.campusQ='';if(item.dataset.tab!=='add')state.submitted=false;render();screen.scrollTop=0;};});
+document.getElementById('nav').querySelectorAll('.navitem').forEach(item=>{item.onclick=()=>{if(!state.onboarded)return;document.querySelectorAll('.navitem').forEach(n=>n.classList.remove('on'));item.classList.add('on');if(item.dataset.tab==='add'&&state.tab!=='add')state.prevTab=state.tab;state.tab=item.dataset.tab;state.moreMenu=false;state.userView=null;state.thread=0;state.inboxView=false;state.groupView=null;state.groupCreateView=false;state.myPostsView=false;state.themeView=false;state.reviewOpen=false;state.cat='All';state.q='';state.near=false;state.detail=0;state.book=null;state.svcEdit=false;state.addMode=null;state.newPhoto=null;state.leaderboard=false;state.storefrontSetup=false;state.reviewOpen=false;state.msgTo=0;state.openMC=0;state.bookSet=false;state.subPrompt=false;state.savedView=false;state.campusPick=false;state.campusQ='';if(item.dataset.tab!=='add')state.submitted=false;render();screen.scrollTop=0;if(item.dataset.tab==='profile')setTimeout(function(){try{venduLiveSync();}catch(e){}},0);};});
 try{restoreCampusPref();}catch(e){}
 /* ---- universal Back: nav helper, layer-aware back, device/browser back ---- */
 function selectTab(tab){
