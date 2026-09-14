@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as BetaRouteImport } from './routes/beta'
+import { Route as ApiPublicFeedRouteImport } from './routes/api/public/feed'
 import { Route as ApiPublicProfileRouteImport } from './routes/api/public/profile'
 import { Route as ApiPublicReportRouteImport } from './routes/api/public/report'
 import { Route as ApiPublicVendorRouteImport } from './routes/api/public/vendor'
@@ -50,6 +51,11 @@ const AppRoute = AppRouteImport.update({
 const BetaRoute = BetaRouteImport.update({
   id: '/beta',
   path: '/beta',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicFeedRoute = ApiPublicFeedRouteImport.update({
+  id: '/api/public/feed',
+  path: '/api/public/feed',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicProfileRoute = ApiPublicProfileRouteImport.update({
@@ -150,6 +156,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
+  '/api/public/feed': typeof ApiPublicFeedRoute
   '/api/public/profile': typeof ApiPublicProfileRoute
   '/api/public/report': typeof ApiPublicReportRoute
   '/api/public/vendor': typeof ApiPublicVendorRoute
@@ -174,6 +181,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
+  '/api/public/feed': typeof ApiPublicFeedRoute
   '/api/public/profile': typeof ApiPublicProfileRoute
   '/api/public/report': typeof ApiPublicReportRoute
   '/api/public/vendor': typeof ApiPublicVendorRoute
@@ -199,6 +207,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
+  '/api/public/feed': typeof ApiPublicFeedRoute
   '/api/public/profile': typeof ApiPublicProfileRoute
   '/api/public/report': typeof ApiPublicReportRoute
   '/api/public/vendor': typeof ApiPublicVendorRoute
@@ -225,6 +234,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/app'
     | '/beta'
+    | '/api/public/feed'
     | '/api/public/profile'
     | '/api/public/report'
     | '/api/public/vendor'
@@ -249,6 +259,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/app'
     | '/beta'
+    | '/api/public/feed'
     | '/api/public/profile'
     | '/api/public/report'
     | '/api/public/vendor'
@@ -273,6 +284,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/app'
     | '/beta'
+    | '/api/public/feed'
     | '/api/public/profile'
     | '/api/public/report'
     | '/api/public/vendor'
@@ -298,6 +310,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AppRoute: typeof AppRoute
   BetaRoute: typeof BetaRoute
+  ApiPublicFeedRoute: typeof ApiPublicFeedRoute
   ApiPublicProfileRoute: typeof ApiPublicProfileRoute
   ApiPublicReportRoute: typeof ApiPublicReportRoute
   ApiPublicVendorRoute: typeof ApiPublicVendorRoute
@@ -346,6 +359,13 @@ declare module '@tanstack/react-router' {
       path: '/beta'
       fullPath: '/beta'
       preLoaderRoute: typeof BetaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/feed': {
+      id: '/api/public/feed'
+      path: '/api/public/feed'
+      fullPath: '/api/public/feed'
+      preLoaderRoute: typeof ApiPublicFeedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/profile': {
@@ -482,6 +502,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   AppRoute: AppRoute,
   BetaRoute: BetaRoute,
+  ApiPublicFeedRoute: ApiPublicFeedRoute,
   ApiPublicProfileRoute: ApiPublicProfileRoute,
   ApiPublicReportRoute: ApiPublicReportRoute,
   ApiPublicVendorRoute: ApiPublicVendorRoute,
