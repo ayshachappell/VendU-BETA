@@ -19,6 +19,7 @@ import { Route as ApiPublicReferralRouteImport } from './routes/api/public/refer
 import { Route as ApiPublicReportRouteImport } from './routes/api/public/report'
 import { Route as ApiPublicVendorRouteImport } from './routes/api/public/vendor'
 import { Route as ApiPublicAccountDeleteRouteImport } from './routes/api/public/account/delete'
+import { Route as ApiPublicAccountEmailChangeRouteImport } from './routes/api/public/account/email-change'
 import { Route as ApiPublicAdminModerateRouteImport } from './routes/api/public/admin/moderate'
 import { Route as ApiPublicCampusEventsRouteImport } from './routes/api/public/campus/events'
 import { Route as ApiPublicCampusResolveRouteImport } from './routes/api/public/campus/resolve'
@@ -84,6 +85,12 @@ const ApiPublicAccountDeleteRoute = ApiPublicAccountDeleteRouteImport.update({
   path: '/api/public/account/delete',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicAccountEmailChangeRoute =
+  ApiPublicAccountEmailChangeRouteImport.update({
+    id: '/api/public/account/email-change',
+    path: '/api/public/account/email-change',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicAdminModerateRoute = ApiPublicAdminModerateRouteImport.update({
   id: '/api/public/admin/moderate',
   path: '/api/public/admin/moderate',
@@ -168,6 +175,7 @@ export interface FileRoutesByFullPath {
   '/api/public/report': typeof ApiPublicReportRoute
   '/api/public/vendor': typeof ApiPublicVendorRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
+  '/api/public/account/email-change': typeof ApiPublicAccountEmailChangeRoute
   '/api/public/admin/moderate': typeof ApiPublicAdminModerateRoute
   '/api/public/campus/events': typeof ApiPublicCampusEventsRoute
   '/api/public/campus/resolve': typeof ApiPublicCampusResolveRoute
@@ -194,6 +202,7 @@ export interface FileRoutesByTo {
   '/api/public/report': typeof ApiPublicReportRoute
   '/api/public/vendor': typeof ApiPublicVendorRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
+  '/api/public/account/email-change': typeof ApiPublicAccountEmailChangeRoute
   '/api/public/admin/moderate': typeof ApiPublicAdminModerateRoute
   '/api/public/campus/events': typeof ApiPublicCampusEventsRoute
   '/api/public/campus/resolve': typeof ApiPublicCampusResolveRoute
@@ -221,6 +230,7 @@ export interface FileRoutesById {
   '/api/public/report': typeof ApiPublicReportRoute
   '/api/public/vendor': typeof ApiPublicVendorRoute
   '/api/public/account/delete': typeof ApiPublicAccountDeleteRoute
+  '/api/public/account/email-change': typeof ApiPublicAccountEmailChangeRoute
   '/api/public/admin/moderate': typeof ApiPublicAdminModerateRoute
   '/api/public/campus/events': typeof ApiPublicCampusEventsRoute
   '/api/public/campus/resolve': typeof ApiPublicCampusResolveRoute
@@ -249,6 +259,7 @@ export interface FileRouteTypes {
     | '/api/public/report'
     | '/api/public/vendor'
     | '/api/public/account/delete'
+    | '/api/public/account/email-change'
     | '/api/public/admin/moderate'
     | '/api/public/campus/events'
     | '/api/public/campus/resolve'
@@ -275,6 +286,7 @@ export interface FileRouteTypes {
     | '/api/public/report'
     | '/api/public/vendor'
     | '/api/public/account/delete'
+    | '/api/public/account/email-change'
     | '/api/public/admin/moderate'
     | '/api/public/campus/events'
     | '/api/public/campus/resolve'
@@ -301,6 +313,7 @@ export interface FileRouteTypes {
     | '/api/public/report'
     | '/api/public/vendor'
     | '/api/public/account/delete'
+    | '/api/public/account/email-change'
     | '/api/public/admin/moderate'
     | '/api/public/campus/events'
     | '/api/public/campus/resolve'
@@ -328,6 +341,7 @@ export interface RootRouteChildren {
   ApiPublicReportRoute: typeof ApiPublicReportRoute
   ApiPublicVendorRoute: typeof ApiPublicVendorRoute
   ApiPublicAccountDeleteRoute: typeof ApiPublicAccountDeleteRoute
+  ApiPublicAccountEmailChangeRoute: typeof ApiPublicAccountEmailChangeRoute
   ApiPublicAdminModerateRoute: typeof ApiPublicAdminModerateRoute
   ApiPublicCampusEventsRoute: typeof ApiPublicCampusEventsRoute
   ApiPublicCampusResolveRoute: typeof ApiPublicCampusResolveRoute
@@ -414,6 +428,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/account/delete'
       fullPath: '/api/public/account/delete'
       preLoaderRoute: typeof ApiPublicAccountDeleteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/account/email-change': {
+      id: '/api/public/account/email-change'
+      path: '/api/public/account/email-change'
+      fullPath: '/api/public/account/email-change'
+      preLoaderRoute: typeof ApiPublicAccountEmailChangeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/admin/moderate': {
@@ -528,6 +549,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicReportRoute: ApiPublicReportRoute,
   ApiPublicVendorRoute: ApiPublicVendorRoute,
   ApiPublicAccountDeleteRoute: ApiPublicAccountDeleteRoute,
+  ApiPublicAccountEmailChangeRoute: ApiPublicAccountEmailChangeRoute,
   ApiPublicAdminModerateRoute: ApiPublicAdminModerateRoute,
   ApiPublicCampusEventsRoute: ApiPublicCampusEventsRoute,
   ApiPublicCampusResolveRoute: ApiPublicCampusResolveRoute,

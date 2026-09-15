@@ -6,7 +6,6 @@ import {
   requestEmailCode,
   requireStudent,
   schoolDomain,
-  str as _str,
 } from "@/lib/edu-verification.server";
 import { domainForEmail } from "@/lib/vendu-core.server";
 
@@ -141,5 +140,3 @@ export const Route = createFileRoute("/api/public/account/email-change")({
     },
   },
 });
-
-void _str;
