@@ -24,6 +24,25 @@ export function domainForEmail(email: string): string {
   }
 }
 
+/** The one school a student publishes to. Defaults to the campus of their
+ *  verified email, unless they corrected it once at first setup. */
+export async function homeDomainFor(email: string): Promise<string> {
+  const fromEmail = domainForEmail(email);
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data } = await supabaseAdmin
+      .from("profiles")
+      .select("campus_domain")
+      .eq("email", email)
+      .maybeSingle();
+    const saved = safeDomain(data?.["campus_domain"]);
+    if (saved) return saved;
+  } catch {
+    /* fall back to the email domain */
+  }
+  return fromEmail;
+}
+
 export function safeDomain(raw: unknown): string {
   const d = String(raw ?? "").trim().toLowerCase().replace(/^.*@/, "");
   if (!d) return "";
