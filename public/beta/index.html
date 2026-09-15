@@ -714,6 +714,46 @@ function CAMP(){return state.campus?state.campus.short:'your campus';}
 function wmk(){var c=state.campus||CAMPUSES[0];return (c.short+' 🐾 '+c.mascot+' 🐾 ').repeat(90);}
 function payPh(app){if(app==='Apple Pay'||app==='Google Pay')return 'phone number (e.g. 555-123-4567)';if(app==='Zelle')return 'phone or email';if(app==='Cash App')return '$cashtag';if(app==='Venmo')return '@handle';if(app==='PayPal')return 'paypal.me handle';return 'handle or link';}
 function openCampusPick(){state.campusPick=true;render();}
+
+/* ===== Home campus: the one school a student's posts publish to =====
+   Set from the verified .edu email, with a single correction allowed the
+   first time the app is unlocked. Changing the location pill afterwards only
+   changes what you browse, never where you post. */
+var HOME_OK_KEY='vendu_home_campus_ok';
+function homeCampusSaved(){try{return !!localStorage.getItem(HOME_OK_KEY);}catch(e){return false;}}
+function saveHomeCampus(c){
+  c=c||state.campus;if(!c)return;
+  try{localStorage.setItem(HOME_OK_KEY,'1');localStorage.setItem('vendu_home_campus',JSON.stringify({domain:c.domain||'',name:c.name||''}));}catch(e){}
+  state.homeCampus={domain:c.domain||'',name:c.name||''};
+  try{if(window.VendU&&VendU.saveProfile)VendU.saveProfile({campusDomain:c.domain||'',campusName:c.name||''});}catch(e){}
+}
+function homePickApply(c){
+  c=c||state.campus;
+  state.homePick=false;state.homeConfirm=false;
+  saveHomeCampus(c);saveCampusPref();
+  toast('Home campus set \u2014 your posts show at '+((c&&c.short)||'your school'));
+  render();
+}
+function maybeAskHomeCampus(){
+  if(state.tester)return;
+  if(!(state.isRealStudent||state.isCEO))return;
+  if(homeCampusSaved())return;
+  setTimeout(function(){if(!homeCampusSaved()){state.homeConfirm=true;render();}},900);
+}
+function homeConfirmScreen(){
+  var c=state.campus||{},nm=c.name||c.short||'your school';
+  screen.innerHTML='<div class="enter" style="padding:28px 20px 24px;display:flex;flex-direction:column;justify-content:center;min-height:100%">'+
+    '<div style="font-size:40px;text-align:center">\uD83C\uDFEB</div>'+
+    '<div style="font-family:Bricolage Grotesque;font-weight:800;font-size:22px;text-align:center;margin-top:8px">Is this your home campus?</div>'+
+    '<div style="text-align:center;font-weight:800;font-size:18px;color:var(--violet);margin-top:10px">'+nm+'</div>'+
+    '<div style="font-size:13px;color:var(--mist);line-height:1.55;text-align:center;margin:10px 4px 18px">We matched this from your school email. Anything you post \u2014 items, storefronts and events \u2014 shows on this school\u2019s feed. You can still browse and message other campuses anytime.</div>'+
+    '<button class="submit" id="hcYes" style="margin:0">Yes, that\u2019s my school</button>'+
+    '<button class="submit" id="hcNo" style="margin:10px 0 0;background:var(--card);color:var(--ink);border:1px solid var(--line)">Choose a different school</button>'+
+    '<div style="font-size:11.5px;color:var(--mist);text-align:center;margin-top:12px">You can correct this once now. After that it only changes by verifying a new school email.</div></div>';
+  document.getElementById('hcYes').onclick=function(){homePickApply(state.campus);};
+  document.getElementById('hcNo').onclick=function(){state.homePick=true;state.homeConfirm=false;state.campusPick=true;render();};
+}
+
 /* ===== Universal campuses: any .edu, real school names, per-campus theming ===== */
 function campusAccent(){return (state.campus&&state.campus.accent)||'#5A2BE0';}
 function applyCampusTheme(){try{document.documentElement.style.setProperty('--campus-accent',campusAccent());document.documentElement.style.setProperty('--school-a',campusAccent());}catch(e){}}
@@ -950,6 +990,7 @@ function applyAccount(email){
     var _saved=false;try{_saved=!!localStorage.getItem('vendu_campus_confirmed');}catch(e){}
     if(_saved){restoreCampusPref();}else{state.campus=campusById('fvsu');applyCampusTheme();setTimeout(function(){openCampusPick();},700);}}
   if(typeof refreshDemo==='function')refreshDemo();
+  maybeAskHomeCampus();
 }
 
 /* ===== Referrals & founder spots (10 per school, 3 vendor referrals = founder) ===== */
@@ -1997,7 +2038,7 @@ function campusPicker(){
   var q=(state.campusQ||'').trim();
   var myDomain=String(state.acctEmail||'').split('@')[1]||'';
   screen.innerHTML='<div class="topbar"><div class="brandrow"><div class="wordmark">Choose your campus</div><div class="locpill" id="cpClose" style="cursor:pointer">\u2715 Close</div></div><div class="search">'+icon('<circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/>')+'<input id="cpq" autocomplete="off" autocorrect="off" autocapitalize="none" placeholder="Search your school\u2026" value="'+q.replace(/"/g,'&quot;')+'"></div></div><div class="enter" style="padding:12px 20px 20px"><button class="submit" id="cpNear" style="background:var(--ink);margin-bottom:14px;position:sticky;top:0;z-index:5">\uD83D\uDCCD Use my location \u2014 find nearest campus</button><div id="cpList"></div><div style="margin-top:16px;padding:14px;border:1px dashed var(--line);border-radius:14px"><div style="font-weight:700;font-size:13.5px">Can\u2019t find your school?</div><div style="font-size:12.5px;color:var(--mist);margin:4px 0 10px">Trade, tech and vocational schools aren\u2019t always listed. Continue with your .edu email and we\u2019ll create your campus.</div><button class="submit" id="cpEdu" style="margin:0">Continue with my .edu email</button></div></div>';
-  document.getElementById('cpClose').onclick=function(){state.campusPick=false;state.campusQ='';state.campusResults=[];state.themeView=false;state.myPostsView=false;state.thread=0;state.inboxView=false;state.groupView=null;state.userView=null;state.groupCreateView=false;state.assignMod=false;state.createGroup=null;render();};
+  document.getElementById('cpClose').onclick=function(){state.campusPick=false;state.campusQ='';state.campusResults=[];if(state.homePick){state.homePick=false;state.homeConfirm=true;render();return;}state.themeView=false;state.myPostsView=false;state.thread=0;state.inboxView=false;state.groupView=null;state.userView=null;state.groupCreateView=false;state.assignMod=false;state.createGroup=null;render();};
   var input=document.getElementById('cpq');
   input.oninput=function(e){
     var val=e.target.value;
@@ -2010,7 +2051,7 @@ function campusPicker(){
   document.getElementById('cpEdu').onclick=function(){
     if(!myDomain){toast('Verify your school email first \u2014 that sets your campus.');return;}
     state.campusPick=false;state.campusQ='';state.campusResults=[];
-    joinCampus(myDomain,null,function(c){toast('Now viewing '+c.short);});
+    joinCampus(myDomain,null,function(c){if(state.homePick){homePickApply(c);return;}toast('Now viewing '+c.short);});
     render();
   };
   cpRenderList();
@@ -2052,11 +2093,11 @@ function cpRenderList(){
   }).join('');
   if(!html)html='<div class="prompt">'+(state.campusSearching?'Searching every U.S. campus\u2026':state.campusSearchError?'School search could not connect. Check your connection and try again.':ql.length===1?'Keep typing\u2026':'Type your school name \u2014 every U.S. college, community college and trade school is searchable.')+'</div>';
   box.innerHTML=html;
-  box.querySelectorAll('[data-camp]').forEach(function(el){el.onclick=function(){state.campus=campusById(el.dataset.camp);applyCampusTheme();loadCampusEvents();saveCampusPref();state.campusPick=false;state.campusQ='';state.campusResults=[];toast('Now viewing '+state.campus.short);render();};});
+  box.querySelectorAll('[data-camp]').forEach(function(el){el.onclick=function(){state.campus=campusById(el.dataset.camp);applyCampusTheme();loadCampusEvents();saveCampusPref();state.campusPick=false;state.campusQ='';state.campusResults=[];if(state.homePick){homePickApply(state.campus);return;}toast('Now viewing '+state.campus.short);render();};});
   box.querySelectorAll('[data-domain]').forEach(function(el){el.onclick=function(){
     var d=el.dataset.domain,n=el.dataset.name;
     state.campusPick=false;state.campusQ='';state.campusResults=[];
-    joinCampus(d,{display_name:n},function(c){toast('Now viewing '+c.short);});
+    joinCampus(d,{display_name:n},function(c){if(state.homePick){homePickApply(c);return;}toast('Now viewing '+c.short);});
     render();
   };});
 }
@@ -2088,7 +2129,7 @@ function pickNearest(){
   }
   toast('\uD83D\uDCCD Finding your nearest campus\u2026');
   var localBest=function(lat,lng){var best=CAMPUSES[0],bd=1e18;CAMPUSES.forEach(function(c){var dx=c.lat-lat,dy=c.lng-lng,d=dx*dx+dy*dy;if(d<bd){bd=d;best=c;}});return best;};
-  var useLocal=function(lat,lng){var b=localBest(lat,lng);state.campus=b;applyCampusTheme();loadCampusEvents();saveCampusPref();state.campusPick=false;state.campusQ='';state.campusResults=[];toast('\uD83D\uDCCD Nearest campus: '+b.short);render();};
+  var useLocal=function(lat,lng){var b=localBest(lat,lng);state.campus=b;applyCampusTheme();loadCampusEvents();saveCampusPref();state.campusPick=false;state.campusQ='';state.campusResults=[];if(state.homePick){homePickApply(b);return;}toast('\uD83D\uDCCD Nearest campus: '+b.short);render();};
   var resolve=function(lat,lng){
     fetch('https://api.bigdatacloud.net/data/reverse-geocode-client?latitude='+lat+'&longitude='+lng+'&localityLanguage=en')
       .then(function(r){return r.json();})
@@ -2101,7 +2142,7 @@ function pickNearest(){
             var hit=(r&&r.ok&&r.results&&r.results[0])||null;
             if(!hit)return step(i+1);
             state.campusPick=false;state.campusQ='';state.campusResults=[];
-            joinCampus(hit.domain,{display_name:hit.name},function(c){toast('\uD83D\uDCCD Nearest campus: '+c.short);});
+            joinCampus(hit.domain,{display_name:hit.name},function(c){if(state.homePick){homePickApply(c);return;}toast('\uD83D\uDCCD Nearest campus: '+c.short);});
             render();
           }).catch(function(){step(i+1);});
         };
@@ -2255,7 +2296,7 @@ try{(function(){
   sc.addEventListener('touchend',function(){if(!pulling)return;pulling=false;var go=dist>70;if(ind){ind.classList.remove('on');ind.style.transform='';}dist=0;if(go)venduPullRefresh();},{passive:true});
 })();}catch(e){}
 
-function render(){try{retagDemo();}catch(e){}if(state.onboarded&&window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour();},300);if(!state.onboarded){if(state.storefrontSetup)return add();return onboarding();}if(state.moreMenu)return settingsScreen();if(state.campusPick)return campusPicker();if(state.themeView)return themeScreen();if(state.book)return bookingScreen();if(state.bookSet)return bookingSettings();if(state.userView)return userProfile();if(state.thread)return messageScreen();if(state.inboxView)return inboxScreen();if(state.groupCreateView)return createGroupScreen();if(state.groupView)return groupPage();if(state.detail)return detail(state.detail);if(state.leaderboard)return leaderboard();if(state.storefrontSetup)return add();if(state.savedView)return savedScreen();if(state.myPostsView)return myPostsScreen();if(state.svcEdit)return servicesEditor();if(state.tab==='add')return addTab();({home,market,venuU,profile}[state.tab]||home)();}
+function render(){try{retagDemo();}catch(e){}if(state.onboarded&&!state.homeConfirm&&!state.homePick&&window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour();},300);if(!state.onboarded){if(state.storefrontSetup)return add();return onboarding();}if(state.moreMenu)return settingsScreen();if(state.campusPick)return campusPicker();if(state.homeConfirm)return homeConfirmScreen();if(state.themeView)return themeScreen();if(state.book)return bookingScreen();if(state.bookSet)return bookingSettings();if(state.userView)return userProfile();if(state.thread)return messageScreen();if(state.inboxView)return inboxScreen();if(state.groupCreateView)return createGroupScreen();if(state.groupView)return groupPage();if(state.detail)return detail(state.detail);if(state.leaderboard)return leaderboard();if(state.storefrontSetup)return add();if(state.savedView)return savedScreen();if(state.myPostsView)return myPostsScreen();if(state.svcEdit)return servicesEditor();if(state.tab==='add')return addTab();({home,market,venuU,profile}[state.tab]||home)();}
 document.getElementById('nav').querySelectorAll('.navitem').forEach(item=>{item.onclick=()=>{if(!state.onboarded)return;document.querySelectorAll('.navitem').forEach(n=>n.classList.remove('on'));item.classList.add('on');if(item.dataset.tab==='add'&&state.tab!=='add')state.prevTab=state.tab;state.tab=item.dataset.tab;state.moreMenu=false;state.userView=null;state.thread=0;state.inboxView=false;state.groupView=null;state.groupCreateView=false;state.myPostsView=false;state.themeView=false;state.reviewOpen=false;state.cat='All';state.q='';state.near=false;state.detail=0;state.book=null;state.svcEdit=false;state.addMode=null;state.newPhoto=null;state.leaderboard=false;state.storefrontSetup=false;state.reviewOpen=false;state.msgTo=0;state.openMC=0;state.bookSet=false;state.subPrompt=false;state.savedView=false;state.campusPick=false;state.campusQ='';if(item.dataset.tab!=='add')state.submitted=false;render();screen.scrollTop=0;if(item.dataset.tab==='profile')setTimeout(function(){try{venduLiveSync();}catch(e){}},0);};});
 try{restoreCampusPref();}catch(e){}
 /* ---- universal Back: nav helper, layer-aware back, device/browser back ---- */

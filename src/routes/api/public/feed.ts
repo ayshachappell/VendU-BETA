@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { json, normalizeBuild, requireStudent } from "@/lib/edu-verification.server";
-import { cleanUrl, domainForEmail, ensureProfile, safeDomain, str } from "@/lib/vendu-core.server";
+import { cleanUrl, homeDomainFor, ensureProfile, safeDomain, str } from "@/lib/vendu-core.server";
 
 type Body = Record<string, unknown>;
 
@@ -99,7 +99,7 @@ export const Route = createFileRoute("/api/public/feed")({
           if (!title) return json({ ok: false, message: "Add a title." }, 400);
           /* Posts always belong to the student's own school, whatever campus
              they are currently browsing. */
-          const domain = domainForEmail(email) || safeDomain(raw["domain"]);
+          const domain = (await homeDomainFor(email)) || safeDomain(raw["domain"]);
           if (!domain) return json({ ok: false, message: "Pick your campus first." }, 400);
           const row = {
             author_email: email,
