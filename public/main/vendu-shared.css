@@ -180,3 +180,10 @@ input,textarea,select{font-size:16px} /* stops iOS zoom-on-focus */
 .etag.sample{background:rgba(255,240,224,.95);color:#a5600f;margin-left:6px}
 .samplebanner{margin:10px 0 2px;padding:10px 12px;border-radius:12px;background:#FFF6EA;border:1px solid #F3D6AE;color:#7a4a08;font-size:12px;line-height:1.45}
 .samplebanner b{font-weight:800}
+
+/* ---- wordmark letter spacing fix (v11): no flex gap between V/end/U ---- */
+.wordmark,.wordmark.header-logo,.ob-title .wordmark.welcome-wordmark,.headline-wordmark{gap:0!important}
+.wordmark .wm-pre{margin-right:.2em}
+.wordmark .wm-post{margin-left:.2em}
+.ob-title .wordmark.welcome-wordmark .wm-pre{margin-right:.18em}
+.ob-title .wordmark.welcome-wordmark .wm-post{margin-left:.18em}
