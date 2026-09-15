@@ -59,9 +59,21 @@ export const Route = createFileRoute("/api/public/profile")({
           if (raw["avatarUrl"] !== undefined) patch["avatar_url"] = cleanUrl(raw["avatarUrl"], 800000);
           if (raw["phone"] !== undefined) patch["phone"] = str(raw["phone"], 24);
           if (raw["vendorMode"] !== undefined) patch["vendor_mode"] = !!raw["vendorMode"];
+          /* Home campus may be corrected exactly once, at first setup. After
+             that it only changes through the verified school-email change. */
           if (raw["campusDomain"] !== undefined) {
             const d = safeDomain(raw["campusDomain"]);
-            if (d) patch["campus_domain"] = d;
+            if (d) {
+              const emailDomain = domainForEmail(email);
+              const { data: cur } = await supabaseAdmin
+                .from("profiles")
+                .select("campus_domain")
+                .eq("email", email)
+                .maybeSingle();
+              const current = safeDomain(cur?.["campus_domain"]);
+              const alreadyMoved = !!current && !!emailDomain && current !== emailDomain;
+              if (!alreadyMoved) patch["campus_domain"] = d;
+            }
           }
           if (raw["campusName"] !== undefined) patch["campus_name"] = str(raw["campusName"], 90);
           if (raw["socials"] && typeof raw["socials"] === "object") {
