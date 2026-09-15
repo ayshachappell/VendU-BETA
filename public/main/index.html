@@ -774,21 +774,30 @@ function applyCampusTheme(){try{document.documentElement.style.setProperty('--ca
 function makeCampus(c){var base=CAMPUSES[0];return {id:base.id,domain:c.domain,name:c.display_name,short:c.display_name,mascot:c.mascot||'',accent:c.accent_color||'#5A2BE0',dynamic:true,lat:c.lat||0,lng:c.lng||0};}
 var CAMPUS_PREF_KEY='vendu_campus_v1';
 function saveCampusPref(){try{var c=state.campus;if(!c)return;localStorage.setItem('vendu_campus_confirmed','1');localStorage.setItem(CAMPUS_PREF_KEY,JSON.stringify({id:c.dynamic?'':c.id,domain:c.domain||'',name:c.name||''}));}catch(e){}}
-function restoreCampusPref(){try{var p=JSON.parse(localStorage.getItem(CAMPUS_PREF_KEY)||'null');if(!p)return;if(p.id){var k=campusById(p.id);if(k){state.campus=k;applyCampusTheme();loadCampusEvents();return;}}if(p.domain){var known=campusByDomain(p.domain);if(known){state.campus=known;applyCampusTheme();loadCampusEvents();return;}state.campus=makeCampus({domain:p.domain,display_name:p.name||p.domain,accent_color:''});applyCampusTheme();joinCampus(p.domain,p.name?{display_name:p.name}:null);}}catch(e){}}
+function restoreCampusPref(){try{var p=JSON.parse(localStorage.getItem(CAMPUS_PREF_KEY)||'null');if(!p)return;if(p.id){var k=campusById(p.id);if(k){state.campus=k;applyCampusTheme();loadCampusEvents();return;}}if(p.domain){var known=campusByDomain(p.domain);if(known){state.campus=known;applyCampusTheme();loadCampusEvents();return;}state.campus=makeCampus({domain:p.domain,display_name:p.name||p.domain,accent_color:''});applyCampusTheme();joinCampus(p.domain,null,null,p.name||'');}}catch(e){}}
 function campusMascot(){var m=(state.campus&&state.campus.mascot)||'';m=String(m);return m&&m.length<=3?m+' ':'';}
 function CAMPPILL(){return campusMascot()+CAMP();}
-function joinCampus(domainOrEmail,patch,cb){
+function joinCampus(domainOrEmail,patch,cb,fallbackName){
   try{
-    if(!window.VendU||!VendU.resolveCampus)return;
+    var dom=String(domainOrEmail||'').split('@').pop().trim().toLowerCase();
+    var applyLocal=function(){
+      if(!dom)return;
+      var k=campusByDomain(dom);
+      state.campus=k||makeCampus({domain:dom,display_name:fallbackName||dom,accent_color:''});
+      applyCampusTheme();loadCampusEvents();saveCampusPref();
+      if(cb)cb(state.campus,!!k);
+      try{render();}catch(e){}
+    };
+    if(!window.VendU||!VendU.resolveCampus){applyLocal();return;}
     VendU.resolveCampus(domainOrEmail,patch).then(function(r){
-      if(!r||!r.ok||!r.campus)return;
+      if(!r||!r.ok||!r.campus){applyLocal();return;}
       var known=campusByDomain(r.campus.domain);
       if(known){known.accent=r.campus.accent_color;known.domain=r.campus.domain;if(r.campus.mascot)known.mascot=r.campus.mascot;state.campus=known;}
       else{state.campus=makeCampus(r.campus);}
       applyCampusTheme();loadCampusEvents();saveCampusPref();
       if(cb)cb(state.campus,!!r.campus.known);
       try{render();}catch(e){}
-    });
+    }).catch(applyLocal);
   }catch(e){}
 }
 /* Official campus events (only for schools that have a feed configured) */
@@ -2113,7 +2122,7 @@ function cpRenderList(){
   box.querySelectorAll('[data-domain]').forEach(function(el){el.onclick=function(){
     var d=el.dataset.domain,n=el.dataset.name;
     state.campusPick=false;state.campusQ='';state.campusResults=[];
-    joinCampus(d,{display_name:n},function(c){if(state.homePick){homePickApply(c);return;}toast('Now viewing '+c.short);});
+    joinCampus(d,null,function(c){if(state.homePick){homePickApply(c);return;}toast('Now viewing '+c.short);},n);
     render();
   };});
 }
@@ -2158,7 +2167,7 @@ function pickNearest(){
             var hit=(r&&r.ok&&r.results&&r.results[0])||null;
             if(!hit)return step(i+1);
             state.campusPick=false;state.campusQ='';state.campusResults=[];
-            joinCampus(hit.domain,{display_name:hit.name},function(c){if(state.homePick){homePickApply(c);return;}toast('\uD83D\uDCCD Nearest campus: '+c.short);});
+            joinCampus(hit.domain,null,function(c){if(state.homePick){homePickApply(c);return;}toast('\uD83D\uDCCD Nearest campus: '+c.short);},hit.name);
             render();
           }).catch(function(){step(i+1);});
         };
