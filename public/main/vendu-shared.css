@@ -208,3 +208,8 @@ input,textarea,select{font-size:16px} /* stops iOS zoom-on-focus */
 .dealbtn.ghost{background:transparent;color:var(--mist);border:1px solid var(--line)}
 .dealok{font-size:13px;font-weight:700;color:#0e9f6e}
 .acceptline{font-size:11.5px;font-weight:600;color:var(--violet);margin-top:3px}
+
+/* Close pills in screen headers: keep the ✕ and the word on one line */
+.brandrow .locpill{flex:0 0 auto;white-space:nowrap;font-size:11.5px;padding:6px 12px;min-height:36px;line-height:1;gap:5px}
+.topbar .brandrow{gap:10px;align-items:center}
+.sf-close{white-space:nowrap;min-height:36px;font-size:11.5px}

@@ -1315,7 +1315,7 @@ function bookingScreen(){
   screen.querySelectorAll('[data-svc]').forEach(el=>el.onclick=()=>{state.book.svc=el.dataset.svc;bookingScreen();});
   screen.querySelectorAll('[data-date]').forEach(el=>el.onclick=()=>{state.book.date=el.dataset.date;bookingScreen();});
   screen.querySelectorAll('[data-time]').forEach(el=>el.onclick=()=>{state.book.time=el.dataset.time;bookingScreen();});
-  document.getElementById('confirm').onclick=()=>{var _ph=document.getElementById('bphone');state.phone=(_ph&&_ph.value.trim())||state.phone||'';try{localStorage.setItem('vendu_phone',state.phone);}catch(e){}notifyBooking(h,state.book);(BOOKED[state.book.id]=BOOKED[state.book.id]||[]).push(state.book.date+'|'+state.book.time);var _jb=HUSTLES.find(x=>x.id===state.book.id);if(_jb)_jb.jobs=(_jb.jobs||0)+1;state.book.step='done';bookingScreen();screen.scrollTop=0;};
+  document.getElementById('confirm').onclick=()=>{safetyGate('Booking '+h.name+' \u00b7 meet on campus, in daylight, and bring a friend.',function(){var _ph=document.getElementById('bphone');state.phone=(_ph&&_ph.value.trim())||state.phone||'';try{localStorage.setItem('vendu_phone',state.phone);}catch(e){}notifyBooking(h,state.book);(BOOKED[state.book.id]=BOOKED[state.book.id]||[]).push(state.book.date+'|'+state.book.time);var _jb=HUSTLES.find(x=>x.id===state.book.id);if(_jb)_jb.jobs=(_jb.jobs||0)+1;state.book.step='done';bookingScreen();screen.scrollTop=0;});};
 }
 
 const SPONSORS=[
@@ -1367,7 +1367,7 @@ function market(){
   screen.querySelectorAll('[data-mkt]').forEach(el=>el.onclick=()=>{state.mkt=el.dataset.mkt;state.openMC=0;market();});conveyorHint(screen.querySelector('.hubseg'),'market');
   var _ph=document.getElementById('postHousing');if(_ph)_ph.onclick=()=>toast('Paid housing listings arrive in the full build 🏠');
   var _pj=document.getElementById('postJob');if(_pj)_pj.onclick=()=>toast('Employer job posts arrive in the full build 💼');
-  screen.querySelectorAll('[data-mmsg]').forEach(el=>el.onclick=()=>{const it=findMkt(el.dataset.mmsg);if(it)openThread(it.by||it.who,it.bi||it.in,it.uc||color(it.c||0),it.name?{id:it.id,item:it.name,seller:it.by||it.who,pays:it.pays||[]}:null);});
+  screen.querySelectorAll('[data-mmsg]').forEach(el=>el.onclick=()=>{const it=findMkt(el.dataset.mmsg);if(it)safetyGate('About \u201c'+(it.name||it.txt||'this item')+'\u201d',()=>openThread(it.by||it.who,it.bi||it.in,it.uc||color(it.c||0),it.name?{id:it.id,item:it.name,seller:it.by||it.who,pays:it.pays||[]}:null));});
   screen.querySelectorAll('[data-user]').forEach(function(el){el.onclick=function(){var p=el.dataset.user.split('␟');openUser(p[0],p[1],+p[2]);};});
   screen.querySelectorAll('[data-mlike]').forEach(el=>el.onclick=()=>{const it=findMkt(el.dataset.mlike);if(it){it.liked=!it.liked;it.likes+=it.liked?1:-1;market();}});
   screen.querySelectorAll('[data-mcmt]').forEach(el=>el.onclick=()=>{const id=el.dataset.mcmt;state.openMC=state.openMC===id?0:id;market();setTimeout(()=>{const i=document.getElementById('mci');if(i)i.focus();},30);});
@@ -2180,6 +2180,7 @@ function openThread(name,init,color,deal){
   if(deal){th.deal=th.deal&&th.deal.id===deal.id?th.deal:{id:deal.id,item:deal.item,seller:deal.seller,pays:deal.pays||[],met:false,paid:false};}
   th.unread=0;state.thread=th.id;state.inboxView=true;state.userView=null;render();
 }
+function safetyGate(ctx,cb){try{if(window.VendU&&VendU.meetSafety){VendU.meetSafety(ctx,cb);return;}}catch(e){}cb();}
 function dealStripHTML(th){
   var d=th&&th.deal;if(!d)return '';
   var esc=function(x){return String(x||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
@@ -2194,14 +2195,14 @@ function wireDealStrip(th){
   var d=th&&th.deal;if(!d)return;
   var now=function(){return new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});};
   var met=document.getElementById('dealmet');
-  if(met)met.onclick=function(){
+  if(met)met.onclick=function(){safetyGate('Meeting '+d.seller+' for \u201c'+d.item+'\u201d.',function(){
     d.met=true;d.metAt=now();
     th.msgs.push(['VendU','\uD83E\uDD1D You confirmed you\u2019re with '+d.seller+' for \u201c'+d.item+'\u201d at '+d.metAt+'.']);
     var pays=(d.pays||[]).filter(function(p){return p.handle;});
     th.msgs.push(['VendU',pays.length?('\uD83D\uDD10 '+d.seller+' accepts: '+pays.map(function(p){return p.app+' \u2014 '+p.handle;}).join(' \u00b7 ')+'. Shared here only, for you two.'):('\uD83D\uDCB5 '+d.seller+' hasn\u2019t added payment accounts \u2014 agree on cash in person.')]);
     th.msgs.push(['VendU','Seller: tap \u201cI got paid\u201d below once the payment lands.']);
     messageScreen();
-  };
+  });};
   var paid=document.getElementById('dealpaid');
   if(paid)paid.onclick=function(){d.paid=true;d.paidAt=now();th.msgs.push(['VendU','\u2713 Payment confirmed at '+d.paidAt+'. Both of you have this record.']);messageScreen();toast('Payment confirmed \u2713');};
   var not=document.getElementById('dealnot');
