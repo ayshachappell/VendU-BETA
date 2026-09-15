@@ -2306,23 +2306,6 @@ document.addEventListener('keydown',function(e){
 render();
 
 /* ---- support & account deletion ---- */
-function emailLinkPopup(addr){
-  var old=document.getElementById('chemailPop');if(old)old.remove();
-  var w=document.createElement('div');w.id='chemailPop';
-  w.setAttribute('role','dialog');w.setAttribute('aria-modal','true');
-  w.style.cssText='position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(18,12,32,.55)';
-  w.innerHTML='<div style="background:#fff;border-radius:18px;max-width:340px;width:100%;padding:24px 22px;text-align:center;box-shadow:0 18px 50px rgba(0,0,0,.28)">'
-    +'<div style="font-size:34px;line-height:1;margin-bottom:10px">\u2709\uFE0F</div>'
-    +'<div style="font-weight:800;font-size:18px;margin-bottom:8px">One more step</div>'
-    +'<div style="font-size:14px;line-height:1.5;color:#4a4458">We sent a confirmation link to<br><b style="word-break:break-all">'+String(addr).replace(/</g,'&lt;')+'</b><br><br>Your school email will <b>only</b> update after you open that email and tap the link. Nothing changes until then \u2014 your current login keeps working.</div>'
-    +'<div style="font-size:12.5px;color:#7b7490;margin-top:12px">Can\u2019t find it? Check your spam folder.</div>'
-    +'<button id="chemailPopOk" style="margin-top:18px;width:100%;border:0;border-radius:14px;padding:13px;font-family:inherit;font-weight:700;font-size:15px;color:#fff;background:var(--violet,#5a2be0);cursor:pointer">Got it</button>'
-    +'</div>';
-  document.body.appendChild(w);
-  function close(){w.remove();}
-  w.querySelector('#chemailPopOk').addEventListener('click',close);
-  w.addEventListener('click',function(e){if(e.target===w)close();});
-}
 function changeSchoolEmail(){
   var cur='';try{var s=window.VendU&&VendU.student&&VendU.student();cur=(s&&s.email)||'';}catch(e){}
   var next=prompt('Transferred schools or re-enrolled?\n\nEnter your new school (.edu) email. We\u2019ll send a link there \u2014 open it to finish the switch.'+(cur?'\n\nCurrent: '+cur:''),'');
@@ -2331,7 +2314,7 @@ function changeSchoolEmail(){
   if(!(window.VendU&&VendU.looksLikeEdu&&VendU.looksLikeEdu(next))){toast('Use a school email ending in .edu');return;}
   toast('Sending your confirmation link\u2026');
   VendU.startEmailChange(next).then(function(r){
-    if(r&&r.ok)emailLinkPopup(next);
+    if(r&&r.ok)toast('Check '+next+' and open the link to finish the switch \u2709\uFE0F');
     else toast((r&&r.message)||'Could not send that link right now.');
   }).catch(function(){toast('Could not send that link right now.');});
 }
