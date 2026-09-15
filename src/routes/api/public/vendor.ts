@@ -3,6 +3,7 @@ import { json, normalizeBuild, requireStudent } from "@/lib/edu-verification.ser
 import {
   cleanUrl,
   domainForEmail,
+  homeDomainFor,
   ensureProfile,
   qualifyReferralFor,
   safeDomain,
@@ -141,7 +142,7 @@ export const Route = createFileRoute("/api/public/vendor")({
           const shopName = str(raw["shopName"], 60);
           if (!shopName) return json({ ok: false, message: "Give your storefront a name." }, 400);
           /* A storefront lives on the owner's own campus, not the one being viewed. */
-          const domain = domainForEmail(email) || safeDomain(raw["campusDomain"]);
+          const domain = (await homeDomainFor(email)) || safeDomain(raw["campusDomain"]);
           if (!domain) return json({ ok: false, message: "Pick your campus first." }, 400);
 
           const badges = Array.isArray(raw["badges"])
