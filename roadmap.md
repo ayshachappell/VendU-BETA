@@ -18,3 +18,6 @@
 - [x] Live accounts, storefronts, feed and referrals wired into Main + Beta (vendu-live.js)
 - [ ] Seed official campus calendar feeds per launch school (needs school list)
 - [ ] Native store wrappers (needs Apple/Google developer accounts)
+- [x] Removed install-app option and its how-to-install instructions from both builds
+- [x] Posts, storefronts and events always publish to the student's home campus (.edu), while browsing other campuses stays open
+- [x] Students can change their verified .edu email (transfer/re-enroll) via a link sent to the new address
