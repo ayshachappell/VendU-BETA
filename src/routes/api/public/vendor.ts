@@ -140,7 +140,8 @@ export const Route = createFileRoute("/api/public/vendor")({
         if (action === "publish") {
           const shopName = str(raw["shopName"], 60);
           if (!shopName) return json({ ok: false, message: "Give your storefront a name." }, 400);
-          const domain = safeDomain(raw["campusDomain"]) || domainForEmail(email);
+          /* A storefront lives on the owner's own campus, not the one being viewed. */
+          const domain = domainForEmail(email) || safeDomain(raw["campusDomain"]);
           if (!domain) return json({ ok: false, message: "Pick your campus first." }, 400);
 
           const badges = Array.isArray(raw["badges"])

@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { canonicalDomain } from "@/lib/campus.server";
 import { json, normalizeBuild, requireStudent } from "@/lib/edu-verification.server";
+import { domainForEmail } from "@/lib/vendu-core.server";
 
 type Body = {
   action?: unknown;
@@ -93,7 +94,8 @@ export const Route = createFileRoute("/api/public/events/activity")({
         }
 
         if (action === "create") {
-          const domain = safeDomain(raw.domain);
+          /* Events post to the student's own school only. */
+          const domain = domainForEmail(email) || safeDomain(raw.domain);
           const title = str(raw.title, 180);
           const startsAt = safeDate(raw.startsAt);
           const endsAt = raw.endsAt ? safeDate(raw.endsAt) : null;
