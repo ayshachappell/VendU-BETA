@@ -172,3 +172,9 @@ input,textarea,select{font-size:16px} /* stops iOS zoom-on-focus */
 .mktseg{overflow:visible}
 .mktseg .hchip{flex:1 0 auto;text-align:center;padding-left:18px;padding-right:18px}
 .p-moreC{font-size:12.5px;font-weight:600;color:var(--mist,#6b6580);padding:4px 2px 2px;cursor:pointer}
+
+/* ---- demo / sample content labels (tester accounts only) ---- */
+.samplechip{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:100px;background:#FFF0E0;color:#a5600f;font-size:10px;font-weight:800;letter-spacing:.02em;vertical-align:middle}
+.etag.sample{background:rgba(255,240,224,.95);color:#a5600f;margin-left:6px}
+.samplebanner{margin:10px 0 2px;padding:10px 12px;border-radius:12px;background:#FFF6EA;border:1px solid #F3D6AE;color:#7a4a08;font-size:12px;line-height:1.45}
+.samplebanner b{font-weight:800}
