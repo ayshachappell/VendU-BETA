@@ -107,6 +107,7 @@ input,textarea,select,[contenteditable="true"]{-webkit-user-select:text!importan
   body{height:100dvh;min-height:100dvh}
   .device{height:100dvh;max-height:none;border-radius:0;border:0}
   .nav{position:fixed!important;left:50%!important;right:auto!important;bottom:0!important;width:min(100%,393px);transform:translateX(-50%)}
+  .nav::before{content:"";position:absolute;left:0;right:0;top:-18px;height:19px;background:inherit;pointer-events:none}
 }
 
 /* fixed bottom navigation with iOS home-indicator safe area */
