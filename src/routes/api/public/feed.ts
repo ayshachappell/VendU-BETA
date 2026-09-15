@@ -97,7 +97,9 @@ export const Route = createFileRoute("/api/public/feed")({
           const kind = KINDS.includes(str(raw["kind"], 16)) ? str(raw["kind"], 16) : "item";
           const title = str(raw["title"], 120);
           if (!title) return json({ ok: false, message: "Add a title." }, 400);
-          const domain = safeDomain(raw["domain"]) || domainForEmail(email);
+          /* Posts always belong to the student's own school, whatever campus
+             they are currently browsing. */
+          const domain = domainForEmail(email) || safeDomain(raw["domain"]);
           if (!domain) return json({ ok: false, message: "Pick your campus first." }, 400);
           const row = {
             author_email: email,

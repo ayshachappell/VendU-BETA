@@ -1796,18 +1796,19 @@ function myPostsScreen(){
   screen.querySelectorAll('[data-photopost]').forEach(function(el){el.onclick=function(){state.photoTarget={id:el.dataset.photopost,type:el.dataset.ptype};cphoto.value='';cphoto.click();};});
 }
 function settingsScreen(){
-  var items=[['\u25B6\uFE0E Replay tutorial','tour'],['\uD83D\uDEDF Help & support','support'],['\uD83D\uDCC4 Privacy & terms','legal'],['\uD83D\uDD12 Privacy choices (do not sell my info)','pchoices'],['\uD83D\uDDD1\uFE0F Delete my account','delete'],['\u23FB Log out','logout']];
+  var items=[['\u25B6\uFE0E Replay tutorial','tour'],['\uD83D\uDEDF Help & support','support'],['\uD83D\uDCC4 Privacy & terms','legal'],['\uD83D\uDD12 Privacy choices (do not sell my info)','pchoices'],['\u2709\uFE0F Change my school email','chemail'],['\uD83D\uDDD1\uFE0F Delete my account','delete'],['\u23FB Log out','logout']];
   screen.innerHTML='<div class="topbar"><div class="brandrow"><div class="wordmark">Settings</div><div class="locpill" id="setBack" style="cursor:pointer">\u2039 Back</div></div></div>'
-    +'<div class="enter" style="padding:10px 20px 20px"><div style="font-size:13px;color:var(--mist);line-height:1.5;margin:2px 0 14px">Tutorial, install, help and account controls.</div>'
+    +'<div class="enter" style="padding:10px 20px 20px"><div style="font-size:13px;color:var(--mist);line-height:1.5;margin:2px 0 14px">Tutorial, help and account controls.</div>'
     +'<div class="menu">'+items.map(function(x){return '<div class="svc" data-smenu="'+x[1]+'">'+x[0]+'<span>'+icon('<path d="m9 18 6-6-6-6"/>',18)+'</span></div>';}).join('')+'</div></div>';
   document.getElementById('setBack').onclick=function(){state.moreMenu=false;render();screen.scrollTop=0;};
   screen.querySelectorAll('[data-smenu]').forEach(function(el){el.onclick=function(){var m=el.dataset.smenu;
     if(m==='tour'){state.moreMenu=false;render();VendU.startTour(true);}
-    else if(m==='install'){showInstall();}
+    
     else if(m==='feedback'){if(typeof sendFeedback==='function')sendFeedback();else window.open('/legal/support.html','_blank','noopener');}
     else if(m==='support'){window.open('/legal/support.html','_blank','noopener');}
     else if(m==='legal'){window.open('/legal/privacy.html','_blank','noopener');}
     else if(m==='pchoices'){window.open('/legal/privacy-choices.html','_blank','noopener');}
+    else if(m==='chemail'){changeSchoolEmail();}
     else if(m==='delete'){deleteAccount();}
     else if(m==='logout'){doLogout();}};});
 }
@@ -1843,7 +1844,7 @@ function profile(){
   const lb=document.getElementById('lbBtn');if(lb)lb.onclick=()=>{state.leaderboard=true;render();try{syncFounders();}catch(e){}};
   const vm=document.getElementById('viewme');if(vm)vm.onclick=()=>openDetail('me');
   var _mt=document.getElementById('moretoggle');if(_mt)_mt.onclick=()=>{state.moreMenu=true;render();screen.scrollTop=0;};
-  screen.querySelectorAll('[data-menu]').forEach(el=>el.onclick=()=>{const m=el.dataset.menu;if(m==='setup'){state.storefrontSetup=true;render();}else if(m==='bookings'){state.bookSet=true;render();}else if(m==='saved'){state.savedView=true;render();}else if(m==='me'){openDetail('me');}else if(m==='boost'){state.boosted=!state.boosted;toast(state.boosted?'⚡ Storefront boosted! Optional upgrade — listing is always free.':'Boost turned off. Your storefront stays free & live.');render();}else if(m==='theme'){state.themeView=true;render();}else if(m==='regular'){state.isSeller=false;state.tab='profile';toast('Vendor mode off — your storefront is saved. Switch back anytime.');render();}else if(m==='myposts'){state.myPostsView=true;render();}else if(m==='tour'){VendU.startTour(true);}else if(m==='install'){showInstall();}else if(m==='support'){window.open('/legal/support.html','_blank','noopener');}else if(m==='legal'){window.open('/legal/privacy.html','_blank','noopener');}else if(m==='delete'){deleteAccount();}else if(m==='logout'){doLogout();}else if(m==='inbox'){openInbox();}else toast('Opens in the real build ⚙️');});
+  screen.querySelectorAll('[data-menu]').forEach(el=>el.onclick=()=>{const m=el.dataset.menu;if(m==='setup'){state.storefrontSetup=true;render();}else if(m==='bookings'){state.bookSet=true;render();}else if(m==='saved'){state.savedView=true;render();}else if(m==='me'){openDetail('me');}else if(m==='boost'){state.boosted=!state.boosted;toast(state.boosted?'⚡ Storefront boosted! Optional upgrade — listing is always free.':'Boost turned off. Your storefront stays free & live.');render();}else if(m==='theme'){state.themeView=true;render();}else if(m==='regular'){state.isSeller=false;state.tab='profile';toast('Vendor mode off — your storefront is saved. Switch back anytime.');render();}else if(m==='myposts'){state.myPostsView=true;render();}else if(m==='tour'){VendU.startTour(true);}else if(m==='support'){window.open('/legal/support.html','_blank','noopener');}else if(m==='legal'){window.open('/legal/privacy.html','_blank','noopener');}else if(m==='delete'){deleteAccount();}else if(m==='logout'){doLogout();}else if(m==='inbox'){openInbox();}else toast('Opens in the real build ⚙️');});
 }
 function lbRows(){return state.lbRows&&state.lbRows.length?state.lbRows.slice():[];}
 function lbRank(refs){if(state.lbRank)return state.lbRank;if(!refs)return 0;const rows=lbRows();const i=rows.findIndex(r=>r[0]==='You');return i<0?0:i+1;}
@@ -2307,25 +2308,18 @@ document.addEventListener('keydown',function(e){
 });
 render();
 
-/* ---- installability, support & account deletion ---- */
-var _deferredInstall=null;
-window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();_deferredInstall=e;});
-function isStandalone(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;}
-function showInstall(){
-  if(isStandalone()){toast('The VendU App is already installed on this device \u2713');return;}
-  if(_deferredInstall){_deferredInstall.prompt();_deferredInstall.userChoice.then(function(c){if(c&&c.outcome==='accepted')toast('Installing The VendU App\u2026 check your home screen \uD83D\uDCF2');_deferredInstall=null;});return;}
-  var ua=navigator.userAgent||'';
-  var ios=/iPhone|iPad|iPod/i.test(ua);
-  var msg=ios
-    ?'On iPhone/iPad: tap the Share button \u2191 in Safari, then \u201CAdd to Home Screen\u201D.'
-    :(/Android/i.test(ua)
-      ?'On Android: tap the \u22EE menu in Chrome, then \u201CInstall app\u201D or \u201CAdd to Home screen\u201D.'
-      :'On desktop: click the install icon in your browser\u2019s address bar, or use the browser menu \u2192 \u201CInstall The VendU App\u201D.');
-  var w=document.createElement('div');
-  w.style.cssText='position:fixed;inset:0;background:rgba(15,12,30,.55);display:flex;align-items:flex-end;justify-content:center;z-index:9999';
-  w.innerHTML='<div style="background:var(--paper,#FBF8F3);border-radius:20px 20px 0 0;padding:22px 20px 26px;max-width:520px;width:100%"><div style="font-size:19px;font-weight:800;margin-bottom:6px">\uD83D\uDCF2 Install The VendU App</div><div style="font-size:14px;line-height:1.5;color:#5d5870">'+msg+'</div><button style="margin-top:16px;width:100%;padding:13px;border:0;border-radius:12px;background:#5A2BE0;color:#fff;font-weight:700;font-size:15px">Got it</button></div>';
-  w.onclick=function(e){if(e.target===w||e.target.tagName==='BUTTON')w.remove();};
-  document.body.appendChild(w);
+/* ---- support & account deletion ---- */
+function changeSchoolEmail(){
+  var cur='';try{var s=window.VendU&&VendU.student&&VendU.student();cur=(s&&s.email)||'';}catch(e){}
+  var next=prompt('Transferred schools or re-enrolled?\n\nEnter your new school (.edu) email. We\u2019ll send a link there \u2014 open it to finish the switch.'+(cur?'\n\nCurrent: '+cur:''),'');
+  if(!next)return;
+  next=String(next).trim().toLowerCase();
+  if(!(window.VendU&&VendU.looksLikeEdu&&VendU.looksLikeEdu(next))){toast('Use a school email ending in .edu');return;}
+  toast('Sending your confirmation link\u2026');
+  VendU.startEmailChange(next).then(function(r){
+    if(r&&r.ok)toast('Check '+next+' and open the link to finish the switch \u2709\uFE0F');
+    else toast((r&&r.message)||'Could not send that link right now.');
+  }).catch(function(){toast('Could not send that link right now.');});
 }
 function deleteAccount(){
   if(!confirm('Delete your The VendU App account?\n\nThis removes your profile, storefront, posts, bookings and reviews. This cannot be undone.'))return;
