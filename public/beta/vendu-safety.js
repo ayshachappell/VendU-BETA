@@ -108,6 +108,47 @@
     };
   };
 
+
+  /* ---------- meet-up safety reminder ---------- */
+  var MEET_TITLE = "Before you meet up";
+  var MEET_LINES = [
+    "Meet in a public, well-lit place \u2014 on campus if you can.",
+    "Meet during daylight hours whenever possible.",
+    "Bring a friend. Don\u2019t meet a buyer or vendor alone.",
+    "Tell someone where you\u2019re going and when you expect to be back.",
+    "Never send money before you meet in person.",
+  ];
+  var MEET_LEGAL =
+    "The VendU App is a listing and messaging platform only. It is not a party to your booking, purchase, trade or meeting, and does not screen users. You agree that The VendU App and Integro Service Group LLC are not responsible for, and you release and indemnify them from, any inconvenience, injury, casualty, loss, damage, theft, chargeback, disagreement, crime or other harm arising before, during or after any interaction, booking or transaction, on or off campus, inside or outside the app. You meet and transact at your own risk.";
+
+  W.MEET_LEGAL = MEET_LEGAL;
+  W.MEET_SHORT =
+    "Safety: meet in public, in daylight, and bring someone with you. The VendU App isn\u2019t responsible for anything that happens between users.";
+
+  /* Shows the reminder. Calls onContinue() only if the person taps Continue. */
+  W.meetSafety = function (context, onContinue) {
+    var back = document.createElement("div");
+    back.className = "vu-report-back";
+    back.innerHTML =
+      '<div class="vu-report-card" role="dialog" aria-modal="true">' +
+      '<div class="vu-report-h">\u26A0\uFE0F ' + MEET_TITLE + "</div>" +
+      (context ? '<div class="vu-report-s">' + String(context).replace(/[<>]/g, "") + "</div>" : "") +
+      '<div class="vu-meet-list">' +
+      MEET_LINES.map(function (l) { return '<div class="vu-meet-li">\u2022 ' + l + "</div>"; }).join("") +
+      "</div>" +
+      '<div class="vu-meet-legal">' + MEET_LEGAL + "</div>" +
+      '<div class="vu-report-b"><button class="vu-report-x" type="button">Cancel</button><button class="vu-report-go" type="button">I understand \u2014 continue</button></div>' +
+      "</div>";
+    document.body.appendChild(back);
+    function close() { back.remove(); }
+    back.querySelector(".vu-report-x").onclick = close;
+    back.onclick = function (e) { if (e.target === back) close(); };
+    back.querySelector(".vu-report-go").onclick = function () {
+      close();
+      try { if (typeof onContinue === "function") onContinue(); } catch (e) {}
+    };
+  };
+
   /* ---------- moderation blocks ---------- */
   var BLOCKS = { hidden: {}, deleted: {} };
   W.isBlocked = function (kind, id) {
@@ -179,6 +220,15 @@
       c.appendChild(b);
     });
 
+    // quiet safety line above the chat composer and comment boxes
+    document.querySelectorAll(".msg-bar, .p-cbox").forEach(function (bar) {
+      if (bar.previousElementSibling && bar.previousElementSibling.classList.contains("vu-meetnote")) return;
+      var n = document.createElement("div");
+      n.className = "vu-meetnote";
+      n.textContent = W.MEET_SHORT;
+      bar.parentNode.insertBefore(n, bar);
+    });
+
     applyBlocks();
   }
 
@@ -203,7 +253,11 @@
       ".vu-report-b{display:flex;gap:8px;margin-top:12px}" +
       ".vu-report-b button{flex:1;padding:12px;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer}" +
       ".vu-report-x{border:1px solid #e6e1d8;background:#fff}" +
-      ".vu-report-go{border:0;background:#5A2BE0;color:#fff}.vu-report-go:disabled{opacity:.45;cursor:default}";
+      ".vu-report-go{border:0;background:#5A2BE0;color:#fff}.vu-report-go:disabled{opacity:.45;cursor:default}" +
+      ".vu-meet-list{margin:2px 0 10px}" +
+      ".vu-meet-li{font-size:13.5px;line-height:1.55;color:#1B1626;margin-bottom:3px}" +
+      ".vu-meet-legal{font-size:11px;line-height:1.5;color:#6B6480;background:#F7F4EE;border-radius:12px;padding:10px 12px}" +
+      ".vu-meetnote{font-size:11px;line-height:1.45;color:#6B6480;padding:6px 14px 0}";
     document.head.appendChild(s);
   }
 
