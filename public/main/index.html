@@ -737,7 +737,8 @@ function homePickApply(c){
 }
 function maybeAskHomeCampus(){
   if(state.tester)return;
-  if(!(state.isRealStudent||state.isCEO))return;
+  if(state.isCEO||isCEOEmail(state.email||state.eduEmail||'')){try{localStorage.setItem(HOME_OK_KEY,'1');}catch(e){}return;}
+  if(!state.isRealStudent)return;
   if(homeCampusSaved())return;
   setTimeout(function(){if(!homeCampusSaved()){state.homeConfirm=true;render();}},900);
 }
