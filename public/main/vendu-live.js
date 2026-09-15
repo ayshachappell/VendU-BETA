@@ -28,6 +28,13 @@
   function campusId() {
     try { return (state.campus && state.campus.id) || ""; } catch (e) { return ""; }
   }
+  /* campus the user is BROWSING (location pill) — reads follow this */
+  function viewDomain() {
+    try {
+      var d = (state.campus && state.campus.domain) || "";
+      return d || domain();
+    } catch (e) { return domain(); }
+  }
   function initialOf(n) { return String(n || "?").trim().charAt(0).toUpperCase() || "?"; }
   function ago(iso) {
     var t = Date.parse(iso || "") || Date.now();
@@ -149,7 +156,9 @@
   var busy = false;
   L.pull = function (thenRender) {
     if (busy || !api()) return Promise.resolve();
-    var dom = domain();
+    /* browse whatever campus the location pill shows; writes stay on the
+       student's home campus (see domain() used by L.post/L.publish) */
+    var dom = viewDomain();
     if (!dom) return Promise.resolve();
     busy = true;
     return Promise.all([
