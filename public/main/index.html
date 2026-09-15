@@ -23,16 +23,28 @@
 })();
 </script>
 <script>
-if('serviceWorker' in navigator){
+(function(){
+  if(!('serviceWorker' in navigator))return;
+  var h=location.hostname||'';
+  var blocked = window.top!==window.self ||
+    /^(id-)?preview--/.test(h) || /lovableproject(-dev)?\.com$/.test(h) ||
+    /(^|\.)beta\.lovable\.dev$/.test(h) || location.search.indexOf('sw=off')>-1;
+  if(blocked){
+    navigator.serviceWorker.getRegistrations().then(function(rs){
+      rs.forEach(function(r){try{if(String(r.active&&r.active.scriptURL||'').indexOf('/main/sw.js')>-1)r.unregister();}catch(e){}});
+    }).catch(function(){});
+    return;
+  }
   navigator.serviceWorker.register('/main/sw.js',{scope:'/main/',updateViaCache:'none'}).then(function(r){
     return r.update().catch(function(){});
   }).catch(function(){});
-}
+})();
 </script>
 <link rel="manifest" href="/main/manifest.webmanifest?v=9">
 <meta name="theme-color" content="#5A2BE0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="VendU">
 <link rel="icon" type="image/png" href="/favicon.png?v=9">
 <link rel="apple-touch-icon" href="/icons/icon-192.png?v=9">
 <style>
@@ -1704,7 +1716,7 @@ function addTab(){if(!state.addMode)return chooser();return miniForm(state.addMo
 function chooser(){
   const chev='<path d="m9 18 6-6-6-6"/>';
   const opts=[['item','📦','Sell or trade an item','Post to Buy & Trade'],['request','🙋','Post a request or barter','Ask the campus for what you need'],['event','🎉','Post an event','Share it on the Events board']];
-  screen.innerHTML=`<div class="topbar"><div class="brandrow"><div class="wordmark">Post to ${WMFULL}</div><div class="locpill" id="addClose" style="cursor:pointer">\u2715 Close</div></div></div>
+  screen.innerHTML=`<div class="topbar"><div class="brandrow"><div class="wordmark header-logo">Post to&nbsp;${WMFULL}</div><div class="locpill" id="addClose" style="cursor:pointer">\u2715 Close</div></div></div>
     <div class="form-wrap enter"><div class="form-h">What are you posting?</div><div class="form-sub">We'll add it to the right place on VendU.</div>
     ${opts.map(o=>`<div class="choose" data-mode="${o[0]}"><div class="ch-em">${o[1]}</div><div style="flex:1"><div class="ch-t">${o[2]}</div><div class="ch-d">${o[3]}</div></div>${icon('<path d="m9 18 6-6-6-6"/>',18)}</div>`).join('')}</div>`;
   screen.querySelectorAll('[data-mode]').forEach(el=>el.onclick=()=>{state.addMode=el.dataset.mode;state.newPhoto=null;render();});
