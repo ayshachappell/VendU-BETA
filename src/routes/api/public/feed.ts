@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { json, normalizeBuild, requireStudent } from "@/lib/edu-verification.server";
-import { cleanUrl, domainForEmail,
-  homeDomainFor, ensureProfile, safeDomain, str } from "@/lib/vendu-core.server";
+import { cleanUrl, homeDomainFor, ensureProfile, safeDomain, str } from "@/lib/vendu-core.server";
 
 type Body = Record<string, unknown>;
 

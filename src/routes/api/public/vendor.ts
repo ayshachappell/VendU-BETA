@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { json, normalizeBuild, requireStudent } from "@/lib/edu-verification.server";
 import {
   cleanUrl,
-  domainForEmail,
   homeDomainFor,
   ensureProfile,
   qualifyReferralFor,

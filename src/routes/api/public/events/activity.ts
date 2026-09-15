@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { canonicalDomain } from "@/lib/campus.server";
 import { json, normalizeBuild, requireStudent } from "@/lib/edu-verification.server";
-import { domainForEmail, homeDomainFor } from "@/lib/vendu-core.server";
+import { homeDomainFor } from "@/lib/vendu-core.server";
 
 type Body = {
   action?: unknown;
