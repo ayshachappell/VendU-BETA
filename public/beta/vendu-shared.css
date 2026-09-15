@@ -104,7 +104,7 @@ input,textarea,select,[contenteditable="true"]{-webkit-user-select:text!importan
 #screen,.screen,.sheet,.detail-body{-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .device{max-width:393px!important}
 @media(max-width:439px){
-  html,body{height:100dvh;min-height:100dvh;background:var(--paper)}
+  html,body{height:100dvh;min-height:100dvh;background:var(--paper)!important}
   .device{height:100dvh;max-height:none;border-radius:0;border:0}
   .nav{position:fixed!important;left:50%!important;right:auto!important;bottom:0!important;width:min(100%,393px);transform:translateX(-50%)}
 }
