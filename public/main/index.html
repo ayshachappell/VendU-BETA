@@ -2041,7 +2041,7 @@ function campusPicker(){
   var q=(state.campusQ||'').trim();
   var myDomain=String(state.acctEmail||'').split('@')[1]||'';
   screen.innerHTML='<div class="topbar"><div class="brandrow"><div class="wordmark">Choose your campus</div><div class="locpill" id="cpClose" style="cursor:pointer">\u2715 Close</div></div><div class="search">'+icon('<circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/>')+'<input id="cpq" autocomplete="off" autocorrect="off" autocapitalize="none" placeholder="Search your school\u2026" value="'+q.replace(/"/g,'&quot;')+'"></div></div><div class="enter" style="padding:12px 20px 20px"><button class="submit" id="cpNear" style="background:var(--ink);margin-bottom:14px;position:sticky;top:0;z-index:5">\uD83D\uDCCD Use my location \u2014 find nearest campus</button><div id="cpList"></div><div style="margin-top:16px;padding:14px;border:1px dashed var(--line);border-radius:14px"><div style="font-weight:700;font-size:13.5px">Can\u2019t find your school?</div><div style="font-size:12.5px;color:var(--mist);margin:4px 0 10px">Trade, tech and vocational schools aren\u2019t always listed. Continue with your .edu email and we\u2019ll create your campus.</div><button class="submit" id="cpEdu" style="margin:0">Continue with my .edu email</button></div></div>';
-  document.getElementById('cpClose').onclick=function(){state.campusPick=false;state.campusQ='';state.campusResults=[];state.themeView=false;state.myPostsView=false;state.thread=0;state.inboxView=false;state.groupView=null;state.userView=null;state.groupCreateView=false;state.assignMod=false;state.createGroup=null;render();};
+  document.getElementById('cpClose').onclick=function(){state.campusPick=false;state.campusQ='';state.campusResults=[];if(state.homePick){state.homePick=false;state.homeConfirm=true;render();return;}state.themeView=false;state.myPostsView=false;state.thread=0;state.inboxView=false;state.groupView=null;state.userView=null;state.groupCreateView=false;state.assignMod=false;state.createGroup=null;render();};
   var input=document.getElementById('cpq');
   input.oninput=function(e){
     var val=e.target.value;
@@ -2132,7 +2132,7 @@ function pickNearest(){
   }
   toast('\uD83D\uDCCD Finding your nearest campus\u2026');
   var localBest=function(lat,lng){var best=CAMPUSES[0],bd=1e18;CAMPUSES.forEach(function(c){var dx=c.lat-lat,dy=c.lng-lng,d=dx*dx+dy*dy;if(d<bd){bd=d;best=c;}});return best;};
-  var useLocal=function(lat,lng){var b=localBest(lat,lng);state.campus=b;applyCampusTheme();loadCampusEvents();saveCampusPref();state.campusPick=false;state.campusQ='';state.campusResults=[];toast('\uD83D\uDCCD Nearest campus: '+b.short);render();};
+  var useLocal=function(lat,lng){var b=localBest(lat,lng);state.campus=b;applyCampusTheme();loadCampusEvents();saveCampusPref();state.campusPick=false;state.campusQ='';state.campusResults=[];if(state.homePick){homePickApply(b);return;}toast('\uD83D\uDCCD Nearest campus: '+b.short);render();};
   var resolve=function(lat,lng){
     fetch('https://api.bigdatacloud.net/data/reverse-geocode-client?latitude='+lat+'&longitude='+lng+'&localityLanguage=en')
       .then(function(r){return r.json();})
@@ -2145,7 +2145,7 @@ function pickNearest(){
             var hit=(r&&r.ok&&r.results&&r.results[0])||null;
             if(!hit)return step(i+1);
             state.campusPick=false;state.campusQ='';state.campusResults=[];
-            joinCampus(hit.domain,{display_name:hit.name},function(c){toast('\uD83D\uDCCD Nearest campus: '+c.short);});
+            joinCampus(hit.domain,{display_name:hit.name},function(c){if(state.homePick){homePickApply(c);return;}toast('\uD83D\uDCCD Nearest campus: '+c.short);});
             render();
           }).catch(function(){step(i+1);});
         };
