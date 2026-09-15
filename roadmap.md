@@ -17,8 +17,10 @@
 - [x] Align event actions, header branding/order, profile cap, storefront photos, and pasted account links in both builds
 
 - [x] Live accounts, storefronts, feed and referrals wired into Main + Beta (vendu-live.js)
-- [ ] Seed official campus calendar feeds per launch school (needs school list)
-- [ ] Native store wrappers (needs Apple/Google developer accounts)
+- [x] US school list integrated (2,348 schools, src/data/us-schools.json)
+- [ ] Seed official campus calendar feeds (needs each school's public calendar/ICS URL)
+- [x] Native wrapper configs for Main + Beta plus signing guide (native/)
+- [ ] Signed store builds (needs your Apple + Google developer accounts and a Mac)
 - [x] Removed install-app option and its how-to-install instructions from both builds
 - [x] Posts, storefronts and events always publish to the student's home campus (.edu), while browsing other campuses stays open
 - [x] Students can change their verified .edu email (transfer/re-enroll) via a link sent to the new address

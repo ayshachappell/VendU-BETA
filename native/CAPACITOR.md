@@ -27,13 +27,11 @@ Copy `native/capacitor.config.ts` (in this repo) over the generated
 every Lovable publish updates the app without a new store release. Change
 `server.url` to your own domain once you connect one.
 
-For the **beta** app, duplicate the config with:
+For the **beta** app, use `native/capacitor.config.beta.ts` instead (already set to
+`app.vendu.beta` / `VendU Beta` / `/beta/index.html`) in a separate checkout. That
+gives you two separate store listings from the same repo.
 
-- `appId: "app.vendu.beta"`
-- `appName: "VendU Beta"`
-- `server.url` ending in `/beta/index.html`
-
-That gives you two separate store listings from the same repo.
+Signing steps live in `native/SIGNING.md`.
 
 ## 4. Build and submit
 
