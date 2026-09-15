@@ -784,7 +784,7 @@ function joinCampus(domainOrEmail,patch,cb,fallbackName){
       if(!dom)return;
       var k=campusByDomain(dom);
       state.campus=k||makeCampus({domain:dom,display_name:fallbackName||dom,accent_color:''});
-      applyCampusTheme();loadCampusEvents();saveCampusPref();
+      applyCampusTheme();loadCampusEvents(true);saveCampusPref();
       if(cb)cb(state.campus,!!k);
       try{render();}catch(e){}
     };
@@ -794,7 +794,7 @@ function joinCampus(domainOrEmail,patch,cb,fallbackName){
       var known=campusByDomain(r.campus.domain);
       if(known){known.accent=r.campus.accent_color;known.domain=r.campus.domain;if(r.campus.mascot)known.mascot=r.campus.mascot;state.campus=known;}
       else{state.campus=makeCampus(r.campus);}
-      applyCampusTheme();loadCampusEvents();saveCampusPref();
+      applyCampusTheme();loadCampusEvents(true);saveCampusPref();
       if(cb)cb(state.campus,!!r.campus.known);
       try{render();}catch(e){}
     }).catch(applyLocal);
@@ -2118,11 +2118,11 @@ function cpRenderList(){
   }).join('');
   if(!html)html='<div class="prompt">'+(state.campusSearching?'Searching every U.S. campus\u2026':state.campusSearchError?'School search could not connect. Check your connection and try again.':ql.length===1?'Keep typing\u2026':'Type your school name \u2014 every U.S. college, community college and trade school is searchable.')+'</div>';
   box.innerHTML=html;
-  box.querySelectorAll('[data-camp]').forEach(function(el){el.onclick=function(){state.campus=campusById(el.dataset.camp);applyCampusTheme();loadCampusEvents();saveCampusPref();state.campusPick=false;state.campusQ='';state.campusResults=[];if(state.homePick){homePickApply(state.campus);return;}toast('Now viewing '+state.campus.short);render();};});
+  box.querySelectorAll('[data-camp]').forEach(function(el){el.onclick=function(){state.campus=campusById(el.dataset.camp);applyCampusTheme();loadCampusEvents(true);saveCampusPref();state.campusPick=false;state.campusQ='';state.campusResults=[];if(state.homePick){homePickApply(state.campus);return;}toast('Now viewing '+state.campus.short);campusSwitched();};});
   box.querySelectorAll('[data-domain]').forEach(function(el){el.onclick=function(){
     var d=el.dataset.domain,n=el.dataset.name;
     state.campusPick=false;state.campusQ='';state.campusResults=[];
-    joinCampus(d,null,function(c){if(state.homePick){homePickApply(c);return;}toast('Now viewing '+c.short);},n);
+    joinCampus(d,null,function(c){if(state.homePick){homePickApply(c);return;}toast('Now viewing '+c.short);campusSwitched();},n);
     render();
   };});
 }
@@ -2154,7 +2154,7 @@ function pickNearest(){
   }
   toast('\uD83D\uDCCD Finding your nearest campus\u2026');
   var localBest=function(lat,lng){var best=CAMPUSES[0],bd=1e18;CAMPUSES.forEach(function(c){var dx=c.lat-lat,dy=c.lng-lng,d=dx*dx+dy*dy;if(d<bd){bd=d;best=c;}});return best;};
-  var useLocal=function(lat,lng){var b=localBest(lat,lng);state.campus=b;applyCampusTheme();loadCampusEvents();saveCampusPref();state.campusPick=false;state.campusQ='';state.campusResults=[];if(state.homePick){homePickApply(b);return;}toast('\uD83D\uDCCD Nearest campus: '+b.short);render();};
+  var useLocal=function(lat,lng){var b=localBest(lat,lng);state.campus=b;applyCampusTheme();loadCampusEvents(true);saveCampusPref();state.campusPick=false;state.campusQ='';state.campusResults=[];if(state.homePick){homePickApply(b);return;}toast('\uD83D\uDCCD Nearest campus: '+b.short);campusSwitched();};
   var resolve=function(lat,lng){
     fetch('https://api.bigdatacloud.net/data/reverse-geocode-client?latitude='+lat+'&longitude='+lng+'&localityLanguage=en')
       .then(function(r){return r.json();})
@@ -2305,6 +2305,13 @@ function localInt(e){state.localInt=state.localInt||{};return !!state.localInt[l
 function localIntCount(e){return (e.count||0)+(localInt(e)?1:0);}
 function refreshHomeBody(){try{var b=document.getElementById('homebody');if(!b)return;var s=screen.scrollTop;b.innerHTML=state.home==='feed'?feedBody():state.home==='browse'?browseBody():eventsBody();wireHome();screen.scrollTop=s;}catch(e){}}
 function updateBellBadge(){try{var b=document.querySelector('.header-actions .bell');if(!b)return;var w=document.createElement('div');w.innerHTML=bellHTML();var n=w.firstChild;b.parentNode.replaceChild(n,b);}catch(e){}}
+function campusSwitched(){
+  try{loadCampusEvents(true);}catch(e){}
+  try{if(window.VenduLive)VenduLive.pull(true);}catch(e){}
+  try{loadEventNotifications();}catch(e){}
+  try{render();}catch(e){}
+}
+window.campusSwitched=campusSwitched;
 function venduPullRefresh(){
   try{loadCampusEvents(true);}catch(e){}
   try{loadEventNotifications();}catch(e){}
