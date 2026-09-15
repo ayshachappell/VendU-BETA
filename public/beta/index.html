@@ -23,11 +23,22 @@
 })();
 </script>
 <script>
-if('serviceWorker' in navigator){
+(function(){
+  if(!('serviceWorker' in navigator))return;
+  var h=location.hostname||'';
+  var blocked = window.top!==window.self ||
+    /^(id-)?preview--/.test(h) || /lovableproject(-dev)?\.com$/.test(h) ||
+    /(^|\.)beta\.lovable\.dev$/.test(h) || location.search.indexOf('sw=off')>-1;
+  if(blocked){
+    navigator.serviceWorker.getRegistrations().then(function(rs){
+      rs.forEach(function(r){try{if(String(r.active&&r.active.scriptURL||'').indexOf('/beta/sw.js')>-1)r.unregister();}catch(e){}});
+    }).catch(function(){});
+    return;
+  }
   navigator.serviceWorker.register('/beta/sw.js',{scope:'/beta/',updateViaCache:'none'}).then(function(r){
     return r.update().catch(function(){});
   }).catch(function(){});
-}
+})();
 </script>
 <link rel="manifest" href="/beta/manifest.webmanifest?v=9">
 <meta name="theme-color" content="#5A2BE0">
