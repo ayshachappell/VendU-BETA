@@ -1025,7 +1025,7 @@ function schoolDomainOf(){var e=String(state.acctEmail||state.eduEmail||'').toLo
 function syncFounders(){
   try{
     if(!window.VendU||!VendU.founderStats)return;
-    var dom=schoolDomainOf();if(!dom)return;
+    var dom=schoolDomainOf();if(!dom)return;if(!/\.edu$/.test(dom))return;
     VendU.founderStats(dom,myRefCode(),BUILD).then(function(r){
       if(!r||!r.ok)return;
       FOUNDERS=Math.min(FOUNDER_CAP,r.claimed||0);
