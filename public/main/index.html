@@ -962,7 +962,8 @@ const bg=h=>h.me?state.themeColor:color(h.c);
 function shade(hex,amt){let c=hex.replace('#','');if(c.length===3)c=c.split('').map(x=>x+x).join('');let r=parseInt(c.slice(0,2),16),g=parseInt(c.slice(2,4),16),b=parseInt(c.slice(4,6),16);const f=amt/100;const adj=v=>Math.round(amt<0?v*(1+f):v+(255-v)*f);return '#'+[adj(r),adj(g),adj(b)].map(v=>Math.max(0,Math.min(255,v)).toString(16).padStart(2,'0')).join('');}
 function textOn(hex){let c=hex.replace('#','');if(c.length===3)c=c.split('').map(x=>x+x).join('');const r=parseInt(c.slice(0,2),16),g=parseInt(c.slice(2,4),16),b=parseInt(c.slice(4,6),16);return (0.299*r+0.587*g+0.114*b)/255>0.62?'#1C1526':'#ffffff';}
 function fmtDate(ts){const d=new Date(ts);const wd=d.toLocaleDateString('en-US',{weekday:'short'});const mo=d.toLocaleDateString('en-US',{month:'short'});let h=d.getHours();const ap=h>=12?'pm':'am';h=h%12||12;const mm=d.getMinutes();return wd+' '+mo+' '+d.getDate()+' · '+h+(mm?':'+String(mm).padStart(2,'0'):'')+ap;}
-function mapsUrl(q){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent((q||'')+' Fort Valley State University Georgia');}
+function campusPlace(){var c=(typeof state!=="undefined"&&state.campus)?state.campus:CAMPUSES[0];return (c&&(c.name||c.short))||"";}
+function mapsUrl(q){var place=campusPlace();var loc=String(q||"").trim();var full=loc;if(!loc||/^(on campus|campus|tba|tbd)$/i.test(loc))full=place;else if(place&&loc.toLowerCase().indexOf(place.toLowerCase())===-1&&loc.toLowerCase().indexOf(((typeof state!=="undefined"&&state.campus&&state.campus.short)||"").toLowerCase())===-1)full=loc+", "+place;return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(full);}
 
 function bannerGrad(c){const top=textOn(c)==='#ffffff'?c:shade(c,-45);return `linear-gradient(140deg,${top},${shade(c,-52)})`;}
 
@@ -1681,7 +1682,7 @@ function routeHTML(){
         segs+='<div class="rtseg">'+mode.emoji+' '+t+' min \u00b7 '+d.toFixed(2)+' mi</div>';
       }
     }
-    var gmaps='https://www.google.com/maps/dir/?api=1&travelmode='+mode.gm+'&waypoints='+r.stops.map(function(s){return encodeURIComponent(s.name+', Fort Valley State University');}).join('%7C');
+    var gmaps='https://www.google.com/maps/dir/?api=1&travelmode='+mode.gm+'&waypoints='+r.stops.map(function(s){return encodeURIComponent(s.name+', '+campusPlace());}).join('%7C');
     body='<div class="rtsum">'+mode.emoji+' <b>'+Math.round(totalT)+' min</b> total \u00b7 '+totalD.toFixed(2)+' mi \u00b7 '+r.stops.length+' stops</div><div class="rtline">'+segs+'</div><a class="submit" href="'+gmaps+'" target="_blank" rel="noopener" style="background:var(--violet);margin:8px 20px 0;width:calc(100% - 40px);display:block;text-align:center;text-decoration:none;box-sizing:border-box">Open in Google Maps</a>';
   }
   var addbtns='<div class="pllbl" style="margin:16px 20px 8px">Add a stop</div><div class="rtchips">'+CAMPUS_PLACES.map(function(p){return '<div class="rtadd" data-addstop="'+p.name+'">'+p.emoji+' '+p.name+'</div>';}).join('')+'</div>';
