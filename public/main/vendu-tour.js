@@ -441,7 +441,6 @@
 
   function cardHTML(st, withDo) {
     return (
-      '<button class="tour-x" data-tour="close" aria-label="Close tutorial">\u2715</button>' +
       '<div class="tour-step">Step ' +
       realIndex() +
       " of " +
@@ -463,8 +462,6 @@
   }
 
   function wireCard() {
-    var cx = card.querySelector('[data-tour="close"]');
-    if (cx) cx.onclick = function () { end(false); };
     var bk = card.querySelector('[data-tour="back"]');
     if (bk) bk.onclick = goBack;
     var nx = card.querySelector('[data-tour="next"]');

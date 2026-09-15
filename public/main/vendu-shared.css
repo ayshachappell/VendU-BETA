@@ -189,7 +189,12 @@ input,textarea,select{font-size:16px} /* stops iOS zoom-on-focus */
 .ob-title .wordmark.welcome-wordmark .wm-post{margin-left:.18em}
 
 
-/* ---- tutorial close button ---- */
-.tour-card{position:relative}
-.tour-card .tour-x{position:absolute;top:8px;right:8px;z-index:3;width:26px;height:26px;display:flex;align-items:center;justify-content:center;border:0;border-radius:50%;background:var(--violet-soft,#EFE9FF);color:var(--violet,#5A2BE0);font-size:13px;font-weight:800;line-height:1;cursor:pointer;padding:0}
-.tour-card .tour-step{padding-right:30px}
+/* ---- consistent "The VendU App" lockup everywhere (v12) ---- */
+.wordmark,.viewwm{font-family:Georgia,'Times New Roman',serif!important;font-weight:700;letter-spacing:0!important;gap:0!important}
+.wordmark .wm-pre,.wordmark .wm-post,.viewwm .wm-pre,.viewwm .wm-post{font-family:Georgia,'Times New Roman',serif!important;font-weight:400;font-size:.8em!important;color:var(--mist);letter-spacing:0}
+.wordmark .wm-pre{margin-right:.14em}
+.wordmark .wm-post{margin-left:.14em}
+.wordmark .u,.viewwm .u{color:var(--violet);font-weight:700}
+.ob-title .wordmark.welcome-wordmark .wm-pre,.ob-title .wordmark.welcome-wordmark .wm-post{color:var(--mist);font-size:.8em!important}
+.headline-wordmark .wm-pre,.headline-wordmark .wm-post{color:var(--mist)}
+.role-question{font-family:Georgia,'Times New Roman',serif!important;font-weight:700;margin-left:1px}
