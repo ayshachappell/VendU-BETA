@@ -2314,9 +2314,12 @@ function changeSchoolEmail(){
   if(!(window.VendU&&VendU.looksLikeEdu&&VendU.looksLikeEdu(next))){toast('Use a school email ending in .edu');return;}
   toast('Sending your confirmation link\u2026');
   VendU.startEmailChange(next).then(function(r){
-    if(r&&r.ok)toast('Check '+next+' and open the link to finish the switch \u2709\uFE0F');
-    else toast((r&&r.message)||'Could not send that link right now.');
-  }).catch(function(){toast('Could not send that link right now.');});
+    if(r&&r.ok){
+      toast('Confirmation link sent \u2709\uFE0F');
+      alert('Almost done \u2014 check your new email\n\nWe just sent a confirmation link to:\n'+next+'\n\nOpening that link is the ONLY way to finish updating your account. Until you open it, you stay signed in with your current school email and nothing changes.\n\nDon\u2019t see it? Check your spam or junk folder.');
+    }
+    else alert((r&&r.message)||'Could not send that link right now. Please try again in a moment.');
+  }).catch(function(){alert('Could not send that link right now. Please try again in a moment.');});
 }
 function deleteAccount(){
   if(!confirm('Delete your The VendU App account?\n\nThis removes your profile, storefront, posts, bookings and reviews. This cannot be undone.'))return;
