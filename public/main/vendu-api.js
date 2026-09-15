@@ -153,6 +153,7 @@
         refresh_token: params.get("refresh_token") || "",
         expires_at: Number(params.get("expires_at") || 0),
       });
+      try { W.finishEmailChange(); } catch (e) {}
       return payload.email;
     } catch (e) {
       return null;
@@ -174,6 +175,7 @@
             JSON.stringify({ email: res.email, at: Date.now(), build: build }),
           );
         } catch (e) {}
+        try { W.finishEmailChange(); } catch (e) {}
       }
       return res;
     });
@@ -193,6 +195,17 @@
         return true;
       }
       return false;
+    });
+  };
+
+  /* Moving to a new school email: the change only lands after the student
+     opens the sign-in link sent to the new address. */
+  W.startEmailChange = function (email) {
+    return authPost("/api/public/account/email-change", { action: "start", email: email });
+  };
+  W.finishEmailChange = function () {
+    return authPost("/api/public/account/email-change", { action: "complete" }).catch(function () {
+      return { ok: false };
     });
   };
 
