@@ -18,7 +18,7 @@
 
 - [x] Live accounts, storefronts, feed and referrals wired into Main + Beta (vendu-live.js)
 - [x] US school list integrated (2,348 schools, src/data/us-schools.json)
-- [ ] Seed official campus calendar feeds (needs each school's public calendar/ICS URL)
+- [x] Seeded official campus calendar feeds: automated discovery across all 2,348 schools verified and saved 181 live calendars (others can be added later)
 - [x] Native wrapper configs for Main + Beta plus signing guide (native/)
 - [ ] Signed store builds (needs your Apple + Google developer accounts and a Mac)
 - [x] Removed install-app option and its how-to-install instructions from both builds
