@@ -51,7 +51,9 @@
 .brandrow{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;flex-wrap:nowrap}
 .wordmark.header-logo{flex:0 1 auto;min-width:0;font-family:Georgia,'Times New Roman',serif;font-size:19px!important;font-weight:700;line-height:1.15;letter-spacing:0;gap:2px!important;padding-top:.5em;white-space:nowrap}
 .header-logo .wm-pre,.header-logo .wm-post{font-family:inherit;font-size:.82em;font-weight:400;letter-spacing:0;color:var(--mist)}
-.header-logo .gradcap{width:1.16em;height:auto;top:-.28em}
+.header-logo .gradcap{width:1.16em;height:auto;top:-8px}
+.wordmark .vhold,.viewwm .vhold{position:relative}
+.viewwm .vhold{padding-top:7px}
 .header-actions{display:flex;align-items:center;justify-content:flex-end;gap:6px;min-width:0;flex:1 1 auto}
 .header-actions .bell{flex:0 0 28px;width:28px;height:28px;padding:4px}
 .header-actions .locpill{gap:5px;flex:0 1 auto;min-width:0;max-width:min(38vw,148px);padding:7px 9px;font-size:11px;overflow:hidden;white-space:nowrap}
