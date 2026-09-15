@@ -214,12 +214,13 @@ input,textarea,select{font-size:16px} /* stops iOS zoom-on-focus */
 .topbar .brandrow{gap:10px;align-items:center}
 .sf-close{white-space:nowrap;min-height:36px;font-size:11.5px}
 
-/* ---- v13: bell badge overlap + even "View my VendU" baseline ---- */
+/* ---- v14: bell badge overlap + balanced "View my VendU" lockup ---- */
 .bell-dot{top:1px!important;right:1px!important}
-.viewwm{display:inline-flex!important;align-items:baseline!important;line-height:1!important}
+.viewbtn{display:flex!important;align-items:center!important;justify-content:center!important;gap:0!important;line-height:1!important}
+.view-label{display:inline-block;font-family:Georgia,'Times New Roman',serif;font-size:18px;font-weight:400;line-height:1;color:var(--mist);margin-right:.34em}
+.viewwm{display:inline-flex!important;align-items:baseline!important;font-size:18px!important;line-height:1!important}
 .viewwm .vhold,.viewwm .u,.viewwm .wm-pre,.viewwm .wm-post{padding-top:0!important;top:0!important;vertical-align:baseline!important;line-height:1!important}
 .viewwm .u{position:relative!important}
-/* v13.1: cap floats above U; even word spacing */
+/* The cap alone floats; every letter remains on one baseline. */
 .viewwm .gradcap{top:-3px!important;width:28px!important;left:52%!important}
-.viewbtn{gap:9px!important}
 .viewwm{letter-spacing:0!important}
