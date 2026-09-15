@@ -387,21 +387,25 @@
       el.style.width = box.w + "px";
       el.style.height = box.h + "px";
     });
-    var ch = card.offsetHeight || 180;
+    // Never cover the highlighted control: fit the card into the gap above or
+    // below it, shrinking (and scrolling) the card when the gap is tight.
     var vh = window.innerHeight;
-    var below = box.top + box.h + 14;
-    var above = box.top - ch - 14;
-    var fitsBelow = below + ch <= vh - 12;
-    var fitsAbove = above >= 12;
-    var top;
-    if (list[i].place === "above") top = fitsAbove ? above : fitsBelow ? below : above;
-    else top = fitsBelow ? below : fitsAbove ? above : below;
-    if (!fitsAbove && !fitsBelow) {
-      // Never cover the highlighted control: sit in whichever gap is larger.
-      var roomAbove = box.top - 12;
-      var roomBelow = vh - (box.top + box.h) - 12;
-      top = roomBelow >= roomAbove ? box.top + box.h + 14 : Math.max(12, box.top - ch - 14);
+    card.style.maxHeight = "";
+    card.style.overflowY = "";
+    var natural = card.offsetHeight || 180;
+    var gapAbove = box.top - 26;
+    var gapBelow = vh - (box.top + box.h) - 26;
+    var wantAbove = list[i].place === "above";
+    var pick;
+    if (wantAbove) pick = gapAbove >= natural ? "above" : gapBelow >= natural ? "below" : gapAbove >= gapBelow ? "above" : "below";
+    else pick = gapBelow >= natural ? "below" : gapAbove >= natural ? "above" : gapBelow >= gapAbove ? "below" : "above";
+    var room = pick === "above" ? gapAbove : gapBelow;
+    if (natural > room) {
+      card.style.maxHeight = Math.max(120, room) + "px";
+      card.style.overflowY = "auto";
     }
+    var ch = card.offsetHeight || 180;
+    var top = pick === "above" ? box.top - ch - 14 : box.top + box.h + 14;
     if (top < 12) top = 12;
     if (top + ch > vh - 12) top = Math.max(12, vh - ch - 12);
     card.style.top = top + "px";
