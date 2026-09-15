@@ -97,12 +97,16 @@
 }
 
 /* ================= native mobile layer (iOS / Android webview) ================= */
-html,body{overscroll-behavior:none;-webkit-text-size-adjust:100%;touch-action:manipulation}
+html,body{height:100%;min-height:100%;overflow:hidden;overscroll-behavior:none;-webkit-text-size-adjust:100%;touch-action:manipulation}
 body{-webkit-user-select:none;user-select:none}
 input,textarea,select,[contenteditable="true"]{-webkit-user-select:text!important;user-select:text!important}
 #screen,.screen,.sheet,.detail-body{-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .device{max-width:393px!important}
-@media(max-width:439px){.device{height:100dvh;max-height:none;border-radius:0;border:0}}
+@media(max-width:439px){
+  body{height:100dvh;min-height:100dvh}
+  .device{height:100dvh;max-height:none;border-radius:0;border:0}
+  .nav{position:fixed!important;left:50%!important;right:auto!important;bottom:0!important;width:min(100%,393px);transform:translateX(-50%)}
+}
 
 /* fixed bottom navigation with iOS home-indicator safe area */
 .nav{padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))!important}
