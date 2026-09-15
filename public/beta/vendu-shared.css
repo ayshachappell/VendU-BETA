@@ -220,3 +220,7 @@ input,textarea,select{font-size:16px} /* stops iOS zoom-on-focus */
 .viewwm{display:inline-flex!important;align-items:baseline!important;line-height:1!important}
 .viewwm .vhold,.viewwm .u,.viewwm .wm-pre,.viewwm .wm-post{padding-top:0!important;top:0!important;vertical-align:baseline!important;line-height:1!important}
 .viewwm .u{position:relative!important}
+/* v13.1: cap floats above U; even word spacing */
+.viewwm .gradcap{top:-3px!important;width:28px!important;left:52%!important}
+.viewbtn{gap:9px!important}
+.viewwm{letter-spacing:0!important}
