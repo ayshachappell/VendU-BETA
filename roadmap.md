@@ -11,6 +11,7 @@
 - [x] Hide campus and founder banners for internal/CEO accounts
 - [x] Restore onboarding tagline and remove headline cap collisions
 - [x] Complete mobile, tester, session, and installability verification
+- [x] Align the profile "View my VendU" lockup and cap across Main, Beta, demos, and tutorials
 
 - [ ] Make events live in both builds: persist manual events and interest counts, notify event creators, and merge configured school calendars
 - [x] Align event actions, header branding/order, profile cap, storefront photos, and pasted account links in both builds
