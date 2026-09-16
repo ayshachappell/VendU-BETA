@@ -231,3 +231,15 @@ input,textarea,select{font-size:16px} /* stops iOS zoom-on-focus */
 /* The cap alone floats; every letter remains on one baseline. */
 .viewwm .gradcap{top:-10px!important;width:28px!important;left:52%!important}
 .viewwm{letter-spacing:0!important}
+
+/* ---- v15: feed fills to the footer, no rubber-band gap under the header ---- */
+@media(max-width:439px){
+  html,body{background:var(--paper)!important}
+  .device{position:fixed!important;top:0!important;bottom:0!important;left:50%!important;right:auto!important;
+    transform:translateX(-50%)!important;width:100%!important;max-width:393px!important;
+    height:auto!important;min-height:100dvh;max-height:none!important;border:0!important;border-radius:0!important;
+    box-shadow:none!important;background:var(--paper)!important;overflow:hidden!important}
+  .screen{flex:1 1 auto!important;min-height:0!important;background:var(--paper)!important;
+    overscroll-behavior-y:none!important;padding-bottom:calc(92px + env(safe-area-inset-bottom,0px))!important}
+}
+#screen,.screen{overscroll-behavior-y:none!important}
