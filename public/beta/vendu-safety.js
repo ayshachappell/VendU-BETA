@@ -123,7 +123,7 @@
 
   W.MEET_LEGAL = MEET_LEGAL;
   W.MEET_SHORT =
-    "Safety: meet in public, in daylight, and bring someone with you. The VendU App isn\u2019t responsible for anything that happens between users.";
+    "To help everyone stay safer, meet in public during daylight, bring someone you trust, and never send money before meeting.";
 
   /* Shows the reminder. Calls onContinue() only if the person taps Continue. */
   W.meetSafety = function (context, onContinue) {

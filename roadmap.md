@@ -24,3 +24,4 @@
 - [x] Removed install-app option and its how-to-install instructions from both builds
 - [x] Posts, storefronts and events always publish to the student's home campus (.edu), while browsing other campuses stays open
 - [x] Students can change their verified .edu email (transfer/re-enroll) via a link sent to the new address
+- [x] Use supportive safety-tip wording and start the tutorial immediately after home-campus selection
