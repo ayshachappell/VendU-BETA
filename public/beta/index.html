@@ -2130,26 +2130,31 @@ function locationHelp(msg){
   var old=document.getElementById('locHelp');if(old)old.remove();
   var ios=/iPad|iPhone|iPod/.test(navigator.userAgent);
   var steps=ios
-    ? 'On iPhone: open <b>Settings \u203A Privacy &amp; Security \u203A Location Services</b>, turn it on, then scroll to <b>Safari Websites</b> (or the VendU App App) and choose <b>While Using the App</b>. Reload The VendU App and tap the button again.'
+    ? 'On iPhone: open <b>Settings \u203A Privacy &amp; Security \u203A Location Services</b>, turn it on, then scroll to <b>Safari Websites</b> (or The VendU App) and choose <b>While Using the App</b>. Return here and tap the button again.'
     : 'On Android: open <b>Settings \u203A Apps \u203A Chrome (or The VendU App) \u203A Permissions \u203A Location</b> and allow it. In Chrome you can also tap the \u{1F512} icon in the address bar \u203A <b>Permissions</b> \u203A <b>Location</b> \u203A Allow. Reload The VendU App and tap the button again.';
   var w=document.createElement('div');w.id='locHelp';
   w.style.cssText='position:absolute;inset:0;background:rgba(20,12,40,.55);display:flex;align-items:center;justify-content:center;z-index:90;padding:24px';
   w.innerHTML='<div style="background:var(--card,#fff);border-radius:20px;padding:22px 20px;max-width:320px;box-shadow:0 20px 50px rgba(0,0,0,.3)">'+
     '<div style="font-size:32px;text-align:center">\uD83D\uDCCD</div>'+
     '<div style="font-family:Bricolage Grotesque;font-weight:800;font-size:18px;text-align:center;margin-top:4px">Turn on location</div>'+
-    '<div style="font-size:13px;color:var(--mist,#777);line-height:1.55;margin:10px 0 14px">'+(msg?msg+'<br><br>':'')+steps+'</div>'+
+    '<div id="locHelpStatus" style="font-size:13px;color:var(--mist,#777);line-height:1.55;margin:10px 0 14px">'+(msg?msg+'<br><br>':'')+steps+'</div>'+
     '<button class="submit" id="locHelpSearch" style="margin:0">Search my school instead</button>'+
     '<button class="submit" id="locHelpRetry" style="margin:8px 0 0;background:var(--card,#fff);color:var(--ink);border:1px solid var(--line,#e5e5e5)">Try location again</button>'+
     '<button class="submit" id="locHelpClose" style="margin:8px 0 0;background:transparent;color:var(--mist,#777)">Close</button></div>';
   host.appendChild(w);
   document.getElementById('locHelpClose').onclick=function(){w.remove();};
-  document.getElementById('locHelpRetry').onclick=function(){w.remove();pickNearest();};
+  document.getElementById('locHelpRetry').onclick=function(){var b=this;b.disabled=true;b.textContent='Checking location\u2026';var s=document.getElementById('locHelpStatus');if(s)s.innerHTML='Requesting your current location\u2026';pickNearest(w);};
   document.getElementById('locHelpSearch').onclick=function(){w.remove();try{var i=document.getElementById('cpq');if(i)i.focus();}catch(e){}};
 }
-function pickNearest(){
-  if(!navigator.geolocation){locationHelp('This browser can\u2019t share location.');return;}
+function pickNearest(retryPanel){
+  retryPanel=retryPanel&&retryPanel.nodeType===1?retryPanel:null;
+  var fail=function(msg){
+    if(retryPanel&&retryPanel.isConnected){var s=retryPanel.querySelector('#locHelpStatus'),b=retryPanel.querySelector('#locHelpRetry');if(s)s.innerHTML=msg+'<br><br>Please check the location permission above, then try again.';if(b){b.disabled=false;b.textContent='Try location again';}return;}
+    locationHelp(msg);
+  };
+  if(!navigator.geolocation){fail('This browser can\u2019t share location.');return;}
   if(!window.isSecureContext&&location.protocol!=='https:'&&location.hostname!=='localhost'){
-    locationHelp('Location only works on the secure (https) The VendU App link.');return;
+    fail('Location only works on the secure (https) The VendU App link.');return;
   }
   toast('\uD83D\uDCCD Finding your nearest campus\u2026');
   var localBest=function(lat,lng){var best=CAMPUSES[0],bd=1e18;CAMPUSES.forEach(function(c){var dx=c.lat-lat,dy=c.lng-lng,d=dx*dx+dy*dy;if(d<bd){bd=d;best=c;}});return best;};
@@ -2167,8 +2172,8 @@ function pickNearest(){
         render();
       }).catch(function(){useLocal(lat,lng);});
   };
-  try{navigator.geolocation.getCurrentPosition(function(p){resolve(p.coords.latitude,p.coords.longitude);},function(err){locationHelp(err&&err.code===1?'The VendU App doesn\u2019t have permission to use your location yet.':'We couldn\u2019t read your location.');},{enableHighAccuracy:true,timeout:12000,maximumAge:0});}
-  catch(e){locationHelp('');}
+  try{navigator.geolocation.getCurrentPosition(function(p){if(retryPanel&&retryPanel.isConnected)retryPanel.remove();resolve(p.coords.latitude,p.coords.longitude);},function(err){fail(err&&err.code===1?'The VendU App still doesn\u2019t have permission to use your location.':'We couldn\u2019t read your location.');},{enableHighAccuracy:true,timeout:12000,maximumAge:0});}
+  catch(e){fail('We couldn\u2019t request your location.');}
 }
 const APP_THEMES=[
  {id:'violet',name:'Violet \u2014 Creative',primary:'#5A2BE0',dark:'#3d1c99',soft:'#EFE8FF',accent:'#FFB020',desc:'Energetic and youthful. Signals creativity and community \u2014 the current The VendU App look.'},
