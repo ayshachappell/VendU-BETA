@@ -22,6 +22,7 @@ import { Route as ApiPublicAccountDeleteRouteImport } from './routes/api/public/
 import { Route as ApiPublicAccountEmailChangeRouteImport } from './routes/api/public/account/email-change'
 import { Route as ApiPublicAdminModerateRouteImport } from './routes/api/public/admin/moderate'
 import { Route as ApiPublicCampusEventsRouteImport } from './routes/api/public/campus/events'
+import { Route as ApiPublicCampusNearestRouteImport } from './routes/api/public/campus/nearest'
 import { Route as ApiPublicCampusResolveRouteImport } from './routes/api/public/campus/resolve'
 import { Route as ApiPublicCampusSearchRouteImport } from './routes/api/public/campus/search'
 import { Route as ApiPublicCommunityActivityRouteImport } from './routes/api/public/community/activity'
@@ -101,6 +102,11 @@ const ApiPublicCampusEventsRoute = ApiPublicCampusEventsRouteImport.update({
   path: '/api/public/campus/events',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicCampusNearestRoute = ApiPublicCampusNearestRouteImport.update({
+  id: '/api/public/campus/nearest',
+  path: '/api/public/campus/nearest',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicCampusResolveRoute = ApiPublicCampusResolveRouteImport.update({
   id: '/api/public/campus/resolve',
   path: '/api/public/campus/resolve',
@@ -178,6 +184,7 @@ export interface FileRoutesByFullPath {
   '/api/public/account/email-change': typeof ApiPublicAccountEmailChangeRoute
   '/api/public/admin/moderate': typeof ApiPublicAdminModerateRoute
   '/api/public/campus/events': typeof ApiPublicCampusEventsRoute
+  '/api/public/campus/nearest': typeof ApiPublicCampusNearestRoute
   '/api/public/campus/resolve': typeof ApiPublicCampusResolveRoute
   '/api/public/campus/search': typeof ApiPublicCampusSearchRoute
   '/api/public/community/activity': typeof ApiPublicCommunityActivityRoute
@@ -205,6 +212,7 @@ export interface FileRoutesByTo {
   '/api/public/account/email-change': typeof ApiPublicAccountEmailChangeRoute
   '/api/public/admin/moderate': typeof ApiPublicAdminModerateRoute
   '/api/public/campus/events': typeof ApiPublicCampusEventsRoute
+  '/api/public/campus/nearest': typeof ApiPublicCampusNearestRoute
   '/api/public/campus/resolve': typeof ApiPublicCampusResolveRoute
   '/api/public/campus/search': typeof ApiPublicCampusSearchRoute
   '/api/public/community/activity': typeof ApiPublicCommunityActivityRoute
@@ -233,6 +241,7 @@ export interface FileRoutesById {
   '/api/public/account/email-change': typeof ApiPublicAccountEmailChangeRoute
   '/api/public/admin/moderate': typeof ApiPublicAdminModerateRoute
   '/api/public/campus/events': typeof ApiPublicCampusEventsRoute
+  '/api/public/campus/nearest': typeof ApiPublicCampusNearestRoute
   '/api/public/campus/resolve': typeof ApiPublicCampusResolveRoute
   '/api/public/campus/search': typeof ApiPublicCampusSearchRoute
   '/api/public/community/activity': typeof ApiPublicCommunityActivityRoute
@@ -262,6 +271,7 @@ export interface FileRouteTypes {
     | '/api/public/account/email-change'
     | '/api/public/admin/moderate'
     | '/api/public/campus/events'
+    | '/api/public/campus/nearest'
     | '/api/public/campus/resolve'
     | '/api/public/campus/search'
     | '/api/public/community/activity'
@@ -289,6 +299,7 @@ export interface FileRouteTypes {
     | '/api/public/account/email-change'
     | '/api/public/admin/moderate'
     | '/api/public/campus/events'
+    | '/api/public/campus/nearest'
     | '/api/public/campus/resolve'
     | '/api/public/campus/search'
     | '/api/public/community/activity'
@@ -316,6 +327,7 @@ export interface FileRouteTypes {
     | '/api/public/account/email-change'
     | '/api/public/admin/moderate'
     | '/api/public/campus/events'
+    | '/api/public/campus/nearest'
     | '/api/public/campus/resolve'
     | '/api/public/campus/search'
     | '/api/public/community/activity'
@@ -344,6 +356,7 @@ export interface RootRouteChildren {
   ApiPublicAccountEmailChangeRoute: typeof ApiPublicAccountEmailChangeRoute
   ApiPublicAdminModerateRoute: typeof ApiPublicAdminModerateRoute
   ApiPublicCampusEventsRoute: typeof ApiPublicCampusEventsRoute
+  ApiPublicCampusNearestRoute: typeof ApiPublicCampusNearestRoute
   ApiPublicCampusResolveRoute: typeof ApiPublicCampusResolveRoute
   ApiPublicCampusSearchRoute: typeof ApiPublicCampusSearchRoute
   ApiPublicCommunityActivityRoute: typeof ApiPublicCommunityActivityRoute
@@ -451,6 +464,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicCampusEventsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/campus/nearest': {
+      id: '/api/public/campus/nearest'
+      path: '/api/public/campus/nearest'
+      fullPath: '/api/public/campus/nearest'
+      preLoaderRoute: typeof ApiPublicCampusNearestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/campus/resolve': {
       id: '/api/public/campus/resolve'
       path: '/api/public/campus/resolve'
@@ -552,6 +572,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicAccountEmailChangeRoute: ApiPublicAccountEmailChangeRoute,
   ApiPublicAdminModerateRoute: ApiPublicAdminModerateRoute,
   ApiPublicCampusEventsRoute: ApiPublicCampusEventsRoute,
+  ApiPublicCampusNearestRoute: ApiPublicCampusNearestRoute,
   ApiPublicCampusResolveRoute: ApiPublicCampusResolveRoute,
   ApiPublicCampusSearchRoute: ApiPublicCampusSearchRoute,
   ApiPublicCommunityActivityRoute: ApiPublicCommunityActivityRoute,

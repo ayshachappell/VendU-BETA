@@ -2155,25 +2155,19 @@ function pickNearest(){
   var localBest=function(lat,lng){var best=CAMPUSES[0],bd=1e18;CAMPUSES.forEach(function(c){var dx=c.lat-lat,dy=c.lng-lng,d=dx*dx+dy*dy;if(d<bd){bd=d;best=c;}});return best;};
   var useLocal=function(lat,lng){var b=localBest(lat,lng);state.campus=b;applyCampusTheme();loadCampusEvents(true);saveCampusPref();state.campusPick=false;state.campusQ='';state.campusResults=[];if(state.homePick){homePickApply(b);return;}toast('\uD83D\uDCCD Nearest campus: '+b.short);campusSwitched();};
   var resolve=function(lat,lng){
-    fetch('https://api.bigdatacloud.net/data/reverse-geocode-client?latitude='+lat+'&longitude='+lng+'&localityLanguage=en')
+    fetch('/api/public/campus/nearest?lat='+lat+'&lng='+lng+'&limit=8&_='+Date.now(),{cache:'no-store'})
       .then(function(r){return r.json();})
-      .then(function(g){
-        var city=g.city||g.locality||'',region=g.principalSubdivision||'';
-        var tries=[city,city+' '+region,region].filter(Boolean);
-        var step=function(i){
-          if(i>=tries.length||!window.VendU||!VendU.searchSchools)return useLocal(lat,lng);
-          VendU.searchSchools(tries[i]).then(function(r){
-            var hit=(r&&r.ok&&r.results&&r.results[0])||null;
-            if(!hit)return step(i+1);
-            state.campusPick=false;state.campusQ='';state.campusResults=[];
-            joinCampus(hit.domain,null,function(c){if(state.homePick){homePickApply(c);return;}toast('\uD83D\uDCCD Nearest campus: '+c.short);},hit.name);
-            render();
-          }).catch(function(){step(i+1);});
-        };
-        step(0);
+      .then(function(res){
+        var list=(res&&res.ok&&res.results)||[];
+        if(!list.length)return useLocal(lat,lng);
+        var hit=list[0];
+        state.nearbyCampuses=list;
+        state.campusPick=false;state.campusQ='';state.campusResults=[];
+        joinCampus(hit.domain,null,function(c){if(state.homePick){homePickApply(c);return;}toast('\uD83D\uDCCD Nearest campus: '+(c.short||hit.name)+' \u2014 '+hit.distance+' mi');},hit.name);
+        render();
       }).catch(function(){useLocal(lat,lng);});
   };
-  try{navigator.geolocation.getCurrentPosition(function(p){resolve(p.coords.latitude,p.coords.longitude);},function(err){locationHelp(err&&err.code===1?'The VendU App doesn\u2019t have permission to use your location yet.':'We couldn\u2019t read your location.');},{enableHighAccuracy:true,timeout:12000,maximumAge:300000});}
+  try{navigator.geolocation.getCurrentPosition(function(p){resolve(p.coords.latitude,p.coords.longitude);},function(err){locationHelp(err&&err.code===1?'The VendU App doesn\u2019t have permission to use your location yet.':'We couldn\u2019t read your location.');},{enableHighAccuracy:true,timeout:12000,maximumAge:0});}
   catch(e){locationHelp('');}
 }
 const APP_THEMES=[
