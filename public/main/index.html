@@ -2170,9 +2170,6 @@ function pickNearest(){
         render();
       }).catch(function(){useLocal(lat,lng);});
   };
-        step(0);
-      }).catch(function(){useLocal(lat,lng);});
-  };
   try{navigator.geolocation.getCurrentPosition(function(p){resolve(p.coords.latitude,p.coords.longitude);},function(err){locationHelp(err&&err.code===1?'The VendU App doesn\u2019t have permission to use your location yet.':'We couldn\u2019t read your location.');},{enableHighAccuracy:true,timeout:12000,maximumAge:0});}
   catch(e){locationHelp('');}
 }
