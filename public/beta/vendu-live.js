@@ -184,6 +184,14 @@
       if (p.avatarUrl) state.avatar = state.avatar || p.avatarUrl;
       if (p.bio) state.about = p.bio;
       if (r.refCode) state.refCode = r.refCode;
+      /* home school follows the account, not the device */
+      if (p.campusDomain) {
+        try {
+          state.homeCampus = { domain: p.campusDomain, name: p.campusName || p.campusDomain };
+          localStorage.setItem("vendu_home_campus", JSON.stringify(state.homeCampus));
+          localStorage.setItem("vendu_home_campus_ok", "1");
+        } catch (e) {}
+      }
       redraw();
     }).catch(function () {});
   };
@@ -260,7 +268,7 @@
   L.post = function (post) {
     if (!signedIn()) return Promise.resolve();
     post = post || {};
-    post.domain = domain();
+    post.domain = post.domain || viewDomain();
     post.authorName = state.vname || "";
     return VendU.createPost(post, build()).then(function (r) {
       if (r && r.ok) L.pull();
