@@ -1,4 +1,4 @@
-const CACHE = "vendu-beta-shell-v18";
+const CACHE = "vendu-beta-shell-v19";
 const SHELL = [
   "/beta/index.html",
   "/beta/vendu-shared.css?v=18",

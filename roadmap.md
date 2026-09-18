@@ -52,4 +52,4 @@
 - [x] Phone layouts fill each device width while preserving safe-area spacing
 - [x] Online dots use recent authenticated activity across feeds, profiles, chats, and storefronts
 - [x] Profile and storefront photos enlarge on tap with a compact close control
-- [x] Main/Beta offline caches versioned to prevent old published screens from persisting
+- [x] Main/Beta offline caches versioned and network requests bypass browser cache to prevent old published screens from persisting
