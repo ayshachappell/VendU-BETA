@@ -244,3 +244,22 @@ input,textarea,select{font-size:16px} /* stops iOS zoom-on-focus */
     overscroll-behavior-y:none!important;padding-bottom:calc(92px + env(safe-area-inset-bottom,0px))!important}
 }
 #screen,.screen{overscroll-behavior-y:none!important}
+
+/* ---- purple header banner (v16) ---- */
+.topbar.hdr-purple{background:linear-gradient(180deg,#6234EA 0%,#4B1FC6 100%)!important;
+  border-radius:0 0 22px 22px;padding-bottom:16px!important;box-shadow:0 8px 22px rgba(74,31,196,.24);color:#fff}
+.topbar.hdr-purple .wordmark,.topbar.hdr-purple .wordmark *{color:#fff!important}
+.topbar.hdr-purple .beta-mark{background:rgba(255,255,255,.2);color:#fff}
+.topbar.hdr-purple .locpill{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);color:#fff}
+.topbar.hdr-purple .locpill .dot{background:var(--amber)}
+.topbar.hdr-purple .search{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.34);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 4px 14px rgba(20,10,50,.14)}
+.topbar.hdr-purple .search svg{stroke:#fff;color:#fff;opacity:.9}
+.topbar.hdr-purple .search input{color:#fff}
+.topbar.hdr-purple .search input::placeholder{color:rgba(255,255,255,.78)}
+.hdr-av{width:32px!important;height:32px!important;flex:0 0 32px!important;padding:0!important;
+  border-radius:50%!important;overflow:visible;background-size:cover;background-position:center;
+  border:2px solid rgba(255,255,255,.75)!important;color:#fff}
+.header-actions .hdr-av{flex:0 0 32px;width:32px;height:32px;padding:0}
+.hdr-av.has-photo svg{display:none}
+.topbar.hdr-purple .bell-dot{border-color:#5127D8!important}
