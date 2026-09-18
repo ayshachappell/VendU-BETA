@@ -32,3 +32,9 @@
 - Home school syncs from the account profile on every device.
 - Posts, requests, market items and events publish to whichever campus is selected in the location pill.
 - Events disappear automatically once they are over (end time, or 3 hours after the start when no end time was given).
+
+## Purple header (done)
+- Purple banner header on Home, Market, Profile (both builds)
+- Semi-transparent search bar inside header
+- Bell replaced by student profile photo; exact unread count, refresh every 15s + on focus/visibility
+- Tutorial step added for the profile-photo inbox button
