@@ -734,18 +734,31 @@ function openCampusPick(){state.campusPick=true;render();}
 var HOME_OK_KEY='vendu_home_campus_ok';
 function homeCampusSaved(){try{return !!localStorage.getItem(HOME_OK_KEY);}catch(e){return false;}}
 function saveHomeCampus(c){
-  c=c||state.campus;if(!c)return;
+  c=c||state.campus;if(!c)return Promise.resolve(null);
   try{localStorage.setItem(HOME_OK_KEY,'1');localStorage.setItem('vendu_home_campus',JSON.stringify({domain:c.domain||'',name:c.name||''}));}catch(e){}
   state.homeCampus={domain:c.domain||'',name:c.name||''};
-  try{if(window.VendU&&VendU.saveProfile)VendU.saveProfile({campusDomain:c.domain||'',campusName:c.name||''});}catch(e){}
+  try{if(window.VendU&&VendU.saveProfile)return Promise.resolve(VendU.saveProfile({campusDomain:c.domain||'',campusName:c.name||''})).catch(function(){return null;});}catch(e){}
+  return Promise.resolve(null);
 }
 function homePickApply(c){
   c=c||state.campus;
   state.homePick=false;state.homeConfirm=false;
-  saveHomeCampus(c);saveCampusPref();
-  toast('Home campus set \u2014 your posts show at '+((c&&c.short)||'your school'));
-  render();
-  if(window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour();},100);
+  saveCampusPref();render();
+  var done=function(){if(window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour();},100);};
+  saveHomeCampus(c).then(function(r){
+    /* The server decides the home school. If it kept an earlier choice, say so
+       instead of confirming a school that posts will not go to. */
+    var p=(r&&r.profile)||null,srv=String((p&&p.campusDomain)||'').toLowerCase(),want=String((c&&c.domain)||'').toLowerCase();
+    if(srv&&want&&srv!==want){
+      var nm=(p&&p.campusName)||srv;
+      state.homeCampus={domain:srv,name:nm};
+      try{localStorage.setItem('vendu_home_campus',JSON.stringify(state.homeCampus));}catch(e){}
+      toast('Your home school stays '+nm+'. To change it, verify a new school email in Settings.');
+    }else{
+      toast('Home campus set \u2014 your posts show at '+((c&&c.short)||'your school'));
+    }
+    render();done();
+  },function(){done();});
 }
 function maybeAskHomeCampus(){
   if(state.tester)return;
@@ -1766,7 +1779,7 @@ function miniForm(mode){
     const rc=()=>Math.floor(Math.random()*12);
     if(mode==='item'){try{if(window.VenduLive)VenduLive.post({kind:'item',title:v('f1')||'New item',priceLabel:v('f2'),body:v('f3'),imageUrl:state.newPhoto||'',badges:tag?[tag]:[]});}catch(e){}GOODS.unshift({name:v('f1')||'New item',price:v('f2')||'$—',desc:v('f3'),cat:v('f4'),tag:tag,pays:(state.mpays||[]).filter(function(p){return String(p.handle||'').trim();}).map(function(p){return {app:p.app,handle:String(p.handle).trim()};}),img:state.newPhoto,emoji:'📦',c:rc(),by:(state.vname||'You'),bi:((state.vname||'Y').trim()[0]||'Y').toUpperCase(),bc:0,uc:state.themeColor,mine:true,id:'mp'+(idc++),campus:state.campus.id});state.tab='market';state.mkt='goods';}
     else if(mode==='request'){try{if(window.VenduLive)VenduLive.post({kind:'request',title:(v('f1')||'New request').slice(0,120),body:v('f1')||'New request',imageUrl:state.newPhoto||''});}catch(e){}REQUESTS.unshift({img:state.newPhoto,who:(state.vname||'You'),in:((state.vname||'Y').trim()[0]||'Y').toUpperCase(),c:rc(),uc:state.themeColor,mine:true,id:'mp'+(idc++),barter:tag==='1'?1:0,txt:v('f1')||'New request',campus:state.campus.id});state.tab='market';state.mkt='requests';}
-    else{let ts=Date.now()+2*86400000;const d=v('f2'),t=v('f3');if(d){const p=new Date(d+'T'+(t||'12:00')).getTime();if(!isNaN(p))ts=p;}if(!window.VendU||!VendU.eventActivity){toast('Events are unavailable right now.');return;}var btn=document.getElementById('postmini');btn.disabled=true;VendU.eventActivity({action:'create',domain:state.campus.domain,title:v('f1')||'New event',startsAt:new Date(ts).toISOString(),location:v('f4')||'Campus',imageUrl:state.newPhoto||'',creatorName:state.vname||'Student',build:BUILD}).then(function(r){if(!r||!r.ok){btn.disabled=false;toast((r&&r.message)||'Could not post that event.');return;}state.addMode=null;state.newPhoto=null;state.tab='home';state.home='events';loadCampusEvents();render();toast('Posted to The VendU App! 🎉');});return;}
+    else{let ts=Date.now()+2*86400000;const d=v('f2'),t=v('f3');if(d){const p=new Date(d+'T'+(t||'12:00')).getTime();if(!isNaN(p))ts=p;}if(!window.VendU||!VendU.eventActivity){toast('Events are unavailable right now.');return;}var btn=document.getElementById('postmini');btn.disabled=true;VendU.eventActivity({action:'create',domain:state.campus.domain,title:v('f1')||'New event',startsAt:new Date(ts).toISOString(),location:v('f4')||'Campus',imageUrl:state.newPhoto||'',creatorName:state.vname||'Student',build:BUILD}).then(function(r){if(!r||!r.ok){btn.disabled=false;toast((r&&r.message)||'Could not post that event.');return;}state.addMode=null;state.newPhoto=null;state.tab='home';state.home='events';var dm=String((r&&r.domain)||'').toLowerCase();var cur=String((state.campus&&state.campus.domain)||'').toLowerCase();if(dm&&cur&&dm!==cur){var known=campusByDomain(dm);if(known){state.campus=known;applyCampusTheme();saveCampusPref();loadCampusEvents(true);render();toast('Posted to '+known.short+' — your school\u2019s events 🎉');}else{joinCampus(dm,null,function(cc){loadCampusEvents(true);render();toast('Posted to '+((cc&&cc.short)||'your school')+' — your school\u2019s events 🎉');});render();}return;}loadCampusEvents();render();toast('Posted to The VendU App! 🎉');});return;}
     state.addMode=null;state.newPhoto=null;state._mpInit=false;render();toast('Posted to The VendU App! 🎉');
   };
 }
