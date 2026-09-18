@@ -1873,7 +1873,7 @@ function myPostsScreen(){
   screen.querySelectorAll('[data-photopost]').forEach(function(el){el.onclick=function(){state.photoTarget={id:el.dataset.photopost,type:el.dataset.ptype};cphoto.value='';cphoto.click();};});
 }
 function settingsScreen(){
-  var items=[['\u25B6\uFE0E Replay tutorial','tour'],['\uD83D\uDCAC Send beta feedback','feedback'],['\uD83D\uDEDF Help & support','support'],['\uD83D\uDCC4 Privacy & terms','legal'],['\uD83D\uDD12 Privacy choices (do not sell my info)','pchoices'],['\u2709\uFE0F Change my school email','chemail'],['\uD83D\uDDD1\uFE0F Delete my account','delete'],['\u23FB Log out','logout']];
+  var items=[['\u25B6\uFE0E Replay tutorial','tour'],['\uD83D\uDCAC Send beta feedback','feedback'],['\uD83D\uDEDF Help & support','support'],['\uD83D\uDCC4 Privacy & terms','legal'],['\uD83D\uDD12 Privacy choices (do not sell my info)','pchoices'],['\uD83D\uDD10 Set or change my password','password'],['\u2709\uFE0F Change my school email','chemail'],['\uD83D\uDCF1 Log out of all devices','logoutall'],['\uD83D\uDDD1\uFE0F Delete my account','delete'],['\u23FB Log out','logout']];
   screen.innerHTML='<div class="topbar"><div class="brandrow"><div class="wordmark">Settings</div><div class="locpill" id="setBack" style="cursor:pointer">\u2039 Back</div></div></div>'
     +'<div class="enter" style="padding:10px 20px 20px"><div style="font-size:13px;color:var(--mist);line-height:1.5;margin:2px 0 14px">Tutorial, help and account controls.</div>'
     +'<div class="menu">'+items.map(function(x){return '<div class="svc" data-smenu="'+x[1]+'">'+x[0]+'<span>'+icon('<path d="m9 18 6-6-6-6"/>',18)+'</span></div>';}).join('')+'</div></div>';
@@ -1887,6 +1887,8 @@ function settingsScreen(){
     else if(m==='pchoices'){window.open('/legal/privacy-choices.html','_blank','noopener');}
     else if(m==='chemail'){changeSchoolEmail();}
     else if(m==='delete'){deleteAccount();}
+    else if(m==='password'){state.moreMenu=false;state.pwErr='';state.pwCreate=true;render();}
+    else if(m==='logoutall'){logoutAllDevices();}
     else if(m==='logout'){doLogout();}};});
 }
 function profile(){
@@ -1974,7 +1976,43 @@ function bookingSettings(){
 
 
 function demoSkip(){state.eduDone=true;state.onboarded=true;state.userType='vendor';state.isSeller=true;state.subscribed=true;state.agree1=true;state.agree2=true;state.agree3=true;state.formCat='Beauty';if(!state.services.length)state.services=[['Signature service','$25'],['Add-on','$10']];if(!state.gallery.length)state.gallery=[pic('#5A2BE0','#8a5bf0','\u2728','Your work'),pic('#0e9f6e','#0891b2','\ud83d\udcf7','Your work'),pic('#c026d3','#e11d48','\ud83c\udfa8','Your work')];if(!state.socials.length)state.socials=[{type:'Instagram',url:'instagram.com/you'},{type:'TikTok',url:'tiktok.com/@you'}];if(!state.pays.length)state.pays=[{app:'Cash App',handle:'$you'},{app:'Venmo',handle:'@you'}];state.demoContent=true;state.tab='home';state.tester=true;state.isCEO=false;state.isRealStudent=false;if(typeof refreshDemo==='function')refreshDemo();render();var _tk='vendu_tour_tester_v1',_seen=false;try{_seen=!!localStorage.getItem(_tk);}catch(e){}if(!_seen){try{localStorage.removeItem('vendu_tour_done_v1');localStorage.setItem(_tk,'1');}catch(e){}}if(window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour(!_seen);},350);}
-function finishOnboarding(){state.onboarded=true;state.tab='home';state.obStep=0;try{document.querySelectorAll('#nav .navitem').forEach(function(n){n.classList.toggle('on',n.dataset.tab==='home');});}catch(e){}render();}
+
+/* ===== Password: set once after verifying, then just log in ===== */
+function pwCreateScreen(){
+  var err=state.pwErr?'<div class="edu-err">'+state.pwErr+'</div>':'';
+  screen.innerHTML='<div class="enter" style="padding:28px 20px 24px;display:flex;flex-direction:column;justify-content:center;min-height:100%">'+
+    '<div style="font-size:40px;text-align:center">\uD83D\uDD10</div>'+
+    '<div style="font-family:Bricolage Grotesque;font-weight:800;font-size:22px;text-align:center;margin-top:8px">Create your password</div>'+
+    '<div style="font-size:13px;color:var(--mist);line-height:1.55;text-align:center;margin:10px 4px 18px">You\u2019re verified \u2014 set a password so next time you just enter your email and password and tap Log in. No email link needed again.</div>'+
+    '<input id="pwA" type="password" autocomplete="new-password" placeholder="Password (8+ characters)" style="border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-family:inherit;font-size:15px;outline:0;background:#fff">'+
+    '<input id="pwB" type="password" autocomplete="new-password" placeholder="Confirm password" style="border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-family:inherit;font-size:15px;outline:0;background:#fff;margin-top:10px">'+err+
+    '<button class="submit" id="pwSave" style="margin:14px 0 0">Save password</button>'+
+    '<div id="pwSkip" style="font-size:12.5px;color:var(--mist);text-align:center;margin-top:14px;cursor:pointer;text-decoration:underline">Skip for now \u2014 I\u2019ll keep using email links</div></div>';
+  var busy=false;
+  document.getElementById('pwSave').onclick=function(){
+    if(busy)return;
+    var a=document.getElementById('pwA').value||'',b=document.getElementById('pwB').value||'';
+    if(a.length<8){state.pwErr='Use at least 8 characters.';pwCreateScreen();return;}
+    if(a!==b){state.pwErr='Both passwords have to match.';pwCreateScreen();return;}
+    busy=true;
+    VendU.setPassword(a,b).then(function(r){
+      busy=false;
+      if(r&&r.ok){state.pwErr='';state.pwCreate=false;toast('Password saved \u2713 Log in with it next time');render();maybeAskHomeCampus();return;}
+      state.pwErr=(r&&r.message)||'Could not save that password.';pwCreateScreen();
+    });
+  };
+  document.getElementById('pwSkip').onclick=function(){state.pwCreate=false;state.pwErr='';render();maybeAskHomeCampus();};
+}
+function logoutAllDevices(){
+  if(!window.VendU||!VendU.signOutEverywhere)return;
+  toast('Signing out everywhere\u2026');
+  VendU.signOutEverywhere().then(function(r){
+    if(r&&r.ok){try{localStorage.removeItem('vendu_return_build');}catch(e){}location.reload();return;}
+    toast((r&&r.message)||'Could not sign out the other devices.');
+  });
+}
+
+function finishOnboarding(){state.onboarded=true;state.tab='home';state.obStep=0;try{if(state.isRealStudent&&window.VendU&&VendU.hasPassword&&!VendU.hasPassword())state.pwCreate=true;}catch(e){}try{document.querySelectorAll('#nav .navitem').forEach(function(n){n.classList.toggle('on',n.dataset.tab==='home');});}catch(e){}render();}
 function onboarding(){
   /* Already verified (e.g. returning from the emailed sign-in link): drop straight
      into the app so the interactive tutorial starts, whatever the user picked. */
@@ -1996,6 +2034,37 @@ function onboarding(){
     document.getElementById('obback1').onclick=()=>{state.obStep=0;render();};
     return;}
   if(VERIFIED||state.eduDone){state.eduDone=true;return finishOnboarding();}
+  if(state.pwLogin){
+    var perr=state.eduErr?`<div class="edu-err">${state.eduErr}</div>`:'';
+    screen.innerHTML=`<div class="ob">
+    <div class="ob-top"><div class="ob-dots"><span class="obd on"></span><span class="obd on"></span><span class="obd on"></span></div></div>
+    <div class="ob-body"><img src="/icons/icon-192.png" alt="The VendU App logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(90,43,224,.26);margin-bottom:14px"><div class="ob-title">Log in</div>
+    <div class="ob-text" style="margin-bottom:20px">Welcome back. Use the school email you verified and the password you set.</div>
+    <div style="width:100%;max-width:330px;display:flex;flex-direction:column;gap:10px">
+      <input id="pwEmail" type="email" inputmode="email" autocomplete="email" value="${state.eduEmail||''}" placeholder="you@yourschool.edu" style="border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-family:inherit;font-size:15px;outline:0;background:#fff">
+      <input id="pwPass" type="password" autocomplete="current-password" placeholder="Password" style="border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-family:inherit;font-size:15px;outline:0;background:#fff">
+      <button class="submit" id="pwGo" style="margin:2px 0 0">Log in</button>
+    </div>${perr}
+    <div class="edu-note" style="margin-top:16px">New here, or forgot your password? <span id="pwBack" style="color:var(--violet);font-weight:700;cursor:pointer">Verify your school email</span></div>
+    </div></div>`;
+    var pwBusy=false;
+    var goBtn=document.getElementById('pwGo');
+    goBtn.onclick=function(){
+      if(pwBusy)return;
+      var em=(document.getElementById('pwEmail').value||'').trim().toLowerCase();
+      var pw=document.getElementById('pwPass').value||'';
+      if(!VendU.looksLikeEmail(em)){state.eduErr='Enter a valid email address';onboarding();return;}
+      if(pw.length<8){state.eduErr='Enter your password (at least 8 characters)';state.eduEmail=em;onboarding();return;}
+      pwBusy=true;goBtn.textContent='Logging in\u2026';
+      VendU.loginPassword(em,pw,BUILD).then(function(r){
+        pwBusy=false;
+        if(r&&r.ok){state.eduErr='';state.pwLogin=false;state.eduEmail=r.email||em;state.eduDone=true;applyAccount(r.email||em);toast('Welcome back \u2713');finishOnboarding();return;}
+        state.eduEmail=em;state.eduErr=(r&&r.message)||'That email and password didn\u2019t match.';onboarding();
+      });
+    };
+    document.getElementById('pwBack').onclick=function(){state.pwLogin=false;state.eduErr='';onboarding();};
+    return;
+  }
   {
     const sent=!!state.eduCodeSent;
     const err=state.eduErr?`<div class="edu-err">${state.eduErr}</div>`:'';
@@ -2003,7 +2072,7 @@ function onboarding(){
     <div class="ob-top"><div class="ob-dots"><span class="obd on"></span><span class="obd on"></span><span class="obd on"></span></div></div>
     <div class="ob-body"><img src="/icons/icon-192.png" alt="The VendU App logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(90,43,224,.26);margin-bottom:14px"><div class="ob-title">${sent?'Check your email':'Verify your school email'}</div>
     <div class="ob-text" style="margin-bottom:20px">${sent?('We emailed a secure sign-in link to <b>'+state.eduEmail+'</b>. Open it and The VendU App unlocks automatically.'):'The VendU App is students-only. Enter your college <b>.edu</b> email \u2014 any school works \u2014 and we\u2019ll email you a sign-in link. Your campus feed is set from this address.'}</div>
-    ${sent?`<div class="edu-note" style="max-width:330px;font-size:14px">Open the email from The VendU App and tap <b>Verify Email</b>. This page unlocks as soon as you do.</div>${err}<div class="edu-note" style="margin-top:16px">Waiting for you to tap the link\u2026 this screen unlocks by itself.</div><div class="edu-note">Didn\u2019t get it? Check your spam folder, then <span id="eduResend" style="color:var(--violet);font-weight:700;cursor:pointer">resend the link</span> \u00b7 <span id="eduEdit" style="cursor:pointer;text-decoration:underline">use a different email</span></div>`:`<div class="edu-row" style="width:100%;max-width:330px"><input id="eduIn" type="email" inputmode="email" autocomplete="email" value="${state.eduEmail||''}" placeholder="you@yourschool.edu" style="flex:1;border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-family:inherit;font-size:15px;outline:0;background:#fff"><button class="verify-btn" id="eduBtn">Send link</button></div>${err}<div class="ob-text" style="margin:22px 0 9px;font-weight:600;color:var(--ink)">Expected graduation year</div><div class="pldays" style="justify-content:center;padding:0">${['2025','2026','2027','2028','2029'].map(y=>`<div class="plday ${state.gradYear===y?'on':''}" data-gradyear="${y}">\u2019${y.slice(2)}</div>`).join('')}</div><div class="edu-legal ${state.legalOK?'on':''}" id="eduLegal" role="checkbox" tabindex="0" aria-checked="${state.legalOK?'true':'false'}"><span class="lbox">\u2713</span><span>I have read and agree to The VendU App\u2019s <a href="/legal/terms.html?from=signin" target="_blank" rel="noopener">Terms &amp; Conditions</a>, <a href="/legal/privacy.html?from=signin" target="_blank" rel="noopener">Privacy Policy</a> and <a href="/legal/support.html?from=signin" target="_blank" rel="noopener">Community Guidelines</a>.</span></div><div class="edu-note">Any college works \u2014 we only use your school email to confirm you\u2019re a student and to show you your campus. No spam, ever.</div>`}
+    ${sent?`<div class="edu-note" style="max-width:330px;font-size:14px">Open the email from The VendU App and tap <b>Verify Email</b>. This page unlocks as soon as you do.</div>${err}<div class="edu-note" style="margin-top:16px">Waiting for you to tap the link\u2026 this screen unlocks by itself.</div><div class="edu-note">Didn\u2019t get it? Check your spam folder, then <span id="eduResend" style="color:var(--violet);font-weight:700;cursor:pointer">resend the link</span> \u00b7 <span id="eduEdit" style="cursor:pointer;text-decoration:underline">use a different email</span></div>`:`<div class="edu-row" style="width:100%;max-width:330px"><input id="eduIn" type="email" inputmode="email" autocomplete="email" value="${state.eduEmail||''}" placeholder="you@yourschool.edu" style="flex:1;border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-family:inherit;font-size:15px;outline:0;background:#fff"><button class="verify-btn" id="eduBtn">Send link</button></div>${err}<div class="ob-text" style="margin:22px 0 9px;font-weight:600;color:var(--ink)">Expected graduation year</div><div class="pldays" style="justify-content:center;padding:0">${['2025','2026','2027','2028','2029'].map(y=>`<div class="plday ${state.gradYear===y?'on':''}" data-gradyear="${y}">\u2019${y.slice(2)}</div>`).join('')}</div><div class="edu-legal ${state.legalOK?'on':''}" id="eduLegal" role="checkbox" tabindex="0" aria-checked="${state.legalOK?'true':'false'}"><span class="lbox">\u2713</span><span>I have read and agree to The VendU App\u2019s <a href="/legal/terms.html?from=signin" target="_blank" rel="noopener">Terms &amp; Conditions</a>, <a href="/legal/privacy.html?from=signin" target="_blank" rel="noopener">Privacy Policy</a> and <a href="/legal/support.html?from=signin" target="_blank" rel="noopener">Community Guidelines</a>.</span></div><div class="edu-note" style="margin-top:14px">Already set a password? <span id="eduPwLogin" style="color:var(--violet);font-weight:700;cursor:pointer">Log in with email &amp; password</span></div><div class="edu-note">Any college works \u2014 we only use your school email to confirm you\u2019re a student and to show you your campus. No spam, ever.</div>`}
     </div>`;
     /* Keep whatever the student already typed, so picking a grad year or the
        legal checkbox never wipes the email box. */
@@ -2036,6 +2105,7 @@ function onboarding(){
     var lg=document.getElementById('eduLegal');
     if(lg){var tog=function(){keepEmail();state.legalOK=!state.legalOK;onboarding();var i=document.getElementById('eduIn');if(i)i.value=state.eduEmail||'';};lg.onclick=function(e){if(e.target&&e.target.tagName==='A')return;tog();};lg.onkeydown=function(e){if(e.key===' '||e.key==='Enter'){e.preventDefault();tog();}};}
     var rs=document.getElementById('eduResend');if(rs)rs.onclick=function(){VendU.sendCode(state.eduEmail,BUILD).then(function(r){toast(r&&r.ok?'New link sent \u{1F4EC}':((r&&r.message)||'Could not resend.'));});};
+    var pl=document.getElementById('eduPwLogin');if(pl)pl.onclick=function(){keepEmail();state.eduErr='';state.pwLogin=true;onboarding();};
     var ed=document.getElementById('eduEdit');if(ed)ed.onclick=function(){state.eduCodeSent=false;state.eduErr='';onboarding();};
     
     return;}
@@ -2341,7 +2411,7 @@ try{(function(){
   sc.addEventListener('touchend',function(){if(!pulling)return;pulling=false;var go=dist>70;if(ind){ind.classList.remove('on');ind.style.transform='';}dist=0;if(go)venduPullRefresh();},{passive:true});
 })();}catch(e){}
 
-function render(){try{retagDemo();}catch(e){}if(state.onboarded&&!state.homeConfirm&&!state.homePick&&(!state.isRealStudent||homeCampusSaved())&&window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour();},300);if(!state.onboarded){if(state.storefrontSetup)return add();return onboarding();}if(state.moreMenu)return settingsScreen();if(state.campusPick)return campusPicker();if(state.homeConfirm)return homeConfirmScreen();if(state.themeView)return themeScreen();if(state.book)return bookingScreen();if(state.bookSet)return bookingSettings();if(state.userView)return userProfile();if(state.thread)return messageScreen();if(state.inboxView)return inboxScreen();if(state.groupCreateView)return createGroupScreen();if(state.groupView)return groupPage();if(state.detail)return detail(state.detail);if(state.leaderboard)return leaderboard();if(state.storefrontSetup)return add();if(state.savedView)return savedScreen();if(state.myPostsView)return myPostsScreen();if(state.svcEdit)return servicesEditor();if(state.tab==='add')return addTab();({home,market,venuU,profile}[state.tab]||home)();}
+function render(){try{retagDemo();}catch(e){}if(state.onboarded&&!state.pwCreate&&!state.homeConfirm&&!state.homePick&&(!state.isRealStudent||homeCampusSaved())&&window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour();},300);if(!state.onboarded){if(state.storefrontSetup)return add();return onboarding();}if(state.pwCreate)return pwCreateScreen();if(state.moreMenu)return settingsScreen();if(state.campusPick)return campusPicker();if(state.homeConfirm)return homeConfirmScreen();if(state.themeView)return themeScreen();if(state.book)return bookingScreen();if(state.bookSet)return bookingSettings();if(state.userView)return userProfile();if(state.thread)return messageScreen();if(state.inboxView)return inboxScreen();if(state.groupCreateView)return createGroupScreen();if(state.groupView)return groupPage();if(state.detail)return detail(state.detail);if(state.leaderboard)return leaderboard();if(state.storefrontSetup)return add();if(state.savedView)return savedScreen();if(state.myPostsView)return myPostsScreen();if(state.svcEdit)return servicesEditor();if(state.tab==='add')return addTab();({home,market,venuU,profile}[state.tab]||home)();}
 document.getElementById('nav').querySelectorAll('.navitem').forEach(item=>{item.onclick=()=>{if(!state.onboarded)return;document.querySelectorAll('.navitem').forEach(n=>n.classList.remove('on'));item.classList.add('on');if(item.dataset.tab==='add'&&state.tab!=='add')state.prevTab=state.tab;state.tab=item.dataset.tab;state.moreMenu=false;state.userView=null;state.thread=0;state.inboxView=false;state.groupView=null;state.groupCreateView=false;state.myPostsView=false;state.themeView=false;state.reviewOpen=false;state.cat='All';state.q='';state.near=false;state.detail=0;state.book=null;state.svcEdit=false;state.addMode=null;state.newPhoto=null;state.leaderboard=false;state.storefrontSetup=false;state.reviewOpen=false;state.msgTo=0;state.openMC=0;state.bookSet=false;state.subPrompt=false;state.savedView=false;state.campusPick=false;state.campusQ='';if(item.dataset.tab!=='add')state.submitted=false;render();screen.scrollTop=0;if(item.dataset.tab==='profile')setTimeout(function(){try{venduLiveSync();}catch(e){}},0);};});
 try{restoreCampusPref();}catch(e){}
 /* ---- universal Back: nav helper, layer-aware back, device/browser back ---- */
