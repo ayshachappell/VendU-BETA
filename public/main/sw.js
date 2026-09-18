@@ -1,9 +1,9 @@
-const CACHE = "vendu-main-shell-v1";
+const CACHE = "vendu-main-shell-v19";
 const SHELL = [
   "/main/index.html",
-  "/main/vendu-shared.css?v=mobile1",
+  "/main/vendu-shared.css?v=18",
   "/main/vendu-api.js?v=13",
-  "/main/vendu-tour.js?v=21",
+  "/main/vendu-tour.js?v=22",
   "/icons/icon-192.png",
   "/icons/icon-512.png",
 ];
@@ -23,9 +23,10 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET" || new URL(event.request.url).origin !== self.location.origin) return;
   const requestUrl = new URL(event.request.url);
-  const cacheKey = new Request(requestUrl.origin + requestUrl.pathname);
+  const cacheKey = new Request(requestUrl.href);
+  const freshRequest = new Request(event.request, { cache: "no-store" });
   event.respondWith(
-    fetch(event.request)
+    fetch(freshRequest)
       .then((response) => {
         if (response.ok) caches.open(CACHE).then((cache) => cache.put(cacheKey, response.clone()));
         return response;

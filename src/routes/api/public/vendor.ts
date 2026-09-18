@@ -25,10 +25,12 @@ function shapeVendor(
   v: Record<string, unknown>,
   services: Record<string, unknown>[],
   photos: Record<string, unknown>[],
+  liveByEmail: Map<string, boolean>,
 ) {
   return {
     id: v["id"],
     ownerEmail: v["owner_email"],
+    live: liveByEmail.get(String(v["owner_email"] ?? "").toLowerCase()) ?? false,
     campusDomain: v["campus_domain"],
     shopName: v["shop_name"],
     tagline: v["tagline"] ?? "",
@@ -106,11 +108,22 @@ export const Route = createFileRoute("/api/public/vendor")({
               .in("vendor_id", ids)
               .order("sort_order", { ascending: true }),
           ]);
+          const owners = rows.map((r) => String(r["owner_email"] ?? "").toLowerCase()).filter(Boolean);
+          const { data: profiles } = owners.length
+            ? await supabaseAdmin.from("profiles").select("email,last_seen_at").in("email", owners)
+            : { data: [] };
+          const liveByEmail = new Map(
+            ((profiles ?? []) as Record<string, unknown>[]).map((p) => [
+              String(p["email"] ?? "").toLowerCase(),
+              (Date.parse(String(p["last_seen_at"] ?? "")) || 0) > Date.now() - 2 * 60 * 1000,
+            ]),
+          );
           return rows.map((r) =>
             shapeVendor(
               r,
               (services ?? []) as Record<string, unknown>[],
               (photos ?? []) as Record<string, unknown>[],
+              liveByEmail,
             ),
           );
         }
