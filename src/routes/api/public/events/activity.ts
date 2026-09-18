@@ -107,8 +107,9 @@ export const Route = createFileRoute("/api/public/events/activity")({
         }
 
         if (action === "create") {
-          /* Events post to the student's own school only. */
-          const domain = (await homeDomainFor(email)) || safeDomain(raw.domain);
+          /* Events post to the campus being viewed; falls back to the
+             student's own school when the app sends no campus. */
+          const domain = safeDomain(raw.domain) || (await homeDomainFor(email));
           const title = str(raw.title, 180);
           const startsAt = safeDate(raw.startsAt);
           const endsAt = raw.endsAt ? safeDate(raw.endsAt) : null;
