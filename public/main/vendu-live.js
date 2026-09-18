@@ -93,11 +93,11 @@
         since: String(new Date(v.createdAt || Date.now()).getFullYear()),
         c: 0,
         avatar: v.avatarUrl || "",
+        avail: v.live ? 1 : 0,
         pays: pays,
         bio: v.tagline || "",
         badges: v.badges || [],
         boost: v.boosted ? 1 : 0,
-        avail: 1,
         services: services,
         campus: cid,
         gallery: (v.photos || []).map(function (p) {
@@ -121,6 +121,7 @@
           id: numId(p.id), uuid: p.id, live: 1, emoji: "🛍️", name: p.title,
           price: p.priceLabel || "", tag: (p.badges && p.badges[0]) || "Sell",
           c: 0, by: who, bi: initialOf(who), bc: 5, campus: cid,
+          avatar: p.authorAvatar || "", avail: p.authorLive ? 1 : 0,
           img: p.imageUrl || "", sold: !!p.sold, mine: isMine(p.authorEmail),
         });
         return;
@@ -129,7 +130,7 @@
         REQUESTS.push({
           id: numId(p.id), uuid: p.id, live: 1, who: who, in: initialOf(who),
           c: 3, barter: 0, txt: p.body || p.title, campus: cid, img: p.imageUrl || "",
-          mine: isMine(p.authorEmail),
+          mine: isMine(p.authorEmail), avatar: p.authorAvatar || "", avail: p.authorLive ? 1 : 0,
         });
         return;
       }

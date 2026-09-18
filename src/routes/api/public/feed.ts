@@ -36,30 +36,40 @@ export const Route = createFileRoute("/api/public/feed")({
             .limit(120);
           const rows = (data ?? []) as Record<string, unknown>[];
           const ids = rows.map((r) => r["id"] as string);
+          const authors = [...new Set(rows.map((r) => String(r["author_email"] ?? "").toLowerCase()).filter(Boolean))];
           let likes: Record<string, unknown>[] = [];
           let comments: Record<string, unknown>[] = [];
-          if (ids.length) {
-            const [l, c] = await Promise.all([
+          let profiles: Record<string, unknown>[] = [];
+          if (ids.length || authors.length) {
+            const [l, c, p] = await Promise.all([
               supabaseAdmin.from("post_likes").select("post_id,student_email").in("post_id", ids),
               supabaseAdmin
                 .from("post_comments")
                 .select("*")
                 .in("post_id", ids)
                 .order("created_at", { ascending: true }),
+              authors.length
+                ? supabaseAdmin.from("profiles").select("email,avatar_url,last_seen_at").in("email", authors)
+                : Promise.resolve({ data: [] }),
             ]);
             likes = (l.data ?? []) as Record<string, unknown>[];
             comments = (c.data ?? []) as Record<string, unknown>[];
+            profiles = (p.data ?? []) as Record<string, unknown>[];
           }
+          const profileByEmail = new Map(profiles.map((p) => [String(p["email"] ?? "").toLowerCase(), p]));
           const me = str(raw["me"], 254).toLowerCase();
           return json({
             ok: true,
             posts: rows.map((p) => {
               const pid = p["id"];
+              const author = profileByEmail.get(String(p["author_email"] ?? "").toLowerCase());
               const mine = likes.filter((l) => l["post_id"] === pid);
               return {
                 id: pid,
                 authorEmail: p["author_email"],
                 authorName: p["author_name"] ?? "",
+                authorAvatar: author?.["avatar_url"] ?? "",
+                authorLive: (Date.parse(String(author?.["last_seen_at"] ?? "")) || 0) > Date.now() - 2 * 60 * 1000,
                 kind: p["kind"],
                 title: p["title"],
                 body: p["body"] ?? "",

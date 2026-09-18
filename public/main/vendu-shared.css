@@ -96,6 +96,25 @@
   .ob-title.role-title{font-size:23px}
 }
 
+/* ---- image 4 scale refinement (v18) ---- */
+.topbar.hdr-purple{padding-top:calc(12px + env(safe-area-inset-top,0px))!important;padding-bottom:8px!important}
+.topbar.hdr-purple::before{height:96px}
+.topbar.hdr-purple .brandrow{min-height:48px;margin-bottom:5px}
+.topbar.hdr-purple .search{min-height:48px;margin:0 7px -16px;padding:4px 15px!important}
+.topbar.hdr-purple .search input{height:24px!important;min-height:24px!important}
+.topbar.hdr-purple .header-actions{align-self:end;transform:translateY(12px)}
+.topbar.hdr-purple .locpill{transform:translateY(-12px)}
+.topbar.hdr-purple .hdr-av{width:50px!important;height:50px!important;flex-basis:50px!important;box-shadow:0 4px 14px rgba(24,10,55,.22)}
+.topbar.hdr-purple .hdr-av.no-photo{width:44px!important;height:44px!important;flex-basis:44px!important}
+.campus-content{padding-top:31px}
+.avatar-wrap{position:relative;display:inline-flex;flex:0 0 auto}
+.avatar-wrap>.livedot,.p-av-wrap>.livedot,.mkt-av-wrap>.livedot,.up-av-wrap>.livedot{position:absolute;right:-2px;bottom:-2px;width:13px;height:13px;border-radius:50%;background:#22C55E;border:2px solid var(--card);box-shadow:0 1px 4px rgba(0,0,0,.2);z-index:3}
+.p-av-wrap,.mkt-av-wrap,.up-av-wrap{position:relative;display:inline-flex;flex:0 0 auto}
+.photo-zoom{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(20,16,28,.86);backdrop-filter:blur(8px)}
+.photo-zoom img{display:block;max-width:min(92vw,560px);max-height:82dvh;border-radius:18px;object-fit:contain;box-shadow:0 18px 60px rgba(0,0,0,.38)}
+.photo-zoom button{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:16px;width:40px;height:40px;min-height:40px;border:1px solid rgba(255,255,255,.4);border-radius:50%;background:rgba(20,16,28,.55);color:#fff;font:700 20px/1 system-ui;cursor:pointer}
+@media(max-width:439px){.device,.nav{max-width:none!important;width:100%!important}.nav{left:0!important;transform:none!important}.topbar.hdr-purple{width:100%}}
+
 /* ================= native mobile layer (iOS / Android webview) ================= */
 html,body{height:100%;min-height:100%;overflow:hidden;overscroll-behavior:none;-webkit-text-size-adjust:100%;touch-action:manipulation}
 body{-webkit-user-select:none;user-select:none}
