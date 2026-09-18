@@ -54,16 +54,29 @@ export const Route = createFileRoute("/api/public/events/activity")({
         if (action === "list") {
           const domain = safeDomain(raw.domain);
           if (!domain) return json({ ok: false, message: "Choose a school first." }, 400);
-          const horizon = new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString();
-          const { data: rows, error } = await supabaseAdmin
+          /* Finished events drop off automatically: an event is over at its
+             end time, or 3 hours after it starts when no end time was given. */
+          const horizon = new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString();
+          const { data: raws, error } = await supabaseAdmin
             .from("campus_events")
             .select("id,creator_email,creator_name,title,starts_at,ends_at,location,description,image_url,build")
             .eq("domain", domain)
             .eq("active", true)
             .gte("starts_at", horizon)
             .order("starts_at", { ascending: true })
-            .limit(100);
+            .limit(200);
           if (error) return json({ ok: false, message: "Events are unavailable right now." }, 500);
+          const now = Date.now();
+          const isOver = (row: { starts_at: string; ends_at: string | null }) => {
+            const end = row.ends_at
+              ? Date.parse(row.ends_at)
+              : Date.parse(row.starts_at) + 3 * 60 * 60 * 1000;
+            return Number.isFinite(end) && end < now;
+          };
+          const rows = (raws ?? []).filter((row) => !isOver(row)).slice(0, 100);
+          const finished = (raws ?? []).filter(isOver).map((row) => row.id);
+          if (finished.length)
+            await supabaseAdmin.from("campus_events").update({ active: false }).in("id", finished);
           const ids = (rows ?? []).map((row) => row.id);
           const interests = ids.length
             ? await supabaseAdmin.from("event_interests").select("event_id,student_email").in("event_id", ids)
@@ -94,8 +107,9 @@ export const Route = createFileRoute("/api/public/events/activity")({
         }
 
         if (action === "create") {
-          /* Events post to the student's own school only. */
-          const domain = (await homeDomainFor(email)) || safeDomain(raw.domain);
+          /* Events post to the campus being viewed; falls back to the
+             student's own school when the app sends no campus. */
+          const domain = safeDomain(raw.domain) || (await homeDomainFor(email));
           const title = str(raw.title, 180);
           const startsAt = safeDate(raw.startsAt);
           const endsAt = raw.endsAt ? safeDate(raw.endsAt) : null;

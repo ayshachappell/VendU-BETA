@@ -310,6 +310,80 @@ export async function requireStudent(
   return { email };
 }
 
+/* ------------------------------------------------------------------ *
+ * Passwords: after the one-time school-email check, a student sets a
+ * password and simply logs in with it on any device from then on.
+ * ------------------------------------------------------------------ */
+
+export function normalizePassword(raw: unknown): string | null {
+  if (typeof raw !== "string") return null;
+  const pw = raw.trim();
+  if (pw.length < 8 || pw.length > 72) return null;
+  return pw;
+}
+
+/** Set (or change) the password of the signed-in account. */
+export async function setPasswordWithToken(accessToken: string, password: string) {
+  const { url, key } = authBase();
+  const res = await fetch(`${url}/auth/v1/user`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      apikey: key,
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({ password }),
+  });
+  if (res.ok) return { ok: true as const };
+  const body = (await res.json().catch(() => ({}))) as { msg?: string; error_description?: string };
+  return {
+    ok: false as const,
+    message: body.msg ?? body.error_description ?? "Could not save that password.",
+  };
+}
+
+/** Email + password sign-in. */
+export async function passwordLogin(email: string, password: string) {
+  const { url, key } = authBase();
+  const res = await fetch(`${url}/auth/v1/token?grant_type=password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", apikey: key },
+    body: JSON.stringify({ email, password }),
+  });
+  const body = (await res.json().catch(() => ({}))) as {
+    access_token?: string;
+    refresh_token?: string;
+    expires_at?: number;
+    msg?: string;
+    error_description?: string;
+  };
+  if (res.ok && body.access_token) {
+    return {
+      ok: true as const,
+      session: {
+        access_token: body.access_token,
+        refresh_token: body.refresh_token ?? "",
+        expires_at: body.expires_at ?? 0,
+      },
+    };
+  }
+  return {
+    ok: false as const,
+    message:
+      body.msg ?? body.error_description ?? "That email and password didn't match.",
+  };
+}
+
+/** Sign the account out on every device it is signed in on. */
+export async function signOutEverywhere(accessToken: string) {
+  const { url, key } = authBase();
+  const res = await fetch(`${url}/auth/v1/logout?scope=global`, {
+    method: "POST",
+    headers: { apikey: key, Authorization: `Bearer ${accessToken}` },
+  });
+  return res.ok;
+}
+
 /** Swap a refresh token for a fresh session so long-lived devices stay signed in. */
 export async function refreshSession(refreshToken: string) {
   const { url, key } = authBase();

@@ -224,6 +224,39 @@
     clearSession();
   };
 
+  /* ---- password sign-in (set once after verifying, then log in anywhere) ---- */
+  var PWKEY = "vendu_has_password_v1";
+  W.hasPassword = function () {
+    try { return !!localStorage.getItem(PWKEY); } catch (e) { return false; }
+  };
+  W.setPassword = function (password, confirm) {
+    return authPost("/api/public/auth/password", {
+      action: "set", password: password, confirm: confirm,
+    }).then(function (r) {
+      if (r && r.ok) { try { localStorage.setItem(PWKEY, "1"); } catch (e) {} }
+      return r;
+    });
+  };
+  W.loginPassword = function (email, password, build) {
+    return post("/api/public/auth/password", {
+      action: "login", email: email, password: password, build: build,
+    }).then(function (res) {
+      if (res && res.ok) {
+        saveSession(res.session);
+        try {
+          localStorage.setItem(KEY, JSON.stringify({ email: res.email, at: Date.now(), build: build }));
+          localStorage.setItem(PWKEY, "1");
+        } catch (e) {}
+      }
+      return res;
+    });
+  };
+  W.signOutEverywhere = function () {
+    return authPost("/api/public/auth/password", { action: "logoutAll" })
+      .then(function (r) { if (r && r.ok) W.signOut(); return r; })
+      .catch(function () { return { ok: false }; });
+  };
+
   /* ---- shared activity: bookings, reviews, referrals (cross-device) ---- */
   function myEmail() {
     var s = W.student();
