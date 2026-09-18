@@ -107,7 +107,7 @@ export const Route = createFileRoute("/api/public/profile")({
             .select("*")
             .maybeSingle();
           if (error) return json({ ok: false, message: "Could not save your profile." }, 500);
-          return json({ ok: true, profile: publicProfile(data) });
+          return json({ ok: true, profile: publicProfile(data), campusLocked });
         }
 
         /* Keeps the green "using the app now" dot honest. */
