@@ -13,7 +13,7 @@
 - [x] Complete mobile, tester, session, and installability verification
 - [x] Align the profile "View my VendU" lockup and cap across Main, Beta, demos, and tutorials
 
-- [ ] Make events live in both builds: persist manual events and interest counts, notify event creators, and merge configured school calendars
+- [x] Make events live in both builds: persist manual events and interest counts, notify event creators, and merge configured school calendars
 - [x] Align event actions, header branding/order, profile cap, storefront photos, and pasted account links in both builds
 
 - [x] Live accounts, storefronts, feed and referrals wired into Main + Beta (vendu-live.js)
@@ -35,5 +35,5 @@
 
 ## Mobile header refinement (done)
 - Home, Market and Profile use a high-contrast purple header in Main and Beta.
-- Search is translucent, and the student's profile photo opens notifications with the exact unread count.
+- Search is translucent, and the student's profile photo opens notifications with the exact account-backed unread count.
 - Notification activity refreshes while open and immediately when the app returns to the foreground.

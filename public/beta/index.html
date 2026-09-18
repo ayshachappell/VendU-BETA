@@ -2271,9 +2271,9 @@ function themeScreen(){
   screen.querySelectorAll('[data-theme]').forEach(function(el){el.onclick=function(){state.appTheme=el.dataset.theme;applyTheme(el.dataset.theme);toast('Theme applied 🎨');themeScreen();};});
 }
 const BELL_PATH='<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>';
-function unreadTotal(){return state.inbox.reduce(function(n,t){return n+(t.unread||0);},0)+(state.eventNotifications||[]).filter(function(n){return !n.read_at;}).length;}
+function unreadTotal(){return (state.eventNotifications||[]).filter(function(n){return !n.read_at;}).length;}
 function accountNotificationsHTML(){var n=unreadTotal(),initial=String(state.vname||state.acctEmail||'Student').trim().charAt(0).toUpperCase()||'S',photo=state.avatar?'<img src="'+String(state.avatar).replace(/&/g,'&amp;').replace(/"/g,'&quot;')+'" alt="">':'<span>'+initial+'</span>';return '<button class="bell account-notifications" onclick="openInbox()" aria-label="Notifications'+(n?' — '+n+' unread':'')+'">'+photo+(n?'<span class="bell-dot">'+n+'</span>':'')+'</button>';}
-function openInbox(){state.thread=0;state.inboxView=true;render();try{if(window.VendU&&VendU.eventActivity)VendU.eventActivity({action:'markNotificationsRead',build:BUILD}).then(function(){(state.eventNotifications||[]).forEach(function(n){n.read_at=n.read_at||new Date().toISOString();});});}catch(e){}}
+function openInbox(){state.thread=0;state.inboxView=true;render();try{if(window.VendU&&VendU.eventActivity)VendU.eventActivity({action:'markNotificationsRead',build:BUILD}).then(function(r){if(r&&r.ok){(state.eventNotifications||[]).forEach(function(n){n.read_at=n.read_at||new Date().toISOString();});updateBellBadge();}});}catch(e){}}
 function openPerson(name,init,col){
   if(!name||name==='You'||name===state.vname)return openUser('You');
   var v=(typeof HUSTLES!=='undefined')?HUSTLES.filter(function(h){return h.name===name;})[0]:null;
