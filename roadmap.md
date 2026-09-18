@@ -45,3 +45,11 @@
 - [x] Image 1 feed spacing, featured-card proportions, and bottom navigation sizing
 - [x] Condensed Settings into Tutorial, Help, Privacy, Sign-in & School, and Account groups
 - [x] Updated demo/tester and tutorial guidance for the refined controls
+
+## Image 4 scale and presence refinement (done)
+- [x] Shorter straight purple band, thinner overlapping search, and overlapping circular inbox photo
+- [x] Feed and Events use screen-specific search labels
+- [x] Phone layouts fill each device width while preserving safe-area spacing
+- [x] Online dots use recent authenticated activity across feeds, profiles, chats, and storefronts
+- [x] Profile and storefront photos enlarge on tap with a compact close control
+- [x] Main/Beta offline caches versioned to prevent old published screens from persisting
