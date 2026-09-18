@@ -1,27 +1,32 @@
 # Match Image 1 and Condense Settings
 
-## Confirmed visual target
-- Use image 1 as the exact mobile reference; image 2 is only the current-state comparison.
-- The purple banner starts at the top edge and stops on a straight horizontal line behind the floating search field, rather than wrapping the whole header in a rounded purple panel.
-- Keep the search field overlapping the banner edge with the larger frosted light surface, softer border, and stronger shadow shown in image 1.
-- Replace the outlined bell circle with the student's circular uploaded profile photo. Keep the real unread count as the small red badge attached to the photo's upper-right edge. Show a neutral circular fallback only when no photo exists.
-- Match image 1's larger serif “The VendU App” lockup, compact school pill, spacing, chip sizes, content width, featured cards, and bottom navigation proportions.
-- Apply the same header treatment consistently to Home, Market, and Profile without letting the purple background bleed into Profile content.
+## Exact visual result before implementation
+- Image 1 is the source of truth; image 2 is only the current-state comparison.
+- The purple banner will be a rectangular top band ending just below the logo/photo row. It will not have image 2’s rounded purple bottom panel.
+- The wide frosted search field will overlap the banner’s lower edge, with the pale translucent fill, soft blur, rounded capsule shape, and shadow seen in image 1.
+- A circular uploaded profile photo will sit at the upper right. Its red unread badge will attach to the photo’s upper-right rim and show the actual unread total. Only users without a photo will see a circular notification bell fallback.
+- The school selector remains a compact frosted purple capsule immediately left of the photo, with its yellow status dot and truncated school name.
+- “The VendU App” becomes the larger serif lockup from image 1, with the cap centered over the U and the Beta badge retained only in Beta.
+- The tab rail begins below the floating search field. Chips become taller and roomier, the featured heading and cards widen, and content spacing matches image 1’s denser full-phone composition.
+- Featured cards will use image 1’s larger near-square proportions and rounded corners; no sample screenshot will be embedded.
+- The bottom navigation will match image 1’s taller proportions, larger icons/labels, and raised central purple plus button.
+- Apply this consistently to Home, Market, and Profile, while keeping the purple area limited to each screen’s header instead of bleeding through Profile content.
 
-## Settings organization
-- Replace the long list with shorter top-level groups while preserving every action:
-  - Tutorial
-  - Feedback & Help
-  - Privacy: Privacy & Terms; Privacy Choices
-  - Sign-in & School: Password; School Email
-  - Account: Log Out; Log Out of All Devices; Delete Account
-- Each group opens a simple subpage with Back navigation and the original actions.
+## Condensed Settings result
+The first Settings screen will show five rows instead of ten:
+- Tutorial — Replay Tutorial
+- Help & Feedback — Send Feedback; Help & Support
+- Privacy — Privacy & Terms; Privacy Choices
+- Sign-in & School — Set or Change Password; Change School Email
+- Account — Log Out; Log Out of All Devices; Delete My Account
+
+Each grouped row opens a clean subpage with a Back control. Destructive account actions remain clearly separated and every current option remains available.
 
 ## Main, Beta, demo, and tutorials
-- Apply the visual and Settings changes to both Main and Beta.
-- Keep Beta identification where appropriate without changing account behavior.
-- Update tester/demo views and tutorial targets/text so highlights point to the photo inbox, school selector, floating search, tabs, filters, and navigation in their new positions.
-- Ensure tutorial cards do not cover or block the control being described.
+- Apply the exact same structure to Main and Beta; only Beta keeps its Beta mark.
+- Demo/tester mode uses the same layout. If no tester photo exists, it deliberately shows the bell fallback.
+- Update tutorial targets for the photo-or-bell inbox, school selector, floating search, tabs, chips, featured cards, plus button, and grouped Settings.
+- Place each tutorial card in the largest free area above or below its target; it must never cover or intercept the highlighted control.
 
 ## Audit and validation
 - Check notification counts against actual unread messages and event updates, including focus/visibility refresh.
