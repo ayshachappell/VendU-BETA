@@ -23,9 +23,10 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET" || new URL(event.request.url).origin !== self.location.origin) return;
   const requestUrl = new URL(event.request.url);
-  const cacheKey = new Request(requestUrl.origin + requestUrl.pathname);
+  const cacheKey = new Request(requestUrl.href);
+  const freshRequest = new Request(event.request, { cache: "no-store" });
   event.respondWith(
-    fetch(event.request)
+    fetch(freshRequest)
       .then((response) => {
         if (response.ok) caches.open(CACHE).then((cache) => cache.put(cacheKey, response.clone()));
         return response;
