@@ -96,6 +96,13 @@
       },
       {
         before: goHome,
+        target: function () { return $(".hdr-av") || $(".header-actions"); },
+        title: "Your photo is your inbox",
+        text: "Top right you'll see your profile photo once you upload one. Tap it to open messages and campus event updates \u2014 the red number is exactly how many unread items are waiting.",
+        place: "below",
+      },
+      {
+        before: goHome,
         target: function () { return $(".seg"); },
         title: "Feed, Browse & Events",
         text: "Feed is what students are posting now, Browse lists every hustle and storefront, Events shows what's happening on campus.",
