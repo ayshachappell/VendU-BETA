@@ -1875,14 +1875,21 @@ function myPostsScreen(){
   screen.querySelectorAll('[data-photopost]').forEach(function(el){el.onclick=function(){state.photoTarget={id:el.dataset.photopost,type:el.dataset.ptype};cphoto.value='';cphoto.click();};});
 }
 function settingsScreen(){
-  var items=[['\u25B6\uFE0E Replay tutorial','tour'],['\uD83D\uDEDF Help & support','support'],['\uD83D\uDCC4 Privacy & terms','legal'],['\uD83D\uDD12 Privacy choices (do not sell my info)','pchoices'],['\uD83D\uDD10 Set or change my password','password'],['\u2709\uFE0F Change my school email','chemail'],['\uD83D\uDCF1 Log out of all devices','logoutall'],['\uD83D\uDDD1\uFE0F Delete my account','delete'],['\u23FB Log out','logout']];
+  var groups={
+    help:{title:'Help & Feedback',items:[['\uD83D\uDCAC Send feedback','feedback'],['\uD83D\uDEDF Help & support','support']]},
+    privacy:{title:'Privacy',items:[['\uD83D\uDCC4 Privacy & terms','legal'],['\uD83D\uDD12 Privacy choices','pchoices']]},
+    signin:{title:'Sign-in & School',items:[['\uD83D\uDD10 Set or change my password','password'],['\u2709\uFE0F Change my school email','chemail']]},
+    account:{title:'Account',items:[['\uD83D\uDCF1 Log out of all devices','logoutall'],['\u23FB Log out','logout'],['\uD83D\uDDD1\uFE0F Delete my account','delete']]}
+  };
+  var items=state.settingsGroup?(groups[state.settingsGroup]||groups.help).items:[['\u25B6\uFE0E Tutorial','tour'],['\uD83D\uDCAC Help & Feedback','help'],['\uD83D\uDD12 Privacy','privacy'],['\uD83D\uDD10 Sign-in & School','signin'],['\u2699\uFE0F Account','account']];
+  var title=state.settingsGroup?(groups[state.settingsGroup]||groups.help).title:'Settings';
   screen.innerHTML='<div class="topbar"><div class="brandrow"><div class="wordmark">Settings</div><div class="locpill" id="setBack" style="cursor:pointer">\u2039 Back</div></div></div>'
-    +'<div class="enter" style="padding:10px 20px 20px"><div style="font-size:13px;color:var(--mist);line-height:1.5;margin:2px 0 14px">Tutorial, help and account controls.</div>'
+    +'<div class="enter settings-panel" style="padding:10px 20px 20px"><div class="settings-title">'+title+'</div>'
     +'<div class="menu">'+items.map(function(x){return '<div class="svc" data-smenu="'+x[1]+'">'+x[0]+'<span>'+icon('<path d="m9 18 6-6-6-6"/>',18)+'</span></div>';}).join('')+'</div></div>';
-  document.getElementById('setBack').onclick=function(){state.moreMenu=false;render();screen.scrollTop=0;};
+  document.getElementById('setBack').onclick=function(){if(state.settingsGroup){state.settingsGroup='';settingsScreen();}else{state.moreMenu=false;render();screen.scrollTop=0;}};
   screen.querySelectorAll('[data-smenu]').forEach(function(el){el.onclick=function(){var m=el.dataset.smenu;
     if(m==='tour'){state.moreMenu=false;render();VendU.startTour(true);}
-    
+    else if(groups[m]){state.settingsGroup=m;settingsScreen();screen.scrollTop=0;}
     else if(m==='feedback'){if(typeof sendFeedback==='function')sendFeedback();else window.open('/legal/support.html','_blank','noopener');}
     else if(m==='support'){window.open('/legal/support.html','_blank','noopener');}
     else if(m==='legal'){window.open('/legal/privacy.html','_blank','noopener');}
@@ -2275,7 +2282,7 @@ function themeScreen(){
 }
 const BELL_PATH='<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>';
 function unreadTotal(){return state.inbox.reduce(function(n,t){return n+(t.unread||0);},0)+(state.eventNotifications||[]).filter(function(n){return !n.read_at;}).length;}
-function bellHTML(){var n=unreadTotal();var av=state.avatar?'background-image:url('+state.avatar+')':'';return '<button class="bell hdr-av'+(state.avatar?' has-photo':'')+'" onclick="openInbox()" style="'+av+'" aria-label="Notifications'+(n?' \u2014 '+n+' unread':'')+'">'+icon(BELL_PATH,18)+(n?'<span class="bell-dot">'+(n>99?'99+':n)+'</span>':'')+'</button>';}
+function bellHTML(){var n=unreadTotal();var av=state.avatar?'background-image:url('+state.avatar+')':'';return '<button class="bell hdr-av'+(state.avatar?' has-photo':' no-photo')+'" onclick="openInbox()" style="'+av+'" aria-label="Notifications'+(n?' \u2014 '+n+' unread':'')+'">'+(state.avatar?'':icon(BELL_PATH,20))+(n?'<span class="bell-dot">'+(n>99?'99+':n)+'</span>':'')+'</button>';}
 function openInbox(){state.thread=0;state.inboxView=true;render();try{if(window.VendU&&VendU.eventActivity)VendU.eventActivity({action:'markNotificationsRead',build:BUILD}).then(function(){(state.eventNotifications||[]).forEach(function(n){n.read_at=n.read_at||new Date().toISOString();});});}catch(e){}}
 function openPerson(name,init,col){
   if(!name||name==='You'||name===state.vname)return openUser('You');
