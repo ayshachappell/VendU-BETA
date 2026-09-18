@@ -124,7 +124,9 @@ export const Route = createFileRoute("/api/public/events/activity")({
             .select("id")
             .single();
           if (error || !data) return json({ ok: false, message: "We couldn't post that event." }, 500);
-          return json({ ok: true, id: data.id });
+          /* Tell the app which school the event actually landed on, so it can
+             show the right Events feed instead of the one being browsed. */
+          return json({ ok: true, id: data.id, domain });
         }
 
         if (action === "notifications") {
