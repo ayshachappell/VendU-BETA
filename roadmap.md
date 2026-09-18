@@ -38,3 +38,10 @@
 - Semi-transparent search bar inside header
 - Bell replaced by student profile photo; exact unread count, refresh every 15s + on focus/visibility
 - Tutorial step added for the profile-photo inbox button
+
+## Image 1 mobile refinement (done)
+- [x] Straight purple top band with overlapping frosted search in Main and Beta
+- [x] Circular profile-photo inbox with bell-only fallback and live unread badge
+- [x] Image 1 feed spacing, featured-card proportions, and bottom navigation sizing
+- [x] Condensed Settings into Tutorial, Help, Privacy, Sign-in & School, and Account groups
+- [x] Updated demo/tester and tutorial guidance for the refined controls
