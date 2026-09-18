@@ -25,3 +25,10 @@
 - [x] Posts, storefronts and events always publish to the student's home campus (.edu), while browsing other campuses stays open
 - [x] Students can change their verified .edu email (transfer/re-enroll) via a link sent to the new address
 - [x] Use supportive safety-tip wording and start the tutorial immediately after home-campus selection
+
+## Accounts, posting and events (done)
+- Password sign-in: verify school email once, set a password, then log in with email + password on any device. Settings → "Set or change my password".
+- "Log out of all devices" in Settings signs the account out everywhere.
+- Home school syncs from the account profile on every device.
+- Posts, requests, market items and events publish to whichever campus is selected in the location pill.
+- Events disappear automatically once they are over (end time, or 3 hours after the start when no end time was given).
