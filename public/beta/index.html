@@ -2272,7 +2272,7 @@ function themeScreen(){
 }
 const BELL_PATH='<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>';
 function unreadTotal(){return state.inbox.reduce(function(n,t){return n+(t.unread||0);},0)+(state.eventNotifications||[]).filter(function(n){return !n.read_at;}).length;}
-function bellHTML(){var n=unreadTotal();return '<button class="bell" onclick="openInbox()" aria-label="Notifications'+(n?' — '+n+' unread':'')+'">'+icon(BELL_PATH,20)+(n?'<span class="bell-dot">'+(n>9?'9+':n)+'</span>':'')+'</button>';}
+function bellHTML(){var n=unreadTotal();var av=state.avatar?'background-image:url('+state.avatar+')':'';return '<button class="bell hdr-av'+(state.avatar?' has-photo':'')+'" onclick="openInbox()" style="'+av+'" aria-label="Notifications'+(n?' \u2014 '+n+' unread':'')+'">'+icon(BELL_PATH,18)+(n?'<span class="bell-dot">'+(n>99?'99+':n)+'</span>':'')+'</button>';}
 function openInbox(){state.thread=0;state.inboxView=true;render();try{if(window.VendU&&VendU.eventActivity)VendU.eventActivity({action:'markNotificationsRead',build:BUILD}).then(function(){(state.eventNotifications||[]).forEach(function(n){n.read_at=n.read_at||new Date().toISOString();});});}catch(e){}}
 function openPerson(name,init,col){
   if(!name||name==='You'||name===state.vname)return openUser('You');
@@ -2380,7 +2380,7 @@ function setDemoVisible(on){Object.keys(_DEMOARR).forEach(function(k){on?_demoFi
 function refreshDemo(){setDemoVisible(!!(state.tester||state.tourActive));}
 window.VendU=window.VendU||{};VendU.onTour=function(active){state.tourActive=!!active;refreshDemo();try{render();}catch(e){}};
 setDemoVisible(false);
-state.campusEvents=[];state.campusResults=[];applyCampusTheme();state.booked=loadBooked();try{state.phone=localStorage.getItem('vendu_phone')||'';}catch(e){state.phone='';}setTimeout(function(){loadCampusEvents();loadEventNotifications();},500);setInterval(loadEventNotifications,30000);
+state.campusEvents=[];state.campusResults=[];applyCampusTheme();state.booked=loadBooked();try{state.phone=localStorage.getItem('vendu_phone')||'';}catch(e){state.phone='';}setTimeout(function(){loadCampusEvents();loadEventNotifications();},500);setInterval(loadEventNotifications,15000);try{document.addEventListener('visibilitychange',function(){if(!document.hidden)loadEventNotifications();});window.addEventListener('focus',loadEventNotifications);}catch(e){}
 
 function lintKey(e){return String(e.title||'')+'|'+String(e.ts||'');}
 function localInt(e){state.localInt=state.localInt||{};return !!state.localInt[lintKey(e)];}
