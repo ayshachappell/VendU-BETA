@@ -62,6 +62,7 @@ export const Route = createFileRoute("/api/public/profile")({
           if (raw["vendorMode"] !== undefined) patch["vendor_mode"] = !!raw["vendorMode"];
           /* Home campus may be corrected exactly once, at first setup. After
              that it only changes through the verified school-email change. */
+          let campusLocked = false;
           if (raw["campusDomain"] !== undefined) {
             const d = safeDomain(raw["campusDomain"]);
             if (d) {
@@ -74,9 +75,13 @@ export const Route = createFileRoute("/api/public/profile")({
               const current = safeDomain(cur?.["campus_domain"]);
               const alreadyMoved = !!current && !!emailDomain && current !== emailDomain;
               if (!alreadyMoved) patch["campus_domain"] = d;
+              else if (current !== d) campusLocked = true;
             }
           }
-          if (raw["campusName"] !== undefined) patch["campus_name"] = str(raw["campusName"], 90);
+          /* If the school is locked, keep its saved name too, so the app never
+             shows a school name that does not match where posts go. */
+          if (raw["campusName"] !== undefined && !campusLocked)
+            patch["campus_name"] = str(raw["campusName"], 90);
           if (raw["socials"] && typeof raw["socials"] === "object") {
             const src = raw["socials"] as Record<string, unknown>;
             const out: Record<string, string> = {};
