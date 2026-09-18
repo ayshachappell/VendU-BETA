@@ -243,3 +243,17 @@ input,textarea,select{font-size:16px} /* stops iOS zoom-on-focus */
     overscroll-behavior-y:none!important;padding-bottom:calc(92px + env(safe-area-inset-bottom,0px))!important}
 }
 #screen,.screen{overscroll-behavior-y:none!important}
+
+/* ---- high-contrast app header with account notifications ---- */
+.topbar.app-primary-header{background:linear-gradient(145deg,var(--violet),color-mix(in oklab,var(--violet) 72%,var(--ink)))!important;color:var(--primary-foreground,#fff);padding-bottom:16px!important;box-shadow:0 8px 20px color-mix(in oklab,var(--violet) 22%,transparent)}
+.app-primary-header .brandrow{margin-bottom:14px}
+.app-primary-header .header-logo,.app-primary-header .header-logo .wm-pre,.app-primary-header .header-logo .wm-post{color:var(--primary-foreground,#fff)!important}
+.app-primary-header .header-logo .u{color:var(--primary-foreground,#fff)!important}
+.app-primary-header .locpill{background:color-mix(in oklab,var(--primary-foreground,#fff) 14%,transparent)!important;color:var(--primary-foreground,#fff);border:1px solid color-mix(in oklab,var(--primary-foreground,#fff) 16%,transparent)}
+.app-primary-header .search{background:color-mix(in oklab,var(--primary-foreground,#fff) 76%,transparent)!important;border-color:color-mix(in oklab,var(--primary-foreground,#fff) 48%,transparent)!important;box-shadow:0 8px 22px color-mix(in oklab,var(--ink) 18%,transparent)!important;backdrop-filter:blur(14px) saturate(125%)}
+.app-primary-header .search input{color:var(--ink)}
+.app-primary-header .search svg{color:var(--ink)}
+.account-notifications{flex:0 0 42px!important;width:42px!important;height:42px!important;min-height:42px!important;padding:0!important;border-radius:50%!important;background:var(--card)!important;color:var(--violet)!important;border:2px solid color-mix(in oklab,var(--primary-foreground,#fff) 78%,transparent)!important;overflow:visible;box-shadow:0 4px 12px color-mix(in oklab,var(--ink) 22%,transparent)}
+.account-notifications>img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}
+.account-notifications>span:not(.bell-dot){font:800 15px/1 'Inter',system-ui,sans-serif}
+.account-notifications .bell-dot{top:-5px!important;right:-5px!important;border-color:var(--primary-foreground,#fff)!important;min-width:18px;height:18px}
