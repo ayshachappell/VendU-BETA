@@ -1,9 +1,9 @@
-const CACHE = "vendu-main-shell-v1";
+const CACHE = "vendu-main-shell-v18";
 const SHELL = [
   "/main/index.html",
-  "/main/vendu-shared.css?v=mobile1",
+  "/main/vendu-shared.css?v=18",
   "/main/vendu-api.js?v=13",
-  "/main/vendu-tour.js?v=21",
+  "/main/vendu-tour.js?v=22",
   "/icons/icon-192.png",
   "/icons/icon-512.png",
 ];

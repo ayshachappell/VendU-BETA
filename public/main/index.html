@@ -1579,10 +1579,10 @@ function userProfile(){
   var comms=COMM.filter(function(c){return c.campus===state.campus.id && c.members.some(function(m){return m.name===u.name;});});
   var listings=[].concat(GOODS,REQUESTS).filter(function(x){return (x.by===u.name||x.who===u.name)&&x.campus===state.campus.id;});
   var mutual=comms.filter(function(c){return commJoined(c.key)&&!isMe;});
-  var av=(isMe&&state.avatar)?'background-image:url('+state.avatar+');background-size:cover':'background:'+(u.col||state.themeColor);
+  var profilePhoto=(isMe&&state.avatar)?state.avatar:(vendor&&vendor.avatar||'');var av=profilePhoto?'background-image:url('+profilePhoto+');background-size:cover;background-position:center':'background:'+(u.col||state.themeColor);
   var h='<div class="topbar"><div class="brandrow"><div class="wordmark" style="font-size:18px">Profile</div><div class="locpill" id="upBack" style="cursor:pointer">\u2039 Back</div></div></div>';
   h+='<div class="enter" style="padding:6px 20px 24px">';
-  h+='<div class="up-head"><div class="up-av-wrap"><div class="up-av" data-zoom-photo="'+((isMe&&state.avatar)?state.avatar:(vendor&&vendor.avatar||''))+'" style="'+av+'">'+((isMe&&state.avatar)?'':u.init)+'</div>'+((isMe?imLive():isLive(vendor))?'<span class="livedot"></span>':'')+'</div><div class="up-name">'+u.name+' '+CHECK+'</div><div class="up-sub">\u2713 Verified student'+(yr?' \u00b7 Class of \u2019'+yr.slice(2):'')+'</div>'+'<div class="up-badges">'+(vendor?vendorPills(vendor):'')+commPills(u.name,2)+'</div>'+'</div>';
+  h+='<div class="up-head"><div class="up-av-wrap"><div class="up-av" data-zoom-photo="'+((isMe&&state.avatar)?state.avatar:(vendor&&vendor.avatar||''))+'" style="'+av+'">'+(profilePhoto?'':u.init)+'</div>'+((isMe?imLive():isLive(vendor))?'<span class="livedot"></span>':'')+'</div><div class="up-name">'+u.name+' '+CHECK+'</div><div class="up-sub">\u2713 Verified student'+(yr?' \u00b7 Class of \u2019'+yr.slice(2):'')+'</div>'+'<div class="up-badges">'+(vendor?vendorPills(vendor):'')+commPills(u.name,2)+'</div>'+'</div>';
   if(!isMe){h+='<button class="submit" id="upMsg" style="background:var(--violet)">\u2709\uFE0F Message '+u.name.split(' ')[0]+'</button>';}
   if(vendor){h+='<button class="submit" id="upStore" style="background:var(--card);color:var(--ink);border:1px solid var(--line);margin-top:10px">🏪 View '+vendor.name+'\u2019s storefront</button>';}
   if(mutual.length){h+='<div class="up-mutual">🤝 You\u2019re both in '+mutual.map(function(c){return c.name;}).join(', ')+'</div>';}
@@ -2286,6 +2286,7 @@ function bellHTML(){var n=unreadTotal();var av=state.avatar?'background-image:ur
 function showProfilePhoto(src){if(!src)return;var z=document.createElement('div');z.className='photo-zoom';z.setAttribute('role','dialog');z.setAttribute('aria-label','Enlarged profile photo');z.innerHTML='<button aria-label="Close enlarged photo">×</button><img src="'+String(src).replace(/"/g,'&quot;')+'" alt="Profile photo">';z.onclick=function(e){if(e.target===z||e.target.tagName==='BUTTON')z.remove();};document.querySelector('.device').appendChild(z);}
 function wirePhotoZoom(){screen.querySelectorAll('[data-zoom-photo]').forEach(function(el){var src=el.getAttribute('data-zoom-photo');if(src){el.style.cursor='zoom-in';el.onclick=function(){showProfilePhoto(src);};}});}
 function openInbox(){state.thread=0;state.inboxView=true;render();try{if(window.VendU&&VendU.eventActivity)VendU.eventActivity({action:'markNotificationsRead',build:BUILD}).then(function(){(state.eventNotifications||[]).forEach(function(n){n.read_at=n.read_at||new Date().toISOString();});});}catch(e){}}
+function personIsLive(name){var v=(typeof HUSTLES!=='undefined')?HUSTLES.filter(function(h){return h.name===name;})[0]:null;return isLive(v);}
 function openPerson(name,init,col){
   if(!name||name==='You'||name===state.vname)return openUser('You');
   var v=(typeof HUSTLES!=='undefined')?HUSTLES.filter(function(h){return h.name===name;})[0]:null;
