@@ -2423,6 +2423,32 @@ try{(function(){
   sc.addEventListener('touchmove',function(e){if(!pulling)return;dist=e.touches[0].clientY-startY;if(dist>4&&sc.scrollTop<=0){var t=bar();t.classList.add('on');t.style.transform='translate(-50%,'+Math.min(dist*0.5,54)+'px)';t.textContent=dist>70?'Release to refresh':'Pull to refresh';}},{passive:true});
   sc.addEventListener('touchend',function(){if(!pulling)return;pulling=false;var go=dist>70;if(ind){ind.classList.remove('on');ind.style.transform='';}dist=0;if(go)venduPullRefresh();},{passive:true});
 })();}catch(e){}
+/* ---- tap rescue: some touch taps get swallowed as micro-scrolls ---- */
+try{(function(){
+  var SEL='button,a[href],[onclick],[data-open],[data-user],[data-home],[data-cat],[data-tab],[data-cal],[data-sfv],[data-svc],[data-date],[data-time],.btn,.chip,.tab,.navitem,.locpill,.swatch,.card.go,.go';
+  var cur=null,sx=0,sy=0,st=0,lastSynth=0,clicked=false;
+  document.addEventListener('click',function(){clicked=true;},true);
+  document.addEventListener('pointerdown',function(e){
+    if(e.pointerType==='mouse'){cur=null;return;}
+    cur=e.target&&e.target.closest?e.target.closest(SEL):null;
+    sx=e.clientX;sy=e.clientY;st=Date.now();clicked=false;
+  },true);
+  document.addEventListener('pointerup',function(e){
+    if(e.pointerType==='mouse'||!cur)return;
+    var n=cur;cur=null;
+    if(Math.abs(e.clientX-sx)>18||Math.abs(e.clientY-sy)>18)return;
+    if(Date.now()-st>900)return;
+    var tg=n.tagName;
+    if(tg==='INPUT'||tg==='SELECT'||tg==='TEXTAREA'||n.isContentEditable)return;
+    setTimeout(function(){
+      if(clicked||!n.isConnected)return;
+      if(Date.now()-lastSynth<400)return;
+      lastSynth=Date.now();
+      try{n.click();}catch(err){}
+    },300);
+  },true);
+  document.addEventListener('pointercancel',function(){cur=null;},true);
+})();}catch(e){}
 
 function render(){try{retagDemo();}catch(e){}if(state.onboarded&&!state.pwCreate&&!state.homeConfirm&&!state.homePick&&(!state.isRealStudent||homeCampusSaved())&&window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour();},300);if(!state.onboarded){if(state.storefrontSetup)return add();return onboarding();}if(state.pwCreate)return pwCreateScreen();if(state.moreMenu)return settingsScreen();if(state.campusPick)return campusPicker();if(state.homeConfirm)return homeConfirmScreen();if(state.themeView)return themeScreen();if(state.book)return bookingScreen();if(state.bookSet)return bookingSettings();if(state.userView)return userProfile();if(state.thread)return messageScreen();if(state.inboxView)return inboxScreen();if(state.groupCreateView)return createGroupScreen();if(state.groupView)return groupPage();if(state.detail)return detail(state.detail);if(state.leaderboard)return leaderboard();if(state.storefrontSetup)return add();if(state.savedView)return savedScreen();if(state.myPostsView)return myPostsScreen();if(state.svcEdit)return servicesEditor();if(state.tab==='add')return addTab();({home,market,venuU,profile}[state.tab]||home)();}
 document.getElementById('nav').querySelectorAll('.navitem').forEach(item=>{item.onclick=()=>{if(!state.onboarded)return;document.querySelectorAll('.navitem').forEach(n=>n.classList.remove('on'));item.classList.add('on');if(item.dataset.tab==='add'&&state.tab!=='add')state.prevTab=state.tab;state.tab=item.dataset.tab;state.moreMenu=false;state.userView=null;state.thread=0;state.inboxView=false;state.groupView=null;state.groupCreateView=false;state.myPostsView=false;state.themeView=false;state.reviewOpen=false;state.cat='All';state.q='';state.near=false;state.detail=0;state.book=null;state.svcEdit=false;state.addMode=null;state.newPhoto=null;state.leaderboard=false;state.storefrontSetup=false;state.reviewOpen=false;state.msgTo=0;state.openMC=0;state.bookSet=false;state.subPrompt=false;state.savedView=false;state.campusPick=false;state.campusQ='';if(item.dataset.tab!=='add')state.submitted=false;render();screen.scrollTop=0;if(item.dataset.tab==='profile')setTimeout(function(){try{venduLiveSync();}catch(e){}},0);};});

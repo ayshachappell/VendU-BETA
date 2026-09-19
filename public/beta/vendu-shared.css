@@ -453,3 +453,8 @@ button,.submit,.btn,.locpill,.catpick,.choose,.tour-next,.tour-back,.tour-skip{m
 .viewed-profile-header .viewed-profile-brand .vhold,.viewed-profile-header .viewed-profile-brand .u,.viewed-profile-header .viewed-profile-brand .wm-pre,.viewed-profile-header .viewed-profile-brand .wm-post{color:inherit!important}
 .viewed-profile-header .viewed-profile-brand .wm-pre,.viewed-profile-header .viewed-profile-brand .wm-post{opacity:.85}
 .viewed-profile-header+.viewed-profile .viewed-profile-hero{padding-top:12px}
+
+/* v30 - reliable tap targets: prevent gesture delay/cancel swallowing taps */
+button,a,.btn,.chip,.tab,.navitem,.locpill,.swatch,.submit,[onclick],[data-open],[data-user],[data-home],[data-cat],[data-tab]{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+button>*,.submit>*,.btn>*,.navitem>*,.chip>*{pointer-events:none}
+input,textarea,select,[contenteditable="true"]{pointer-events:auto}
