@@ -1034,7 +1034,7 @@ function applyAccount(email){
 }
 
 /* ===== Referrals & founder spots (10 per school, 3 vendor referrals = founder) ===== */
-function brandName(n){return String(n==null?"":n).replace(/VendU/g,'Vend<span class="brandu">U</span>');}
+function brandName(n){return String(n==null?"":n).replace(/Vend\s*U/g,'Vend<span class="brandu">U</span>');}
 function myRefCodeLocal(){var e=String(state.acctEmail||'').toLowerCase();var s=(e.split('@')[0]||'').replace(/[^a-z0-9]/g,'');if(!e)return s||'vendu';var h=0;for(var i=0;i<e.length;i++){h=(h*31+e.charCodeAt(i))>>>0;}return ((s||'vendu').slice(0,10))+h.toString(36).slice(0,4);}function myRefCode(){return state.refCode||myRefCodeLocal();}function myRefLink(){return state.refLink||('https://venduapp.com/?ref='+myRefCode());}
 function shareRefLink(){var url=myRefLink();var txt='Join me on The VendU App — buy, sell and book with students on campus.';var copied=false;try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url);copied=true;}}catch(e){}try{if(navigator.share){navigator.share({title:'The VendU App',text:txt,url:url}).catch(function(){});toast(copied?'Link copied — pick where to share 🔗':'Pick where to share 🔗');return;}}catch(e){}toast('Referral link copied! 🔗');}
 function founderNumber(){if(state.founderNum)return state.founderNum;var n=0;try{n=parseInt(localStorage.getItem('vendu_founder_num')||'0',10)||0;}catch(e){}if(!n&&state.referrals>=FOUNDER_GOAL){n=Math.min(FOUNDER_CAP,(FOUNDERS||0)+1);try{localStorage.setItem('vendu_founder_num',String(n));}catch(e){}}state.founderNum=n;return n;}
@@ -2043,18 +2043,18 @@ function onboarding(){
     <button class="ob-btn" id="obnext">Get started</button></div>`;
     document.getElementById('obnext').onclick=()=>{state.obStep=1;render();};
     return;}
-  if(s===1){screen.innerHTML=`<div class="ob">
+  if(s===1){screen.innerHTML=`<div class="ob"><button class="ob-back ob-back-corner" id="obback1">\u2039 Back</button>
     <div class="ob-body"><img src="/icons/icon-192.png" alt="The VendU App logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(90,43,224,.26);margin-bottom:14px"><div class="ob-title role-title"><span class="role-title-line">How will you use</span><span class="wordmark headline-wordmark role-title-brand">${WMFULL}<span class="role-question">?</span></span></div><div class="ob-text" style="margin-bottom:20px">Everyone gets a free account. Becoming a vendor is completely optional \u2014 you can switch it on or off anytime.</div>
       <div class="ob-choice" data-ut="regular"><div class="obc-em">\u{1F64B}\u{1F3FF}\u200D\u2640\uFE0F</div><div><div class="obc-t">Just browsing</div><div class="obc-d">Book vendors, buy, sell & barter items, message & comment. Always free.</div></div></div>
       <div class="ob-choice" data-ut="vendor"><div class="obc-em">\u{1F6CD}\uFE0F</div><div><div class="obc-t">I\u2019m a vendor</div><div class="obc-d">I offer a service and want a storefront with services, bookings & payments. Free \u2014 optional, and you can turn it off anytime.</div></div></div>
-    </div><button class="ob-back" id="obback1">\u2039 Back</button></div>`;
+    </div></div>`;
     screen.querySelectorAll('[data-ut]').forEach(el=>el.onclick=()=>{state.userType=el.dataset.ut;state.isSeller=(el.dataset.ut==='vendor');state.obStep=2;render();});
     document.getElementById('obback1').onclick=()=>{state.obStep=0;render();};
     return;}
   if(VERIFIED||state.eduDone){state.eduDone=true;return finishOnboarding();}
   if(state.pwLogin){
     var perr=state.eduErr?`<div class="edu-err">${state.eduErr}</div>`:'';
-    screen.innerHTML=`<div class="ob">
+    screen.innerHTML=`<div class="ob"><button class="ob-back ob-back-corner" id="eduBack">\u2039 Back</button>
     <div class="ob-body"><img src="/icons/icon-192.png" alt="The VendU App logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(90,43,224,.26);margin-bottom:14px"><div class="ob-title">Log in</div>
     <div class="ob-text" style="margin-bottom:20px">Welcome back. Use the school email you verified and the password you set.</div>
     <div style="width:100%;max-width:330px;display:flex;flex-direction:column;gap:10px">
@@ -2093,6 +2093,7 @@ function onboarding(){
     /* Keep whatever the student already typed, so picking a grad year or the
        legal checkbox never wipes the email box. */
     function keepEmail(){var i=document.getElementById('eduIn');if(i)state.eduEmail=(i.value||'').trim();}
+    document.getElementById('eduBack').onclick=function(){state.obStep=1;state.eduErr='';state.eduCodeSent=false;render();};
     var _eduIn=document.getElementById('eduIn');
     if(_eduIn){_eduIn.oninput=function(){state.eduEmail=(_eduIn.value||'').trim();};}
     screen.querySelectorAll('[data-gradyear]').forEach(function(el){el.onclick=function(){keepEmail();state.gradYear=el.dataset.gradyear;onboarding();var i=document.getElementById('eduIn');if(i)i.value=state.eduEmail||'';};});
