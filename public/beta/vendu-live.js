@@ -181,7 +181,7 @@
     return VendU.myProfile().then(function (r) {
       if (!r || !r.ok || !r.profile) return;
       var p = r.profile;
-      if (p.displayName) state.vname = state.vname || p.displayName;
+      if (p.studentName || p.displayName) state.studentName = state.studentName || p.studentName || p.displayName;
       if (p.avatarUrl) state.avatar = state.avatar || p.avatarUrl;
       if (p.bio) state.about = p.bio;
       if (r.refCode) state.refCode = r.refCode;
@@ -208,7 +208,7 @@
       if (s && s.app) socials[String(s.app).toLowerCase().replace(/[^a-z]/g, "")] = s.handle || "";
     });
     var body = {
-      displayName: state.vname || "",
+      studentName: state.studentName || "",
       bio: state.about || "",
       avatarUrl: state.avatar || "",
       phone: state.phone || "",
@@ -241,7 +241,7 @@
       return { url: g.src, caption: g.label || "" };
     });
     return VendU.publishVendor({
-      shopName: state.vname || "",
+      shopName: state.vendorName || "",
       tagline: state.about || "",
       category: state.formCat || "Other",
       accentColor: state.themeColor || "",
@@ -270,7 +270,7 @@
     if (!signedIn()) return Promise.resolve();
     post = post || {};
     post.domain = post.domain || viewDomain();
-    post.authorName = state.vname || "";
+    post.authorName = state.isSeller ? (state.vendorName || "") : (state.studentName || "");
     return VendU.createPost(post, build()).then(function (r) {
       if (r && r.ok) L.pull();
       return r;

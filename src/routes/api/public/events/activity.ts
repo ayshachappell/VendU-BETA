@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { canonicalDomain } from "@/lib/campus.server";
 import { json, normalizeBuild, requireStudent } from "@/lib/edu-verification.server";
-import { homeDomainFor } from "@/lib/vendu-core.server";
+import { ensureProfile, homeDomainFor } from "@/lib/vendu-core.server";
 
 type Body = {
   action?: unknown;
@@ -113,7 +113,8 @@ export const Route = createFileRoute("/api/public/events/activity")({
           const title = str(raw.title, 180);
           const startsAt = safeDate(raw.startsAt);
           const endsAt = raw.endsAt ? safeDate(raw.endsAt) : null;
-          const creatorName = str(raw.creatorName, 100) || email.split("@")[0] || "Student";
+          const profile = await ensureProfile(email);
+          const creatorName = str(profile?.display_name, 100) || email.split("@")[0] || "Student";
           const imageUrl = str(raw.imageUrl, 1_500_000);
           if (!domain || !title || !startsAt)
             return json({ ok: false, message: "Add an event name, school, and valid date." }, 400);
