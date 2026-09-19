@@ -458,3 +458,12 @@ button,.submit,.btn,.locpill,.catpick,.choose,.tour-next,.tour-back,.tour-skip{m
 button,a,.btn,.chip,.tab,.navitem,.locpill,.swatch,.submit,[onclick],[data-open],[data-user],[data-home],[data-cat],[data-tab]{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 button>*,.submit>*,.btn>*,.navitem>*,.chip>*{pointer-events:none}
 input,textarea,select,[contenteditable="true"]{pointer-events:auto}
+
+/* v31 - refined translucent contrast for banner labels and badges */
+.awning .awn-lead,.awning .awn-wm,.profile-hero .store-name,.profile-hero .store-sub,.viewed-profile .up-name,.viewed-profile .up-sub,.viewed-profile .up-meta,.storefront+.shop-sign .store-name,.storefront+.shop-sign .store-sub{
+  color:var(--primary-foreground,#fff)!important;text-shadow:0 1px 2px color-mix(in srgb,var(--ink) 38%,transparent)}
+.awning .awn-lead{opacity:1}
+.storefront+.shop-sign .store-badges span,.profile-hero .store-badges span,.viewed-profile .up-badges span{
+  display:inline-flex;align-items:center;gap:5px;padding:5px 10px!important;border:1px solid color-mix(in srgb,var(--primary-foreground,#fff) 34%,transparent)!important;border-radius:999px;background:color-mix(in srgb,var(--ink) 24%,transparent)!important;color:var(--primary-foreground,#fff)!important;box-shadow:none!important;backdrop-filter:blur(6px) saturate(1.12);font-size:10px!important;font-weight:800!important;letter-spacing:.06em;text-shadow:0 1px 1px color-mix(in srgb,var(--ink) 35%,transparent)}
+.profile-hero .store-sub,.viewed-profile .up-sub,.viewed-profile .up-meta,.storefront+.shop-sign .store-sub{font-weight:600;opacity:1}
+.profile-hero .store-sub>span{color:var(--primary-foreground,#fff)!important}
