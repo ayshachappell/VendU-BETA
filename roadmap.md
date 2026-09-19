@@ -87,3 +87,4 @@
 - [x] v38: matched header and storefront welcome typography, improved banner contrast, prioritized Instagram handles, and placed all profile badges below handles.
 - [x] v39: kept social handles profile-only and shared across account modes, added avatar enlargement, themed the camera control, rounded notification bells, removed onboarding dots, and pinned storefront/profile presence dots to avatar corners.
 - [x] v40: restored the signature purple VendU “U” with a contrast edge so it stays visible on every header and storefront banner.
+- [x] v41: applied the purple “U” treatment to all styled VendU names, moved onboarding Back controls to the top-left, added Back to school verification, reduced crowded header titles, and removed storefront welcome outlines.
