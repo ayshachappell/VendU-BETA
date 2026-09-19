@@ -95,6 +95,7 @@
         avatar: v.avatarUrl || "",
         avail: v.live ? 1 : 0,
         pays: pays,
+        socials: v.socials || {},
         bio: v.tagline || "",
         badges: v.badges || [],
         boost: v.boosted ? 1 : 0,
