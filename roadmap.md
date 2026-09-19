@@ -79,3 +79,4 @@
 - [x] v30: viewed-profile banner wordmark restored to full "The VendU App" lockup (WMFULL) with BETA badge in Beta; CSS `.viewed-profile-brand` max-width 220px, The/App in white at 850pacity; SW caches v30. Playwright verified 393px both builds.
 - [x] v31: improved banner legibility with crisp white identity text and translucent dark-glass badges across Main and Beta.
 - [x] v32: standardized every “Welcome to my VendU” banner lockup, including typography, color, dimensions, placement, and animated graduation hat across Main and Beta.
+- [x] v33: made the full “Welcome to my VendU” sentence one consistent font, size, weight, color, position, and height while preserving the animated graduation hat across Main and Beta.
