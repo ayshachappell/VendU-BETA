@@ -519,3 +519,16 @@ input,textarea,select,[contenteditable="true"]{pointer-events:auto}
 .wordmark.header-logo,.viewed-profile-brand{font-family:'Bricolage Grotesque',sans-serif!important;font-weight:700!important;letter-spacing:0!important}
 .wordmark.header-logo .wm-pre,.wordmark.header-logo .wm-post,.viewed-profile-brand .wm-pre,.viewed-profile-brand .wm-post{font-family:inherit!important;font-size:inherit!important;font-weight:inherit!important;letter-spacing:inherit!important}
 .wordmark.header-logo .beta-mark,.viewed-profile-brand .beta-mark{font-family:'Inter',sans-serif!important}
+
+/* v38 - consistent banner lockups and handle-before-badge identity order */
+.storefront .awn-welcome{gap:.28em!important;padding:8px 12px!important;border:1px solid color-mix(in srgb,var(--primary-foreground,#fff) 28%,transparent);border-radius:8px;background:color-mix(in srgb,var(--ink) 28%,transparent);box-shadow:0 2px 10px color-mix(in srgb,var(--ink) 20%,transparent);backdrop-filter:blur(7px) saturate(1.12);-webkit-backdrop-filter:blur(7px) saturate(1.12);text-shadow:0 1px 3px color-mix(in srgb,var(--ink) 72%,transparent)}
+.storefront .awn-welcome .awn-lead{white-space:nowrap}
+.storefront .awn-welcome .awn-wm{gap:0!important;white-space:nowrap}
+.storefront .awn-welcome .u{color:var(--violet)!important;text-shadow:0 0 1px var(--primary-foreground,#fff),0 1px 3px color-mix(in srgb,var(--ink) 72%,transparent)}
+.wordmark.header-logo,.viewed-profile-brand{font-family:Georgia,'Times New Roman',serif!important}
+.wordmark.header-logo .beta-mark,.viewed-profile-brand .beta-mark{font-family:'Inter',sans-serif!important}
+.store-identity-handle,.profile-handle-line{margin-top:4px;font-weight:700!important}
+.shop-sign .store-badges{display:flex;margin:7px 0 0!important}
+.profile-badge-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+.profile-badge-row:empty{display:none}
+.profile-meta-line{margin-top:5px}
