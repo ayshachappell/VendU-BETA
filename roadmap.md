@@ -66,3 +66,4 @@
 - [x] Added the live green dot to the editable Profile picture
 - [x] Applied profile color changes to the avatar, identity background, border, and membership card
 - [x] Bumped both offline caches so published devices receive the refreshed Profile screen
+- [x] Replaced the editable Profile camera badge with a bottom-right green online dot in both builds

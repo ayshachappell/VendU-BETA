@@ -356,7 +356,7 @@ input,textarea,select{font-size:16px} /* stops iOS zoom-on-focus */
 .vendor-profile{padding-top:0!important}
 @media(max-width:370px){.profile-hero .detail-av{width:100px;height:100px}.profile-hero .store-name{font-size:22px!important}}
 
-/* ---- reference-matched vendor profile composition (v21) ---- */
+/* ---- reference-matched vendor profile composition (v22) ---- */
 .topbar.hdr-purple.profile-header{background:linear-gradient(105deg,var(--profile-color,var(--violet)) 0%,#4b1b9d 62%,#260b57 100%)!important;padding:13px 16px 5px!important}
 .topbar.hdr-purple.profile-header::before{display:none}
 .profile-header .brandrow{min-height:55px!important;margin:0!important}
@@ -377,6 +377,5 @@ input,textarea,select{font-size:16px} /* stops iOS zoom-on-focus */
 .vendor-profile .plan .p-lbl{font-size:12px;letter-spacing:.04em}
 .vendor-profile .plan .p-big{font-size:24px}
 .vendor-profile .plan .ref{margin-top:14px;padding:14px;border-radius:17px}
-.vendor-profile .profile-hero .detail-av>.livedot{right:1px;top:1px;width:13px;height:13px;border-width:2px}
-.vendor-profile .profile-hero .detail-av>.cam{right:-6px;bottom:-3px;width:27px;height:27px}
+.vendor-profile .profile-hero .detail-av>.livedot{right:-5px;top:auto;bottom:-3px;width:22px;height:22px;border:3px solid var(--primary-foreground,#fff);box-shadow:0 2px 7px rgba(0,0,0,.25)}
 @media(max-width:370px){.profile-header .wordmark.header-logo{font-size:19px!important}.profile-header .locpill{max-width:104px!important}.vendor-profile .profile-hero .detail-av{width:74px;height:74px}.vendor-profile .profile-hero .store-name{font-size:20px!important}.vendor-profile .profile-hero .store-sub{font-size:12px}}
