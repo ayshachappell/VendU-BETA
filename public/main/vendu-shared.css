@@ -479,7 +479,7 @@ input,textarea,select,[contenteditable="true"]{pointer-events:auto}
 @media(prefers-reduced-motion:reduce){.storefront .awn-welcome .tassel{animation:none!important}}
 
 /* v34 - unobstructed welcome lockup, matched identity type, compact profile actions */
-.storefront .awning{min-height:96px!important;padding:42px 20px 12px!important}
+.storefront .awning{min-height:102px!important;padding:48px 20px 12px!important}
 .storefront .awn-welcome{padding-top:0!important}
 .storefront+.shop-sign .store-name,.profile-hero .store-name{
   font-family:'Bricolage Grotesque',sans-serif!important;font-weight:800!important;letter-spacing:0!important}
