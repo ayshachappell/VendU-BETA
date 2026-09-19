@@ -2358,7 +2358,7 @@ function messageScreen(){
   document.getElementById('msgBack').onclick=function(){state.thread=0;render();};
   var _ta=document.getElementById('thav');if(_ta)_ta.onclick=function(){openPerson(th.name,th.init,th.color);};
   wireDealStrip(th);
-  var send=function(){var i=document.getElementById('msgInput');if(i.value.trim()){th.msgs.push(['You',i.value.trim()]);messageScreen();}};
+  var send=function(){var i=document.getElementById('msgInput');if(i.value.trim()){th.msgs.push([activeName(),i.value.trim()]);messageScreen();}};
   document.getElementById('msgSend').onclick=send;
   document.getElementById('msgInput').onkeydown=function(e){if(e.key==='Enter')send();};
   var thr=document.getElementById('thread');if(thr)thr.scrollTop=thr.scrollHeight;
