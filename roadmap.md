@@ -71,3 +71,4 @@
 - [x] Matched Student/Vendor view switch controls and kept the active dot at the avatar's bottom-right
 - [x] Rearranged Student Profile to the supplied reference with the full storefront-live message and 48px+ touch controls
 - [x] Matched Student and Vendor profile action buttons and corrected the storefront-live sentence
+- [x] Moved “View My VendU” below the profile banner and restored the graduation-hat VendU lockup without the silhouette icon

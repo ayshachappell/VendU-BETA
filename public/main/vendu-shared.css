@@ -429,3 +429,10 @@ button,.submit,.btn,.locpill,.catpick,.choose,.tour-next,.tour-back,.tour-skip{m
 .vendor-profile .profile-hero .student-view-profile{position:relative;z-index:4;width:100%;margin:5px 0 -28px;padding:12px 16px;border:0!important}
 .vendor-profile .profile-hero .student-view-profile svg{width:21px;height:21px}
 .vendor-profile>.profile-switch{min-height:58px;margin:48px 0 18px!important;border-radius:16px!important;background:var(--card)!important;color:var(--ink)!important;border:1px solid var(--line)!important;box-shadow:0 9px 22px color-mix(in srgb,var(--ink) 12%,transparent)!important;font-size:17px}
+
+/* ---- View My VendU below the identity banner (v26) ---- */
+.vendor-profile>.student-view-profile{display:flex;align-items:center;justify-content:center;gap:0;position:relative;z-index:4;width:100%;min-height:58px;margin:42px 0 14px;padding:12px 16px;border:0!important;border-radius:16px!important;background:linear-gradient(90deg,color-mix(in srgb,var(--ink) 82%,var(--profile-color,var(--violet))),var(--profile-color,var(--violet)),color-mix(in srgb,var(--ink) 82%,var(--profile-color,var(--violet))))!important;color:var(--primary-foreground,#fff)!important;box-shadow:0 10px 22px color-mix(in srgb,var(--profile-color,var(--violet)) 24%,transparent)!important}
+.vendor-profile>.student-view-profile .view-label{color:inherit;font-family:Inter,system-ui,sans-serif;font-size:17px;font-weight:700;margin-right:.32em}
+.vendor-profile>.student-view-profile .viewwm{color:inherit;font-size:20px!important}
+.vendor-profile>.student-view-profile .viewwm .vhold,.vendor-profile>.student-view-profile .viewwm .u{color:inherit!important}
+.vendor-profile>.profile-switch{margin:0 0 18px!important}

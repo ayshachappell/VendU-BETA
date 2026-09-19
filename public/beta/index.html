@@ -1901,7 +1901,7 @@ function settingsScreen(){
 function profile(){
   const av=state.avatar?`background-image:url(${state.avatar})`:`background:${state.themeColor}`;
   const refLink=myRefLink(), refShown=refLink.replace(/^https?:\/\//,''), goal=FOUNDER_GOAL;
-  const viewBtn=`<button class="submit viewbtn student-view-profile" id="viewme">${icon('<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/>',18)} <span>View My VendU</span></button>`;
+  const viewBtn=`<button class="submit viewbtn student-view-profile" id="viewme"><span class="view-label">View My</span><span class="viewwm">${WM}</span></button>`;
   const studentSwitch=`<button class="submit profile-switch" id="toregular">Switch to Student View</button>`;
   const membership=`<div class="plan" style="background:${bannerGrad(state.themeColor)};color:#fff"><div class="plan-badge">${state.isFounder?'🎓 Founder':'💠 Vendor'}</div><div class="p-lbl">Your membership</div><div class="p-big">${state.isFounder?`Founder #${founderNumber()} of ${FOUNDER_CAP}`:'Vendor'}</div>
     <div class="ref"><div class="ref-top"><span>Vendors referred</span><span><b>${state.referrals}</b> / ${goal}</span></div><div style="font-size:11.5px;opacity:.85;margin:-4px 0 9px">${state.isFounder?'🎓 Founder — free forever + a monthly Boost':`${Math.max(0,goal-state.referrals)} more vendor sign-ups through your link to become a founder`}</div>
@@ -1916,8 +1916,8 @@ function profile(){
     <div class="enter profile-enter ${state.isSeller?'vendor-profile':''}" style="padding:6px 20px 20px;--profile-color:${state.themeColor}">
       <div class="profile-hero"><div class="store-row"><div class="av-wrap"><div class="detail-av up" data-zoom-photo="${state.avatar||''}" style="${av};position:relative">${state.avatar?'':'A'}<span class="livedot"></span></div></div>
       <div><div class="store-name" style="color:var(--ink);font-size:21px">${state.vname||'Your name'} ${CHECK}${accountBadge()}</div><div class="store-sub" style="color:var(--mist)"><span style="color:var(--violet);font-weight:600;display:inline-flex;align-items:center;gap:3px">${icon('<path d="M20 6 9 17l-5-5"/>',12)}Verified</span> · ${CAMP()} · ${state.isSeller?'Vendor':'Student'}${state.gradYear?` · Class of ’${state.gradYear.slice(2)}`:''}</div></div></div>
-      ${state.isSeller?viewBtn:''}</div>
-      ${state.isSeller?studentSwitch+membership:studentActions+regularCard}
+      </div>
+      ${state.isSeller?viewBtn+studentSwitch+membership:studentActions+regularCard}
       <div class="menu">${menuItems.map(x=>`<div class="svc" data-menu="${x[1]}">${x[0]}<span>${icon('<path d="m9 18 6-6-6-6"/>',18)}</span></div>`).join('')}
         <div class="svc" id="moretoggle" style="font-weight:600">⚙️ Settings, help & account<span style="transform:rotate('0deg');transition:transform .18s">${icon('<path d="m9 18 6-6-6-6"/>',18)}</span></div></div>
     </div>`;
