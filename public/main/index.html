@@ -1571,6 +1571,7 @@ function createGroupScreen(){
 }
 function classYearFor(name){var h=0;for(var i=0;i<name.length;i++)h+=name.charCodeAt(i);return ''+(2025+h%4);}
 function profileNameMarkup(name){var parts=String(name||'').trim().split(/\s+/),last=parts.pop()||'';return '<span class="profile-name-text">'+(parts.length?parts.join(' ')+' ':'')+'<span class="verified-name-tail">'+last+' '+CHECK+'</span></span>';}
+function activeName(){return state.isSeller?(state.vendorName||state.studentName||'You'):(state.studentName||'You');}
 function openUser(name,init,c){var col=(typeof c==='string'&&c.charAt(0)==='#')?c:color(c==null?0:c);if(!name||name==='You'||name===state.studentName){state.userView={name:state.studentName||'You',init:(state.studentName?state.studentName.trim()[0].toUpperCase():'Y'),c:0,col:state.themeColor,me:true};}else{state.userView={name:name,init:init||name.trim()[0].toUpperCase(),c:(typeof c==='number'?c:0),col:col};}render();}
 function userProfile(){
   var u=state.userView;
@@ -1851,7 +1852,7 @@ function add(){
   screen.querySelectorAll('[data-pod]').forEach(el=>el.onclick=()=>{state.pays.splice(+el.dataset.pod,1);add();});
   const apay=document.getElementById('addpay');if(apay)apay.onclick=()=>{state.pays.push({app:'Cash App',handle:''});add();};
   const sf=document.getElementById('sfClose');if(sf)sf.onclick=()=>{state.storefrontSetup=false;state.tab='profile';render();};
-  document.getElementById('save').onclick=()=>{try{autoPostNewServices(state._svcBefore||[]);state._svcBefore=svcSnapshot();}catch(e){}try{if(window.VenduLive)VenduLive.publish();}catch(e){}state.isSeller=true;state.hasStore=true;if(!state.onboarded)state.onboarded=true;state.storefrontSetup=false;state.tab='profile';render();toast('Storefront saved ✓');};
+  document.getElementById('save').onclick=()=>{if(!(state.vendorName||'').trim()){toast('Add a Vendor Name first.');return;}try{autoPostNewServices(state._svcBefore||[]);state._svcBefore=svcSnapshot();}catch(e){}try{if(window.VenduLive)VenduLive.publish();}catch(e){}state.isSeller=true;state.hasStore=true;if(!state.onboarded)state.onboarded=true;state.storefrontSetup=false;state.tab='profile';render();toast('Storefront saved ✓');};
 }
 
 function mpRow(emoji,title,meta,type,id,img,sold){return '<div class="mprow"'+(sold?' style="opacity:.6"':'')+'>'+'<div class="mpic">'+(img?'<img src="'+img+'" style="width:100%;height:100%;object-fit:cover;border-radius:12px">':emoji)+'</div>'+'<div class="mpbody"><div class="mptitle">'+title+(sold?' \u00b7 SOLD':'')+'</div><div class="mpmeta">'+meta+'</div>'+'<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">'+'<button class="mpdel" data-photopost="'+id+'" data-ptype="'+type+'">\uD83D\uDCF7 '+(img?'Change photo':'Add photo')+'</button>'+(type==='item'?'<button class="mpdel" data-soldpost="'+id+'">'+(sold?'\u21ba Mark available':'\u2713 Mark as sold')+'</button>':'')+'</div></div>'+'<button class="mpdel" data-delpost="'+id+'" data-ptype="'+type+'">Delete</button></div>';}

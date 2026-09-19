@@ -291,8 +291,8 @@
     if (!signedIn()) return Promise.resolve();
     post = post || {};
     post.domain = post.domain || viewDomain();
-    post.authorName = state.isSeller ? (state.vendorName || "") : (state.studentName || "");
-    post.identityMode = state.isSeller ? "vendor" : "student";
+    post.authorName = post.identityMode === "vendor" ? (state.vendorName || "") : (state.studentName || "");
+    post.identityMode = post.identityMode || "student";
     return VendU.createPost(post, build()).then(function (r) {
       if (r && r.ok) L.pull();
       return r;
