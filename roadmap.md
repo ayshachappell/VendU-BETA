@@ -53,3 +53,10 @@
 - [x] Online dots use recent authenticated activity across feeds, profiles, chats, and storefronts
 - [x] Profile and storefront photos enlarge on tap with a compact close control
 - [x] Main/Beta offline caches versioned and network requests bypass browser cache to prevent old published screens from persisting
+
+## Compact header alignment refinement (done)
+- [x] Raised and aligned the inbox photo/bell with the wordmark and campus pill
+- [x] Shortened the purple band and repositioned the thinner frosted search
+- [x] Matched search-icon and placeholder colors
+- [x] Overlapped the editable Profile photo with the band and removed its self-presence dot
+- [x] Kept live presence on other students' profiles, feeds, chats, and storefronts
