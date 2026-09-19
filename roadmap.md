@@ -69,3 +69,4 @@
 - [x] Replaced the editable Profile camera badge with a bottom-right green online dot in both builds
 - [x] Unified Student, Vendor, viewed-profile, and storefront identity headers with the seamless profile gradient
 - [x] Matched Student/Vendor view switch controls and kept the active dot at the avatar's bottom-right
+- [x] Rearranged Student Profile to the supplied reference with the full storefront-live message and 48px+ touch controls

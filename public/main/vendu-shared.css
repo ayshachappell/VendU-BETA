@@ -405,3 +405,21 @@ input,textarea,select{font-size:16px} /* stops iOS zoom-on-focus */
 .storefront+.shop-sign .detail-av{border:3px solid var(--primary-foreground,#fff)}
 .storefront+.shop-sign .livedot{right:-3px;bottom:-3px;border-color:var(--primary-foreground,#fff)}
 @media(max-width:370px){.viewed-profile .up-av{width:98px;height:98px}.viewed-profile .up-name{font-size:20px}.viewed-profile .up-meta{font-size:12px}}
+
+/* ---- reference-matched student profile and generous touch targets (v24) ---- */
+button,.submit,.btn,.locpill,.catpick,.choose,.tour-next,.tour-back,.tour-skip{min-height:48px}
+.profile-enter:not(.vendor-profile) .profile-hero{padding:7px 20px 20px}
+.profile-enter:not(.vendor-profile) .profile-hero .store-row{min-height:142px;margin:0;gap:18px;align-items:center}
+.profile-enter:not(.vendor-profile) .profile-hero .detail-av{width:126px;height:126px;border-radius:34px;font-size:44px;box-shadow:none}
+.profile-enter:not(.vendor-profile) .profile-hero .store-name{font-size:25px!important}
+.profile-enter:not(.vendor-profile) .profile-hero .store-sub{font-size:15px;line-height:1.6}
+.student-profile-actions{margin:0 -20px;padding:0 20px 28px;background:var(--paper);text-align:center}
+.storefront-live-note{padding:14px 0 12px;color:var(--mist);font-size:13px;line-height:1.45;text-align:center}
+.student-profile-actions .submit{min-height:58px;margin:0 0 14px;border-radius:16px;font-size:17px}
+.student-profile-actions .student-view-profile{display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(90deg,#28104f,var(--profile-color,var(--violet)),#291051);color:var(--primary-foreground,#fff);box-shadow:0 10px 22px color-mix(in srgb,var(--profile-color,var(--violet)) 24%,transparent)}
+.student-profile-actions .student-view-profile svg{width:21px;height:21px}
+.student-profile-actions .profile-switch{background:var(--card)!important;color:var(--ink)!important;box-shadow:0 9px 22px rgba(32,23,48,.12)!important;margin:0!important;border:1px solid var(--line)!important}
+.student-account{margin-top:0!important;border-radius:18px!important}
+.student-account .sw{min-width:44px;min-height:44px;cursor:pointer}
+.student-account .plday{min-height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+@media(max-width:370px){.profile-enter:not(.vendor-profile) .profile-hero .detail-av{width:108px;height:108px}.profile-enter:not(.vendor-profile) .profile-hero .store-row{min-height:126px;gap:13px}.profile-enter:not(.vendor-profile) .profile-hero .store-name{font-size:22px!important}}
