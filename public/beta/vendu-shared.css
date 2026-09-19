@@ -422,3 +422,9 @@ button,.submit,.btn,.locpill,.catpick,.choose,.tour-next,.tour-back,.tour-skip{m
 .student-account .sw{min-width:44px;min-height:44px;cursor:pointer}
 .student-account .plday{min-height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer}
 @media(max-width:370px){.profile-enter:not(.vendor-profile) .profile-hero .detail-av{width:108px;height:108px}.profile-enter:not(.vendor-profile) .profile-hero .store-row{min-height:126px;gap:13px}.profile-enter:not(.vendor-profile) .profile-hero .store-name{font-size:22px!important}}
+
+/* ---- matching student and vendor profile actions (v25) ---- */
+.student-profile-actions .student-view-profile,.vendor-profile .profile-hero .student-view-profile{display:flex;align-items:center;justify-content:center;gap:10px;min-height:58px;border-radius:16px!important;background:linear-gradient(90deg,color-mix(in srgb,var(--ink) 82%,var(--profile-color,var(--violet))),var(--profile-color,var(--violet)),color-mix(in srgb,var(--ink) 82%,var(--profile-color,var(--violet))))!important;color:var(--primary-foreground,#fff)!important;box-shadow:0 10px 22px color-mix(in srgb,var(--profile-color,var(--violet)) 24%,transparent)!important;font-family:Inter,system-ui,sans-serif;font-size:17px!important;font-weight:700}
+.vendor-profile .profile-hero .student-view-profile{position:relative;z-index:4;width:100%;margin:5px 0 -28px;padding:12px 16px;border:0!important}
+.vendor-profile .profile-hero .student-view-profile svg{width:21px;height:21px}
+.vendor-profile>.profile-switch{min-height:58px;margin:48px 0 18px!important;border-radius:16px!important;background:var(--card)!important;color:var(--ink)!important;border:1px solid var(--line)!important;box-shadow:0 9px 22px color-mix(in srgb,var(--ink) 12%,transparent)!important;font-size:17px}
