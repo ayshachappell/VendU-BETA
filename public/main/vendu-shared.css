@@ -340,3 +340,19 @@ input,textarea,select{font-size:16px} /* stops iOS zoom-on-focus */
 .topbar.hdr-purple.profile-header::before{height:76px}
 .profile-enter{padding-top:0!important}
 .profile-enter>.store-row{position:relative;z-index:3;transform:translateY(-17px);margin-bottom:-1px!important}
+
+/* ---- profile identity treatment (v20) ---- */
+.profile-enter{position:relative}
+.profile-hero{margin:0 -20px;padding:4px 20px 16px;background:linear-gradient(135deg,var(--profile-color,var(--violet)),#32106f);color:var(--primary-foreground,#fff)}
+.profile-hero .store-row{margin:0 0 18px;align-items:center}
+.profile-hero .detail-av{width:112px;height:112px;border-radius:32px;border:4px solid var(--primary-foreground,#fff);box-shadow:0 10px 26px rgba(24,10,55,.25);font-size:42px}
+.profile-hero .store-name,.profile-hero .store-sub,.profile-hero .store-sub span{color:var(--primary-foreground,#fff)!important}
+.profile-hero .store-name{font-size:25px!important;line-height:1.08}
+.profile-hero .store-sub{font-size:14px;line-height:1.45;margin-top:5px}
+.profile-hero .viewbtn{width:100%;margin:0;padding:17px 16px;background:var(--card);color:var(--ink);border:1px solid color-mix(in srgb,var(--profile-color) 78%,var(--card));box-shadow:0 8px 22px rgba(24,10,55,.18)}
+.profile-switch{background:transparent;color:var(--mist);border:0;box-shadow:none;margin:14px 0 16px;display:flex;align-items:center;justify-content:center;gap:7px;padding:8px;font-size:14px;font-weight:700}
+.profile-hero .detail-av>.livedot{position:absolute;right:3px;bottom:5px;width:15px;height:15px;border-radius:50%;background:#22C55E;border:3px solid var(--primary-foreground,#fff);box-shadow:0 1px 4px rgba(0,0,0,.25);z-index:4}
+.profile-hero .detail-av>.cam{position:absolute;right:-6px;bottom:8px;width:28px;height:28px;border-radius:50%;background:var(--violet);color:var(--primary-foreground,#fff);display:flex;align-items:center;justify-content:center;border:2px solid var(--primary-foreground,#fff);z-index:5}
+.profile-hero .detail-av>.livedot+.cam{bottom:-7px}
+.vendor-profile{padding-top:0!important}
+@media(max-width:370px){.profile-hero .detail-av{width:100px;height:100px}.profile-hero .store-name{font-size:22px!important}}
