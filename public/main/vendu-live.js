@@ -184,6 +184,12 @@
       if (p.studentName || p.displayName) state.studentName = state.studentName || p.studentName || p.displayName;
       if (p.avatarUrl) state.avatar = state.avatar || p.avatarUrl;
       if (p.bio) state.about = p.bio;
+      if (p.socials && typeof p.socials === "object") {
+        state.socials = Object.keys(p.socials).filter(function (k) { return p.socials[k]; }).map(function (k) {
+          var labels = { instagram: "Instagram", tiktok: "TikTok", snapchat: "Snapchat", x: "X/Twitter", website: "Website" };
+          return { type: labels[k] || k, url: String(p.socials[k]) };
+        });
+      }
       if (r.refCode) state.refCode = r.refCode;
       /* home school follows the account, not the device */
       if (p.campusDomain) {
@@ -226,7 +232,11 @@
     });
     var socials = {};
     (state.socials || []).forEach(function (s) {
-      if (s && s.app) socials[String(s.app).toLowerCase().replace(/[^a-z]/g, "")] = s.handle || "";
+      if (s && s.type) {
+        var key = String(s.type).toLowerCase().replace(/[^a-z]/g, "");
+        if (key === "xtwitter") key = "x";
+        socials[key] = s.url || "";
+      }
     });
     var body = {
       studentName: state.studentName || "",
