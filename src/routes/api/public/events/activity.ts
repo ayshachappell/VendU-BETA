@@ -11,6 +11,7 @@ type Body = {
   title?: unknown;
   creatorName?: unknown;
   actorName?: unknown;
+  identityMode?: unknown;
   startsAt?: unknown;
   endsAt?: unknown;
   location?: unknown;
@@ -115,7 +116,7 @@ export const Route = createFileRoute("/api/public/events/activity")({
           const endsAt = raw.endsAt ? safeDate(raw.endsAt) : null;
           const profile = await ensureProfile(email);
           let creatorName = str(profile?.display_name, 100) || email.split("@")[0] || "Student";
-          if (str(raw["identityMode"], 16) === "vendor") {
+          if (str(raw.identityMode, 16) === "vendor") {
             const { data: vendor } = await supabaseAdmin
               .from("vendors")
               .select("shop_name")
