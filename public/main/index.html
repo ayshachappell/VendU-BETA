@@ -1292,7 +1292,7 @@ function detail(id){
         <div class="awn-welcome"><span class="awn-lead">Welcome to my</span><span class="awn-wm">Vend<span class="u">U${CAP}</span></span></div><div class="awn-fold"></div>
       </div>
     </div>
-    <div class="shop-sign">
+    <div class="shop-sign" style="--profile-color:${c}">
       <div class="av-wrap"><div class="detail-av" data-zoom-photo="${h.avatar||''}" style="${avStyle}">${h.me&&h.avatar?'':h.init}</div>${isLive(h)?'<span class="livedot"></span>':''}</div>
       <div><div class="store-name" style="font-size:20px;color:var(--ink)">${brandName(h.name)}${h.v?CHECK:''}<span class="store-badges">${vendorPills(h)}${pillFor(h)}</span></div>
       <div class="store-sub" style="color:var(--mist)">${h.cat}${h.me?'':` · ${pin} ${h.dist} mi`}</div></div>
