@@ -1286,13 +1286,13 @@ function detail(id){
     else if(bm===1)cta=`<button class="btn btn-ghost ${saved?'on':''}" id="saveBtn">${bkIcon}</button><button class="btn btn-ghost" id="msgBtn">${icon(chat,20)}</button><a class="btn btn-primary" id="bookLink" href="${linkUrl(h.link)}" target="_blank" rel="noopener" style="background:${c};color:${tc};text-decoration:none;text-align:center;line-height:1.6">Book on their site ↗</a>`;
     else cta=`<button class="btn btn-ghost ${saved?'on':''}" id="saveBtn">${bkIcon}</button><button class="btn btn-ghost" id="msgBtn">${icon(chat,20)}</button><button class="btn btn-primary" id="bookBtn" style="background:${c};color:${tc};display:flex;align-items:center;justify-content:center;gap:7px">${icon(cal,18)} Book ${fn}</button>`;}
   screen.innerHTML=`<div class="fade">
-    <div class="storefront">
+    <div class="storefront" style="--profile-color:${c}">
       <div class="roofline"><div class="backbtn" id="back">${icon('<path d="m15 18-6-6 6-6"/>')} Back</div></div>
       <div class="awning" style="background:linear-gradient(160deg,${c},${shade(c,-10)});color:${tc};text-shadow:${tc==='#ffffff'?'0 1px 2px rgba(0,0,0,.25)':'none'};--awn:${c}">
         <div class="awn-welcome"><span class="awn-lead">Welcome to my</span><span class="awn-wm">Vend<span class="u">U${CAP}</span></span></div><div class="awn-fold"></div>
       </div>
     </div>
-    <div class="shop-sign">
+    <div class="shop-sign" style="--profile-color:${c}">
       <div class="av-wrap"><div class="detail-av" data-zoom-photo="${h.avatar||''}" style="${avStyle}">${h.me&&h.avatar?'':h.init}</div>${isLive(h)?'<span class="livedot"></span>':''}</div>
       <div><div class="store-name" style="font-size:20px;color:var(--ink)">${brandName(h.name)}${h.v?CHECK:''}<span class="store-badges">${vendorPills(h)}${pillFor(h)}</span></div>
       <div class="store-sub" style="color:var(--mist)">${h.cat}${h.me?'':` · ${pin} ${h.dist} mi`}</div></div>

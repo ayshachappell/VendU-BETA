@@ -399,8 +399,8 @@ input,textarea,select{font-size:16px} /* stops iOS zoom-on-focus */
 .viewed-profile-back{margin:0 0 12px;border:0;background:transparent;color:var(--violet);font:700 13px/1.2 Inter,system-ui,sans-serif;padding:10px 0;cursor:pointer}
 .storefront .awning{background:linear-gradient(90deg,var(--awn,var(--violet)) 0%,#4b1b9d 62%,#260b57 100%)!important}
 .storefront .awning::before{display:none}
-.storefront .shop-sign{margin-top:0;padding-top:18px;background:linear-gradient(90deg,var(--awn,var(--violet)) 0%,#4b1b9d 62%,#260b57 100%);color:var(--primary-foreground,#fff)}
-.storefront .shop-sign .store-name,.storefront .shop-sign .store-sub{color:var(--primary-foreground,#fff)!important}
-.storefront .shop-sign .detail-av{border:3px solid var(--primary-foreground,#fff)}
-.storefront .shop-sign .livedot{right:-3px;bottom:-3px;border-color:var(--primary-foreground,#fff)}
+.storefront+.shop-sign{margin-top:0;padding-top:18px;background:linear-gradient(90deg,var(--profile-color,var(--violet)) 0%,#4b1b9d 62%,#260b57 100%);color:var(--primary-foreground,#fff)}
+.storefront+.shop-sign .store-name,.storefront+.shop-sign .store-sub{color:var(--primary-foreground,#fff)!important}
+.storefront+.shop-sign .detail-av{border:3px solid var(--primary-foreground,#fff)}
+.storefront+.shop-sign .livedot{right:-3px;bottom:-3px;border-color:var(--primary-foreground,#fff)}
 @media(max-width:370px){.viewed-profile .up-av{width:98px;height:98px}.viewed-profile .up-name{font-size:20px}.viewed-profile .up-meta{font-size:12px}}
