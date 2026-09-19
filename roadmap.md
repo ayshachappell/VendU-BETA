@@ -72,3 +72,4 @@
 - [x] Rearranged Student Profile to the supplied reference with the full storefront-live message and 48px+ touch controls
 - [x] Matched Student and Vendor profile action buttons and corrected the storefront-live sentence
 - [x] Moved “View My VendU” below the profile banner and restored the graduation-hat VendU lockup without the silhouette icon
+- [x] Replaced the viewed-profile text back link with the compact purple pill from the storefront reference
