@@ -74,3 +74,4 @@
 - [x] Moved “View My VendU” below the profile banner and restored the graduation-hat VendU lockup without the silhouette icon
 - [x] Replaced the viewed-profile text back link with the compact purple pill from the storefront reference
 - [x] Matched the student-profile action spacing and button proportions to the supplied reference in Main and Beta
+- [x] Matched “Become a vendor” to the white Vendor View control and moved viewed-profile Back into the banner top-left
