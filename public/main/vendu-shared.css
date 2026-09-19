@@ -323,3 +323,20 @@ input,textarea,select{font-size:16px} /* stops iOS zoom-on-focus */
 .photo-zoom img{display:block;max-width:min(92vw,560px);max-height:82dvh;border-radius:18px;object-fit:contain;box-shadow:0 18px 60px rgba(0,0,0,.38)}
 .photo-zoom button{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:16px;width:40px;height:40px;min-height:40px;border:1px solid rgba(255,255,255,.4);border-radius:50%;background:rgba(20,16,28,.55);color:#fff;font:700 20px/1 system-ui;cursor:pointer}
 @media(max-width:439px){.device,.nav{max-width:none!important;width:100%!important}.nav{left:0!important;transform:none!important}.topbar.hdr-purple{width:100%}}
+
+/* ---- compact aligned header + profile overlap (v19) ---- */
+.topbar.hdr-purple{padding-top:calc(10px + env(safe-area-inset-top,0px))!important;padding-bottom:7px!important}
+.topbar.hdr-purple::before{height:88px}
+.topbar.hdr-purple .brandrow{min-height:46px;margin-bottom:3px;align-items:center}
+.topbar.hdr-purple .wordmark.header-logo{padding-top:0}
+.topbar.hdr-purple .header-actions{align-self:center;transform:none}
+.topbar.hdr-purple .locpill{transform:none}
+.topbar.hdr-purple .hdr-av{width:46px!important;height:46px!important;flex-basis:46px!important}
+.topbar.hdr-purple .hdr-av.no-photo{width:42px!important;height:42px!important;flex-basis:42px!important}
+.topbar.hdr-purple .search{min-height:44px;margin:0 7px -15px;padding:3px 15px!important}
+.topbar.hdr-purple .search svg{width:21px;height:21px;stroke:rgba(73,65,84,.55)!important;opacity:1}
+.topbar.hdr-purple .search input{height:22px!important;min-height:22px!important}
+.campus-content{padding-top:28px}
+.topbar.hdr-purple.profile-header::before{height:76px}
+.profile-enter{padding-top:0!important}
+.profile-enter>.store-row{position:relative;z-index:3;transform:translateY(-17px);margin-bottom:-1px!important}
