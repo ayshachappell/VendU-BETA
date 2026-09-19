@@ -367,6 +367,9 @@
     body.build = build;
     return authPost("/api/public/vendor", body);
   };
+  W.renameVendor = function (shopName, build) {
+    return authPost("/api/public/vendor", { action: "rename", shopName: shopName, build: build });
+  };
 
   /* ---- real feed: posts, likes, comments ---- */
   W.listFeed = function (domain, build) {
@@ -384,8 +387,8 @@
   W.likePost = function (postId, build) {
     return authPost("/api/public/feed", { action: "like", postId: postId, build: build });
   };
-  W.commentPost = function (postId, text, build) {
-    return authPost("/api/public/feed", { action: "comment", postId: postId, body: text, build: build });
+  W.commentPost = function (postId, text, build, identityMode) {
+    return authPost("/api/public/feed", { action: "comment", postId: postId, body: text, build: build, identityMode: identityMode });
   };
   W.deletePost = function (postId, build) {
     return authPost("/api/public/feed", { action: "delete", postId: postId, build: build });

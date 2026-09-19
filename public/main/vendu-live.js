@@ -197,6 +197,27 @@
     }).catch(function () {});
   };
 
+  L.loadVendor = function () {
+    if (!signedIn()) return Promise.resolve();
+    return VendU.myVendor(build()).then(function (r) {
+      if (!r || !r.ok || !r.vendor) return;
+      state.vendorName = r.vendor.shopName || state.vendorName;
+      state.hasStore = true;
+      redraw();
+    }).catch(function () {});
+  };
+
+  L.saveStudentName = function () {
+    if (!signedIn()) return Promise.resolve({ ok: true });
+    return VendU.saveProfile({ studentName: state.studentName || "" });
+  };
+
+  L.saveVendorName = function () {
+    if (!signedIn()) return Promise.resolve({ ok: true });
+    if (state.hasStore && VendU.renameVendor) return VendU.renameVendor(state.vendorName || "", build());
+    return Promise.resolve({ ok: true });
+  };
+
   L.saveProfile = function (extra) {
     if (!signedIn()) return Promise.resolve();
     var payments = {};
@@ -271,6 +292,7 @@
     post = post || {};
     post.domain = post.domain || viewDomain();
     post.authorName = state.isSeller ? (state.vendorName || "") : (state.studentName || "");
+    post.identityMode = state.isSeller ? "vendor" : "student";
     return VendU.createPost(post, build()).then(function (r) {
       if (r && r.ok) L.pull();
       return r;
@@ -282,7 +304,7 @@
   };
   L.comment = function (uuid, text) {
     if (!uuid || !signedIn()) return Promise.resolve();
-    return VendU.commentPost(uuid, text, build()).catch(function () {});
+    return VendU.commentPost(uuid, text, build(), state.isSeller ? "vendor" : "student").catch(function () {});
   };
 
   /* ---- referrals & founder spots, straight from the backend ---- */
@@ -323,6 +345,7 @@
   L.start = function () {
     if (!signedIn()) return;
     L.loadProfile();
+    L.loadVendor();
     L.creditInvite();
     L.referrals();
     L.pull();
