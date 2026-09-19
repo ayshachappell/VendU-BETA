@@ -67,3 +67,5 @@
 - [x] Applied profile color changes to the avatar, identity background, border, and membership card
 - [x] Bumped both offline caches so published devices receive the refreshed Profile screen
 - [x] Replaced the editable Profile camera badge with a bottom-right green online dot in both builds
+- [x] Unified Student, Vendor, viewed-profile, and storefront identity headers with the seamless profile gradient
+- [x] Matched Student/Vendor view switch controls and kept the active dot at the avatar's bottom-right
