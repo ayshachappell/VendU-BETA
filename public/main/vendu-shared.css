@@ -351,8 +351,7 @@ input,textarea,select{font-size:16px} /* stops iOS zoom-on-focus */
 .profile-hero .store-sub{font-size:14px;line-height:1.45;margin-top:5px}
 .profile-hero .viewbtn{width:100%;margin:0;padding:17px 16px;background:var(--card);color:var(--ink);border:1px solid color-mix(in srgb,var(--profile-color) 78%,var(--card));box-shadow:0 8px 22px rgba(24,10,55,.18)}
 .profile-switch{background:transparent;color:var(--mist);border:0;box-shadow:none;margin:14px 0 16px;display:flex;align-items:center;justify-content:center;gap:7px;padding:8px;font-size:14px;font-weight:700}
-.profile-hero .detail-av>.livedot{position:absolute;right:3px;bottom:5px;width:15px;height:15px;border-radius:50%;background:#22C55E;border:3px solid var(--primary-foreground,#fff);box-shadow:0 1px 4px rgba(0,0,0,.25);z-index:4}
+.profile-hero .detail-av>.livedot{position:absolute;right:5px;top:5px;width:15px;height:15px;border-radius:50%;background:#22C55E;border:3px solid var(--primary-foreground,#fff);box-shadow:0 1px 4px rgba(0,0,0,.25);z-index:4}
 .profile-hero .detail-av>.cam{position:absolute;right:-6px;bottom:8px;width:28px;height:28px;border-radius:50%;background:var(--violet);color:var(--primary-foreground,#fff);display:flex;align-items:center;justify-content:center;border:2px solid var(--primary-foreground,#fff);z-index:5}
-.profile-hero .detail-av>.livedot+.cam{bottom:-7px}
 .vendor-profile{padding-top:0!important}
 @media(max-width:370px){.profile-hero .detail-av{width:100px;height:100px}.profile-hero .store-name{font-size:22px!important}}
