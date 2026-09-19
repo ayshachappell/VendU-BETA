@@ -450,6 +450,7 @@ button,.submit,.btn,.locpill,.catpick,.choose,.tour-next,.tour-back,.tour-skip{m
 .student-profile-actions .become-vendor-action{background:var(--card)!important;color:var(--ink)!important;border:1px solid var(--line)!important;box-shadow:0 9px 22px color-mix(in srgb,var(--ink) 12%,transparent)!important}
 .viewed-profile-header{position:relative!important;display:flex;align-items:center;justify-content:center;min-height:76px;padding:12px 16px!important}
 .viewed-profile-header .viewed-profile-back{position:absolute;z-index:2;top:14px;left:16px;min-width:76px;min-height:40px;margin:0;padding:8px 14px}
-.viewed-profile-header .viewed-profile-brand{display:flex;align-items:center;justify-content:center;gap:5px;max-width:170px;color:var(--primary-foreground,#fff);font-size:18px;font-weight:700}
-.viewed-profile-header .viewed-profile-brand .vhold,.viewed-profile-header .viewed-profile-brand .u{color:inherit!important}
+.viewed-profile-header .viewed-profile-brand{display:flex;align-items:center;justify-content:center;gap:5px;max-width:220px;color:var(--primary-foreground,#fff);font-size:18px;font-weight:700}
+.viewed-profile-header .viewed-profile-brand .vhold,.viewed-profile-header .viewed-profile-brand .u,.viewed-profile-header .viewed-profile-brand .wm-pre,.viewed-profile-header .viewed-profile-brand .wm-post{color:inherit!important}
+.viewed-profile-header .viewed-profile-brand .wm-pre,.viewed-profile-header .viewed-profile-brand .wm-post{opacity:.85}
 .viewed-profile-header+.viewed-profile .viewed-profile-hero{padding-top:12px}
