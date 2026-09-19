@@ -26,6 +26,7 @@ function shapeVendor(
   services: Record<string, unknown>[],
   photos: Record<string, unknown>[],
   liveByEmail: Map<string, boolean>,
+  socialsByEmail: Map<string, Record<string, unknown>>,
 ) {
   return {
     id: v["id"],
@@ -41,6 +42,7 @@ function shapeVendor(
     badges: v["badges"] ?? [],
     availability: v["availability"] ?? "",
     payments: v["payments"] ?? {},
+    socials: socialsByEmail.get(String(v["owner_email"] ?? "").toLowerCase()) ?? {},
     boosted: !!v["boosted"],
     createdAt: v["created_at"],
     services: services
@@ -110,12 +112,18 @@ export const Route = createFileRoute("/api/public/vendor")({
           ]);
           const owners = rows.map((r) => String(r["owner_email"] ?? "").toLowerCase()).filter(Boolean);
           const { data: profiles } = owners.length
-            ? await supabaseAdmin.from("profiles").select("email,last_seen_at").in("email", owners)
+            ? await supabaseAdmin.from("profiles").select("email,last_seen_at,socials").in("email", owners)
             : { data: [] };
           const liveByEmail = new Map(
             ((profiles ?? []) as Record<string, unknown>[]).map((p) => [
               String(p["email"] ?? "").toLowerCase(),
               (Date.parse(String(p["last_seen_at"] ?? "")) || 0) > Date.now() - 2 * 60 * 1000,
+            ]),
+          );
+          const socialsByEmail = new Map(
+            ((profiles ?? []) as Record<string, unknown>[]).map((p) => [
+              String(p["email"] ?? "").toLowerCase(),
+              (p["socials"] && typeof p["socials"] === "object" ? p["socials"] : {}) as Record<string, unknown>,
             ]),
           );
           return rows.map((r) =>
@@ -124,6 +132,7 @@ export const Route = createFileRoute("/api/public/vendor")({
               (services ?? []) as Record<string, unknown>[],
               (photos ?? []) as Record<string, unknown>[],
               liveByEmail,
+              socialsByEmail,
             ),
           );
         }
