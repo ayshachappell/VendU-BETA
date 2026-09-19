@@ -60,3 +60,9 @@
 - [x] Matched search-icon and placeholder colors
 - [x] Overlapped the editable Profile photo with the band and removed its self-presence dot
 - [x] Kept live presence on other students' profiles, feeds, chats, and storefronts
+
+## Profile identity refresh (done)
+- [x] Matched the vendor Profile identity area to the supplied purple reference treatment
+- [x] Added the live green dot to the editable Profile picture
+- [x] Applied profile color changes to the avatar, identity background, border, and membership card
+- [x] Bumped both offline caches so published devices receive the refreshed Profile screen
