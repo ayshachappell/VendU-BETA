@@ -130,6 +130,7 @@ export function publicProfile(row: Record<string, unknown> | null | undefined) {
   return {
     email: row["email"],
     displayName: row["display_name"] ?? "",
+    studentName: row["display_name"] ?? "",
     avatarUrl: row["avatar_url"] ?? "",
     bio: row["bio"] ?? "",
     campusDomain: row["campus_domain"] ?? "",

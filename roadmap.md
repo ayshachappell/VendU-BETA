@@ -81,3 +81,4 @@
 - [x] v32: standardized every “Welcome to my VendU” banner lockup, including typography, color, dimensions, placement, and animated graduation hat across Main and Beta.
 - [x] v33: made the full “Welcome to my VendU” sentence one consistent font, size, weight, color, position, and height while preserving the animated graduation hat across Main and Beta.
 - [x] v34: kept every “Welcome to my VendU” title clear of Back pills, matched “Your VendU” typography to profile names, and compacted all four profile action buttons to accessible 48px tonal pills across Main and Beta.
+- [x] v35: separated Student Name and Vendor Name across Main and Beta, added matching explicit Save controls, used the active identity across profiles and activity, and kept verification marks attached to the final name word.

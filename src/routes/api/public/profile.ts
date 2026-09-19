@@ -55,7 +55,8 @@ export const Route = createFileRoute("/api/public/profile")({
         if (action === "save") {
           await ensureProfile(email);
           const patch: Record<string, unknown> = { last_seen_at: new Date().toISOString() };
-          if (raw["displayName"] !== undefined) patch["display_name"] = str(raw["displayName"], 60);
+          if (raw["studentName"] !== undefined) patch["display_name"] = str(raw["studentName"], 60);
+          else if (raw["displayName"] !== undefined) patch["display_name"] = str(raw["displayName"], 60);
           if (raw["bio"] !== undefined) patch["bio"] = str(raw["bio"], 600);
           if (raw["avatarUrl"] !== undefined) patch["avatar_url"] = cleanUrl(raw["avatarUrl"], 800000);
           if (raw["phone"] !== undefined) patch["phone"] = str(raw["phone"], 24);

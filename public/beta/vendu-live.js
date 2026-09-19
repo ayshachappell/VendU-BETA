@@ -181,7 +181,7 @@
     return VendU.myProfile().then(function (r) {
       if (!r || !r.ok || !r.profile) return;
       var p = r.profile;
-      if (p.displayName) state.vname = state.vname || p.displayName;
+      if (p.studentName || p.displayName) state.studentName = state.studentName || p.studentName || p.displayName;
       if (p.avatarUrl) state.avatar = state.avatar || p.avatarUrl;
       if (p.bio) state.about = p.bio;
       if (r.refCode) state.refCode = r.refCode;
@@ -197,6 +197,27 @@
     }).catch(function () {});
   };
 
+  L.loadVendor = function () {
+    if (!signedIn()) return Promise.resolve();
+    return VendU.myVendor(build()).then(function (r) {
+      if (!r || !r.ok || !r.vendor) return;
+      state.vendorName = r.vendor.shopName || state.vendorName;
+      state.hasStore = true;
+      redraw();
+    }).catch(function () {});
+  };
+
+  L.saveStudentName = function () {
+    if (!signedIn()) return Promise.resolve({ ok: true });
+    return VendU.saveProfile({ studentName: state.studentName || "" });
+  };
+
+  L.saveVendorName = function () {
+    if (!signedIn()) return Promise.resolve({ ok: true });
+    if (state.hasStore && VendU.renameVendor) return VendU.renameVendor(state.vendorName || "", build());
+    return Promise.resolve({ ok: true });
+  };
+
   L.saveProfile = function (extra) {
     if (!signedIn()) return Promise.resolve();
     var payments = {};
@@ -208,7 +229,7 @@
       if (s && s.app) socials[String(s.app).toLowerCase().replace(/[^a-z]/g, "")] = s.handle || "";
     });
     var body = {
-      displayName: state.vname || "",
+      studentName: state.studentName || "",
       bio: state.about || "",
       avatarUrl: state.avatar || "",
       phone: state.phone || "",
@@ -241,7 +262,7 @@
       return { url: g.src, caption: g.label || "" };
     });
     return VendU.publishVendor({
-      shopName: state.vname || "",
+      shopName: state.vendorName || "",
       tagline: state.about || "",
       category: state.formCat || "Other",
       accentColor: state.themeColor || "",
@@ -270,7 +291,8 @@
     if (!signedIn()) return Promise.resolve();
     post = post || {};
     post.domain = post.domain || viewDomain();
-    post.authorName = state.vname || "";
+    post.authorName = post.identityMode === "vendor" ? (state.vendorName || "") : (state.studentName || "");
+    post.identityMode = post.identityMode || "student";
     return VendU.createPost(post, build()).then(function (r) {
       if (r && r.ok) L.pull();
       return r;
@@ -282,7 +304,7 @@
   };
   L.comment = function (uuid, text) {
     if (!uuid || !signedIn()) return Promise.resolve();
-    return VendU.commentPost(uuid, text, build()).catch(function () {});
+    return VendU.commentPost(uuid, text, build(), state.isSeller ? "vendor" : "student").catch(function () {});
   };
 
   /* ---- referrals & founder spots, straight from the backend ---- */
@@ -323,6 +345,7 @@
   L.start = function () {
     if (!signedIn()) return;
     L.loadProfile();
+    L.loadVendor();
     L.creditInvite();
     L.referrals();
     L.pull();

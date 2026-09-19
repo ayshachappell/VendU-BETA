@@ -101,7 +101,20 @@ export const Route = createFileRoute("/api/public/feed")({
         if ("response" in auth) return auth.response;
         const email = auth.email;
         const profile = await ensureProfile(email);
-        const authorName = str(raw["authorName"], 60) || str(profile?.["display_name"], 60);
+        const studentName = str(profile?.["display_name"], 60) || email.split("@")[0] || "Student";
+        const wantsVendorName = str(raw["identityMode"], 16) === "vendor";
+
+        async function savedAuthorName(vendorId?: string | null) {
+          if (!wantsVendorName && !vendorId) return studentName;
+          let query = supabaseAdmin
+            .from("vendors")
+            .select("shop_name")
+            .eq("owner_email", email)
+            .eq("build", build);
+          if (vendorId) query = query.eq("id", vendorId);
+          const { data: vendor } = await query.maybeSingle();
+          return str(vendor?.shop_name, 60) || studentName;
+        }
 
         if (action === "post") {
           const kind = KINDS.includes(str(raw["kind"], 16)) ? str(raw["kind"], 16) : "item";
@@ -111,6 +124,8 @@ export const Route = createFileRoute("/api/public/feed")({
              app sends no campus, it falls back to their own school. */
           const domain = safeDomain(raw["domain"]) || (await homeDomainFor(email));
           if (!domain) return json({ ok: false, message: "Pick your campus first." }, 400);
+          const vendorId = str(raw["vendorId"], 64) || null;
+          const authorName = await savedAuthorName(vendorId);
           const row = {
             author_email: email,
             author_name: authorName || null,
@@ -124,7 +139,7 @@ export const Route = createFileRoute("/api/public/feed")({
             badges: Array.isArray(raw["badges"])
               ? (raw["badges"] as unknown[]).slice(0, 2).map((b) => str(b, 40))
               : [],
-            vendor_id: str(raw["vendorId"], 64) || null,
+            vendor_id: vendorId,
             event_id: str(raw["eventId"], 64) || null,
             auto: !!raw["auto"],
           };
@@ -167,7 +182,7 @@ export const Route = createFileRoute("/api/public/feed")({
             .insert({
               post_id: postId,
               student_email: email,
-              author_name: authorName || null,
+              author_name: (await savedAuthorName()) || null,
               body,
             })
             .select("id,created_at")
