@@ -436,3 +436,6 @@ button,.submit,.btn,.locpill,.catpick,.choose,.tour-next,.tour-back,.tour-skip{m
 .vendor-profile>.student-view-profile .viewwm{color:inherit;font-size:20px!important}
 .vendor-profile>.student-view-profile .viewwm .vhold,.vendor-profile>.student-view-profile .viewwm .u{color:inherit!important}
 .vendor-profile>.profile-switch{margin:0 0 18px!important}
+
+/* ---- compact viewed-profile back pill (v27) ---- */
+.viewed-profile-back{display:inline-flex;align-items:center;justify-content:center;min-width:76px;min-height:40px;margin:14px 0 18px;padding:8px 16px;border:0;border-radius:999px;background:color-mix(in srgb,var(--profile-color,var(--violet)) 72%,var(--ink));color:var(--primary-foreground,#fff);box-shadow:0 5px 13px color-mix(in srgb,var(--ink) 22%,transparent);font:700 14px/1 Inter,system-ui,sans-serif;cursor:pointer}
