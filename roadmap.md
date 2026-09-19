@@ -85,3 +85,4 @@
 - [x] v36: let students save social handles, show their first @handle in place of the repeated Verified label, and restore the camera control on the owner's avatar while retaining presence dots for other people.
 - [x] v37: anchored Browse online dots to avatar corners and matched header/posting app-title typography to “Featured on campus” without changing the Beta badge.
 - [x] v38: matched header and storefront welcome typography, improved banner contrast, prioritized Instagram handles, and placed all profile badges below handles.
+- [x] v39: kept social handles profile-only and shared across account modes, added avatar enlargement, themed the camera control, rounded notification bells, removed onboarding dots, and pinned storefront/profile presence dots to avatar corners.
