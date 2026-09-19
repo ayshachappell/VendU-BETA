@@ -114,7 +114,16 @@ export const Route = createFileRoute("/api/public/events/activity")({
           const startsAt = safeDate(raw.startsAt);
           const endsAt = raw.endsAt ? safeDate(raw.endsAt) : null;
           const profile = await ensureProfile(email);
-          const creatorName = str(profile?.display_name, 100) || email.split("@")[0] || "Student";
+          let creatorName = str(profile?.display_name, 100) || email.split("@")[0] || "Student";
+          if (str(raw["identityMode"], 16) === "vendor") {
+            const { data: vendor } = await supabaseAdmin
+              .from("vendors")
+              .select("shop_name")
+              .eq("owner_email", email)
+              .eq("build", build)
+              .maybeSingle();
+            creatorName = str(vendor?.shop_name, 100) || creatorName;
+          }
           const imageUrl = str(raw.imageUrl, 1_500_000);
           if (!domain || !title || !startsAt)
             return json({ ok: false, message: "Add an event name, school, and valid date." }, 400);

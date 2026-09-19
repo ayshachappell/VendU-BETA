@@ -150,6 +150,20 @@ export const Route = createFileRoute("/api/public/vendor")({
           return json({ ok: true, vendor: list[0] ?? null });
         }
 
+        if (action === "rename") {
+          const shopName = str(raw["shopName"], 60);
+          if (!shopName) return json({ ok: false, message: "Add a Vendor Name." }, 400);
+          const { data, error } = await supabaseAdmin
+            .from("vendors")
+            .update({ shop_name: shopName })
+            .eq("owner_email", email)
+            .eq("build", build)
+            .select("id,shop_name")
+            .maybeSingle();
+          if (error || !data) return json({ ok: false, message: "Save your storefront first." }, 404);
+          return json({ ok: true, vendorName: data.shop_name });
+        }
+
         if (action === "publish") {
           const shopName = str(raw["shopName"], 60);
           if (!shopName) return json({ ok: false, message: "Give your storefront a name." }, 400);

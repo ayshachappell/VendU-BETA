@@ -102,6 +102,19 @@ export const Route = createFileRoute("/api/public/feed")({
         const email = auth.email;
         const profile = await ensureProfile(email);
         const studentName = str(profile?.["display_name"], 60) || email.split("@")[0] || "Student";
+        const wantsVendorName = str(raw["identityMode"], 16) === "vendor";
+
+        async function savedAuthorName(vendorId?: string | null) {
+          if (!wantsVendorName && !vendorId) return studentName;
+          let query = supabaseAdmin
+            .from("vendors")
+            .select("shop_name")
+            .eq("owner_email", email)
+            .eq("build", build);
+          if (vendorId) query = query.eq("id", vendorId);
+          const { data: vendor } = await query.maybeSingle();
+          return str(vendor?.shop_name, 60) || studentName;
+        }
 
         if (action === "post") {
           const kind = KINDS.includes(str(raw["kind"], 16)) ? str(raw["kind"], 16) : "item";
@@ -112,17 +125,7 @@ export const Route = createFileRoute("/api/public/feed")({
           const domain = safeDomain(raw["domain"]) || (await homeDomainFor(email));
           if (!domain) return json({ ok: false, message: "Pick your campus first." }, 400);
           const vendorId = str(raw["vendorId"], 64) || null;
-          let authorName = studentName;
-          if (vendorId) {
-            const { data: vendor } = await supabaseAdmin
-              .from("vendors")
-              .select("shop_name")
-              .eq("id", vendorId)
-              .eq("owner_email", email)
-              .eq("build", build)
-              .maybeSingle();
-            if (vendor?.shop_name) authorName = str(vendor.shop_name, 60);
-          }
+          const authorName = await savedAuthorName(vendorId);
           const row = {
             author_email: email,
             author_name: authorName || null,
@@ -179,7 +182,7 @@ export const Route = createFileRoute("/api/public/feed")({
             .insert({
               post_id: postId,
               student_email: email,
-              author_name: studentName || null,
+              author_name: (await savedAuthorName()) || null,
               body,
             })
             .select("id,created_at")
