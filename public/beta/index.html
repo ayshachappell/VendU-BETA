@@ -2340,7 +2340,7 @@ function inboxScreen(){
   var h='<div class="topbar"><div class="brandrow"><div class="wordmark">Messages</div><div class="locpill" id="inbClose" style="cursor:pointer">\u2715 Close</div></div></div><div class="enter" style="padding:8px 0 24px">';
   if((state.eventNotifications||[]).length){h+='<div class="sec-h">Event activity</div>'+state.eventNotifications.map(function(n){return '<div class="inbox-row"><div class="detail-av" style="width:46px;height:46px;font-size:20px;border-radius:13px;background:var(--violet);color:#fff;flex:none">🎉</div><div style="flex:1;min-width:0"><div class="inbox-name">Event update</div><div class="inbox-prev">'+safe(n.message)+'</div></div>'+(!n.read_at?'<span class="inbox-badge">1</span>':'')+'</div>';}).join('');}
   if(!list.length){h+='<div class="empty" style="padding:50px 30px">No messages yet.<br>Reach out to a vendor or someone\u2019s Market post to start a chat.</div>';}
-  else{h+=list.map(function(t){var last=t.msgs[t.msgs.length-1];var prev=(last[0]==='You'?'You: ':'')+last[1];return '<div class="inbox-row" data-openth="'+t.id+'"><div class="detail-av" data-openav="'+t.id+'" style="width:46px;height:46px;font-size:18px;border-radius:13px;background:'+t.color+';color:#fff;flex:none;cursor:pointer">'+t.init+'</div><div style="flex:1;min-width:0"><div class="inbox-name" data-openuser="'+t.id+'">'+t.name+'</div><div class="inbox-prev">'+prev+'</div></div>'+(t.unread?'<span class="inbox-badge">'+t.unread+'</span>':'')+'</div>';}).join('');}
+  else{h+=list.map(function(t){var last=t.msgs[t.msgs.length-1];var prev=((last[0]==='You'||last[0]===state.studentName||last[0]===state.vendorName)?'You: ':'')+last[1];return '<div class="inbox-row" data-openth="'+t.id+'"><div class="detail-av" data-openav="'+t.id+'" style="width:46px;height:46px;font-size:18px;border-radius:13px;background:'+t.color+';color:#fff;flex:none;cursor:pointer">'+t.init+'</div><div style="flex:1;min-width:0"><div class="inbox-name" data-openuser="'+t.id+'">'+t.name+'</div><div class="inbox-prev">'+prev+'</div></div>'+(t.unread?'<span class="inbox-badge">'+t.unread+'</span>':'')+'</div>';}).join('');}
   h+='</div>';
   screen.innerHTML=h;
   document.getElementById('inbClose').onclick=function(){state.inboxView=false;render();};
@@ -2352,7 +2352,7 @@ function messageScreen(){
   var _deal=dealStripHTML(th);
   screen.innerHTML='<div class="fade" style="height:100%;display:flex;flex-direction:column">'
     +'<div class="topbar"><div class="brandrow"><div style="display:flex;align-items:center;gap:11px"><div class="detail-av" id="thav" style="width:40px;height:40px;font-size:17px;border-radius:12px;background:'+th.color+';color:#fff;cursor:pointer">'+th.init+'</div><div class="wordmark" style="font-size:18px">'+th.name+'</div></div><div class="locpill" id="msgBack" style="cursor:pointer">\u2039 Inbox</div></div></div>'
-    +'<div class="msg-thread" id="thread">'+th.msgs.map(function(m){return '<div class="bubble '+(m[0]==='You'?'me':'')+'">'+m[1]+'</div>';}).join('')+'</div>'
+    +'<div class="msg-thread" id="thread">'+th.msgs.map(function(m){return '<div class="bubble '+((m[0]==='You'||m[0]===state.studentName||m[0]===state.vendorName)?'me':'')+'">'+m[1]+'</div>';}).join('')+'</div>'
     +_deal
     +'<div class="msg-bar"><input id="msgInput" placeholder="Message '+th.name.split(' ')[0]+'\u2026"><button id="msgSend">Send</button></div></div>';
   document.getElementById('msgBack').onclick=function(){state.thread=0;render();};
