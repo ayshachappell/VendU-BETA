@@ -77,3 +77,4 @@
 - [x] Matched “Become a vendor” to the white Vendor View control and moved viewed-profile Back into the banner top-left
 
 - [x] v30: viewed-profile banner wordmark restored to full "The VendU App" lockup (WMFULL) with BETA badge in Beta; CSS `.viewed-profile-brand` max-width 220px, The/App in white at 850pacity; SW caches v30. Playwright verified 393px both builds.
+- [x] v31: improved banner legibility with crisp white identity text and translucent dark-glass badges across Main and Beta.
