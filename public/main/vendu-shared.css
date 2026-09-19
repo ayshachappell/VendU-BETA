@@ -532,3 +532,8 @@ input,textarea,select,[contenteditable="true"]{pointer-events:auto}
 .profile-badge-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
 .profile-badge-row:empty{display:none}
 .profile-meta-line{margin-top:5px}
+
+/* v39 - profile-only handles, themed camera, circular bell, and stable presence dots */
+.avatar-camera{background:var(--profile-color,var(--violet));color:var(--primary-foreground,#fff);border-color:var(--primary-foreground,#fff)}
+.header-actions .bell,.profile-header .bell,.topbar.hdr-purple .hdr-av.no-photo{aspect-ratio:1!important;border-radius:50%!important}
+.shop-sign .av-wrap>.livedot,.viewed-profile .up-av-wrap>.livedot{right:-3px!important;top:auto!important;bottom:-3px!important}
