@@ -93,3 +93,4 @@
 - [x] v44: raised the graduation cap above the “U” in student-profile banners to `top: -12px` across Main and Beta; service-worker caches bumped to v44.
 - [x] v45: matched student-profile “The VendU App” lockups to the animated header design in Main and Beta while preserving the `top: -12px` cap position.
 - [x] v46: matched the student-profile graduation cap height to the standard “The VendU App” header cap at `top: -9px` across Main and Beta.
+- [x] v47: restored the visible chat composer above mobile navigation, made message rows open conversations while avatars alone open profiles, and matched the mobile status area to the darker purple header in Main and Beta.
