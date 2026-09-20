@@ -563,6 +563,7 @@ input,textarea,select,[contenteditable="true"]{pointer-events:auto}
 .viewed-profile-header .viewed-profile-brand .gradcap{width:1.2em!important;top:-9px!important;left:50%!important}
 
 /* v47 - keep chat composer above mobile navigation and match the darker header chrome */
+.topbar.hdr-purple,.topbar.hdr-purple::before{background:#331174!important}
 .nav.messages-open .navadd{visibility:hidden;pointer-events:none}
 .nav.message-active{display:none!important}
 .msg-tools{display:flex;align-items:center;gap:3px;padding:7px 10px 0;background:var(--paper);border-top:1px solid var(--line);overflow-x:auto;flex:none}
