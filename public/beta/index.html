@@ -11,7 +11,7 @@
 /* Always-fresh assets: every page load requests a unique URL, so no browser,
    proxy or installed-app cache can ever serve an old stylesheet or tutorial. */
 (function(){
-  var B='/beta/', V='v59';
+  var B='/beta/', V='v60';
   var l=document.createElement('link');
   l.rel='stylesheet'; l.href=B+'vendu-shared.css?v='+V;
   document.head.appendChild(l);
@@ -1242,6 +1242,7 @@ function refreshFeed(){const s=screen.scrollTop;document.getElementById('homebod
 function toggleNear(){state.near=!state.near;state.home='browse';if(state.near){try{navigator.geolocation.getCurrentPosition(()=>toast('📍 Showing hustles nearest you'),()=>toast('Allow location to sort by your real distance'),{timeout:5000});}catch(e){toast('Location works on the live site 📍');}}home();}
 
 function openDetail(id){state.detail=id;state.reviewOpen=false;detail(id);screen.scrollTop=0;}
+function returnFromMessageProfile(){var back=state.messageReturn;state.messageReturn=null;state.userView=null;state.detail=0;state.reviewOpen=false;if(back){state.inboxView=true;state.thread=back.thread||0;}render();}
 function meObj(){return {me:true,avatar:state.avatar,name:(state.vendorName||'Your VendU'),init:(state.vendorName?state.vendorName.trim()[0].toUpperCase():'A'),v:1,cat:(state.formCat||'Your storefront'),dist:0,rating:'New',reviews:0,jobs:0,since:'2026',pays:(state.pays&&state.pays.length?state.pays:[{app:'Cash App',handle:'$you'}]),bio:state.about,services:state.services,gallery:state.gallery,bm:state.bookMethod||0,link:state.booking.link};}
 function detail(id){
   const h=id==='me'?meObj():HUSTLES.find(x=>x.id===id);
@@ -1306,7 +1307,7 @@ function detail(id){
     </div></div>
     <div class="cta-bar">${cta}</div>`;
   screen.querySelectorAll('[data-sfv]').forEach(function(el){el.onclick=function(){state.sfView=el.dataset.sfv;detail(id);};});
-  document.getElementById('back').onclick=()=>{state.detail=0;state.reviewOpen=false;render();};
+  document.getElementById('back').onclick=()=>{if(state.messageReturn)return returnFromMessageProfile();state.detail=0;state.reviewOpen=false;render();};
   if(h.me){const de=document.getElementById('doneEdit');if(de)de.onclick=()=>{state.detail=0;render();};const mp=document.getElementById('mePrev');if(mp)mp.onclick=()=>toast(state.booking.mode==='message'?'Students tap here to message you directly.':'Students tap here to book an appointment with you.');}
   else{const bb=document.getElementById('bookBtn');if(bb)bb.onclick=()=>{state.book={id:h.id,svc:h.services[0][0],date:'Sat May 3',time:'2:00 PM',step:'pick'};render();};
     const mb=document.getElementById('msgBtn');if(mb)mb.onclick=()=>{openThread(h.name,h.init,bg(h),null,h.owner||'');};
@@ -1598,7 +1599,7 @@ function userProfile(){
   else{h+=listings.map(function(x){var isReq=x.txt!=null;return '<div class="up-listing"><div class="up-lic">'+(isReq?'🙋':(x.emoji||'📦'))+'</div><div style="flex:1;min-width:0"><div class="up-lt">'+(isReq?x.txt:x.name)+'</div><div class="up-lm">'+(isReq?(x.barter?'Open to barter':'Looking for'):x.price+' \u00b7 '+x.tag)+'</div></div></div>';}).join('');}
   h+='</div>';
   screen.innerHTML=h;
-  document.getElementById('upBack').onclick=function(){state.userView=null;render();};
+  document.getElementById('upBack').onclick=function(){if(state.messageReturn)return returnFromMessageProfile();state.userView=null;render();};
   var um=document.getElementById('upMsg');if(um)um.onclick=function(){openThread(u.name,u.init,u.col||state.themeColor,null,(vendor&&vendor.owner)||u.email||'');};
   var us=document.getElementById('upStore');if(us)us.onclick=function(){state.userView=null;openDetail(vendor.id);};
   screen.querySelectorAll('[data-opencomm]').forEach(function(el){el.onclick=function(){state.userView=null;openGroup(el.dataset.opencomm);};});screen.querySelectorAll('[data-change-avatar]').forEach(function(el){el.onclick=function(){photo.click();};});wirePhotoZoom();
@@ -2292,6 +2293,7 @@ function wirePhotoZoom(){screen.querySelectorAll('[data-zoom-photo]').forEach(fu
 function openInbox(){state.thread=0;state.inboxView=true;render();try{if(window.VendU&&VendU.eventActivity)VendU.eventActivity({action:'markNotificationsRead',build:BUILD}).then(function(){(state.eventNotifications||[]).forEach(function(n){n.read_at=n.read_at||new Date().toISOString();});});}catch(e){}}
 function personIsLive(name){var v=(typeof HUSTLES!=='undefined')?HUSTLES.filter(function(h){return h.name===name;})[0]:null;return isLive(v);}
 function openPerson(name,init,col){
+  if(state.inboxView)state.messageReturn={thread:state.thread||0};
   if(!name||name==='You'||name===state.studentName)return openUser('You');
   var v=(typeof HUSTLES!=='undefined')?HUSTLES.filter(function(h){return h.name===name;})[0]:null;
   if(v){state.thread=0;state.inboxView=false;state.userView=null;return openDetail(v.id);}
