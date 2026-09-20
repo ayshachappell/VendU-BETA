@@ -95,3 +95,10 @@
 - [x] v46: matched the student-profile graduation cap height to the standard “The VendU App” header cap at `top: -9px` across Main and Beta.
 - [x] v47: restored the visible chat composer above mobile navigation, made message rows open conversations while avatars alone open profiles, and matched the mobile status area to the darker purple header in Main and Beta.
 - [x] v48: removed DM pull-to-refresh and the purple add control, added role-specific buyer/seller meet-up and payment steps, and strengthened dated legal acknowledgment language across Main and Beta.
+
+## Persistent messaging and meet-ups (in progress)
+- [ ] Shared Main/Beta-isolated conversations, transaction cards, attachments, and unread state
+- [ ] Appointment cards unlock and notify both people 15 minutes before start
+- [ ] Hide all bottom navigation inside a DM while keeping it on the Messages list
+- [ ] Camera, photos, voice, GIF/sticker, file, location, and contact composer tools
+- [ ] Seamless light-purple mobile status/header area in web and native wrappers
