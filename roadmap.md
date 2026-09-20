@@ -108,3 +108,4 @@
 - [x] v52: removed the misplaced DM safety line, kept every composer control on one row, closed attachment tools when typing resumes, and added searchable online GIFs in Main and Beta.
 - [x] v53: restored the reference safety reminder above a bottom-anchored message bar, matched conversation spacing, and enlarged touch areas across Main, Beta, demos, and tutorials.
 - [x] v54: removed the hidden navigation's reserved space so the DM safety reminder and message bar reach the true bottom on every viewport in Main and Beta.
+- [x] v55: aligned message-list avatars with names and added a private, confirmed thread-removal control in Main and Beta.

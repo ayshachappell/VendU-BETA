@@ -313,6 +313,7 @@
   W.openConversation = function (peerEmail, peerName, myName, build) { return W.messageAction({ action: "open", peerEmail: peerEmail, peerName: peerName, myName: myName, build: build }); };
   W.sendMessage = function (payload) { payload.action = "send"; return W.messageAction(payload); };
   W.markConversationRead = function (conversationId, build) { return W.messageAction({ action: "read", conversationId: conversationId, build: build }); };
+  W.hideConversation = function (conversationId, build) { return W.messageAction({ action: "hide", conversationId: conversationId, build: build }); };
   W.createMessageTransaction = function (payload) { payload.action = "createTransaction"; return W.messageAction(payload); };
   W.messageTransactionAction = function (payload) { payload.action = "transactionAction"; return W.messageAction(payload); };
   W.messageAttachmentUrl = function (conversationId, path, build) { return W.messageAction({ action: "attachmentUrl", conversationId: conversationId, path: path, build: build }); };

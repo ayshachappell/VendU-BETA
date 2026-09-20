@@ -91,7 +91,7 @@ export const Route = createFileRoute("/api/public/messages")({
           return data as Record<string, unknown> | null;
         }
 
-        async function shapeConversation(c: Record<string, unknown>) {
+        async function shapeConversation(c: Record<string, unknown>, hiddenAt?: string) {
           const id = String(c["id"]);
           const peerIsA = String(c["participant_b_email"]) === email;
           const peerEmail = String(c[peerIsA ? "participant_a_email" : "participant_b_email"] ?? "");
@@ -103,7 +103,9 @@ export const Route = createFileRoute("/api/public/messages")({
             supabaseAdmin.from("vendors").select("accent_color,avatar_url").eq("owner_email", peerEmail).eq("build", build).eq("published", true).maybeSingle(),
           ]);
           const readAt = Date.parse(String(read?.read_at ?? "")) || 0;
-          const safeTransactions = (transactions ?? []).map((tx) => {
+          const hiddenTime = Date.parse(hiddenAt ?? "") || 0;
+          const visibleMessages = (messages ?? []).filter((message) => Date.parse(String(message.created_at)) > hiddenTime);
+          const safeTransactions = (transactions ?? []).filter((tx) => Date.parse(String(tx.created_at)) > hiddenTime).map((tx) => {
             const row = { ...tx } as Record<string, unknown>;
             const viewerIsBuyer = String(row["buyer_email"] ?? "") === email;
             if (viewerIsBuyer && !row["buyer_met_at"]) {
@@ -120,8 +122,8 @@ export const Route = createFileRoute("/api/public/messages")({
             color: peerVendor?.accent_color ?? null,
             avatar: peerVendor?.avatar_url ?? null,
             updatedAt: c["updated_at"],
-            unread: (messages ?? []).filter((m) => String(m.sender_email ?? "") !== email && Date.parse(String(m.created_at)) > readAt).length,
-            messages: (messages ?? []).map((m) => publicMessage(m as Record<string, unknown>)),
+            unread: visibleMessages.filter((m) => String(m.sender_email ?? "") !== email && Date.parse(String(m.created_at)) > readAt).length,
+            messages: visibleMessages.map((m) => publicMessage(m as Record<string, unknown>)),
             transactions: safeTransactions,
           };
         }
@@ -157,7 +159,15 @@ export const Route = createFileRoute("/api/public/messages")({
             .or(`participant_a_email.eq.${email},participant_b_email.eq.${email}`)
             .order("updated_at", { ascending: false })
             .limit(100);
-          const conversations = await Promise.all(((data ?? []) as Record<string, unknown>[]).map(shapeConversation));
+          const { data: hides } = await supabaseAdmin
+            .from("conversation_hides")
+            .select("conversation_id,hidden_at")
+            .eq("user_email", email)
+            .eq("build", build);
+          const hiddenByConversation = new Map((hides ?? []).map((hide) => [String(hide.conversation_id), String(hide.hidden_at)]));
+          const shaped = await Promise.all(((data ?? []) as Record<string, unknown>[]).map((conversation) => shapeConversation(conversation, hiddenByConversation.get(String(conversation["id"])))));
+          const conversations = shaped.filter((conversation) => !hiddenByConversation.has(conversation.id) || conversation.messages.length > 0);
+          const hiddenConversationIds = shaped.filter((conversation) => hiddenByConversation.has(conversation.id) && conversation.messages.length === 0).map((conversation) => conversation.id);
           const { data: notifications } = await supabaseAdmin
             .from("message_notifications")
             .select("*")
@@ -165,7 +175,7 @@ export const Route = createFileRoute("/api/public/messages")({
             .eq("build", build)
             .order("created_at", { ascending: false })
             .limit(100);
-          return json({ ok: true, conversations, notifications: notifications ?? [] });
+          return json({ ok: true, conversations, hiddenConversationIds, notifications: notifications ?? [] });
         }
 
         if (action === "open") {
@@ -196,6 +206,14 @@ export const Route = createFileRoute("/api/public/messages")({
         if (action === "read") {
           await supabaseAdmin.from("conversation_reads").upsert({ conversation_id: conversationId, reader_email: email, read_at: new Date().toISOString() });
           await supabaseAdmin.from("message_notifications").update({ read_at: new Date().toISOString() }).eq("conversation_id", conversationId).eq("recipient_email", email).is("read_at", null);
+          return json({ ok: true });
+        }
+
+        if (action === "hide") {
+          const hiddenAt = new Date().toISOString();
+          const { error } = await supabaseAdmin.from("conversation_hides").upsert({ conversation_id: conversationId, user_email: email, build, hidden_at: hiddenAt }, { onConflict: "conversation_id,user_email" });
+          if (error) return json({ ok: false, message: "Could not remove that conversation." }, 500);
+          await supabaseAdmin.from("message_notifications").update({ read_at: hiddenAt }).eq("conversation_id", conversationId).eq("recipient_email", email).is("read_at", null);
           return json({ ok: true });
         }
 

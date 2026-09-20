@@ -11,7 +11,7 @@
 /* Always-fresh assets: every page load requests a unique URL, so no browser,
    proxy or installed-app cache can ever serve an old stylesheet or tutorial. */
 (function(){
-  var B='/main/', V='v54';
+  var B='/main/', V='v55';
   var l=document.createElement('link');
   l.rel='stylesheet'; l.href=B+'vendu-shared.css?v='+V;
   document.head.appendChild(l);
@@ -32,7 +32,7 @@
   }).catch(function(){});
 })();
 </script>
-<link rel="manifest" href="/main/manifest.webmanifest?v=54">
+<link rel="manifest" href="/main/manifest.webmanifest?v=55">
 <meta name="theme-color" content="#331174">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -2308,7 +2308,7 @@ function localThreadFromConversation(c){
 }
 function myAccountEmail(){try{var s=window.VendU&&VendU.student&&VendU.student();return String((s&&s.email)||'').toLowerCase();}catch(e){return '';}}
 function serverDeal(t){if(!t)return null;return {serverId:t.id,id:t.reference_id,item:t.title,seller:t.seller_name,pays:t.payment_methods||[],role:String(t.seller_email||'').toLowerCase()===myAccountEmail()?'seller':'buyer',buyerMet:!!t.buyer_met_at,sellerMet:!!t.seller_met_at,buyerPaid:!!t.buyer_paid_at,paid:!!t.seller_paid_at,paidAt:t.seller_paid_at?new Date(t.seller_paid_at).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}):'',availableAt:t.meetup_available_at,appointmentAt:t.appointment_at};}
-function syncMessages(redraw){if(!window.VendU||!VendU.listMessages||!myAccountEmail())return Promise.resolve();return VendU.listMessages(BUILD).then(function(r){if(!r||!r.ok)return;(r.conversations||[]).forEach(localThreadFromConversation);state.messageNotifications=r.notifications||[];if(redraw){if(state.thread)messageScreen();else if(state.inboxView)inboxScreen();}}).catch(function(){});}
+function syncMessages(redraw){if(!window.VendU||!VendU.listMessages||!myAccountEmail())return Promise.resolve();return VendU.listMessages(BUILD).then(function(r){if(!r||!r.ok)return;var hidden=r.hiddenConversationIds||[];state.inbox=(state.inbox||[]).filter(function(t){return hidden.indexOf(String(t.serverId||t.id))<0;});(r.conversations||[]).forEach(localThreadFromConversation);state.messageNotifications=r.notifications||[];if(redraw){if(state.thread)messageScreen();else if(state.inboxView)inboxScreen();}}).catch(function(){});}
 function transactionFor(th){return th&&th.deal;}
 function openThread(name,init,color,deal,peerEmail){
   name=name||'a seller';peerEmail=String(peerEmail||'').toLowerCase();
@@ -2360,11 +2360,11 @@ function inboxScreen(){
   if((state.messageNotifications||[]).filter(function(n){return !n.read_at;}).length){h+='<div class="sec-h">Message activity</div>'+state.messageNotifications.filter(function(n){return !n.read_at;}).slice(0,5).map(function(n){return '<div class="inbox-row" data-notifyth="'+safe(n.conversation_id)+'"><div class="detail-av" style="width:46px;height:46px;font-size:20px;border-radius:13px;background:var(--violet);color:#fff;flex:none">💬</div><div style="flex:1;min-width:0"><div class="inbox-name">'+(n.kind==='meetup'?'Meet-up reminder':'New message')+'</div><div class="inbox-prev">'+safe(n.message)+'</div></div><span class="inbox-badge">1</span></div>';}).join('');}
   if((state.eventNotifications||[]).length){h+='<div class="sec-h">Event activity</div>'+state.eventNotifications.map(function(n){return '<div class="inbox-row"><div class="detail-av" style="width:46px;height:46px;font-size:20px;border-radius:13px;background:var(--violet);color:#fff;flex:none">🎉</div><div style="flex:1;min-width:0"><div class="inbox-name">Event update</div><div class="inbox-prev">'+safe(n.message)+'</div></div>'+(!n.read_at?'<span class="inbox-badge">1</span>':'')+'</div>';}).join('');}
   if(!list.length){h+='<div class="empty" style="padding:50px 30px">No messages yet.<br>Reach out to a vendor or someone\u2019s Market post to start a chat.</div>';}
-  else{h+=list.map(function(t){var last=t.msgs[t.msgs.length-1];var prev=((last[0]==='You'||last[0]===state.studentName||last[0]===state.vendorName)?'You: ':'')+last[1];return '<div class="inbox-row" data-openth="'+t.id+'"><div class="detail-av" data-openav="'+t.id+'" role="button" aria-label="View '+safe(t.name)+' profile" style="width:46px;height:46px;font-size:18px;border-radius:13px;background:'+t.color+';color:#fff;flex:none;cursor:pointer">'+t.init+'</div><div style="flex:1;min-width:0"><div class="inbox-name">'+t.name+'</div><div class="inbox-prev">'+prev+'</div></div>'+(t.unread?'<span class="inbox-badge">'+t.unread+'</span>':'')+'</div>';}).join('');}
+  else{h+=list.map(function(t){var last=t.msgs[t.msgs.length-1]||['',''];var prev=((last[0]==='You'||last[0]===state.studentName||last[0]===state.vendorName)?'You: ':'')+last[1];return '<div class="inbox-row" data-openth="'+t.id+'"><button class="inbox-delete" data-deleteth="'+t.id+'" aria-label="Delete conversation with '+safe(t.name)+'">×</button><div class="detail-av inbox-avatar" data-openav="'+t.id+'" role="button" aria-label="View '+safe(t.name)+' profile" style="background:'+t.color+';color:#fff;cursor:pointer">'+t.init+'</div><div class="inbox-copy"><div class="inbox-name">'+safe(t.name)+'</div><div class="inbox-prev">'+safe(prev)+'</div></div>'+(t.unread?'<span class="inbox-badge">'+t.unread+'</span>':'')+'</div>';}).join('');}
   h+='</div>';
   screen.innerHTML=h;
   document.getElementById('inbClose').onclick=function(){state.inboxView=false;render();};
-  screen.querySelectorAll('[data-openav]').forEach(function(el){el.onclick=function(e){e.stopPropagation();var t=state.inbox.filter(function(x){return x.id===el.dataset.openav;})[0];if(t)openPerson(t.name,t.init,t.color);};});screen.querySelectorAll('[data-openth]').forEach(function(el){el.onclick=function(){var t=state.inbox.filter(function(x){return x.id===el.dataset.openth;})[0];if(t)t.unread=0;state.thread=el.dataset.openth;messageScreen();};});screen.querySelectorAll('[data-notifyth]').forEach(function(el){el.onclick=function(){var t=state.inbox.filter(function(x){return x.id===el.dataset.notifyth;})[0];if(t){state.thread=t.id;messageScreen();}};});
+  screen.querySelectorAll('[data-openav]').forEach(function(el){el.onclick=function(e){e.stopPropagation();var t=state.inbox.filter(function(x){return x.id===el.dataset.openav;})[0];if(t)openPerson(t.name,t.init,t.color);};});screen.querySelectorAll('[data-deleteth]').forEach(function(el){el.onclick=function(e){e.stopPropagation();var t=state.inbox.filter(function(x){return x.id===el.dataset.deleteth;})[0];if(!t||!confirm('Delete this conversation from your Messages list?'))return;state.inbox=state.inbox.filter(function(x){return x.id!==t.id;});inboxScreen();if(t.serverId&&window.VendU&&VendU.hideConversation)VendU.hideConversation(t.serverId,BUILD).then(function(r){if(!r||!r.ok){toast((r&&r.message)||'Could not remove that conversation.');syncMessages(true);}});};});screen.querySelectorAll('[data-openth]').forEach(function(el){el.onclick=function(){var t=state.inbox.filter(function(x){return x.id===el.dataset.openth;})[0];if(t)t.unread=0;state.thread=el.dataset.openth;messageScreen();};});screen.querySelectorAll('[data-notifyth]').forEach(function(el){el.onclick=function(){var t=state.inbox.filter(function(x){return x.id===el.dataset.notifyth;})[0];if(t){state.thread=t.id;messageScreen();}};});
 }
 function msgEsc(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function messageColor(th){var c=String((th&&th.color)||'');return /^#[0-9a-f]{6}$/i.test(c)?c:'#5A2BE0';}
