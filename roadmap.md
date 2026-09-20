@@ -103,3 +103,5 @@
 - [x] Camera, photos, voice, GIF/sticker, file, location, and contact composer tools
 - [x] Seamless dark-purple mobile status/header area in web and native wrappers
 - [x] v50: restored the purple post button on the Messages list and combined all DM controls into one compact message bar in Main and Beta
+
+- [x] v51: limited pull-to-refresh to Feed, Browse, Events, Buy & Trade, and Requests; rebuilt profile-colored DMs with a + attachment menu; updated demos/tutorials; corrected Main routing, legal links, manifest chrome, and stale installed-app caches in both builds.
