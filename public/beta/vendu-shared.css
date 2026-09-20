@@ -628,7 +628,7 @@ input:not([type="checkbox"]):not([type="radio"]),textarea,select,.search,.msg-ba
 .request-head{display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:start;column-gap:10px;margin-bottom:8px}
 .request-avatar-wrap{width:34px;height:34px;align-self:start}
 .request-avatar{width:34px!important;height:34px!important;min-height:34px!important;border-radius:50%!important;font-size:14px!important}
-.request-author{min-width:0;align-self:start;padding-top:0;font-size:14px!important;line-height:20px;cursor:pointer}
+.request-author{min-width:0;align-self:start;padding-top:1px;font-size:14px!important;line-height:20px;cursor:pointer}
 .request-author .samplepill{vertical-align:top}
 .request-kind{align-self:start;margin-left:4px;padding:3px 9px;border-radius:100px;background:var(--violet-soft);color:#3f2b8c;font-size:11px;font-weight:700;line-height:16px;white-space:nowrap}
 .request-kind.is-barter{background:#FFF0E0;color:#a5600f}
