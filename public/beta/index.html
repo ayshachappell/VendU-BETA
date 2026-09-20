@@ -1335,6 +1335,7 @@ function notifyBooking(h,b){
     th.msgs.push([h.name,'Confirmed! '+b.svc+' on '+when+'. You\u2019ll get a reminder 15 minutes before \u23F0']);
     th.unread=(th.unread||0)+1;
     if(window.VendU&&VendU.notifyAppointment)VendU.notifyAppointment({vendor:h.name,vendorId:h.id,service:b.svc,when:when,phone:state.phone||'',build:BUILD});
+    var peer=String(h.owner||'').toLowerCase();if(peer&&window.VendU&&VendU.openConversation)VendU.openConversation(peer,h.name,activeName(),BUILD).then(function(r){if(!r||!r.ok)return;var c=localThreadFromConversation(r.conversation);return VendU.createMessageTransaction({conversationId:c.id,kind:'booking',referenceId:'booking-'+h.id+'-'+bookTs(b.date,b.time),title:b.svc+' — '+when,role:'buyer',myName:activeName(),peerName:h.name,paymentMethods:h.pays||[],appointmentAt:new Date(bookTs(b.date,b.time)).toISOString(),build:BUILD});}).then(function(){syncMessages(false);}).catch(function(){});
   }catch(e){}
 }
 function bookingScreen(){
@@ -2340,21 +2341,22 @@ function dealStripHTML(th){
 function wireDealStrip(th){
   var d=th&&th.deal;if(!d)return;
   var isSeller=dealRole(d)==='seller';
+  var serverAct=function(event){if(d.serverId&&th.serverId&&window.VendU&&VendU.messageTransactionAction)return VendU.messageTransactionAction({conversationId:th.serverId,transactionId:d.serverId,event:event,build:BUILD}).then(function(r){if(!r||!r.ok)toast((r&&r.message)||'Could not update this meet-up.');else syncMessages(true);});return Promise.resolve();};
   var now=function(){return new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});};
   var met=document.getElementById('dealmet');
   if(met)met.onclick=function(){safetyGate('Meeting '+(isSeller?'the buyer':d.seller)+' for \u201c'+d.item+'\u201d.',function(){
-    if(isSeller)d.sellerMet=true;else d.buyerMet=true;d.metAt=now();
+    if(isSeller)d.sellerMet=true;else d.buyerMet=true;d.metAt=now();serverAct('met');
     th.msgs.push(['VendU','\uD83E\uDD1D '+(isSeller?'Seller confirmed they are with the buyer.':'Buyer confirmed they are with the seller.')]);
     if(!isSeller){var pays=(d.pays||[]).filter(function(p){return p.handle;});th.msgs.push(['VendU',pays.length?('\uD83D\uDD10 '+d.seller+' accepts: '+pays.map(function(p){return p.app+' \u2014 '+p.handle;}).join(' \u00b7 ')+'. Shared here only, for you two.'):('\uD83D\uDCB5 '+d.seller+' hasn\u2019t added payment accounts \u2014 agree on cash in person.')]);}
     th.msgs.push(['VendU',isSeller?'Seller: confirm below only when the payment lands.':'Buyer: confirm below only after you pay in person.']);
     messageScreen();
   });};
   var paid=document.getElementById('dealpaid');
-  if(paid)paid.onclick=function(){if(isSeller){d.paid=true;d.paidAt=now();th.msgs.push(['VendU','\u2713 Seller confirmed payment at '+d.paidAt+'. Both of you have this record.']);toast('Payment confirmed \u2713');}else{d.buyerPaid=true;th.msgs.push(['VendU','\u2713 Buyer says payment was sent. Seller: confirm when it lands.']);toast('Payment marked as sent \u2713');}messageScreen();};
+  if(paid)paid.onclick=function(){serverAct('paid');if(isSeller){d.paid=true;d.paidAt=now();th.msgs.push(['VendU','\u2713 Seller confirmed payment at '+d.paidAt+'. Both of you have this record.']);toast('Payment confirmed \u2713');}else{d.buyerPaid=true;th.msgs.push(['VendU','\u2713 Buyer says payment was sent. Seller: confirm when it lands.']);toast('Payment marked as sent \u2713');}messageScreen();};
   var not=document.getElementById('dealnot');
-  if(not)not.onclick=function(){th.msgs.push(['VendU',isSeller?'\u23F3 Seller says payment hasn\u2019t arrived yet.':'\u23F3 Buyer says payment has not been sent yet.']);messageScreen();};
+  if(not)not.onclick=function(){serverAct('notYet');th.msgs.push(['VendU',isSeller?'\u23F3 Seller says payment hasn\u2019t arrived yet.':'\u23F3 Buyer says payment has not been sent yet.']);messageScreen();};
   var rep=document.getElementById('dealrep');
-  if(rep)rep.onclick=function(){if(window.VendU&&VendU.openReport)VendU.openReport('post',String(d.id||''),d.item);else toast('Reporting is unavailable right now.');};
+  if(rep)rep.onclick=function(){serverAct('report');if(window.VendU&&VendU.openReport)VendU.openReport('post',String(d.id||''),d.item);else toast('Reporting is unavailable right now.');};
 }
 function inboxScreen(){
   document.getElementById('nav').classList.add('messages-open');
@@ -2439,7 +2441,7 @@ function setDemoVisible(on){Object.keys(_DEMOARR).forEach(function(k){on?_demoFi
 function refreshDemo(){setDemoVisible(!!(state.tester||state.tourActive));}
 window.VendU=window.VendU||{};VendU.onTour=function(active){state.tourActive=!!active;refreshDemo();try{render();}catch(e){}};
 setDemoVisible(false);
-state.campusEvents=[];state.campusResults=[];applyCampusTheme();state.booked=loadBooked();try{state.phone=localStorage.getItem('vendu_phone')||'';}catch(e){state.phone='';}setTimeout(function(){loadCampusEvents();loadEventNotifications();},500);setInterval(loadEventNotifications,15000);try{document.addEventListener('visibilitychange',function(){if(!document.hidden)loadEventNotifications();});window.addEventListener('focus',loadEventNotifications);}catch(e){}
+state.campusEvents=[];state.campusResults=[];applyCampusTheme();state.booked=loadBooked();try{state.phone=localStorage.getItem('vendu_phone')||'';}catch(e){state.phone='';}setTimeout(function(){loadCampusEvents();loadEventNotifications();},500);setInterval(loadEventNotifications,15000);setTimeout(function(){syncMessages(false);},900);setInterval(function(){if(state.inboxView||state.thread)syncMessages(true);},15000);try{document.addEventListener('visibilitychange',function(){if(!document.hidden)loadEventNotifications();});window.addEventListener('focus',loadEventNotifications);}catch(e){}
 
 function lintKey(e){return String(e.title||'')+'|'+String(e.ts||'');}
 function localInt(e){state.localInt=state.localInt||{};return !!state.localInt[lintKey(e)];}

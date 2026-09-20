@@ -97,8 +97,8 @@
 - [x] v48: removed DM pull-to-refresh and the purple add control, added role-specific buyer/seller meet-up and payment steps, and strengthened dated legal acknowledgment language across Main and Beta.
 
 ## Persistent messaging and meet-ups (in progress)
-- [ ] Shared Main/Beta-isolated conversations, transaction cards, attachments, and unread state
-- [ ] Appointment cards unlock and notify both people 15 minutes before start
-- [ ] Hide all bottom navigation inside a DM while keeping it on the Messages list
-- [ ] Camera, photos, voice, GIF/sticker, file, location, and contact composer tools
-- [ ] Seamless light-purple mobile status/header area in web and native wrappers
+- [x] Shared Main/Beta-isolated conversations, transaction cards, attachments, and unread state
+- [x] Appointment cards unlock and notify both people 15 minutes before start
+- [x] Hide all bottom navigation inside a DM while keeping it on the Messages list
+- [x] Camera, photos, voice, GIF/sticker, file, location, and contact composer tools
+- [x] Seamless dark-purple mobile status/header area in web and native wrappers
