@@ -66,6 +66,16 @@ export const Route = createFileRoute("/api/public/messages")({
             supabaseAdmin.from("conversation_reads").select("read_at").eq("conversation_id", id).eq("reader_email", email).maybeSingle(),
           ]);
           const readAt = Date.parse(String(read?.read_at ?? "")) || 0;
+          const safeTransactions = (transactions ?? []).map((tx) => {
+            const row = { ...tx } as Record<string, unknown>;
+            const viewerIsBuyer = String(row["buyer_email"] ?? "") === email;
+            if (viewerIsBuyer && !row["buyer_met_at"]) {
+              row["payment_methods"] = Array.isArray(row["payment_methods"])
+                ? (row["payment_methods"] as Record<string, unknown>[]).map((p) => ({ app: p["app"] ?? "Payment app" }))
+                : [];
+            }
+            return row;
+          });
           return {
             id,
             name: peerName,
@@ -73,7 +83,7 @@ export const Route = createFileRoute("/api/public/messages")({
             updatedAt: c["updated_at"],
             unread: (messages ?? []).filter((m) => String(m.sender_email ?? "") !== email && Date.parse(String(m.created_at)) > readAt).length,
             messages: (messages ?? []).map((m) => publicMessage(m as Record<string, unknown>)),
-            transactions: transactions ?? [],
+            transactions: safeTransactions,
           };
         }
 
