@@ -475,7 +475,7 @@ input,textarea,select,[contenteditable="true"]{pointer-events:auto}
 .storefront .awn-welcome .awn-lead{font:inherit!important;letter-spacing:inherit!important;text-transform:inherit;color:inherit!important}
 .storefront .awn-welcome .awn-wm{display:inline-flex;align-items:baseline;position:relative;font:inherit!important;letter-spacing:inherit!important;color:inherit!important}
 .storefront .awn-welcome .vhold,.storefront .awn-welcome .u{position:relative;color:inherit!important}
-.storefront .awn-welcome .gradcap{left:50%;top:-10px;width:25px;height:auto}
+.storefront .awn-welcome .gradcap{left:50%;top:-17px;width:25px;height:auto}
 @media(prefers-reduced-motion:reduce){.storefront .awn-welcome .tassel{animation:none!important}}
 
 /* v34 - unobstructed welcome lockup, matched identity type, compact profile actions */
@@ -509,8 +509,8 @@ input,textarea,select,[contenteditable="true"]{pointer-events:auto}
 /* v36 - social identity and an unmistakable self-avatar edit control */
 .avatar-camera{position:absolute;right:-4px;bottom:-4px;z-index:20;display:grid;place-items:center;width:28px;height:28px;min-height:28px;padding:0;border:2px solid var(--card);border-radius:50%;background:var(--ink);color:var(--card);box-shadow:0 2px 8px color-mix(in srgb,var(--ink) 28%,transparent);cursor:pointer}
 .avatar-camera svg{width:13px;height:13px;pointer-events:none}
-.profile-social-handle{color:var(--violet);font-weight:700}
-.verified-student{color:var(--violet);font-weight:600;display:inline-flex;align-items:center;gap:3px}
+.profile-social-handle{color:var(--primary-foreground,#fff)!important;font-weight:700;text-shadow:0 1px 2px color-mix(in srgb,var(--ink) 38%,transparent)}
+.verified-student{color:var(--primary-foreground,#fff)!important;font-weight:600;display:inline-flex;align-items:center;gap:3px}
 .student-account .field+.field{margin-top:16px}
 
 /* v37 - keep Browse presence on the avatar and unify app-title typography */
