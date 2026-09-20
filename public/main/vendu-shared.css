@@ -557,3 +557,6 @@ input,textarea,select,[contenteditable="true"]{pointer-events:auto}
 /* v42 - seamless storefront title and enlargeable initial avatars */
 .storefront .awn-welcome{padding:8px 12px!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;pointer-events:none}
 .photo-zoom-initial{display:flex;width:min(72vw,360px);aspect-ratio:1;align-items:center;justify-content:center;border:5px solid var(--primary-foreground,#fff);border-radius:28%;background-position:center;background-size:cover;color:var(--primary-foreground,#fff);font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(84px,28vw,150px);font-weight:800;box-shadow:0 18px 60px color-mix(in srgb,var(--ink) 48%,transparent)}
+
+/* v44 - raise the cap above the U in the student profile banner */
+.viewed-profile-header .viewed-profile-brand .gradcap{top:-12px!important}
