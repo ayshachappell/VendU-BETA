@@ -562,6 +562,7 @@ input,textarea,select,[contenteditable="true"]{pointer-events:auto}
 .viewed-profile-header .viewed-profile-brand .gradcap{width:1.2em!important;top:-9px!important;left:50%!important}
 
 /* v47 - keep chat composer above mobile navigation and match the darker header chrome */
+.nav.messages-open .navadd{visibility:hidden;pointer-events:none}
 @media(max-width:439px){
   html,body{background:#331174!important}
   .message-view{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}

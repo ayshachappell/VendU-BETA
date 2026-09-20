@@ -119,7 +119,7 @@
     "Never send money before you meet in person.",
   ];
   var MEET_LEGAL =
-    "The VendU App is a listing and messaging platform only. It is not a party to your booking, purchase, trade or meeting, and does not screen users. You agree that The VendU App and Integro Service Group LLC are not responsible for, and you release and indemnify them from, any inconvenience, injury, casualty, loss, damage, theft, chargeback, disagreement, crime or other harm arising before, during or after any interaction, booking or transaction, on or off campus, inside or outside the app. You meet and transact at your own risk.";
+    "The VendU App is a listing and messaging platform only. It is not a party to your booking, purchase, trade or meeting, and does not screen users. You agree that The VendU App and Integro Service Group LLC are not responsible for, and you release and indemnify them from, any inconvenience, injury, casualty, loss, damage, theft, chargeback, disagreement, crime or other harm arising before, during or after any interaction, booking or transaction, on or off campus, inside or outside the app. You meet and transact at your own risk. If you continue using the app, communicate, meet, book, buy, sell, trade, provide or receive a service, or otherwise engage with another user without selecting “I understand — continue” or otherwise acknowledging a safety message, that conduct still confirms your acknowledgment and assumption of these risks, and your agreement not to hold The VendU App or Integro Service Group LLC liable, to the maximum extent permitted by law.";
 
   W.MEET_LEGAL = MEET_LEGAL;
   W.MEET_SHORT =
