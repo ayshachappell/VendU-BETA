@@ -220,8 +220,8 @@
       c.appendChild(b);
     });
 
-    // quiet safety line above the chat composer and comment boxes
-    document.querySelectorAll(".msg-bar, .p-cbox").forEach(function (bar) {
+    // quiet safety line above public comment boxes (DM safety is handled by transaction cards)
+    document.querySelectorAll(".p-cbox").forEach(function (bar) {
       if (bar.previousElementSibling && bar.previousElementSibling.classList.contains("vu-meetnote")) return;
       var n = document.createElement("div");
       n.className = "vu-meetnote";

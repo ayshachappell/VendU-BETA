@@ -565,14 +565,14 @@ input,textarea,select,[contenteditable="true"]{pointer-events:auto}
 /* v51 - profile-colored direct messages and compact attachment composer */
 .topbar.hdr-purple,.topbar.hdr-purple::before{background:#331174!important}
 .nav.message-active{display:none!important}
-.msg-composer{display:grid;grid-template-columns:38px 40px minmax(0,1fr) auto;align-items:center;gap:5px;flex:none;padding:8px 10px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);background:var(--paper)}
+.msg-composer{display:grid;grid-template-columns:36px 38px minmax(0,1fr) 56px;align-items:center;gap:4px;flex:none;width:100%;padding:8px 8px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);background:var(--paper)}
 .msg-tool{width:38px;min-width:38px!important;height:38px;min-height:38px!important;padding:0!important;border:0!important;border-radius:50%!important;background:transparent!important;color:var(--ink)!important;display:grid!important;place-items:center;font:800 11px/1 Inter,sans-serif!important}
 .msg-tool svg,.msg-send svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
 .msg-tool.msg-plus{background:var(--card)!important;border:1px solid var(--line)!important;color:var(--ink)!important}
-.msg-tool.msg-camera{width:40px;min-width:40px!important;height:40px;min-height:40px!important;background:var(--thread-color,var(--violet))!important;color:var(--thread-text,#fff)!important}
+.msg-tool.msg-camera{width:38px;min-width:38px!important;height:38px;min-height:38px!important;background:var(--thread-color,var(--violet))!important;color:var(--thread-text,#fff)!important}
 .msg-bar{position:relative!important;inset:auto!important;display:flex!important;align-items:center;min-width:0;height:42px;padding:0 12px!important;gap:3px!important;border:1px solid var(--line);border-radius:14px;background:var(--card)!important;z-index:auto!important}
 .msg-bar input{min-width:0;height:100%;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;font-size:14px!important}
-.msg-send{display:grid!important;place-items:center;min-width:74px!important;height:42px;min-height:42px!important;padding:0 15px!important;border:0!important;border-radius:12px!important;background:var(--thread-color,var(--violet))!important;color:var(--thread-text,#fff)!important;font:800 14px/1 'Bricolage Grotesque',sans-serif!important}
+.msg-send{display:grid!important;place-items:center;width:56px!important;min-width:56px!important;height:42px;min-height:42px!important;padding:0 8px!important;border:0!important;border-radius:12px!important;background:var(--thread-color,var(--violet))!important;color:var(--thread-text,#fff)!important;font:800 13px/1 'Bricolage Grotesque',sans-serif!important}
 .msg-send:disabled{opacity:.42}
 .message-view{height:100%;display:flex;flex-direction:column;padding:0!important;background:var(--paper)}
 .message-view .topbar{flex:none;color:var(--thread-text,#fff);padding-top:calc(14px + env(safe-area-inset-top,0px));padding-bottom:22px;border:0}
@@ -585,10 +585,11 @@ input,textarea,select,[contenteditable="true"]{pointer-events:auto}
 .msg-more{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px;background:var(--paper);border-top:1px solid var(--line)}
 .msg-more[hidden]{display:none!important}
 .msg-more button{min-height:44px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:600 12px Inter}
+.gif-picker{flex:none;max-height:42vh;padding:10px;background:var(--paper);border-top:1px solid var(--line);overflow:hidden}.gif-picker-head{display:grid;grid-template-columns:minmax(0,1fr) 40px;gap:8px;margin-bottom:8px}.gif-picker-head input{min-width:0;height:40px;padding:0 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:600 14px Inter}.gif-picker-head button{width:40px;height:40px;border:0;border-radius:50%;background:var(--violet-soft);color:var(--violet);font-size:24px}.gif-results{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;max-height:calc(42vh - 58px);overflow-y:auto}.gif-results button{padding:0;border:0;border-radius:8px;overflow:hidden;background:var(--card);aspect-ratio:1}.gif-results img,.bubble-gif{display:block;width:100%;height:100%;object-fit:cover}.gif-status{grid-column:1/-1;padding:24px 8px;text-align:center;color:var(--mist);font-size:13px}.bubble-gif{width:min(220px,65vw);height:auto;max-height:220px;margin-top:4px;border-radius:8px}
 .bubble-attachment{display:block;margin-top:6px;color:inherit;font-weight:700;text-decoration:underline;cursor:pointer}
 .dealbar.locked{opacity:.8}.dealwhen{font-size:11px;font-weight:700;color:var(--mist);margin-top:5px}
 @media(max-width:439px){
   html,body{background:#331174!important}
   .message-view .msg-thread{padding-bottom:16px}
 }
-@media(max-width:370px){.msg-composer{grid-template-columns:34px 36px minmax(0,1fr) auto;gap:3px;padding-left:6px;padding-right:6px}.msg-tool{width:34px;min-width:34px!important}.msg-tool.msg-camera{width:36px;min-width:36px!important}.msg-send{min-width:62px!important;padding:0 10px!important}.msg-person-name{font-size:18px}}
+@media(max-width:370px){.msg-composer{grid-template-columns:34px 34px minmax(0,1fr) 48px;gap:3px;padding-left:5px;padding-right:5px}.msg-tool{width:34px;min-width:34px!important}.msg-tool.msg-camera{width:34px;min-width:34px!important}.msg-bar{padding:0 9px!important}.msg-send{width:48px!important;min-width:48px!important;padding:0 5px!important;font-size:12px!important}.msg-person-name{font-size:18px}}
