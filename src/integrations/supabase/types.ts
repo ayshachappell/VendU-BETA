@@ -16,30 +16,50 @@ export type Database = {
     Tables: {
       bookings: {
         Row: {
+          appointment_at: string | null
           build: string
+          conversation_id: string | null
           created_at: string
           id: string
           service: string | null
+          status: string
           student_email: string
+          vendor_email: string | null
           vendor_id: string
         }
         Insert: {
+          appointment_at?: string | null
           build?: string
+          conversation_id?: string | null
           created_at?: string
           id?: string
           service?: string | null
+          status?: string
           student_email: string
+          vendor_email?: string | null
           vendor_id: string
         }
         Update: {
+          appointment_at?: string | null
           build?: string
+          conversation_id?: string | null
           created_at?: string
           id?: string
           service?: string | null
+          status?: string
           student_email?: string
+          vendor_email?: string | null
           vendor_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "bookings_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       campus_event_feeds: {
         Row: {
@@ -208,6 +228,109 @@ export type Database = {
         }
         Relationships: []
       }
+      conversation_messages: {
+        Row: {
+          attachment: Json | null
+          body: string | null
+          build: string
+          conversation_id: string
+          created_at: string
+          id: string
+          kind: string
+          sender_email: string | null
+          sender_name: string
+        }
+        Insert: {
+          attachment?: Json | null
+          body?: string | null
+          build?: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          kind?: string
+          sender_email?: string | null
+          sender_name: string
+        }
+        Update: {
+          attachment?: Json | null
+          body?: string | null
+          build?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          sender_email?: string | null
+          sender_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversation_reads: {
+        Row: {
+          conversation_id: string
+          read_at: string
+          reader_email: string
+        }
+        Insert: {
+          conversation_id: string
+          read_at?: string
+          reader_email: string
+        }
+        Update: {
+          conversation_id?: string
+          read_at?: string
+          reader_email?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_reads_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversations: {
+        Row: {
+          build: string
+          created_at: string
+          id: string
+          participant_a_email: string
+          participant_a_name: string | null
+          participant_b_email: string
+          participant_b_name: string | null
+          updated_at: string
+        }
+        Insert: {
+          build?: string
+          created_at?: string
+          id?: string
+          participant_a_email: string
+          participant_a_name?: string | null
+          participant_b_email: string
+          participant_b_name?: string | null
+          updated_at?: string
+        }
+        Update: {
+          build?: string
+          created_at?: string
+          id?: string
+          participant_a_email?: string
+          participant_a_name?: string | null
+          participant_b_email?: string
+          participant_b_name?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       event_interests: {
         Row: {
           created_at: string
@@ -325,6 +448,140 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      message_notifications: {
+        Row: {
+          build: string
+          conversation_id: string | null
+          created_at: string
+          id: string
+          kind: string
+          message: string
+          read_at: string | null
+          recipient_email: string
+          transaction_id: string | null
+        }
+        Insert: {
+          build?: string
+          conversation_id?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          message: string
+          read_at?: string | null
+          recipient_email: string
+          transaction_id?: string | null
+        }
+        Update: {
+          build?: string
+          conversation_id?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          message?: string
+          read_at?: string | null
+          recipient_email?: string
+          transaction_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_notifications_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "message_notifications_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "message_transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      message_transactions: {
+        Row: {
+          appointment_at: string | null
+          build: string
+          buyer_email: string
+          buyer_met_at: string | null
+          buyer_name: string
+          buyer_paid_at: string | null
+          conversation_id: string
+          created_at: string
+          id: string
+          kind: string
+          meetup_available_at: string | null
+          payment_methods: Json
+          payment_not_received_at: string | null
+          reference_id: string
+          reminder_sent_at: string | null
+          reported_at: string | null
+          seller_email: string
+          seller_met_at: string | null
+          seller_name: string
+          seller_paid_at: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          appointment_at?: string | null
+          build?: string
+          buyer_email: string
+          buyer_met_at?: string | null
+          buyer_name: string
+          buyer_paid_at?: string | null
+          conversation_id: string
+          created_at?: string
+          id?: string
+          kind?: string
+          meetup_available_at?: string | null
+          payment_methods?: Json
+          payment_not_received_at?: string | null
+          reference_id: string
+          reminder_sent_at?: string | null
+          reported_at?: string | null
+          seller_email: string
+          seller_met_at?: string | null
+          seller_name: string
+          seller_paid_at?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          appointment_at?: string | null
+          build?: string
+          buyer_email?: string
+          buyer_met_at?: string | null
+          buyer_name?: string
+          buyer_paid_at?: string | null
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          meetup_available_at?: string | null
+          payment_methods?: Json
+          payment_not_received_at?: string | null
+          reference_id?: string
+          reminder_sent_at?: string | null
+          reported_at?: string | null
+          seller_email?: string
+          seller_met_at?: string | null
+          seller_name?: string
+          seller_paid_at?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_transactions_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       moderation_blocks: {
         Row: {

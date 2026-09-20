@@ -303,6 +303,20 @@
     });
   };
 
+  /* ---- persistent, participant-only direct messages and transactions ---- */
+  W.messageAction = function (payload) {
+    payload = payload || {};
+    payload.build = payload.build || (location.pathname.indexOf("/beta") === 0 ? "beta" : "main");
+    return authPost("/api/public/messages", payload);
+  };
+  W.listMessages = function (build) { return W.messageAction({ action: "list", build: build }); };
+  W.openConversation = function (peerEmail, peerName, myName, build) { return W.messageAction({ action: "open", peerEmail: peerEmail, peerName: peerName, myName: myName, build: build }); };
+  W.sendMessage = function (payload) { payload.action = "send"; return W.messageAction(payload); };
+  W.markConversationRead = function (conversationId, build) { return W.messageAction({ action: "read", conversationId: conversationId, build: build }); };
+  W.createMessageTransaction = function (payload) { payload.action = "createTransaction"; return W.messageAction(payload); };
+  W.messageTransactionAction = function (payload) { payload.action = "transactionAction"; return W.messageAction(payload); };
+  W.messageAttachmentUrl = function (conversationId, path, build) { return W.messageAction({ action: "attachmentUrl", conversationId: conversationId, path: path, build: build }); };
+
   /* ---- account deletion (only ever deletes the signed-in student) ---- */
   W.deleteAccount = function (build) {
     return authPost("/api/public/account/delete", { build: build });

@@ -82,7 +82,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         name: "description",
         content: "The students-only campus marketplace. Verified with your .edu email.",
       },
-      { name: "theme-color", content: "#5A2BE0" },
+      { name: "theme-color", content: "#331174" },
       { property: "og:title", content: "VendU — Campus Marketplace" },
       {
         property: "og:description",

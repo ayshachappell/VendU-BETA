@@ -43,7 +43,7 @@
 <link rel="manifest" href="/beta/manifest.webmanifest?v=9">
 <meta name="theme-color" content="#331174">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="VendU">
 <link rel="icon" type="image/png" href="/favicon.png?v=9">
 <link rel="apple-touch-icon" href="/icons/icon-192.png?v=9">
@@ -692,6 +692,9 @@
   <input type="file" id="gphoto" accept="image/*" multiple style="display:none">
   <input type="file" id="ephoto" accept="image/*" style="display:none">
   <input type="file" id="cphoto" accept="image/*,application/pdf,.pdf,.doc,.docx" style="display:none">
+  <input type="file" id="msgCamera" accept="image/*" capture="environment" style="display:none">
+  <input type="file" id="msgMedia" accept="image/*" style="display:none">
+  <input type="file" id="msgFile" accept=".pdf,.doc,.docx,.txt,.zip,audio/*" style="display:none">
   <nav class="nav" id="nav">
     <div class="navitem on" data-tab="home"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5V21H3z"/></svg>Home</div>
     <div class="navitem" data-tab="market"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18l-1.5 12.5a1 1 0 0 1-1 .5H5.5a1 1 0 0 1-1-.5z"/><path d="M8 7a4 4 0 0 1 8 0"/></svg>Market</div>
@@ -971,7 +974,7 @@ try{if(window.VendU)VendU.consumeMagicLink();}catch(e){}
 var VERIFY_ERR='';try{if(/[?&]verify=expired/.test(location.search)){VERIFY_ERR='That link expired or was already used. Send yourself a new one.';history.replaceState(null,'',location.pathname);}if(location.hash==='#verified')history.replaceState(null,'',location.pathname);}catch(e){}
 var VERIFIED=!!(window.VendU&&VendU.student());
 let state={eduEmail:'',eduCodeSent:false,eduErr:VERIFY_ERR,tab:'home',home:'browse',cat:'All',q:'',near:false,mkt:'goods',formCat:'Food',foodType:'baked',eduOK:false,a1:false,a2:false,a3:false,submitted:false,avatar:'',gallery:[],themeColor:'#5A2BE0',book:null,openC:0,detail:0,isSeller:true,events:[],eventNotifications:[],about:"Tell buyers about your storefront — what you make or do, your vibe, and how to work with you.",services:[],referrals:0,isFounder:false,addMode:null,svcEdit:false,newPhoto:null,reviewOpen:false,reviewStars:5,booked:[],leaderboard:false,storefrontSetup:false,hasStore:false,mpays:[],avail:false,cheap:false,top:false,justReferred:-1,msgTo:0,openMC:0,bookSet:false,booking:{mode:'builtin',link:'',provider:'Calendly',days:{Mon:true,Tue:true,Wed:true,Thu:true,Fri:true,Sat:true,Sun:false},open:'09:00',close:'18:00',blackouts:[]},onboarded:false,tester:false,isCEO:false,isRealStudent:false,acctEmail:'',tourActive:false,userType:null,obStep:0,subscribed:false,subPrompt:false,eduDone:false,legalOK:false,agree1:false,agree2:false,agree3:false,cardName:'',cardNum:'',cardExp:'',cardCvc:'',studentName:'',vendorName:'',bookMethod:0,pays:[],socials:[],saved:[],savedView:false,sfView:'window',campus:campusById('fvsu'),campusPick:false,campusQ:'',hubView:'resources',openRes:-1,joinedOrgs:[],joinedGroups:[],intros:[],introText:'',classes:[{id:'c1',name:'BIOL 101',days:['Mon','Wed','Fri'],start:'09:00',end:'09:50',loc:'Founders Hall 204',c:0},{id:'c2',name:'MATH 241',days:['Tue','Thu'],start:'11:00',end:'12:15',loc:'Science Bldg 110',c:2},{id:'c3',name:'ENG 102',days:['Mon','Wed'],start:'14:00',end:'15:15',loc:'Humanities 3',c:4}],todos:[{id:'t1',text:'Finish BIOL lab report',done:false,due:'Today'},{id:'t2',text:'Email advisor about fall registration',done:false,due:'Tomorrow'},{id:'t3',text:'Read Chapter 5 for ENG',done:true,due:'None'}],plannerSub:'schedule',plannerDay:'',classForm:null,todoText:'',todoDue:'None',route:{stops:[],mode:'walk'},promo:{type:'none',pct:'20',ends:''},moreMenu:false,boosted:false,appTheme:'violet',themeView:false,myPostsView:false,thread:0,inboxView:false,joinedComm:[],groupView:null,userView:null,groupCreateView:false,assignMod:false,createGroup:null,groupPostText:'',gradYear:'',inbox:[{id:'ths1',name:'Fades by Marcus',init:'M',color:'#F0873B',unread:1,msgs:[['Fades by Marcus','Appreciate the booking! You want the usual taper this time? ✂️']]},{id:'ths2',name:'Tutor Tori',init:'T',color:'#C026D3',unread:0,msgs:[['You','Hey! Free to help with calc this week?'],['Tutor Tori','Yes! Thursday after 4 works 📚']]}]};
-const screen=document.getElementById('screen'),photo=document.getElementById('photo'),gphoto=document.getElementById('gphoto'),ephoto=document.getElementById('ephoto'),cphoto=document.getElementById('cphoto');
+const screen=document.getElementById('screen'),photo=document.getElementById('photo'),gphoto=document.getElementById('gphoto'),ephoto=document.getElementById('ephoto'),cphoto=document.getElementById('cphoto'),msgCamera=document.getElementById('msgCamera'),msgMedia=document.getElementById('msgMedia'),msgFile=document.getElementById('msgFile');
 const color=i=>COLORS[i%COLORS.length];
 const bg=h=>h.me?state.themeColor:color(h.c);
 function shade(hex,amt){let c=hex.replace('#','');if(c.length===3)c=c.split('').map(x=>x+x).join('');let r=parseInt(c.slice(0,2),16),g=parseInt(c.slice(2,4),16),b=parseInt(c.slice(4,6),16);const f=amt/100;const adj=v=>Math.round(amt<0?v*(1+f):v+(255-v)*f);return '#'+[adj(r),adj(g),adj(b)].map(v=>Math.max(0,Math.min(255,v)).toString(16).padStart(2,'0')).join('');}
@@ -1314,7 +1317,7 @@ function detail(id){
   document.getElementById('back').onclick=()=>{state.detail=0;state.reviewOpen=false;render();};
   if(h.me){const de=document.getElementById('doneEdit');if(de)de.onclick=()=>{state.detail=0;render();};const mp=document.getElementById('mePrev');if(mp)mp.onclick=()=>toast(state.booking.mode==='message'?'Students tap here to message you directly.':'Students tap here to book an appointment with you.');}
   else{const bb=document.getElementById('bookBtn');if(bb)bb.onclick=()=>{state.book={id:h.id,svc:h.services[0][0],date:'Sat May 3',time:'2:00 PM',step:'pick'};render();};
-    const mb=document.getElementById('msgBtn');if(mb)mb.onclick=()=>{openThread(h.name,h.init,bg(h));};
+    const mb=document.getElementById('msgBtn');if(mb)mb.onclick=()=>{openThread(h.name,h.init,bg(h),null,h.owner||'');};
     const sv=document.getElementById('saveBtn');if(sv)sv.onclick=()=>{state.saved=state.saved||[];var ix=state.saved.indexOf(h.id);if(ix>-1){state.saved.splice(ix,1);toast('Removed from saved');}else{state.saved.push(h.id);toast('Saved to your hustles ✓');}detail(id);};
     const wr=document.getElementById('writeRev');if(wr)wr.onclick=()=>{state.reviewOpen=!state.reviewOpen;detail(id);};
     screen.querySelectorAll('[data-star]').forEach(el=>el.onclick=()=>{state.reviewStars=+el.dataset.star;detail(id);});
@@ -1329,9 +1332,10 @@ function notifyBooking(h,b){
     var th=(state.inbox||[]).filter(function(t){return t.name===h.name;})[0];
     if(!th){th={id:'th'+(idc++),name:h.name,init:(h.name.trim()[0]||'?').toUpperCase(),color:'#5A2BE0',unread:0,msgs:[]};state.inbox.unshift(th);}
     th.msgs.push([activeName(),'\uD83D\uDCC5 Booking request: '+b.svc+' \u2014 '+when]);
-    th.msgs.push([h.name,'Confirmed! '+b.svc+' on '+when+'. You\u2019ll get a reminder 1 hour before \u23F0']);
+    th.msgs.push([h.name,'Confirmed! '+b.svc+' on '+when+'. You\u2019ll get a reminder 15 minutes before \u23F0']);
     th.unread=(th.unread||0)+1;
     if(window.VendU&&VendU.notifyAppointment)VendU.notifyAppointment({vendor:h.name,vendorId:h.id,service:b.svc,when:when,phone:state.phone||'',build:BUILD});
+    var peer=String(h.owner||'').toLowerCase();if(peer&&window.VendU&&VendU.openConversation)VendU.openConversation(peer,h.name,activeName(),BUILD).then(function(r){if(!r||!r.ok)return;var c=localThreadFromConversation(r.conversation);return VendU.createMessageTransaction({conversationId:c.id,kind:'booking',referenceId:'booking-'+h.id+'-'+bookTs(b.date,b.time),title:b.svc+' — '+when,role:'buyer',myName:activeName(),peerName:h.name,paymentMethods:h.pays||[],appointmentAt:new Date(bookTs(b.date,b.time)).toISOString(),build:BUILD});}).then(function(){syncMessages(false);}).catch(function(){});
   }catch(e){}
 }
 function bookingScreen(){
@@ -1340,8 +1344,8 @@ function bookingScreen(){
     markBooked(b.id,b.svc);
     const price=(h.services.find(s=>s[0]===b.svc)||['',''])[1];
     screen.innerHTML=`<div class="fade"><div class="topbar"><div class="brandrow"><div class="wordmark">Booked!</div></div></div>
-      <div class="book-wrap"><div class="done" style="padding:24px 0 8px"><div class="mark">${icon('<path d="M20 6 9 17l-5-5"/>',34)}</div><h3>You're booked with ${h.name}!</h3><p>A confirmation text just went out, and we'll remind you 1 hour before.</p></div>
-      <div class="sms"><div class="sms-h">${icon('<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',15)} Confirmation text</div><b>The VendU App ✓ You're booked with ${h.name}</b><br>Service: ${b.svc} (${price})<br>When: ${b.date} · ${b.time}<br>Where: on campus — they'll confirm the spot<br>Pay: ${h.pays.join(', ')} · you keep 100%<br><span style="opacity:.7">We'll text a reminder 1 hour before. Reply STOP to opt out.</span></div>
+      <div class="book-wrap"><div class="done" style="padding:24px 0 8px"><div class="mark">${icon('<path d="M20 6 9 17l-5-5"/>',34)}</div><h3>You're booked with ${h.name}!</h3><p>A confirmation text just went out, and we'll remind you 15 minutes before.</p></div>
+      <div class="sms"><div class="sms-h">${icon('<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',15)} Confirmation text</div><b>The VendU App ✓ You're booked with ${h.name}</b><br>Service: ${b.svc} (${price})<br>When: ${b.date} · ${b.time}<br>Where: on campus — they'll confirm the spot<br>Pay: ${h.pays.join(', ')} · you keep 100%<br><span style="opacity:.7">We'll alert you 15 minutes before. Reply STOP to opt out.</span></div>
       <a class="submit" href="${mapsUrl('Fort Valley State University')}" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;margin-top:14px;background:var(--violet)">Get directions</a>${calBtn(calEvent(h.name+" — "+b.svc,bookTs(b.date,b.time),null,"On campus","Booked on The VendU App with "+h.name),"Add to calendar")}<button class="submit" id="bdone" style="margin-top:10px;background:var(--ink)">Done</button><button class="submit" id="leaveRev" style="margin-top:10px;background:transparent;color:var(--violet);border:1px solid var(--violet)">Leave a review for ${h.name}</button></div></div>`;
     document.getElementById('bdone').onclick=()=>{state.book=null;render();};var lr=document.getElementById('leaveRev');if(lr)lr.onclick=()=>{var sid=b.id;state.book=null;state.detail=sid;state.reviewOpen=true;detail(sid);screen.scrollTop=0;};return;
   }
@@ -1351,7 +1355,7 @@ function bookingScreen(){
       <div class="book-lbl">Choose a service</div>${h.services.map(s=>`<div class="opt ${b.svc===s[0]?'on':''}" data-svc="${s[0]}">${s[0]}<span class="p" style="font-weight:700">${s[1]}</span></div>`).join('')}
       <div class="book-lbl">Pick a day</div><div class="pillrow">${dates.map(d=>`<div class="tpick ${b.date===d?'on':''}" data-date="${d}">${d}</div>`).join('')}</div>
       <div class="book-lbl">Pick a time</div><div class="pillrow">${times.map(t=>{var taken=(BOOKED[b.id]||[]).indexOf(b.date+"|"+t)>-1;return `<div class="tpick ${b.time===t?'on':''} ${taken?'taken':''}" ${taken?'':`data-time="${t}"`}>${t}${taken?' · booked':''}</div>`}).join('')}</div>
-      <div class="book-lbl">Your mobile number <span style="color:var(--mist);font-weight:500">· for confirmation & reminder texts</span></div><input id="bphone" type="tel" inputmode="tel" placeholder="(555) 555-5555" value="${state.phone||''}" style="width:100%;box-sizing:border-box;padding:13px 14px;border:1px solid var(--line);border-radius:13px;font:inherit;font-size:15px;background:var(--card)"><div class="sublock" style="margin-top:18px">${icon('<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',16)}Adds to your calendar + sends a confirmation text now and a reminder 1 hour before.</div>
+      <div class="book-lbl">Your mobile number <span style="color:var(--mist);font-weight:500">· for confirmation & reminder texts</span></div><input id="bphone" type="tel" inputmode="tel" placeholder="(555) 555-5555" value="${state.phone||''}" style="width:100%;box-sizing:border-box;padding:13px 14px;border:1px solid var(--line);border-radius:13px;font:inherit;font-size:15px;background:var(--card)"><div class="sublock" style="margin-top:18px">${icon('<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',16)}Adds to your calendar + sends a confirmation text now and a reminder 15 minutes before.</div>
       <button class="submit" id="confirm">Confirm booking</button></div></div>`;
   document.getElementById('bback').onclick=()=>{state.book=null;detail(h.id);};
   screen.querySelectorAll('[data-svc]').forEach(el=>el.onclick=()=>{state.book.svc=el.dataset.svc;bookingScreen();});
@@ -1409,7 +1413,7 @@ function market(){
   screen.querySelectorAll('[data-mkt]').forEach(el=>el.onclick=()=>{state.mkt=el.dataset.mkt;state.openMC=0;market();});conveyorHint(screen.querySelector('.hubseg'),'market');
   var _ph=document.getElementById('postHousing');if(_ph)_ph.onclick=()=>toast('Paid housing listings arrive in the full build 🏠');
   var _pj=document.getElementById('postJob');if(_pj)_pj.onclick=()=>toast('Employer job posts arrive in the full build 💼');
-  screen.querySelectorAll('[data-mmsg]').forEach(el=>el.onclick=()=>{const it=findMkt(el.dataset.mmsg);if(it)safetyGate('About \u201c'+(it.name||it.txt||'this item')+'\u201d',()=>openThread(it.by||it.who,it.bi||it.in,it.uc||color(it.c||0),it.name?{id:it.id,item:it.name,seller:it.by||it.who,pays:it.pays||[]}:null));});
+  screen.querySelectorAll('[data-mmsg]').forEach(el=>el.onclick=()=>{const it=findMkt(el.dataset.mmsg);if(it)safetyGate('About \u201c'+(it.name||it.txt||'this item')+'\u201d',()=>openThread(it.by||it.who,it.bi||it.in,it.uc||color(it.c||0),{id:it.id,item:it.name||it.txt||'Campus request',seller:it.by||it.who,pays:it.pays||[],kind:it.name?'market':'request'},it.owner||''));});
   screen.querySelectorAll('[data-user]').forEach(function(el){el.onclick=function(){var p=el.dataset.user.split('␟');openUser(p[0],p[1],+p[2]);};});
   screen.querySelectorAll('[data-mlike]').forEach(el=>el.onclick=()=>{const it=findMkt(el.dataset.mlike);if(it){it.liked=!it.liked;it.likes+=it.liked?1:-1;market();}});
   screen.querySelectorAll('[data-mcmt]').forEach(el=>el.onclick=()=>{const id=el.dataset.mcmt;state.openMC=state.openMC===id?0:id;market();setTimeout(()=>{const i=document.getElementById('mci');if(i)i.focus();},30);});
@@ -2289,7 +2293,7 @@ function themeScreen(){
   screen.querySelectorAll('[data-theme]').forEach(function(el){el.onclick=function(){state.appTheme=el.dataset.theme;applyTheme(el.dataset.theme);toast('Theme applied 🎨');themeScreen();};});
 }
 const BELL_PATH='<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>';
-function unreadTotal(){return state.inbox.reduce(function(n,t){return n+(t.unread||0);},0)+(state.eventNotifications||[]).filter(function(n){return !n.read_at;}).length;}
+function unreadTotal(){return state.inbox.reduce(function(n,t){return n+(t.unread||0);},0)+(state.eventNotifications||[]).filter(function(n){return !n.read_at;}).length+(state.messageNotifications||[]).filter(function(n){return !n.read_at;}).length;}
 function bellHTML(){var n=unreadTotal();var av=state.avatar?'background-image:url('+state.avatar+')':'';return '<button class="bell hdr-av'+(state.avatar?' has-photo':' no-photo')+'" onclick="openInbox()" style="'+av+'" aria-label="Notifications'+(n?' \u2014 '+n+' unread':'')+'">'+(state.avatar?'':icon(BELL_PATH,20))+(n?'<span class="bell-dot">'+(n>99?'99+':n)+'</span>':'')+'</button>';}
 function showProfilePhoto(src,source){var z=document.createElement('div');z.className='photo-zoom';z.setAttribute('role','dialog');z.setAttribute('aria-modal','true');z.setAttribute('aria-label','Enlarged profile photo');var close='<button aria-label="Close enlarged photo">×</button>';if(src){z.innerHTML=close+'<img src="'+String(src).replace(/"/g,'&quot;')+'" alt="Profile photo">';}else{var style=source?source.getAttribute('style')||'':'';var initial=source?(source.textContent||'?').trim().slice(0,1):'?';z.innerHTML=close+'<div class="photo-zoom-initial" style="'+style.replace(/"/g,'&quot;')+'">'+initial.replace(/[<>&]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];})+'</div>';}z.onclick=function(e){if(e.target===z||e.target.tagName==='BUTTON')z.remove();};document.querySelector('.device').appendChild(z);}
 function wirePhotoZoom(){screen.querySelectorAll('[data-zoom-photo]').forEach(function(el){var src=el.getAttribute('data-zoom-photo')||'';el.style.cursor='zoom-in';el.setAttribute('role','button');el.setAttribute('tabindex','0');el.setAttribute('aria-label','Enlarge profile picture');var open=function(){showProfilePhoto(src,el);};el.onclick=open;el.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}};});}
@@ -2301,22 +2305,34 @@ function openPerson(name,init,col){
   if(v){state.thread=0;state.inboxView=false;state.userView=null;return openDetail(v.id);}
   openUser(name,init,col);
 }
-function openThread(name,init,color,deal){
-  name=name||'a seller';
-  var th=state.inbox.filter(function(t){return t.name===name;})[0];
-  if(!th){th={id:'th'+(idc++),name:name,init:(init||name.trim()[0]||'?').toUpperCase(),color:color||'#5A2BE0',unread:0,msgs:[[name,'Hey! Thanks for reaching out 👋 What can I do for you?']]};state.inbox.unshift(th);}
-  if(deal){th.deal=th.deal&&th.deal.id===deal.id?th.deal:{id:deal.id,item:deal.item,seller:deal.seller,pays:deal.pays||[],role:deal.role||'buyer',buyerMet:false,sellerMet:false,buyerPaid:false,paid:false};}
+function localThreadFromConversation(c){
+  var th=(state.inbox||[]).filter(function(t){return t.serverId===c.id||t.id===c.id;})[0];
+  if(!th){th={id:c.id,serverId:c.id,name:c.name||'Student',peerEmail:c.peerEmail||'',init:(c.name||'?').charAt(0).toUpperCase(),color:'#5A2BE0',unread:0,msgs:[]};state.inbox.unshift(th);}
+  th.serverId=c.id;th.peerEmail=c.peerEmail||th.peerEmail;th.name=c.name||th.name;th.unread=c.unread||0;
+  th.msgs=(c.messages||[]).map(function(m){return [m.senderEmail&&m.senderEmail===myAccountEmail()?activeName():(m.senderName||c.name),m.body||'',m];});
+  th.transactions=c.transactions||[];if(th.transactions.length)th.deal=serverDeal(th.transactions[th.transactions.length-1]);return th;
+}
+function myAccountEmail(){try{var s=window.VendU&&VendU.student&&VendU.student();return String((s&&s.email)||'').toLowerCase();}catch(e){return '';}}
+function serverDeal(t){if(!t)return null;return {serverId:t.id,id:t.reference_id,item:t.title,seller:t.seller_name,pays:t.payment_methods||[],role:String(t.seller_email||'').toLowerCase()===myAccountEmail()?'seller':'buyer',buyerMet:!!t.buyer_met_at,sellerMet:!!t.seller_met_at,buyerPaid:!!t.buyer_paid_at,paid:!!t.seller_paid_at,paidAt:t.seller_paid_at?new Date(t.seller_paid_at).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}):'',availableAt:t.meetup_available_at,appointmentAt:t.appointment_at};}
+function syncMessages(redraw){if(!window.VendU||!VendU.listMessages||!myAccountEmail())return Promise.resolve();return VendU.listMessages(BUILD).then(function(r){if(!r||!r.ok)return;(r.conversations||[]).forEach(localThreadFromConversation);state.messageNotifications=r.notifications||[];if(redraw){if(state.thread)messageScreen();else if(state.inboxView)inboxScreen();}}).catch(function(){});}
+function transactionFor(th){return th&&th.deal;}
+function openThread(name,init,color,deal,peerEmail){
+  name=name||'a seller';peerEmail=String(peerEmail||'').toLowerCase();
+  var th=state.inbox.filter(function(t){return (peerEmail&&t.peerEmail===peerEmail)||t.name===name;})[0];
+  if(!th){th={id:'th'+(idc++),name:name,peerEmail:peerEmail,init:(init||name.trim()[0]||'?').toUpperCase(),color:color||'#5A2BE0',unread:0,msgs:[[name,'Hey! Thanks for reaching out 👋 What can I do for you?']]};state.inbox.unshift(th);}
+  if(deal){th.deal=th.deal&&th.deal.id===deal.id?th.deal:{id:deal.id,item:deal.item,seller:deal.seller,pays:deal.pays||[],role:deal.role||'buyer',buyerMet:false,sellerMet:false,buyerPaid:false,paid:false,appointmentAt:deal.appointmentAt||null,availableAt:deal.appointmentAt?new Date(Date.parse(deal.appointmentAt)-900000).toISOString():null};}
   th.unread=0;state.thread=th.id;state.inboxView=true;state.userView=null;render();
+  if(peerEmail&&window.VendU&&VendU.openConversation)VendU.openConversation(peerEmail,name,activeName(),BUILD).then(function(r){if(!r||!r.ok)return;th=localThreadFromConversation(r.conversation);state.thread=th.id;if(deal)VendU.createMessageTransaction({conversationId:th.id,kind:deal.kind||'market',referenceId:String(deal.id),title:deal.item,role:deal.role||'buyer',myName:activeName(),peerName:name,paymentMethods:deal.pays||[],appointmentAt:deal.appointmentAt||null,build:BUILD}).then(function(){syncMessages(true);});else messageScreen();});
 }
 function safetyGate(ctx,cb){try{if(window.VendU&&VendU.meetSafety){VendU.meetSafety(ctx,cb);return;}}catch(e){}cb();}
 function dealRole(d){var mine=[activeName(),state.studentName,state.vendorName].filter(Boolean).map(function(n){return String(n).trim().toLowerCase();});return d.role==='seller'||mine.indexOf(String(d.seller||'').trim().toLowerCase())>-1?'seller':'buyer';}
 function dealStripHTML(th){
-  var d=th&&th.deal;if(!d)return '';
+  var d=transactionFor(th);if(!d)return '';
   var esc=function(x){return String(x||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
   var isSeller=dealRole(d)==='seller',met=isSeller?(d.sellerMet||d.met):(d.buyerMet||d.met);
   var labels=(d.pays||[]).map(function(p){return esc(p.app);}).join(' \u00b7 ');
-  var h='<div class="dealbar"><div class="dealt">\uD83D\uDD12 Safe meet-up \u00b7 '+esc(d.item)+'</div>';
-  if(!met){h+='<div class="dealn">Meet in a busy spot on campus. Never send money before you meet.'+(labels&&!isSeller?' '+esc(d.seller)+' accepts '+labels+'.':'')+'</div><button class="dealbtn" id="dealmet">\uD83E\uDD1D I\u2019m with the '+(isSeller?'buyer':'seller')+'</button>';}
+  var locked=d.availableAt&&Date.parse(d.availableAt)>Date.now();var h='<div class="dealbar '+(locked?'locked':'')+'"><div class="dealt">\uD83D\uDD12 Safe meet-up \u00b7 '+esc(d.item)+'</div>';
+  if(locked){h+='<div class="dealn">Meet-up confirmation opens 15 minutes before your appointment.</div><div class="dealwhen">'+new Date(d.availableAt).toLocaleString()+'</div>';}else if(!met){h+='<div class="dealn">Meet in a busy spot on campus. Never send money before you meet.'+(labels&&!isSeller?' '+esc(d.seller)+' accepts '+labels+'.':'')+'</div><button class="dealbtn" id="dealmet">\uD83E\uDD1D I\u2019m with the '+(isSeller?'buyer':'seller')+'</button>';}
   else if(!d.paid&&d.buyerPaid&&!isSeller){h+='<div class="dealn">You marked this payment as sent. Waiting for the seller to confirm it arrived.</div><button class="dealbtn ghost" id="dealrep">\u26A0\uFE0E Report this deal</button>';}
   else if(!d.paid){h+='<div class="dealn">'+(isSeller?'Confirm only after the buyer\u2019s payment lands.':'Confirm only after you have paid the seller in person.')+'</div><div class="dealrow"><button class="dealbtn" id="dealpaid">'+(isSeller?'Seller: I got paid \u2713':'Buyer: I paid \u2713')+'</button><button class="dealbtn ghost" id="dealnot">Not yet</button></div><button class="dealbtn ghost" id="dealrep" style="margin-top:6px">\u26A0\uFE0E Report this deal</button>';}
   else{h+='<div class="dealok">\u2713 Payment confirmed \u00b7 '+esc(d.paidAt)+'</div><button class="dealbtn ghost" id="dealrep" style="margin-top:6px">\u26A0\uFE0E Report this deal</button>';}
@@ -2325,51 +2341,71 @@ function dealStripHTML(th){
 function wireDealStrip(th){
   var d=th&&th.deal;if(!d)return;
   var isSeller=dealRole(d)==='seller';
+  var serverAct=function(event){if(d.serverId&&th.serverId&&window.VendU&&VendU.messageTransactionAction)return VendU.messageTransactionAction({conversationId:th.serverId,transactionId:d.serverId,event:event,build:BUILD}).then(function(r){if(!r||!r.ok)toast((r&&r.message)||'Could not update this meet-up.');else syncMessages(true);});return Promise.resolve();};
   var now=function(){return new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});};
   var met=document.getElementById('dealmet');
   if(met)met.onclick=function(){safetyGate('Meeting '+(isSeller?'the buyer':d.seller)+' for \u201c'+d.item+'\u201d.',function(){
-    if(isSeller)d.sellerMet=true;else d.buyerMet=true;d.metAt=now();
+    if(isSeller)d.sellerMet=true;else d.buyerMet=true;d.metAt=now();serverAct('met');
     th.msgs.push(['VendU','\uD83E\uDD1D '+(isSeller?'Seller confirmed they are with the buyer.':'Buyer confirmed they are with the seller.')]);
     if(!isSeller){var pays=(d.pays||[]).filter(function(p){return p.handle;});th.msgs.push(['VendU',pays.length?('\uD83D\uDD10 '+d.seller+' accepts: '+pays.map(function(p){return p.app+' \u2014 '+p.handle;}).join(' \u00b7 ')+'. Shared here only, for you two.'):('\uD83D\uDCB5 '+d.seller+' hasn\u2019t added payment accounts \u2014 agree on cash in person.')]);}
     th.msgs.push(['VendU',isSeller?'Seller: confirm below only when the payment lands.':'Buyer: confirm below only after you pay in person.']);
     messageScreen();
   });};
   var paid=document.getElementById('dealpaid');
-  if(paid)paid.onclick=function(){if(isSeller){d.paid=true;d.paidAt=now();th.msgs.push(['VendU','\u2713 Seller confirmed payment at '+d.paidAt+'. Both of you have this record.']);toast('Payment confirmed \u2713');}else{d.buyerPaid=true;th.msgs.push(['VendU','\u2713 Buyer says payment was sent. Seller: confirm when it lands.']);toast('Payment marked as sent \u2713');}messageScreen();};
+  if(paid)paid.onclick=function(){serverAct('paid');if(isSeller){d.paid=true;d.paidAt=now();th.msgs.push(['VendU','\u2713 Seller confirmed payment at '+d.paidAt+'. Both of you have this record.']);toast('Payment confirmed \u2713');}else{d.buyerPaid=true;th.msgs.push(['VendU','\u2713 Buyer says payment was sent. Seller: confirm when it lands.']);toast('Payment marked as sent \u2713');}messageScreen();};
   var not=document.getElementById('dealnot');
-  if(not)not.onclick=function(){th.msgs.push(['VendU',isSeller?'\u23F3 Seller says payment hasn\u2019t arrived yet.':'\u23F3 Buyer says payment has not been sent yet.']);messageScreen();};
+  if(not)not.onclick=function(){serverAct('notYet');th.msgs.push(['VendU',isSeller?'\u23F3 Seller says payment hasn\u2019t arrived yet.':'\u23F3 Buyer says payment has not been sent yet.']);messageScreen();};
   var rep=document.getElementById('dealrep');
-  if(rep)rep.onclick=function(){if(window.VendU&&VendU.openReport)VendU.openReport('post',String(d.id||''),d.item);else toast('Reporting is unavailable right now.');};
+  if(rep)rep.onclick=function(){serverAct('report');if(window.VendU&&VendU.openReport)VendU.openReport('post',String(d.id||''),d.item);else toast('Reporting is unavailable right now.');};
 }
 function inboxScreen(){
   document.getElementById('nav').classList.add('messages-open');
   var list=state.inbox;
   var safe=function(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
   var h='<div class="topbar"><div class="brandrow"><div class="wordmark">Messages</div><div class="locpill" id="inbClose" style="cursor:pointer">\u2715 Close</div></div></div><div class="enter" style="padding:8px 0 24px">';
+  if((state.messageNotifications||[]).filter(function(n){return !n.read_at;}).length){h+='<div class="sec-h">Message activity</div>'+state.messageNotifications.filter(function(n){return !n.read_at;}).slice(0,5).map(function(n){return '<div class="inbox-row" data-notifyth="'+safe(n.conversation_id)+'"><div class="detail-av" style="width:46px;height:46px;font-size:20px;border-radius:13px;background:var(--violet);color:#fff;flex:none">💬</div><div style="flex:1;min-width:0"><div class="inbox-name">'+(n.kind==='meetup'?'Meet-up reminder':'New message')+'</div><div class="inbox-prev">'+safe(n.message)+'</div></div><span class="inbox-badge">1</span></div>';}).join('');}
   if((state.eventNotifications||[]).length){h+='<div class="sec-h">Event activity</div>'+state.eventNotifications.map(function(n){return '<div class="inbox-row"><div class="detail-av" style="width:46px;height:46px;font-size:20px;border-radius:13px;background:var(--violet);color:#fff;flex:none">🎉</div><div style="flex:1;min-width:0"><div class="inbox-name">Event update</div><div class="inbox-prev">'+safe(n.message)+'</div></div>'+(!n.read_at?'<span class="inbox-badge">1</span>':'')+'</div>';}).join('');}
   if(!list.length){h+='<div class="empty" style="padding:50px 30px">No messages yet.<br>Reach out to a vendor or someone\u2019s Market post to start a chat.</div>';}
   else{h+=list.map(function(t){var last=t.msgs[t.msgs.length-1];var prev=((last[0]==='You'||last[0]===state.studentName||last[0]===state.vendorName)?'You: ':'')+last[1];return '<div class="inbox-row" data-openth="'+t.id+'"><div class="detail-av" data-openav="'+t.id+'" role="button" aria-label="View '+safe(t.name)+' profile" style="width:46px;height:46px;font-size:18px;border-radius:13px;background:'+t.color+';color:#fff;flex:none;cursor:pointer">'+t.init+'</div><div style="flex:1;min-width:0"><div class="inbox-name">'+t.name+'</div><div class="inbox-prev">'+prev+'</div></div>'+(t.unread?'<span class="inbox-badge">'+t.unread+'</span>':'')+'</div>';}).join('');}
   h+='</div>';
   screen.innerHTML=h;
   document.getElementById('inbClose').onclick=function(){state.inboxView=false;render();};
-  screen.querySelectorAll('[data-openav]').forEach(function(el){el.onclick=function(e){e.stopPropagation();var t=state.inbox.filter(function(x){return x.id===el.dataset.openav;})[0];if(t)openPerson(t.name,t.init,t.color);};});screen.querySelectorAll('[data-openth]').forEach(function(el){el.onclick=function(){var t=state.inbox.filter(function(x){return x.id===el.dataset.openth;})[0];if(t)t.unread=0;state.thread=el.dataset.openth;messageScreen();};});
+  screen.querySelectorAll('[data-openav]').forEach(function(el){el.onclick=function(e){e.stopPropagation();var t=state.inbox.filter(function(x){return x.id===el.dataset.openav;})[0];if(t)openPerson(t.name,t.init,t.color);};});screen.querySelectorAll('[data-openth]').forEach(function(el){el.onclick=function(){var t=state.inbox.filter(function(x){return x.id===el.dataset.openth;})[0];if(t)t.unread=0;state.thread=el.dataset.openth;messageScreen();};});screen.querySelectorAll('[data-notifyth]').forEach(function(el){el.onclick=function(){var t=state.inbox.filter(function(x){return x.id===el.dataset.notifyth;})[0];if(t){state.thread=t.id;messageScreen();}};});
+}
+function msgEsc(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function messageBubble(m){var meta=m[2]||{},me=m[0]==='You'||m[0]===state.studentName||m[0]===state.vendorName||String(meta.senderEmail||'').toLowerCase()===myAccountEmail();var out='<div class="bubble '+(me?'me':'')+'">'+msgEsc(m[1]);if(meta.attachment){var a=meta.attachment;out+='<button class="bubble-attachment" data-attachment="'+msgEsc(a.path||'')+'" data-thread="'+msgEsc(state.thread)+'">'+(meta.kind==='image'?'📷 Photo':meta.kind==='voice'?'🎤 Voice message':meta.kind==='gif'?'GIF / sticker':'📎 '+msgEsc(a.name||meta.kind||'Attachment'))+'</button>';}return out+'</div>';}
+function fileData(file,cb){if(!file)return;if(file.size>8*1024*1024){toast('Attachments must be 8 MB or smaller.');return;}var r=new FileReader();r.onload=function(){cb({dataUrl:r.result,fileName:file.name||'attachment',kind:/^image\//.test(file.type)?'image':/^audio\//.test(file.type)?'voice':'file'});};r.onerror=function(){toast('Could not read that attachment.');};r.readAsDataURL(file);}
+function sendThreadMessage(th,payload){payload=payload||{};var text=String(payload.body||'').trim();if(!text&&!payload.dataUrl&&!payload.attachment)return;th.msgs.push([activeName(),text,payload]);messageScreen();if(th.serverId&&window.VendU&&VendU.sendMessage)VendU.sendMessage({conversationId:th.serverId,body:text,kind:payload.kind||'text',dataUrl:payload.dataUrl||'',fileName:payload.fileName||'',attachment:payload.attachment||null,senderName:activeName(),build:BUILD}).then(function(r){if(!r||!r.ok)toast((r&&r.message)||'Message could not be sent.');else syncMessages(true);});}
+function wireMessageTools(th){
+  function choose(el){el.value='';el.click();}
+  var cam=document.getElementById('toolCamera'),pics=document.getElementById('toolPhotos'),voice=document.getElementById('toolVoice'),gif=document.getElementById('toolGif'),more=document.getElementById('toolMore');
+  if(cam)cam.onclick=function(){choose(msgCamera);};if(pics)pics.onclick=function(){choose(msgMedia);};
+  msgCamera.onchange=function(){fileData(msgCamera.files[0],function(p){sendThreadMessage(th,p);});};msgMedia.onchange=function(){fileData(msgMedia.files[0],function(p){sendThreadMessage(th,p);});};msgFile.onchange=function(){fileData(msgFile.files[0],function(p){sendThreadMessage(th,p);});};
+  if(gif)gif.onclick=function(){var q=prompt('Search GIFs or choose a sticker:','Celebration');if(q)sendThreadMessage(th,{kind:'sticker',body:'🎉 '+q,attachment:{label:q}});};
+  if(more)more.onclick=function(){var m=document.getElementById('msgMore');if(m)m.hidden=!m.hidden;};
+  var mf=document.getElementById('moreFile');if(mf)mf.onclick=function(){choose(msgFile);};
+  var ml=document.getElementById('moreLocation');if(ml)ml.onclick=function(){if(!navigator.geolocation)return toast('Location is unavailable.');navigator.geolocation.getCurrentPosition(function(p){var u='https://maps.google.com/?q='+p.coords.latitude+','+p.coords.longitude;sendThreadMessage(th,{kind:'location',body:'📍 Shared location',attachment:{url:u,label:'Open map'}});},function(){toast('Location permission was not granted.');});};
+  var mc=document.getElementById('moreContact');if(mc)mc.onclick=function(){var c=prompt('Enter a name and phone number to share:');if(c)sendThreadMessage(th,{kind:'contact',body:'👤 '+c,attachment:{label:c}});};
+  if(voice)voice.onclick=async function(){if(!navigator.mediaDevices||!window.MediaRecorder)return toast('Voice recording is not supported on this device.');if(voice.dataset.recording==='1'){window._venduRecorder.stop();voice.dataset.recording='0';voice.textContent='🎤';return;}try{var stream=await navigator.mediaDevices.getUserMedia({audio:true}),parts=[],rec=new MediaRecorder(stream);window._venduRecorder=rec;rec.ondataavailable=function(e){parts.push(e.data);};rec.onstop=function(){stream.getTracks().forEach(function(t){t.stop();});var blob=new Blob(parts,{type:rec.mimeType||'audio/webm'}),file=new File([blob],'voice-message.webm',{type:blob.type});fileData(file,function(p){sendThreadMessage(th,p);});};rec.start();voice.dataset.recording='1';voice.textContent='■';toast('Recording — tap stop to send.');}catch(e){toast('Microphone permission was not granted.');}};
+  screen.querySelectorAll('[data-attachment]').forEach(function(el){el.onclick=function(){var meta=(th.msgs||[]).map(function(x){return x[2]&&x[2].attachment;}).filter(function(a){return a&&a.path===el.dataset.attachment;})[0];if(meta&&meta.url)return window.open(meta.url,'_blank');if(!el.dataset.attachment)return;VendU.messageAttachmentUrl(th.serverId,el.dataset.attachment,BUILD).then(function(r){if(r&&r.url)window.open(r.url,'_blank');});};});
 }
 function messageScreen(){
-  document.getElementById('nav').classList.add('messages-open');
+  document.getElementById('nav').classList.add('message-active');
   var th=state.inbox.filter(function(t){return t.id===state.thread;})[0];
   if(!th){state.thread=0;return render();}
   var _deal=dealStripHTML(th);
-  screen.innerHTML='<div class="fade message-view" style="height:100%;display:flex;flex-direction:column">'
-    +'<div class="topbar"><div class="brandrow"><div style="display:flex;align-items:center;gap:11px"><div class="detail-av" id="thav" style="width:40px;height:40px;font-size:17px;border-radius:12px;background:'+th.color+';color:#fff;cursor:pointer">'+th.init+'</div><div class="wordmark" style="font-size:18px">'+th.name+'</div></div><div class="locpill" id="msgBack" style="cursor:pointer">\u2039 Inbox</div></div></div>'
-    +'<div class="msg-thread" id="thread">'+th.msgs.map(function(m){return '<div class="bubble '+((m[0]==='You'||m[0]===state.studentName||m[0]===state.vendorName)?'me':'')+'">'+m[1]+'</div>';}).join('')+'</div>'
-    +_deal
-    +'<div class="msg-bar"><input id="msgInput" placeholder="Message '+th.name.split(' ')[0]+'\u2026"><button id="msgSend">Send</button></div></div>';
-  document.getElementById('msgBack').onclick=function(){state.thread=0;render();};
+  screen.innerHTML='<div class="fade message-view">'
+    +'<div class="topbar"><div class="brandrow"><div style="display:flex;align-items:center;gap:11px"><div class="detail-av" id="thav" style="width:40px;height:40px;font-size:17px;border-radius:12px;background:'+th.color+';color:#fff;cursor:pointer">'+th.init+'</div><div class="wordmark" style="font-size:18px">'+msgEsc(th.name)+'</div></div><div class="locpill" id="msgBack" style="cursor:pointer">‹ Inbox</div></div></div>'
+    +'<div class="msg-thread" id="thread">'+th.msgs.map(messageBubble).join('')+'</div>'+_deal
+    +'<div class="msg-tools"><button class="msg-tool" id="toolCamera" aria-label="Take photo">📷</button><button class="msg-tool" id="toolVoice" aria-label="Record voice message">🎤</button><button class="msg-tool" id="toolPhotos" aria-label="Choose photo">🖼️</button><button class="msg-tool" id="toolGif" aria-label="GIFs and stickers">GIF</button><button class="msg-tool" id="toolMore" aria-label="More attachments">＋</button></div>'
+    +'<div class="msg-more" id="msgMore" hidden><button id="moreFile">📎 File</button><button id="moreLocation">📍 Location</button><button id="moreContact">👤 Contact</button></div>'
+    +'<div class="msg-bar"><input id="msgInput" placeholder="Message '+msgEsc(th.name.split(' ')[0])+'…"><button id="msgSend">Send</button></div></div>';
+  document.getElementById('msgBack').onclick=function(){state.thread=0;render();syncMessages(true);};
   var _ta=document.getElementById('thav');if(_ta)_ta.onclick=function(){openPerson(th.name,th.init,th.color);};
-  wireDealStrip(th);
-  var send=function(){var i=document.getElementById('msgInput');if(i.value.trim()){th.msgs.push([activeName(),i.value.trim()]);messageScreen();}};
-  document.getElementById('msgSend').onclick=send;
-  document.getElementById('msgInput').onkeydown=function(e){if(e.key==='Enter')send();};
+  wireDealStrip(th);wireMessageTools(th);
+  var send=function(){var i=document.getElementById('msgInput');if(i&&i.value.trim())sendThreadMessage(th,{body:i.value.trim(),kind:'text'});};
+  document.getElementById('msgSend').onclick=send;document.getElementById('msgInput').onkeydown=function(e){if(e.key==='Enter')send();};
+  if(th.serverId&&window.VendU&&VendU.markConversationRead)VendU.markConversationRead(th.serverId,BUILD);
   var thr=document.getElementById('thread');if(thr)thr.scrollTop=thr.scrollHeight;
 }
 var _hinted={};
@@ -2406,7 +2442,7 @@ function setDemoVisible(on){Object.keys(_DEMOARR).forEach(function(k){on?_demoFi
 function refreshDemo(){setDemoVisible(!!(state.tester||state.tourActive));}
 window.VendU=window.VendU||{};VendU.onTour=function(active){state.tourActive=!!active;refreshDemo();try{render();}catch(e){}};
 setDemoVisible(false);
-state.campusEvents=[];state.campusResults=[];applyCampusTheme();state.booked=loadBooked();try{state.phone=localStorage.getItem('vendu_phone')||'';}catch(e){state.phone='';}setTimeout(function(){loadCampusEvents();loadEventNotifications();},500);setInterval(loadEventNotifications,15000);try{document.addEventListener('visibilitychange',function(){if(!document.hidden)loadEventNotifications();});window.addEventListener('focus',loadEventNotifications);}catch(e){}
+state.campusEvents=[];state.campusResults=[];applyCampusTheme();state.booked=loadBooked();try{state.phone=localStorage.getItem('vendu_phone')||'';}catch(e){state.phone='';}setTimeout(function(){loadCampusEvents();loadEventNotifications();},500);setInterval(loadEventNotifications,15000);setTimeout(function(){syncMessages(false);},900);setInterval(function(){if(state.inboxView||state.thread)syncMessages(true);},15000);try{document.addEventListener('visibilitychange',function(){if(!document.hidden)loadEventNotifications();});window.addEventListener('focus',loadEventNotifications);}catch(e){}
 
 function lintKey(e){return String(e.title||'')+'|'+String(e.ts||'');}
 function localInt(e){state.localInt=state.localInt||{};return !!state.localInt[lintKey(e)];}
@@ -2463,7 +2499,7 @@ try{(function(){
   document.addEventListener('pointercancel',function(){cur=null;},true);
 })();}catch(e){}
 
-function render(){document.getElementById('nav').classList.remove('messages-open');try{retagDemo();}catch(e){}if(state.onboarded&&!state.pwCreate&&!state.homeConfirm&&!state.homePick&&(!state.isRealStudent||homeCampusSaved())&&window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour();},300);if(!state.onboarded){if(state.storefrontSetup)return add();return onboarding();}if(state.pwCreate)return pwCreateScreen();if(state.moreMenu)return settingsScreen();if(state.campusPick)return campusPicker();if(state.homeConfirm)return homeConfirmScreen();if(state.themeView)return themeScreen();if(state.book)return bookingScreen();if(state.bookSet)return bookingSettings();if(state.userView)return userProfile();if(state.thread)return messageScreen();if(state.inboxView)return inboxScreen();if(state.groupCreateView)return createGroupScreen();if(state.groupView)return groupPage();if(state.detail)return detail(state.detail);if(state.leaderboard)return leaderboard();if(state.storefrontSetup)return add();if(state.savedView)return savedScreen();if(state.myPostsView)return myPostsScreen();if(state.svcEdit)return servicesEditor();if(state.tab==='add')return addTab();({home,market,venuU,profile}[state.tab]||home)();}
+function render(){document.getElementById('nav').classList.remove('messages-open','message-active');try{retagDemo();}catch(e){}if(state.onboarded&&!state.pwCreate&&!state.homeConfirm&&!state.homePick&&(!state.isRealStudent||homeCampusSaved())&&window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour();},300);if(!state.onboarded){if(state.storefrontSetup)return add();return onboarding();}if(state.pwCreate)return pwCreateScreen();if(state.moreMenu)return settingsScreen();if(state.campusPick)return campusPicker();if(state.homeConfirm)return homeConfirmScreen();if(state.themeView)return themeScreen();if(state.book)return bookingScreen();if(state.bookSet)return bookingSettings();if(state.userView)return userProfile();if(state.thread)return messageScreen();if(state.inboxView)return inboxScreen();if(state.groupCreateView)return createGroupScreen();if(state.groupView)return groupPage();if(state.detail)return detail(state.detail);if(state.leaderboard)return leaderboard();if(state.storefrontSetup)return add();if(state.savedView)return savedScreen();if(state.myPostsView)return myPostsScreen();if(state.svcEdit)return servicesEditor();if(state.tab==='add')return addTab();({home,market,venuU,profile}[state.tab]||home)();}
 document.getElementById('nav').querySelectorAll('.navitem').forEach(item=>{item.onclick=()=>{if(!state.onboarded)return;document.querySelectorAll('.navitem').forEach(n=>n.classList.remove('on'));item.classList.add('on');if(item.dataset.tab==='add'&&state.tab!=='add')state.prevTab=state.tab;state.tab=item.dataset.tab;state.moreMenu=false;state.userView=null;state.thread=0;state.inboxView=false;state.groupView=null;state.groupCreateView=false;state.myPostsView=false;state.themeView=false;state.reviewOpen=false;state.cat='All';state.q='';state.near=false;state.detail=0;state.book=null;state.svcEdit=false;state.addMode=null;state.newPhoto=null;state.leaderboard=false;state.storefrontSetup=false;state.reviewOpen=false;state.msgTo=0;state.openMC=0;state.bookSet=false;state.subPrompt=false;state.savedView=false;state.campusPick=false;state.campusQ='';if(item.dataset.tab!=='add')state.submitted=false;render();screen.scrollTop=0;if(item.dataset.tab==='profile')setTimeout(function(){try{venduLiveSync();}catch(e){}},0);};});
 try{restoreCampusPref();}catch(e){}
 /* ---- universal Back: nav helper, layer-aware back, device/browser back ---- */
