@@ -196,7 +196,8 @@ export const Route = createFileRoute("/api/public/messages")({
             .select("*")
             .single();
           if (error || !data) return json({ ok: false, message: "Could not open that conversation." }, 500);
-          return json({ ok: true, conversation: await shapeConversation(data as Record<string, unknown>) });
+          const { data: hidden } = await supabaseAdmin.from("conversation_hides").select("hidden_at").eq("conversation_id", data.id).eq("user_email", email).maybeSingle();
+          return json({ ok: true, conversation: await shapeConversation(data as Record<string, unknown>, hidden?.hidden_at) });
         }
 
         const conversationId = str(raw["conversationId"], 80);
