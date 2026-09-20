@@ -228,6 +228,35 @@ export type Database = {
         }
         Relationships: []
       }
+      conversation_hides: {
+        Row: {
+          build: string
+          conversation_id: string
+          hidden_at: string
+          user_email: string
+        }
+        Insert: {
+          build?: string
+          conversation_id: string
+          hidden_at?: string
+          user_email: string
+        }
+        Update: {
+          build?: string
+          conversation_id?: string
+          hidden_at?: string
+          user_email?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_hides_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       conversation_messages: {
         Row: {
           attachment: Json | null
