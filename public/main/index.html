@@ -937,7 +937,7 @@ const FEED=[
   {id:4,s:11,promo:'',when:'1d ago',text:"Campus pups got pampered today 🐾 bath, brush & nails. Slots open this weekend for grooming!",likes:27,liked:false,comments:[['Aisha','my golden needs this']]},
   {id:5,s:4,promo:'',when:'2d ago',text:"Calc kicking your butt before the exam? 🧮 pull up — first 30 minutes on me. Group rates too.",likes:19,liked:false,comments:[]},
 ];
-const GOODS=[{emoji:'📚',name:'Organic Chem textbook',price:'$35',tag:'Trade or sell',c:0,by:'Jordan M.',bi:'J',bc:5},{emoji:'🪑',name:'Desk chair — like new',price:'$20',tag:'Move-out',c:2,by:'Aisha K.',bi:'A',bc:1},{emoji:'🎧',name:'Studio headphones',price:'$25',tag:'Trade',c:4,by:'Deon P.',bi:'D',bc:3},{emoji:'🧊',name:'Mini fridge',price:'$45',tag:'Move-out',c:1,by:'Maya R.',bi:'M',bc:6},{emoji:'💡',name:'LED strip lights',price:'$8',tag:'Sell',c:6,by:'Chris T.',bi:'C',bc:9},{emoji:'👟',name:'Sneakers — size 10',price:'$40',tag:'Trade or sell',c:7,by:'Tay B.',bi:'T',bc:2},{emoji:'📐',name:'TI-84 calculator',price:'$30',tag:'Sell',c:9,by:'Nina L.',bi:'N',bc:4},{emoji:'🛏️',name:'Twin XL sheets',price:'$10',tag:'Move-out',c:3,by:'Bri S.',bi:'B',bc:7}];
+const GOODS=[{emoji:'📚',name:'Organic Chem textbook',price:'$35',tag:'For sale',c:0,by:'Jordan M.',bi:'J',bc:5},{emoji:'🪑',name:'Desk chair — like new',price:'$20',tag:'Move-out',c:2,by:'Aisha K.',bi:'A',bc:1},{emoji:'🎧',name:'Studio headphones',price:'$25',tag:'For sale',c:4,by:'Deon P.',bi:'D',bc:3},{emoji:'🧊',name:'Mini fridge',price:'$45',tag:'Move-out',c:1,by:'Maya R.',bi:'M',bc:6},{emoji:'💡',name:'LED strip lights',price:'$8',tag:'For sale',c:6,by:'Chris T.',bi:'C',bc:9},{emoji:'👟',name:'Sneakers — size 10',price:'$40',tag:'For sale',c:7,by:'Tay B.',bi:'T',bc:2},{emoji:'📐',name:'TI-84 calculator',price:'$30',tag:'For sale',c:9,by:'Nina L.',bi:'N',bc:4},{emoji:'🛏️',name:'Twin XL sheets',price:'$10',tag:'Move-out',c:3,by:'Bri S.',bi:'B',bc:7}];
 const REQUESTS=[{who:'Maya R.',in:'M',c:1,barter:0,txt:'ISO a photographer for grad photos — May 3, can pay ~$100.'},{who:'Deon P.',in:'D',c:3,barter:1,txt:'Will trade 2 hrs of calc tutoring ⇄ a fresh fade. Anyone down?'},{who:'Aisha K.',in:'A',c:5,barter:0,txt:'Need my 1-bedroom moved this weekend. Boxes ready.'},{who:'Chris T.',in:'C',c:0,barter:1,txt:'Trading a week of meal prep for help building my website.'}];
 const LEARN=[
   {ic:'M22 10 12 5 2 10l10 5 10-5z',title:'Is my hustle legal here?',desc:"Some services (hair, nails, food) need a license depending on your state. Braiding is license-free in many, including Georgia. A quick check keeps you safe.",src:'Your state licensing board'},
@@ -1762,11 +1762,11 @@ function miniForm(mode){
     <div class="field"><label>Price</label><input id="f2" placeholder="$25"></div>
     <div class="field"><label>Category</label><input id="f4" placeholder="e.g. Dorm & home"></div>
     <div class="field"><label>Description</label><textarea id="f3" placeholder="Condition, size, why you're selling it"></textarea></div>
-    <div class="field"><label>Type</label><div class="catgrid">${['Sell','Trade or sell','Move-out'].map((t,i)=>`<div class="catpick ${i===0?'on':''}" data-tag="${t}">${t}</div>`).join('')}</div></div>
+    <div class="field"><label>Type</label><div class="catgrid">${['For sale','Move-out'].map((t,i)=>`<div class="catpick ${i===0?'on':''}" data-tag="${t}">${t}</div>`).join('')}</div></div>
     <div class="field"><label>How do you get paid? <span style="color:var(--mist);font-weight:500">· buyers only see the app names — your handle stays private until you meet</span></label><div id="mpayrows">${state.mpays.map((p,i)=>`<div class="dyn-row"><select class="dyn-sel" data-mpi="${i}">${PAY_APPS.map(a=>`<option ${p.app===a?'selected':''}>${a}</option>`).join('')}</select><input data-mpu="${i}" value="${p.handle||''}" placeholder="Type or paste your handle"><button class="svc-rm" data-mpd="${i}">✕</button></div>`).join('')}</div><button class="catpick" id="mpaddpay" style="width:100%;padding:11px;justify-content:center;margin-top:4px">＋ Add a payment account</button></div>`;}
   else if(mode==='request'){title='Post a trade or request';body=`${photoBox}
     <div class="field"><label>What do you need?</label><textarea id="f1" placeholder="e.g. ISO a photographer for grad photos — can pay ~$100"></textarea></div>
-    <div class="field"><label>Type</label><div class="catgrid"><div class="catpick on" data-tag="0">Looking for</div><div class="catpick" data-tag="1">Barter / trade</div></div></div>`;}
+    <div class="field"><label>Type</label><div class="catgrid"><div class="catpick on" data-tag="0">Request</div><div class="catpick" data-tag="1">Trade</div></div></div>`;}
   else{title='Post an event';body=`${photoBox}
     <div class="field"><label>Event name</label><input id="f1" placeholder="e.g. Spring Cookout"></div>
     <div class="field"><label>Date & time</label><div style="display:flex;gap:8px"><input id="f2" type="date" style="flex:1"><input id="f3" type="time" style="max-width:120px"></div></div>
@@ -1779,7 +1779,7 @@ function miniForm(mode){
   screen.querySelectorAll('[data-mpd]').forEach(el=>el.onclick=()=>{state.mpays.splice(+el.dataset.mpd,1);miniForm(mode);});
   var _map=document.getElementById('mpaddpay');if(_map)_map.onclick=()=>{state.mpays.push({app:'Cash App',handle:''});miniForm(mode);};
   const up=screen.querySelector('.up2');if(up)up.onclick=()=>cphoto.click();
-  let tag=mode==='item'?'Sell':(mode==='request'?'0':'');
+  let tag=mode==='item'?'For sale':(mode==='request'?'0':'');
   screen.querySelectorAll('[data-tag]').forEach(el=>el.onclick=()=>{screen.querySelectorAll('[data-tag]').forEach(x=>x.classList.remove('on'));el.classList.add('on');tag=el.dataset.tag;});
   document.getElementById('postmini').onclick=()=>{
     const v=id=>{const e=document.getElementById(id);return e?e.value.trim():'';};
