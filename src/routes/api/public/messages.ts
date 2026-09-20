@@ -99,7 +99,9 @@ export const Route = createFileRoute("/api/public/messages")({
         if (action === "open") {
           const peerEmail = str(raw["peerEmail"], 254).toLowerCase();
           if (!peerEmail || peerEmail === email) return json({ ok: false, message: "That person cannot be messaged." }, 400);
-          const [a, b] = pair(email, peerEmail);
+          const sorted = pair(email, peerEmail);
+          const a = sorted[0] ?? email;
+          const b = sorted[1] ?? peerEmail;
           const me = await ensureProfile(email);
           const { data: peer } = await supabaseAdmin.from("profiles").select("display_name").eq("email", peerEmail).maybeSingle();
           const names: Record<string, string> = {
@@ -108,7 +110,7 @@ export const Route = createFileRoute("/api/public/messages")({
           };
           const { data, error } = await supabaseAdmin
             .from("conversations")
-            .upsert({ build, participant_a_email: a, participant_b_email: b, participant_a_name: names[a], participant_b_name: names[b] }, { onConflict: "build,participant_a_email,participant_b_email" })
+            .upsert({ build, participant_a_email: a, participant_b_email: b, participant_a_name: names[a] ?? "Student", participant_b_name: names[b] ?? "Student" }, { onConflict: "build,participant_a_email,participant_b_email" })
             .select("*")
             .single();
           if (error || !data) return json({ ok: false, message: "Could not open that conversation." }, 500);
@@ -145,7 +147,7 @@ export const Route = createFileRoute("/api/public/messages")({
           if (!body && !attachment) return json({ ok: false, message: "Write a message or add an attachment." }, 400);
           const profile = await ensureProfile(email);
           const senderName = str(raw["senderName"], 80) || String(profile?.["display_name"] ?? "Student");
-          const { data, error } = await supabaseAdmin.from("conversation_messages").insert({ conversation_id: conversationId, build, sender_email: email, sender_name: senderName, kind, body: body || null, attachment }).select("*").single();
+          const { data, error } = await supabaseAdmin.from("conversation_messages").insert({ conversation_id: conversationId, build, sender_email: email, sender_name: senderName, kind, body: body || null, attachment: attachment as never }).select("*").single();
           if (error || !data) return json({ ok: false, message: "Could not send that message." }, 500);
           const recipient = String(conversation["participant_a_email"]) === email ? String(conversation["participant_b_email"]) : String(conversation["participant_a_email"]);
           await Promise.all([
@@ -197,7 +199,7 @@ export const Route = createFileRoute("/api/public/messages")({
           else if (event === "notYet") { patch["payment_not_received_at"] = new Date().toISOString(); note = `${seller ? "Seller" : "Buyer"} selected Not yet.`; }
           else if (event === "report") { patch["reported_at"] = new Date().toISOString(); note = "A participant reported this transaction for review."; }
           else return json({ ok: false, message: "Unknown transaction action." }, 400);
-          const { data } = await supabaseAdmin.from("message_transactions").update(patch).eq("id", transactionId).select("*").single();
+          const { data } = await supabaseAdmin.from("message_transactions").update(patch as never).eq("id", transactionId).select("*").single();
           await supabaseAdmin.from("conversation_messages").insert({ conversation_id: conversationId, build, sender_email: null, sender_name: "VendU", kind: "system", body: note });
           return json({ ok: true, transaction: data });
         }
