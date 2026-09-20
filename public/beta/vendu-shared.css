@@ -561,31 +561,33 @@ input,textarea,select,[contenteditable="true"]{pointer-events:auto}
 .viewed-profile-header .viewed-profile-brand{font-size:18px!important;line-height:1!important;padding-top:8px!important;gap:0!important}
 .viewed-profile-header .viewed-profile-brand .gradcap{width:1.2em!important;top:-9px!important;left:50%!important}
 
-/* v47 - keep chat composer above mobile navigation and match the darker header chrome */
+/* v51 - profile-colored direct messages and compact attachment composer */
 .topbar.hdr-purple,.topbar.hdr-purple::before{background:#331174!important}
 .nav.message-active{display:none!important}
-.msg-composer{display:grid;grid-template-columns:40px minmax(0,1fr) 38px 38px 38px 38px;align-items:center;gap:3px;flex:none;padding:8px 10px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);background:var(--paper)}
+.msg-composer{display:grid;grid-template-columns:38px 40px minmax(0,1fr) auto;align-items:center;gap:5px;flex:none;padding:8px 10px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);background:var(--paper)}
 .msg-tool{width:38px;min-width:38px!important;height:38px;min-height:38px!important;padding:0!important;border:0!important;border-radius:50%!important;background:transparent!important;color:var(--ink)!important;display:grid!important;place-items:center;font:800 11px/1 Inter,sans-serif!important}
 .msg-tool svg,.msg-send svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
-.msg-tool.msg-camera{width:40px;min-width:40px!important;height:40px;min-height:40px!important;background:var(--violet)!important;color:#fff!important}
-.msg-tool.msg-gif{font-size:12px!important}
-.msg-bar{position:relative!important;inset:auto!important;display:flex!important;align-items:center;min-width:0;height:42px;padding:0 4px 0 12px!important;gap:3px!important;border:1px solid var(--line);border-radius:21px;background:#fff!important;z-index:auto!important}
+.msg-tool.msg-plus{background:var(--card)!important;border:1px solid var(--line)!important;color:var(--ink)!important}
+.msg-tool.msg-camera{width:40px;min-width:40px!important;height:40px;min-height:40px!important;background:var(--thread-color,var(--violet))!important;color:var(--thread-text,#fff)!important}
+.msg-bar{position:relative!important;inset:auto!important;display:flex!important;align-items:center;min-width:0;height:42px;padding:0 12px!important;gap:3px!important;border:1px solid var(--line);border-radius:14px;background:var(--card)!important;z-index:auto!important}
 .msg-bar input{min-width:0;height:100%;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;font-size:14px!important}
-.msg-send{display:grid!important;place-items:center;width:34px;min-width:34px!important;height:34px;min-height:34px!important;padding:0!important;border:0!important;border-radius:50%!important;background:var(--violet)!important;color:#fff!important}
-.msg-send[hidden]{display:none!important}
-.msg-send svg{width:18px;height:18px}
+.msg-send{display:grid!important;place-items:center;min-width:74px!important;height:42px;min-height:42px!important;padding:0 15px!important;border:0!important;border-radius:12px!important;background:var(--thread-color,var(--violet))!important;color:var(--thread-text,#fff)!important;font:800 14px/1 'Bricolage Grotesque',sans-serif!important}
+.msg-send:disabled{opacity:.42}
 .message-view{height:100%;display:flex;flex-direction:column;padding:0!important;background:var(--paper)}
-.message-view .topbar{flex:none;background:#331174;color:#fff;padding-top:calc(14px + env(safe-area-inset-top,0px));border:0}
+.message-view .topbar{flex:none;color:var(--thread-text,#fff);padding-top:calc(14px + env(safe-area-inset-top,0px));padding-bottom:22px;border:0}
 .message-view .topbar .wordmark{color:#fff}.message-view .topbar .locpill{color:#fff;border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.12)}
+.msg-person{display:flex;align-items:center;gap:12px;min-width:0}.msg-person-av{position:relative;width:58px!important;height:58px!important;border-radius:50%!important;border:3px solid var(--primary-foreground,#fff);color:var(--thread-text,#fff);font:800 24px/1 'Bricolage Grotesque',sans-serif;flex:none}.msg-person-av .livedot{right:-2px!important;bottom:1px!important;top:auto!important}.msg-person-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:800 20px/1.05 'Bricolage Grotesque',sans-serif}.msg-verified{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:color-mix(in srgb,var(--primary-foreground,#fff) 18%,transparent);font-size:12px;vertical-align:2px}
+.message-view .bubble.me{background:var(--thread-color,var(--violet));border-color:var(--thread-color,var(--violet));color:var(--thread-text,#fff)}
+.msg-safety-note{flex:none;padding:9px 12px;color:var(--mist);font-size:11px;line-height:1.4;border-top:1px solid var(--line);background:var(--paper)}
 .attach-preview{margin:0 10px;padding:8px 10px;border-radius:10px;background:var(--violet-soft);font-size:12px;color:#3f2b8c;display:flex;justify-content:space-between;align-items:center}
 .attach-preview button{min-height:32px;border:0;background:transparent;color:#3f2b8c;font-weight:800}
-.msg-more{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:8px 10px 0;background:var(--paper);border-top:1px solid var(--line)}
+.msg-more{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px;background:var(--paper);border-top:1px solid var(--line)}
 .msg-more[hidden]{display:none!important}
-.msg-more button{min-height:44px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font:600 12px Inter}
+.msg-more button{min-height:44px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:600 12px Inter}
 .bubble-attachment{display:block;margin-top:6px;color:inherit;font-weight:700;text-decoration:underline;cursor:pointer}
 .dealbar.locked{opacity:.8}.dealwhen{font-size:11px;font-weight:700;color:var(--mist);margin-top:5px}
 @media(max-width:439px){
   html,body{background:#331174!important}
   .message-view .msg-thread{padding-bottom:16px}
 }
-@media(max-width:370px){.msg-composer{grid-template-columns:38px minmax(0,1fr) 34px 34px 34px 34px;gap:1px;padding-left:6px;padding-right:6px}.msg-tool{width:34px;min-width:34px!important}.msg-tool.msg-camera{width:38px;min-width:38px!important}}
+@media(max-width:370px){.msg-composer{grid-template-columns:34px 36px minmax(0,1fr) auto;gap:3px;padding-left:6px;padding-right:6px}.msg-tool{width:34px;min-width:34px!important}.msg-tool.msg-camera{width:36px;min-width:36px!important}.msg-send{min-width:62px!important;padding:0 10px!important}.msg-person-name{font-size:18px}}
