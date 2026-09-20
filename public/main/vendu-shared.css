@@ -675,3 +675,15 @@ input:not([type="checkbox"]):not([type="radio"]),textarea,select,.search,.msg-ba
 .card:has(.request-head) .request-head{margin-right:28px}
 .request-kind{justify-self:end}
 @media(max-width:390px){.card:has(.request-head) .request-head{margin-right:26px}.request-head{grid-template-columns:36px minmax(0,1fr) auto}.request-kind{grid-column:3;justify-self:end;font-size:10.5px;padding-left:7px;padding-right:7px}}
+
+/* v61 - keep every top control below the native iOS/Android status bar */
+@media(max-width:439px){
+  .topbar{padding-top:calc(18px + env(safe-area-inset-top,0px))!important}
+  .topbar.hdr-purple{padding-top:calc(12px + env(safe-area-inset-top,0px))!important}
+  .topbar.hdr-purple.profile-header{padding-top:calc(13px + env(safe-area-inset-top,0px))!important}
+  .viewed-profile-header{min-height:calc(76px + env(safe-area-inset-top,0px));padding-top:calc(12px + env(safe-area-inset-top,0px))!important}
+  .viewed-profile-header .viewed-profile-back{top:calc(14px + env(safe-area-inset-top,0px))}
+  .storefront .awning{min-height:calc(102px + env(safe-area-inset-top,0px))!important;padding-top:calc(48px + env(safe-area-inset-top,0px))!important}
+  .roofline .backbtn{top:calc(14px + env(safe-area-inset-top,0px))}
+  .ptr{top:calc(6px + env(safe-area-inset-top,0px))}
+}
