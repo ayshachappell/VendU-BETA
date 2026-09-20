@@ -99,7 +99,7 @@ export const Route = createFileRoute("/api/public/messages")({
                 { recipient_email: tx.buyer_email, conversation_id: tx.conversation_id, transaction_id: tx.id, build, kind: "meetup", message: reminder },
                 { recipient_email: tx.seller_email, conversation_id: tx.conversation_id, transaction_id: tx.id, build, kind: "meetup", message: reminder },
               ]),
-            ];
+            ]);
           }
           const { data } = await supabaseAdmin
             .from("conversations")
