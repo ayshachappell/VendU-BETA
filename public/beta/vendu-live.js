@@ -79,6 +79,7 @@
         uuid: v.id,
         live: 1,
         me: !!mine,
+        owner: String(v.ownerEmail || "").toLowerCase(),
         name: v.shopName,
         init: initialOf(v.shopName),
         cat: v.category || "Other",
@@ -137,6 +138,14 @@
       }
       /* service, promo and vendor updates ride the main feed */
       var vendor = HUSTLES.filter(function (h) { return h.uuid && h.uuid === p.vendorId; })[0];
+      if (!vendor) {
+        /* older or unlinked storefront updates: match the author's shop */
+        var mail = String(p.authorEmail || "").toLowerCase();
+        vendor = HUSTLES.filter(function (h) { return h.owner && mail && h.owner === mail; })[0];
+      }
+      if (!vendor && isMine(p.authorEmail)) {
+        vendor = HUSTLES.filter(function (h) { return h.id === "me" || h.me === 1; })[0];
+      }
       if (!vendor) return;
       FEED.push({
         id: numId(p.id), uuid: p.id, live: 1, s: vendor.id,
@@ -204,12 +213,24 @@
     }).catch(function () {});
   };
 
+  /* Vendor Name typed before a storefront exists is kept on this device
+     until publishing creates the storefront row. */
+  function pendingKey() { return "vendu_vendor_name_" + build(); }
+  function readPending() { try { return localStorage.getItem(pendingKey()) || ""; } catch (e) { return ""; } }
+  function clearPending() { try { localStorage.removeItem(pendingKey()); } catch (e) {} }
+
   L.loadVendor = function () {
     if (!signedIn()) return Promise.resolve();
     return VendU.myVendor(build()).then(function (r) {
-      if (!r || !r.ok || !r.vendor) return;
+      if (!r || !r.ok || !r.vendor) {
+        var pend = readPending();
+        if (pend && !state.vendorName) { state.vendorName = pend; redraw(); }
+        return;
+      }
       state.vendorName = r.vendor.shopName || state.vendorName;
+      state.vendorUuid = r.vendor.id || state.vendorUuid || "";
       state.hasStore = true;
+      clearPending();
       redraw();
     }).catch(function () {});
   };
@@ -220,8 +241,10 @@
   };
 
   L.saveVendorName = function () {
+    var name = String(state.vendorName || "").trim();
     if (!signedIn()) return Promise.resolve({ ok: true });
-    if (state.hasStore && VendU.renameVendor) return VendU.renameVendor(state.vendorName || "", build());
+    if (state.hasStore && VendU.renameVendor) return VendU.renameVendor(name, build());
+    try { localStorage.setItem(pendingKey(), name); } catch (e) {}
     return Promise.resolve({ ok: true });
   };
 
@@ -287,6 +310,8 @@
       photos: photos,
     }, build()).then(function (r) {
       if (r && r.ok) {
+        if (r.vendor && r.vendor.id) state.vendorUuid = r.vendor.id;
+        clearPending();
         L.saveProfile({ vendorMode: true });
         L.pull();
         L.referrals();

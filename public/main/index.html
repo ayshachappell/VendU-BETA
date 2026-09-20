@@ -1121,11 +1121,12 @@ function myFeedVendor(){
   if(!h){h={id:'me',name:nm,init:nm.charAt(0).toUpperCase(),cat:state.formCat||'Other',v:1,lic:0,dist:0,offer:state.about||'',price:'',rating:'5.0',reviews:0,jobs:0,since:String(new Date().getFullYear()),c:0,pays:[],bio:'',services:[],campus:state.campus.id,me:1};HUSTLES.push(h);}
   h.name=nm;h.init=nm.charAt(0).toUpperCase();h.cat=state.formCat||h.cat;h.campus=state.campus.id;
   h.services=state.services||[];h.gallery=state.gallery||[];h.founder=!!state.isFounder;h.avatar=state.avatar||'';
+  if(state.vendorUuid)h.uuid=state.vendorUuid;
   return h;
 }
 function autoFeedPost(text,promo){
   var h=myFeedVendor();
-  FEED.unshift({id:Date.now()+Math.floor(Math.random()*1000),s:h.id,promo:promo||'',when:'Just now',ts:Date.now(),text:text,likes:0,liked:false,comments:[],auto:1});
+  FEED.unshift({id:Date.now()+Math.floor(Math.random()*1000),s:h.id,promo:promo||'',when:'Just now',ts:Date.now(),text:text,likes:0,liked:false,comments:[],auto:1,live:1});
   try{if(window.VenduLive)VenduLive.post({identityMode:'vendor',vendorId:h.uuid||'',kind:'service',title:(text||'Storefront update').slice(0,120),body:text||'',badges:promo?[promo]:[],auto:true});}catch(e){}
   try{if(state.tab==='home'&&state.home==='feed')refreshFeed();}catch(e){}
 }
