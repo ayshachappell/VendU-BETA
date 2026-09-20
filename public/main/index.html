@@ -41,7 +41,7 @@
 })();
 </script>
 <link rel="manifest" href="/main/manifest.webmanifest?v=9">
-<meta name="theme-color" content="#5A2BE0">
+<meta name="theme-color" content="#331174">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="VendU">
@@ -1090,7 +1090,7 @@ try{
 /* ---- status bar tint: brand purple everywhere, off-white only on a storefront ---- */
 try{
   var _tm=document.querySelector('meta[name="theme-color"]');
-  var BRAND_TINT='#5A2BE0', STORE_TINT='#5A2BE0';
+  var BRAND_TINT='#331174', STORE_TINT='#331174';
   function venduTint(){
     if(!_tm)return;
     var onStore=!!document.querySelector('.storefront');
@@ -2319,6 +2319,7 @@ function dealStripHTML(th){
   var labels=(d.pays||[]).map(function(p){return esc(p.app);}).join(' \u00b7 ');
   var h='<div class="dealbar"><div class="dealt">\uD83D\uDD12 Safe meet-up \u00b7 '+esc(d.item)+'</div>';
   if(!met){h+='<div class="dealn">Meet in a busy spot on campus. Never send money before you meet.'+(labels&&!isSeller?' '+esc(d.seller)+' accepts '+labels+'.':'')+'</div><button class="dealbtn" id="dealmet">\uD83E\uDD1D I\u2019m with the '+(isSeller?'buyer':'seller')+'</button>';}
+  else if(!d.paid&&d.buyerPaid&&!isSeller){h+='<div class="dealn">You marked this payment as sent. Waiting for the seller to confirm it arrived.</div><button class="dealbtn ghost" id="dealrep">\u26A0\uFE0E Report this deal</button>';}
   else if(!d.paid){h+='<div class="dealn">'+(isSeller?'Confirm only after the buyer\u2019s payment lands.':'Confirm only after you have paid the seller in person.')+'</div><div class="dealrow"><button class="dealbtn" id="dealpaid">'+(isSeller?'Seller: I got paid \u2713':'Buyer: I paid \u2713')+'</button><button class="dealbtn ghost" id="dealnot">Not yet</button></div><button class="dealbtn ghost" id="dealrep" style="margin-top:6px">\u26A0\uFE0E Report this deal</button>';}
   else{h+='<div class="dealok">\u2713 Payment confirmed \u00b7 '+esc(d.paidAt)+'</div><button class="dealbtn ghost" id="dealrep" style="margin-top:6px">\u26A0\uFE0E Report this deal</button>';}
   return h+'</div>';
@@ -2349,11 +2350,11 @@ function inboxScreen(){
   var h='<div class="topbar"><div class="brandrow"><div class="wordmark">Messages</div><div class="locpill" id="inbClose" style="cursor:pointer">\u2715 Close</div></div></div><div class="enter" style="padding:8px 0 24px">';
   if((state.eventNotifications||[]).length){h+='<div class="sec-h">Event activity</div>'+state.eventNotifications.map(function(n){return '<div class="inbox-row"><div class="detail-av" style="width:46px;height:46px;font-size:20px;border-radius:13px;background:var(--violet);color:#fff;flex:none">🎉</div><div style="flex:1;min-width:0"><div class="inbox-name">Event update</div><div class="inbox-prev">'+safe(n.message)+'</div></div>'+(!n.read_at?'<span class="inbox-badge">1</span>':'')+'</div>';}).join('');}
   if(!list.length){h+='<div class="empty" style="padding:50px 30px">No messages yet.<br>Reach out to a vendor or someone\u2019s Market post to start a chat.</div>';}
-  else{h+=list.map(function(t){var last=t.msgs[t.msgs.length-1];var prev=((last[0]==='You'||last[0]===state.studentName||last[0]===state.vendorName)?'You: ':'')+last[1];return '<div class="inbox-row" data-openth="'+t.id+'"><div class="detail-av" data-openav="'+t.id+'" style="width:46px;height:46px;font-size:18px;border-radius:13px;background:'+t.color+';color:#fff;flex:none;cursor:pointer">'+t.init+'</div><div style="flex:1;min-width:0"><div class="inbox-name" data-openuser="'+t.id+'">'+t.name+'</div><div class="inbox-prev">'+prev+'</div></div>'+(t.unread?'<span class="inbox-badge">'+t.unread+'</span>':'')+'</div>';}).join('');}
+  else{h+=list.map(function(t){var last=t.msgs[t.msgs.length-1];var prev=((last[0]==='You'||last[0]===state.studentName||last[0]===state.vendorName)?'You: ':'')+last[1];return '<div class="inbox-row" data-openth="'+t.id+'"><div class="detail-av" data-openav="'+t.id+'" role="button" aria-label="View '+safe(t.name)+' profile" style="width:46px;height:46px;font-size:18px;border-radius:13px;background:'+t.color+';color:#fff;flex:none;cursor:pointer">'+t.init+'</div><div style="flex:1;min-width:0"><div class="inbox-name">'+t.name+'</div><div class="inbox-prev">'+prev+'</div></div>'+(t.unread?'<span class="inbox-badge">'+t.unread+'</span>':'')+'</div>';}).join('');}
   h+='</div>';
   screen.innerHTML=h;
   document.getElementById('inbClose').onclick=function(){state.inboxView=false;render();};
-  screen.querySelectorAll('[data-openuser]').forEach(function(el){el.onclick=function(e){e.stopPropagation();var t=state.inbox.filter(function(x){return x.id===el.dataset.openuser;})[0];if(t)openPerson(t.name,t.init,t.color);};});screen.querySelectorAll('[data-openav]').forEach(function(el){el.onclick=function(e){e.stopPropagation();var t=state.inbox.filter(function(x){return x.id===el.dataset.openav;})[0];if(t)openPerson(t.name,t.init,t.color);};});screen.querySelectorAll('[data-openth]').forEach(function(el){el.onclick=function(){var t=state.inbox.filter(function(x){return x.id===el.dataset.openth;})[0];if(t)t.unread=0;state.thread=el.dataset.openth;messageScreen();};});
+  screen.querySelectorAll('[data-openav]').forEach(function(el){el.onclick=function(e){e.stopPropagation();var t=state.inbox.filter(function(x){return x.id===el.dataset.openav;})[0];if(t)openPerson(t.name,t.init,t.color);};});screen.querySelectorAll('[data-openth]').forEach(function(el){el.onclick=function(){var t=state.inbox.filter(function(x){return x.id===el.dataset.openth;})[0];if(t)t.unread=0;state.thread=el.dataset.openth;messageScreen();};});
 }
 function messageScreen(){
   document.getElementById('nav').classList.add('messages-open');

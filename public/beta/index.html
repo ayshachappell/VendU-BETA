@@ -2317,6 +2317,7 @@ function dealStripHTML(th){
   var labels=(d.pays||[]).map(function(p){return esc(p.app);}).join(' \u00b7 ');
   var h='<div class="dealbar"><div class="dealt">\uD83D\uDD12 Safe meet-up \u00b7 '+esc(d.item)+'</div>';
   if(!met){h+='<div class="dealn">Meet in a busy spot on campus. Never send money before you meet.'+(labels&&!isSeller?' '+esc(d.seller)+' accepts '+labels+'.':'')+'</div><button class="dealbtn" id="dealmet">\uD83E\uDD1D I\u2019m with the '+(isSeller?'buyer':'seller')+'</button>';}
+  else if(!d.paid&&d.buyerPaid&&!isSeller){h+='<div class="dealn">You marked this payment as sent. Waiting for the seller to confirm it arrived.</div><button class="dealbtn ghost" id="dealrep">\u26A0\uFE0E Report this deal</button>';}
   else if(!d.paid){h+='<div class="dealn">'+(isSeller?'Confirm only after the buyer\u2019s payment lands.':'Confirm only after you have paid the seller in person.')+'</div><div class="dealrow"><button class="dealbtn" id="dealpaid">'+(isSeller?'Seller: I got paid \u2713':'Buyer: I paid \u2713')+'</button><button class="dealbtn ghost" id="dealnot">Not yet</button></div><button class="dealbtn ghost" id="dealrep" style="margin-top:6px">\u26A0\uFE0E Report this deal</button>';}
   else{h+='<div class="dealok">\u2713 Payment confirmed \u00b7 '+esc(d.paidAt)+'</div><button class="dealbtn ghost" id="dealrep" style="margin-top:6px">\u26A0\uFE0E Report this deal</button>';}
   return h+'</div>';
