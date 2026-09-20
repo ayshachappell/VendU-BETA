@@ -150,7 +150,7 @@
         before: goHome,
         target: function () { return nav("add"); },
         title: "Market & posting",
-        text: "Market is where students post items for sale, trades, housing and jobs. Pull down to refresh Buy & Trade or Requests. The ＋ button posts a service, item, Request or campus event — add photos, then delete or mark sold anytime.",
+        text: "Market is where students buy items or post trades and requests. Pull down to refresh Buy or Trade & Requests. The ＋ button posts a service, item, trade, request or campus event — add photos, then delete or mark sold anytime.",
         doit: "Tap ＋",
         click: true,
         place: "above",

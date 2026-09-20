@@ -11,7 +11,7 @@
 /* Always-fresh assets: every page load requests a unique URL, so no browser,
    proxy or installed-app cache can ever serve an old stylesheet or tutorial. */
 (function(){
-  var B='/main/', V='v57';
+  var B='/main/', V='v58';
   var l=document.createElement('link');
   l.rel='stylesheet'; l.href=B+'vendu-shared.css?v='+V;
   document.head.appendChild(l);
@@ -937,7 +937,7 @@ const FEED=[
   {id:4,s:11,promo:'',when:'1d ago',text:"Campus pups got pampered today 🐾 bath, brush & nails. Slots open this weekend for grooming!",likes:27,liked:false,comments:[['Aisha','my golden needs this']]},
   {id:5,s:4,promo:'',when:'2d ago',text:"Calc kicking your butt before the exam? 🧮 pull up — first 30 minutes on me. Group rates too.",likes:19,liked:false,comments:[]},
 ];
-const GOODS=[{emoji:'📚',name:'Organic Chem textbook',price:'$35',tag:'Trade or sell',c:0,by:'Jordan M.',bi:'J',bc:5},{emoji:'🪑',name:'Desk chair — like new',price:'$20',tag:'Move-out',c:2,by:'Aisha K.',bi:'A',bc:1},{emoji:'🎧',name:'Studio headphones',price:'$25',tag:'Trade',c:4,by:'Deon P.',bi:'D',bc:3},{emoji:'🧊',name:'Mini fridge',price:'$45',tag:'Move-out',c:1,by:'Maya R.',bi:'M',bc:6},{emoji:'💡',name:'LED strip lights',price:'$8',tag:'Sell',c:6,by:'Chris T.',bi:'C',bc:9},{emoji:'👟',name:'Sneakers — size 10',price:'$40',tag:'Trade or sell',c:7,by:'Tay B.',bi:'T',bc:2},{emoji:'📐',name:'TI-84 calculator',price:'$30',tag:'Sell',c:9,by:'Nina L.',bi:'N',bc:4},{emoji:'🛏️',name:'Twin XL sheets',price:'$10',tag:'Move-out',c:3,by:'Bri S.',bi:'B',bc:7}];
+const GOODS=[{emoji:'📚',name:'Organic Chem textbook',price:'$35',tag:'For sale',c:0,by:'Jordan M.',bi:'J',bc:5},{emoji:'🪑',name:'Desk chair — like new',price:'$20',tag:'Move-out',c:2,by:'Aisha K.',bi:'A',bc:1},{emoji:'🎧',name:'Studio headphones',price:'$25',tag:'For sale',c:4,by:'Deon P.',bi:'D',bc:3},{emoji:'🧊',name:'Mini fridge',price:'$45',tag:'Move-out',c:1,by:'Maya R.',bi:'M',bc:6},{emoji:'💡',name:'LED strip lights',price:'$8',tag:'For sale',c:6,by:'Chris T.',bi:'C',bc:9},{emoji:'👟',name:'Sneakers — size 10',price:'$40',tag:'For sale',c:7,by:'Tay B.',bi:'T',bc:2},{emoji:'📐',name:'TI-84 calculator',price:'$30',tag:'For sale',c:9,by:'Nina L.',bi:'N',bc:4},{emoji:'🛏️',name:'Twin XL sheets',price:'$10',tag:'Move-out',c:3,by:'Bri S.',bi:'B',bc:7}];
 const REQUESTS=[{who:'Maya R.',in:'M',c:1,barter:0,txt:'ISO a photographer for grad photos — May 3, can pay ~$100.'},{who:'Deon P.',in:'D',c:3,barter:1,txt:'Will trade 2 hrs of calc tutoring ⇄ a fresh fade. Anyone down?'},{who:'Aisha K.',in:'A',c:5,barter:0,txt:'Need my 1-bedroom moved this weekend. Boxes ready.'},{who:'Chris T.',in:'C',c:0,barter:1,txt:'Trading a week of meal prep for help building my website.'}];
 const LEARN=[
   {ic:'M22 10 12 5 2 10l10 5 10-5z',title:'Is my hustle legal here?',desc:"Some services (hair, nails, food) need a license depending on your state. Braiding is license-free in many, including Georgia. A quick check keeps you safe.",src:'Your state licensing board'},
@@ -1397,9 +1397,9 @@ function market(){
   const goods=state.mkt==='goods';
   const acts=o=>`<div class="mkt-act"><span class="p-act ${o.liked?'liked':''}" data-mlike="${o.id}">${heart(o.liked)} ${o.likes}</span><span class="p-act ${state.openMC===o.id?'liked':''}" data-mcmt="${o.id}">${icon(com,16)} ${o.comments.length}${o.comments.length?(state.openMC===o.id?' · hide':' · view'):''}</span>${!o.mine?`<span class="p-act" data-mmsg="${o.id}">✉ Message</span>`:''}</div>`;
   const panel=(o,who)=>`<div class="mkt-comments"><div class="mkt-ch">Comments <span style="color:var(--mist);font-weight:500">· go to ${who}</span></div>${o.comments.length?o.comments.map(c=>`<div class="p-comment"><b class="gp-author" data-user="${c[0]}␟${c[0].charAt(0)}␟0" style="cursor:pointer">${c[0]}</b> ${c[1]}</div>`).join(''):'<div style="font-size:12.5px;color:var(--mist)">No comments yet — be the first.</div>'}<div class="p-cbox"><input id="mci" placeholder="Add a comment…"><button id="mcsend">Post</button></div></div>`;
-  screen.innerHTML=`<div class="topbar hdr-purple"><div class="brandrow"><div class="wordmark header-logo go" id="logo">${WMFULL}</div><div class="header-actions"><div class="locpill" onclick="openCampusPick()"><span class="dot"></span><span class="locpill-label">${CAMPPILL()}</span></div>${bellHTML()}</div></div><div class="search">${icon('<circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/>')}<input placeholder="${goods?'Search supplies…':'Search requests…'}"></div></div>
+  screen.innerHTML=`<div class="topbar hdr-purple"><div class="brandrow"><div class="wordmark header-logo go" id="logo">${WMFULL}</div><div class="header-actions"><div class="locpill" onclick="openCampusPick()"><span class="dot"></span><span class="locpill-label">${CAMPPILL()}</span></div>${bellHTML()}</div></div><div class="search">${icon('<circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/>')}<input placeholder="${goods?'Search items to buy…':'Search trades & requests…'}"></div></div>
     <div class="campus-wrap"><div class="campus-bg">${wmk()}</div><div class="campus-content">
-    <div class="hubseg mktseg" style="padding-top:2px">${[['goods','Buy & Trade'],['requests','Requests'],['housing','🏠 Housing'],['jobs','💼 Jobs']].map(x=>`<div class="hchip ${state.mkt===x[0]?'on':''}" data-mkt="${x[0]}">${x[1]}</div>`).join('')}</div>
+    <div class="hubseg mktseg" style="padding-top:2px">${[['goods','Buy'],['requests','Trade & Requests'],['housing','🏠 Housing'],['jobs','💼 Jobs']].map(x=>`<div class="hchip ${state.mkt===x[0]?'on':''}" data-mkt="${x[0]}">${x[1]}</div>`).join('')}</div>
     ${state.mkt==='housing'?housingHTML():state.mkt==='jobs'?jobsHTML():goods?`<div class="list" style="padding-top:16px">${GOODS.map((g,i)=>g.campus!==state.campus.id?'':`<div class="card" style="display:block;animation-delay:${i*40}ms"><div class="market-item-main"><div class="market-item-photo" style="background:${color(g.c)}22">${g.img?`<img src="${g.img}" alt="">`:g.emoji}</div><div class="market-item-copy"><div class="market-item-title">${g.name}${SAMPLE(g)}</div><div class="market-item-price">${g.price}</div><div class="market-item-meta">${g.tag}${g.sold?' · <span class="market-sold">SOLD</span>':''}</div>${(g.pays&&g.pays.length)?`<div class="acceptline">Accepts ${g.pays.map(p=>p.app).join(' · ')}</div>`:''}<div class="market-seller"><span class="mkt-av-wrap market-seller-avatar-wrap"><span class="mkt-avatar market-seller-avatar" style="${g.avatar?'background-image:url('+g.avatar+');background-size:cover;background-position:center':'background:'+color(g.bc||0)}">${g.avatar?'':(g.bi||'?')}</span>${g.avail?'<span class="livedot"></span>':''}</span><span class="gp-author market-seller-name" data-user="${g.by||'Student'}␟${g.bi||'?'}␟${g.bc||0}">${g.by||'Student'}</span></div></div></div>${acts(g)}${state.openMC===g.id?panel(g,g.by||'the seller'):''}</div>`).join('')}</div>`
     :`<div class="list" style="padding-top:16px">${REQUESTS.map((r,i)=>r.campus!==state.campus.id?'':`<div class="card" style="display:block;animation-delay:${i*40}ms"><div class="request-head"><div class="avatar-wrap request-avatar-wrap"><div class="avatar request-avatar" style="${r.avatar?'background-image:url('+r.avatar+');background-size:cover;background-position:center':'background:'+(r.uc||color(r.c))}">${r.avatar?'':r.in}</div>${r.avail?'<span class="livedot"></span>':''}</div><div class="request-identity"><div class="gp-author request-author" data-user="${r.who}␟${r.in}␟${r.c||0}">${r.who}</div>${SAMPLE(r)}</div><div class="request-kind ${r.barter?'is-barter':''}">${r.barter?'Barter':'Looking for'}</div></div><div class="request-copy">${r.txt}</div>${acts(r)}${state.openMC===r.id?panel(r,r.who):''}</div>`).join('')}</div>`}
     </div></div>`;
@@ -1745,7 +1745,7 @@ function foodAtt(){if(state.formCat==='Food'){return state.foodType==='baked'?"M
 function addTab(){if(!state.addMode)return chooser();return miniForm(state.addMode);}
 function chooser(){
   const chev='<path d="m9 18 6-6-6-6"/>';
-  const opts=[['item','📦','Sell or trade an item','Post to Buy & Trade'],['request','🙋','Post a request or barter','Ask the campus for what you need'],['event','🎉','Post an event','Share it on the Events board']];
+  const opts=[['item','📦','Sell an item','Post it for students to buy'],['request','🙋','Post a trade or request','Ask the campus for what you need'],['event','🎉','Post an event','Share it on the Events board']];
   screen.innerHTML=`<div class="topbar"><div class="brandrow"><div class="wordmark header-logo">Post to&nbsp;${WMFULL}</div><div class="locpill" id="addClose" style="cursor:pointer">\u2715 Close</div></div></div>
     <div class="form-wrap enter"><div class="form-h">What are you posting?</div><div class="form-sub">We'll add it to the right place on VendU.</div>
     ${opts.map(o=>`<div class="choose" data-mode="${o[0]}"><div class="ch-em">${o[1]}</div><div style="flex:1"><div class="ch-t">${o[2]}</div><div class="ch-d">${o[3]}</div></div>${icon('<path d="m9 18 6-6-6-6"/>',18)}</div>`).join('')}</div>`;
@@ -1757,16 +1757,16 @@ function miniForm(mode){
   const back=`<div class="locpill" id="tochooser" style="cursor:pointer">‹ Back</div>`;
   const photoBox=`<div class="photo-up"><div class="up2" style="${state.newPhoto?`background-image:url(${state.newPhoto})`:''}">${state.newPhoto?'':icon('<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',24)}</div><div style="font-size:13px;color:var(--mist)">Add a photo or file (optional)</div></div>`;
   let title='',body='';
-  if(mode==='item'){title='Sell or trade an item';body=`${photoBox}
+  if(mode==='item'){title='Sell an item';body=`${photoBox}
     <div class="field"><label>Item name</label><input id="f1" placeholder="e.g. Mini fridge"></div>
     <div class="field"><label>Price</label><input id="f2" placeholder="$25"></div>
     <div class="field"><label>Category</label><input id="f4" placeholder="e.g. Dorm & home"></div>
     <div class="field"><label>Description</label><textarea id="f3" placeholder="Condition, size, why you're selling it"></textarea></div>
-    <div class="field"><label>Type</label><div class="catgrid">${['Sell','Trade or sell','Move-out'].map((t,i)=>`<div class="catpick ${i===0?'on':''}" data-tag="${t}">${t}</div>`).join('')}</div></div>
+    <div class="field"><label>Type</label><div class="catgrid">${['For sale','Move-out'].map((t,i)=>`<div class="catpick ${i===0?'on':''}" data-tag="${t}">${t}</div>`).join('')}</div></div>
     <div class="field"><label>How do you get paid? <span style="color:var(--mist);font-weight:500">· buyers only see the app names — your handle stays private until you meet</span></label><div id="mpayrows">${state.mpays.map((p,i)=>`<div class="dyn-row"><select class="dyn-sel" data-mpi="${i}">${PAY_APPS.map(a=>`<option ${p.app===a?'selected':''}>${a}</option>`).join('')}</select><input data-mpu="${i}" value="${p.handle||''}" placeholder="Type or paste your handle"><button class="svc-rm" data-mpd="${i}">✕</button></div>`).join('')}</div><button class="catpick" id="mpaddpay" style="width:100%;padding:11px;justify-content:center;margin-top:4px">＋ Add a payment account</button></div>`;}
-  else if(mode==='request'){title='Post a request or barter';body=`${photoBox}
+  else if(mode==='request'){title='Post a trade or request';body=`${photoBox}
     <div class="field"><label>What do you need?</label><textarea id="f1" placeholder="e.g. ISO a photographer for grad photos — can pay ~$100"></textarea></div>
-    <div class="field"><label>Type</label><div class="catgrid"><div class="catpick on" data-tag="0">Looking for</div><div class="catpick" data-tag="1">Barter / trade</div></div></div>`;}
+    <div class="field"><label>Type</label><div class="catgrid"><div class="catpick on" data-tag="0">Request</div><div class="catpick" data-tag="1">Trade</div></div></div>`;}
   else{title='Post an event';body=`${photoBox}
     <div class="field"><label>Event name</label><input id="f1" placeholder="e.g. Spring Cookout"></div>
     <div class="field"><label>Date & time</label><div style="display:flex;gap:8px"><input id="f2" type="date" style="flex:1"><input id="f3" type="time" style="max-width:120px"></div></div>
@@ -1779,7 +1779,7 @@ function miniForm(mode){
   screen.querySelectorAll('[data-mpd]').forEach(el=>el.onclick=()=>{state.mpays.splice(+el.dataset.mpd,1);miniForm(mode);});
   var _map=document.getElementById('mpaddpay');if(_map)_map.onclick=()=>{state.mpays.push({app:'Cash App',handle:''});miniForm(mode);};
   const up=screen.querySelector('.up2');if(up)up.onclick=()=>cphoto.click();
-  let tag=mode==='item'?'Sell':(mode==='request'?'0':'');
+  let tag=mode==='item'?'For sale':(mode==='request'?'0':'');
   screen.querySelectorAll('[data-tag]').forEach(el=>el.onclick=()=>{screen.querySelectorAll('[data-tag]').forEach(x=>x.classList.remove('on'));el.classList.add('on');tag=el.dataset.tag;});
   document.getElementById('postmini').onclick=()=>{
     const v=id=>{const e=document.getElementById(id);return e?e.value.trim():'';};
@@ -1865,7 +1865,7 @@ function myPostsScreen(){
   if(!total){h+='<div class="empty" style="padding:44px 30px">You haven\u2019t posted anything yet.<br>Tap the \uFF0B to sell an item, post a request, or add an event.</div>';}
   else{
     if(items.length){h+='<div class="sec-h">Items ('+items.length+')</div>'+items.map(function(g){return mpRow(g.emoji||'📦',g.name,g.price+' \u00b7 '+g.tag,'item',g.id,g.img,g.sold);}).join('');}
-    if(reqs.length){h+='<div class="sec-h">Requests ('+reqs.length+')</div>'+reqs.map(function(r){return mpRow('🙋',r.txt,r.barter?'Barter':'Looking for','request',r.id,r.img,false);}).join('');}
+    if(reqs.length){h+='<div class="sec-h">Trades & Requests ('+reqs.length+')</div>'+reqs.map(function(r){return mpRow('🙋',r.txt,r.barter?'Trade':'Looking for','request',r.id,r.img,false);}).join('');}
     if(evs.length){h+='<div class="sec-h">Events ('+evs.length+')</div>'+evs.map(function(e){return mpRow('🎉',e.title,e.loc||'Campus','event',e.id,e.img,false);}).join('');}
   }
   h+='</div>';

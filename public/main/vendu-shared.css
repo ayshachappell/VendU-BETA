@@ -659,3 +659,12 @@ input:not([type="checkbox"]):not([type="radio"]),textarea,select,.search,.msg-ba
 .request-kind.is-barter{background:#FFF0E0;color:#a5600f}
 .request-copy{color:#40384c;font-size:14px;line-height:20px}
 @media(max-width:370px){.request-head{grid-template-columns:36px minmax(0,1fr);row-gap:6px}.request-kind{grid-column:2;margin-left:0;justify-self:start}.request-copy{margin-top:0}}
+
+/* v58 - prevent Market badges and flags from colliding */
+.market-item-title{column-gap:7px;row-gap:5px}
+.market-item-title .samplechip,.request-identity>.samplechip{flex:0 0 auto;margin:0}
+.request-head{column-gap:10px;row-gap:7px}
+.request-identity{column-gap:7px;row-gap:5px;overflow:hidden}
+.request-author{min-width:0;max-width:100%;overflow-wrap:anywhere}
+.request-kind{margin-left:0;justify-self:end;max-width:100%}
+@media(max-width:390px){.request-head{grid-template-columns:36px minmax(0,1fr)}.request-kind{grid-column:2;justify-self:start}}
