@@ -1,4 +1,4 @@
-# Persistent messaging, transaction meet-ups, and mobile polish
+- Persistent messaging, transaction meet-ups, and mobile polish
 
 Main and Beta will receive the same capabilities while remaining fully separated by build.
 
@@ -49,8 +49,8 @@ Match the supplied messaging reference with compact icon controls and accessible
 
 ## 6. Seamless mobile purple header
 
-- Use one dark-purple mobile browser/status-bar color across the page metadata, runtime updates, app header, installed app theme, and both native wrappers.
-- Remove the lighter strip and any one-pixel seam at the top by extending the same header color through the safe area.
+- Use one light-purple mobile browser/status-bar color across the page metadata, runtime updates, app header, installed app theme, and both native wrappers.
+- Remove the darker strip and any one-pixel seam at the top by extending the same header color through the safe area.
 - Preserve the user-selected profile/storefront colors below the global app header.
 
 ## 7. Validation
