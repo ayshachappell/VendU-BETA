@@ -89,3 +89,4 @@
 - [x] v40: restored the signature purple VendU “U” with a contrast edge so it stays visible on every header and storefront banner.
 - [x] v41: applied the purple “U” treatment to all styled VendU names, moved onboarding Back controls to the top-left, added Back to school verification, reduced crowded header titles, and removed storefront welcome outlines.
 - [x] v42: removed the darker interactive layer behind every storefront welcome title and made both uploaded photos and letter avatars enlarge on tap.
+- [x] v43: lifted the storefront welcome grad cap fully above the “U” (matching the other lockups) and turned profile @ handles white for legibility on the purple identity surfaces; service-worker caches bumped to v43.
