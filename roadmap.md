@@ -106,3 +106,4 @@
 
 - [x] v51: limited pull-to-refresh to Feed, Browse, Events, Buy & Trade, and Requests; rebuilt profile-colored DMs with a + attachment menu; updated demos/tutorials; corrected Main routing, legal links, manifest chrome, and stale installed-app caches in both builds.
 - [x] v52: removed the misplaced DM safety line, kept every composer control on one row, closed attachment tools when typing resumes, and added searchable online GIFs in Main and Beta.
+- [x] v53: restored the reference safety reminder above a bottom-anchored message bar, matched conversation spacing, and enlarged touch areas across Main, Beta, demos, and tutorials.
