@@ -14,6 +14,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as BetaRouteImport } from './routes/beta'
 import { Route as ApiPublicFeedRouteImport } from './routes/api/public/feed'
+import { Route as ApiPublicMessagesRouteImport } from './routes/api/public/messages'
 import { Route as ApiPublicProfileRouteImport } from './routes/api/public/profile'
 import { Route as ApiPublicReferralRouteImport } from './routes/api/public/referral'
 import { Route as ApiPublicReportRouteImport } from './routes/api/public/report'
@@ -60,6 +61,11 @@ const BetaRoute = BetaRouteImport.update({
 const ApiPublicFeedRoute = ApiPublicFeedRouteImport.update({
   id: '/api/public/feed',
   path: '/api/public/feed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicMessagesRoute = ApiPublicMessagesRouteImport.update({
+  id: '/api/public/messages',
+  path: '/api/public/messages',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicProfileRoute = ApiPublicProfileRouteImport.update({
@@ -182,6 +188,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
   '/api/public/feed': typeof ApiPublicFeedRoute
+  '/api/public/messages': typeof ApiPublicMessagesRoute
   '/api/public/profile': typeof ApiPublicProfileRoute
   '/api/public/referral': typeof ApiPublicReferralRoute
   '/api/public/report': typeof ApiPublicReportRoute
@@ -211,6 +218,7 @@ export interface FileRoutesByTo {
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
   '/api/public/feed': typeof ApiPublicFeedRoute
+  '/api/public/messages': typeof ApiPublicMessagesRoute
   '/api/public/profile': typeof ApiPublicProfileRoute
   '/api/public/referral': typeof ApiPublicReferralRoute
   '/api/public/report': typeof ApiPublicReportRoute
@@ -241,6 +249,7 @@ export interface FileRoutesById {
   '/app': typeof AppRoute
   '/beta': typeof BetaRoute
   '/api/public/feed': typeof ApiPublicFeedRoute
+  '/api/public/messages': typeof ApiPublicMessagesRoute
   '/api/public/profile': typeof ApiPublicProfileRoute
   '/api/public/referral': typeof ApiPublicReferralRoute
   '/api/public/report': typeof ApiPublicReportRoute
@@ -272,6 +281,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/beta'
     | '/api/public/feed'
+    | '/api/public/messages'
     | '/api/public/profile'
     | '/api/public/referral'
     | '/api/public/report'
@@ -301,6 +311,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/beta'
     | '/api/public/feed'
+    | '/api/public/messages'
     | '/api/public/profile'
     | '/api/public/referral'
     | '/api/public/report'
@@ -330,6 +341,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/beta'
     | '/api/public/feed'
+    | '/api/public/messages'
     | '/api/public/profile'
     | '/api/public/referral'
     | '/api/public/report'
@@ -360,6 +372,7 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRoute
   BetaRoute: typeof BetaRoute
   ApiPublicFeedRoute: typeof ApiPublicFeedRoute
+  ApiPublicMessagesRoute: typeof ApiPublicMessagesRoute
   ApiPublicProfileRoute: typeof ApiPublicProfileRoute
   ApiPublicReferralRoute: typeof ApiPublicReferralRoute
   ApiPublicReportRoute: typeof ApiPublicReportRoute
@@ -419,6 +432,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/feed'
       fullPath: '/api/public/feed'
       preLoaderRoute: typeof ApiPublicFeedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/messages': {
+      id: '/api/public/messages'
+      path: '/api/public/messages'
+      fullPath: '/api/public/messages'
+      preLoaderRoute: typeof ApiPublicMessagesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/profile': {
@@ -584,6 +604,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRoute,
   BetaRoute: BetaRoute,
   ApiPublicFeedRoute: ApiPublicFeedRoute,
+  ApiPublicMessagesRoute: ApiPublicMessagesRoute,
   ApiPublicProfileRoute: ApiPublicProfileRoute,
   ApiPublicReferralRoute: ApiPublicReferralRoute,
   ApiPublicReportRoute: ApiPublicReportRoute,
