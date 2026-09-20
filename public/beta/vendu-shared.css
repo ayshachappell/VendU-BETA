@@ -667,3 +667,10 @@ input:not([type="checkbox"]):not([type="radio"]),textarea,select,.search,.msg-ba
 .request-author{min-width:0;max-width:100%;overflow-wrap:anywhere}
 .request-kind{margin-left:0;justify-self:end;max-width:100%}
 @media(max-width:390px){.request-head{grid-template-columns:36px minmax(0,1fr)}.request-kind{grid-column:2;justify-self:start}}
+
+/* v60 - preserve message return context and balance Market controls */
+.mktseg{display:grid;grid-auto-flow:column;grid-auto-columns:calc(50% - 4px);gap:8px;overflow-x:auto}
+.mktseg .hchip{width:100%;min-width:0;padding-left:8px;padding-right:8px;display:flex;align-items:center;justify-content:center;text-align:center;white-space:normal;line-height:18px}
+.card:has(.request-head) .request-head{margin-right:28px}
+.request-kind{justify-self:end}
+@media(max-width:390px){.card:has(.request-head) .request-head{margin-right:26px}.request-head{grid-template-columns:36px minmax(0,1fr) auto}.request-kind{grid-column:3;justify-self:end;font-size:10.5px;padding-left:7px;padding-right:7px}}
