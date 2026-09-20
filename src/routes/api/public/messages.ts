@@ -78,6 +78,29 @@ export const Route = createFileRoute("/api/public/messages")({
         }
 
         if (action === "list") {
+          /* Materialize due reminders whenever either participant syncs. The
+             durable rows make this idempotent and visible on every device. */
+          const dueNow = new Date().toISOString();
+          const { data: due } = await supabaseAdmin
+            .from("message_transactions")
+            .select("*")
+            .eq("build", build)
+            .or(`seller_email.eq.${email},buyer_email.eq.${email}`)
+            .lte("meetup_available_at", dueNow)
+            .is("reminder_sent_at", null)
+            .limit(50);
+          for (const tx of due ?? []) {
+            const reminder = `Your ${tx.kind === "booking" ? "appointment" : "meet-up"} for ${tx.title} is ready. Open the message to confirm when you are together.`;
+            const at = new Date().toISOString();
+            const { data: claimed } = await supabaseAdmin.from("message_transactions").update({ reminder_sent_at: at }).eq("id", tx.id).is("reminder_sent_at", null).select("id").maybeSingle();
+            if (claimed) await Promise.all([
+              supabaseAdmin.from("conversation_messages").insert({ conversation_id: tx.conversation_id, build, sender_email: null, sender_name: "VendU", kind: "system", body: reminder }),
+              supabaseAdmin.from("message_notifications").insert([
+                { recipient_email: tx.buyer_email, conversation_id: tx.conversation_id, transaction_id: tx.id, build, kind: "meetup", message: reminder },
+                { recipient_email: tx.seller_email, conversation_id: tx.conversation_id, transaction_id: tx.id, build, kind: "meetup", message: reminder },
+              ]),
+            ];
+          }
           const { data } = await supabaseAdmin
             .from("conversations")
             .select("*")
