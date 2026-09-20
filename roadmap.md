@@ -112,3 +112,4 @@
 - [x] v56: aligned request-card avatars precisely with the first line of student names in Main and Beta.
 - [x] v57: rebuilt Buy & Trade and Requests card alignment so avatars, names, badges, labels, and spacing remain exact across Main and Beta screen sizes.
 - [x] v58: renamed Market sections to Buy and Trade & Requests, updated posting/tutorial wording, and prevented badges and flags from overlapping in Main and Beta.
+- v59: GIF picker loads trending on open and searches as you type with real error messages; attachment messages (photo, voice, file, location, contact, GIF) now confirm send, roll back and warn on failure, and open correctly in the thread.
