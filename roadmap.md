@@ -102,3 +102,4 @@
 - [x] Hide all bottom navigation inside a DM while keeping it on the Messages list
 - [x] Camera, photos, voice, GIF/sticker, file, location, and contact composer tools
 - [x] Seamless dark-purple mobile status/header area in web and native wrappers
+- [x] v50: restored the purple post button on the Messages list and combined all DM controls into one compact message bar in Main and Beta
