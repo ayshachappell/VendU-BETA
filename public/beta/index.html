@@ -1086,10 +1086,10 @@ try{
   window.addEventListener('online',venduLiveSync);
 }catch(e){}
 
-/* ---- status bar tint: brand purple everywhere, off-white only on a storefront ---- */
+/* ---- status bar tint: match the dark purple header everywhere ---- */
 try{
   var _tm=document.querySelector('meta[name="theme-color"]');
-  var BRAND_TINT='#5A2BE0', STORE_TINT='#5A2BE0';
+  var BRAND_TINT='#331174', STORE_TINT='#331174';
   function venduTint(){
     if(!_tm)return;
     var onStore=!!document.querySelector('.storefront');
