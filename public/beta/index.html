@@ -11,7 +11,7 @@
 /* Always-fresh assets: every page load requests a unique URL, so no browser,
    proxy or installed-app cache can ever serve an old stylesheet or tutorial. */
 (function(){
-  var B='/beta/', V='v51';
+  var B='/beta/', V='v52';
   var l=document.createElement('link');
   l.rel='stylesheet'; l.href=B+'vendu-shared.css?v='+V;
   document.head.appendChild(l);
@@ -32,7 +32,7 @@
   }).catch(function(){});
 })();
 </script>
-<link rel="manifest" href="/beta/manifest.webmanifest?v=51">
+<link rel="manifest" href="/beta/manifest.webmanifest?v=52">
 <meta name="theme-color" content="#331174">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -2384,6 +2384,7 @@ function wireMessageTools(th){
 }
 function openGifPicker(th){
   var more=document.getElementById('msgMore');if(more)more.hidden=true;
+  var existing=document.querySelector('.gif-picker');if(existing)existing.remove();
   var panel=document.createElement('div');panel.className='gif-picker';panel.innerHTML='<div class="gif-picker-head"><input id="gifQuery" type="search" placeholder="Search GIFs" aria-label="Search GIFs"><button id="gifClose" type="button" aria-label="Close GIF search">×</button></div><div class="gif-results" id="gifResults"><div class="gif-status">Loading GIFs…</div></div>';
   var composer=document.querySelector('.msg-composer');if(!composer)return;composer.parentNode.insertBefore(panel,composer);
   var query=panel.querySelector('#gifQuery'),results=panel.querySelector('#gifResults'),timer;
