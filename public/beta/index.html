@@ -2397,14 +2397,15 @@ function messageScreen(){
   screen.innerHTML='<div class="fade message-view">'
     +'<div class="topbar"><div class="brandrow"><div style="display:flex;align-items:center;gap:11px"><div class="detail-av" id="thav" style="width:40px;height:40px;font-size:17px;border-radius:12px;background:'+th.color+';color:#fff;cursor:pointer">'+th.init+'</div><div class="wordmark" style="font-size:18px">'+msgEsc(th.name)+'</div></div><div class="locpill" id="msgBack" style="cursor:pointer">‹ Inbox</div></div></div>'
     +'<div class="msg-thread" id="thread">'+th.msgs.map(messageBubble).join('')+'</div>'+_deal
-    +'<div class="msg-tools"><button class="msg-tool" id="toolCamera" aria-label="Take photo">📷</button><button class="msg-tool" id="toolVoice" aria-label="Record voice message">🎤</button><button class="msg-tool" id="toolPhotos" aria-label="Choose photo">🖼️</button><button class="msg-tool" id="toolGif" aria-label="GIFs and stickers">GIF</button><button class="msg-tool" id="toolMore" aria-label="More attachments">＋</button></div>'
     +'<div class="msg-more" id="msgMore" hidden><button id="moreFile">📎 File</button><button id="moreLocation">📍 Location</button><button id="moreContact">👤 Contact</button></div>'
-    +'<div class="msg-bar"><input id="msgInput" placeholder="Message '+msgEsc(th.name.split(' ')[0])+'…"><button id="msgSend">Send</button></div></div>';
+    +'<div class="msg-composer"><button class="msg-tool msg-camera" id="toolCamera" type="button" aria-label="Take photo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3l1.5-2h7L17 7h3v12H4z"/><circle cx="12" cy="13" r="4"/></svg></button><div class="msg-bar"><input id="msgInput" placeholder="Message '+msgEsc(th.name.split(' ')[0])+'…" aria-label="Message '+msgEsc(th.name)+'"><button class="msg-send" id="msgSend" type="button" aria-label="Send message" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 14-7-4 14-3-5z"/><path d="m12 14 7-9"/></svg></button></div><button class="msg-tool" id="toolVoice" type="button" aria-label="Record voice message"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/></svg></button><button class="msg-tool" id="toolPhotos" type="button" aria-label="Choose photo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="m5 18 5-5 3 3 2-2 4 4"/></svg></button><button class="msg-tool msg-gif" id="toolGif" type="button" aria-label="GIFs and stickers">GIF</button><button class="msg-tool" id="toolMore" type="button" aria-label="More attachments"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg></button></div></div>';
   document.getElementById('msgBack').onclick=function(){state.thread=0;render();syncMessages(true);};
   var _ta=document.getElementById('thav');if(_ta)_ta.onclick=function(){openPerson(th.name,th.init,th.color);};
   wireDealStrip(th);wireMessageTools(th);
-  var send=function(){var i=document.getElementById('msgInput');if(i&&i.value.trim())sendThreadMessage(th,{body:i.value.trim(),kind:'text'});};
-  document.getElementById('msgSend').onclick=send;document.getElementById('msgInput').onkeydown=function(e){if(e.key==='Enter')send();};
+  var input=document.getElementById('msgInput'),sendButton=document.getElementById('msgSend');
+  var send=function(){if(input&&input.value.trim())sendThreadMessage(th,{body:input.value.trim(),kind:'text'});};
+  var updateSend=function(){if(sendButton)sendButton.hidden=!(input&&input.value.trim());};
+  sendButton.onclick=send;input.oninput=updateSend;input.onkeydown=function(e){if(e.key==='Enter')send();};updateSend();
   if(th.serverId&&window.VendU&&VendU.markConversationRead)VendU.markConversationRead(th.serverId,BUILD);
   var thr=document.getElementById('thread');if(thr)thr.scrollTop=thr.scrollHeight;
 }
