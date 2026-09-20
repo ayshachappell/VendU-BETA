@@ -1599,7 +1599,7 @@ function userProfile(){
   h+='</div>';
   screen.innerHTML=h;
   document.getElementById('upBack').onclick=function(){state.userView=null;render();};
-  var um=document.getElementById('upMsg');if(um)um.onclick=function(){openThread(u.name,u.init,u.col||state.themeColor);};
+  var um=document.getElementById('upMsg');if(um)um.onclick=function(){openThread(u.name,u.init,u.col||state.themeColor,null,(vendor&&vendor.owner)||u.email||'');};
   var us=document.getElementById('upStore');if(us)us.onclick=function(){state.userView=null;openDetail(vendor.id);};
   screen.querySelectorAll('[data-opencomm]').forEach(function(el){el.onclick=function(){state.userView=null;openGroup(el.dataset.opencomm);};});screen.querySelectorAll('[data-change-avatar]').forEach(function(el){el.onclick=function(){photo.click();};});wirePhotoZoom();
 }
@@ -2298,7 +2298,9 @@ function openPerson(name,init,col){
   openUser(name,init,col);
 }
 function localThreadFromConversation(c){
-  var th=(state.inbox||[]).filter(function(t){return t.serverId===c.id||t.id===c.id;})[0];
+  var peer=String(c.peerEmail||'').toLowerCase();
+  var th=(state.inbox||[]).filter(function(t){return t.serverId===c.id||t.id===c.id||(peer&&String(t.peerEmail||'').toLowerCase()===peer);})[0];
+  if(th&&th.id!==c.id){if(state.thread===th.id)state.thread=c.id;th.id=c.id;}
   if(!th){th={id:c.id,serverId:c.id,name:c.name||'Student',peerEmail:c.peerEmail||'',init:(c.name||'?').charAt(0).toUpperCase(),color:c.color||'#5A2BE0',avatar:c.avatar||'',unread:0,msgs:[]};state.inbox.unshift(th);}
   th.serverId=c.id;th.peerEmail=c.peerEmail||th.peerEmail;th.name=c.name||th.name;th.color=c.color||th.color;th.avatar=c.avatar||th.avatar;th.unread=c.unread||0;
   th.msgs=(c.messages||[]).map(function(m){return [m.senderEmail&&m.senderEmail===myAccountEmail()?activeName():(m.senderName||c.name),m.body||'',m];});
@@ -2311,7 +2313,7 @@ function transactionFor(th){return th&&th.deal;}
 function openThread(name,init,color,deal,peerEmail){
   name=name||'a seller';peerEmail=String(peerEmail||'').toLowerCase();
   var th=state.inbox.filter(function(t){return (peerEmail&&t.peerEmail===peerEmail)||t.name===name;})[0];
-  if(!th){th={id:'th'+(idc++),name:name,peerEmail:peerEmail,init:(init||name.trim()[0]||'?').toUpperCase(),color:color||'#5A2BE0',unread:0,msgs:[[name,'Hey! Thanks for reaching out 👋 What can I do for you?']]};state.inbox.unshift(th);}
+  if(!th){th={id:'th'+(idc++),name:name,peerEmail:peerEmail,init:(init||name.trim()[0]||'?').toUpperCase(),color:color||'#5A2BE0',unread:0,msgs:peerEmail?[]:[[name,'Hey! Thanks for reaching out 👋 What can I do for you?']]};state.inbox.unshift(th);}
   if(deal){th.deal=th.deal&&th.deal.id===deal.id?th.deal:{id:deal.id,item:deal.item,seller:deal.seller,pays:deal.pays||[],role:deal.role||'buyer',buyerMet:false,sellerMet:false,buyerPaid:false,paid:false,appointmentAt:deal.appointmentAt||null,availableAt:deal.appointmentAt?new Date(Date.parse(deal.appointmentAt)-900000).toISOString():null};}
   th.unread=0;state.thread=th.id;state.inboxView=true;state.userView=null;render();
   if(peerEmail&&window.VendU&&VendU.openConversation)VendU.openConversation(peerEmail,name,activeName(),BUILD).then(function(r){if(!r||!r.ok)return;th=localThreadFromConversation(r.conversation);state.thread=th.id;if(deal)VendU.createMessageTransaction({conversationId:th.id,kind:deal.kind||'market',referenceId:String(deal.id),title:deal.item,role:deal.role||'buyer',myName:activeName(),peerName:name,paymentMethods:deal.pays||[],appointmentAt:deal.appointmentAt||null,build:BUILD}).then(function(){syncMessages(true);});else messageScreen();});
