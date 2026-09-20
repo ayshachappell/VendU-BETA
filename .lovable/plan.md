@@ -1,0 +1,19 @@
+# Restore posting and unify the DM message bar
+
+## Changes
+- Keep the complete Home / Market / purple “+” / Profile navigation visible on the Messages list.
+- Continue hiding the entire bottom navigation only inside an open conversation.
+- Replace the separate attachment row and text/send row with one compact rounded message bar modeled on the reference: camera, message field, microphone, photos, GIF/sticker, and more controls in one line.
+- Keep File, Location, and Contact inside the existing “+” menu.
+- Show a compact send arrow in the bar when text is entered, without covering the typed message.
+- Apply the same behavior and styling to Main and Beta, then refresh both offline caches.
+
+## Validation
+- Check both builds at 393×852.
+- Confirm the Messages list shows all four navigation controls, including the purple “+”.
+- Confirm an open DM hides navigation and has one usable message bar with every attachment action available.
+- Confirm typed text, send, Inbox, and avatar actions remain functional.
+
+## Technical notes
+- Update the shared message/navigation styles and matching message markup in both static builds.
+- Preserve the current persistent messaging and transaction behavior; this is a presentation and interaction change only.
