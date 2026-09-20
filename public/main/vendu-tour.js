@@ -98,7 +98,7 @@
         before: goHome,
         target: function () { return $(".hdr-av") || $(".header-actions"); },
         title: "Your photo is your inbox",
-        text: "Your circular profile photo opens messages and campus event updates. In a chat, tap + for photos, voice, GIFs, files, location or contacts; the camera stays one tap away. Until you add a photo, a bell appears instead.",
+        text: "Your circular profile photo opens messages and campus event updates. In a chat, the safety reminder and message bar stay at the bottom. Tap + for photos, voice, GIFs, files, location or contacts; the camera stays one tap away. Until you add a photo, a bell appears instead.",
         place: "below",
       },
       {

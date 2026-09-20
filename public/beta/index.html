@@ -11,7 +11,7 @@
 /* Always-fresh assets: every page load requests a unique URL, so no browser,
    proxy or installed-app cache can ever serve an old stylesheet or tutorial. */
 (function(){
-  var B='/beta/', V='v52';
+  var B='/beta/', V='v53';
   var l=document.createElement('link');
   l.rel='stylesheet'; l.href=B+'vendu-shared.css?v='+V;
   document.head.appendChild(l);
@@ -32,7 +32,7 @@
   }).catch(function(){});
 })();
 </script>
-<link rel="manifest" href="/beta/manifest.webmanifest?v=52">
+<link rel="manifest" href="/beta/manifest.webmanifest?v=53">
 <meta name="theme-color" content="#331174">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -2400,6 +2400,7 @@ function messageScreen(){
   screen.innerHTML='<div class="fade message-view" style="--thread-color:'+_threadColor+';--thread-text:'+_threadText+'">'
     +'<div class="topbar msg-theme-header" style="background:'+bannerGrad(_threadColor)+'"><div class="brandrow"><div class="msg-person"><div class="detail-av msg-person-av" id="thav"'+(th.avatar?' style="background-color:'+_threadColor+';background-image:url(&quot;'+msgEsc(th.avatar)+'&quot;);background-size:cover;background-position:center"':' style="background:'+_threadColor+'"')+'>'+(th.avatar?'':th.init)+'<span class="livedot"></span></div><div class="msg-person-name">'+msgEsc(th.name)+' <span class="msg-verified" aria-label="Verified">✓</span></div></div><button class="locpill" id="msgBack" type="button">‹ Inbox</button></div></div>'
     +'<div class="msg-thread" id="thread">'+th.msgs.map(messageBubble).join('')+'</div>'+_deal
+    +'<div class="msg-safety-text">To help everyone stay safer, meet in public during daylight, bring someone you trust, and never send money before meeting.</div>'
     +'<div class="msg-more" id="msgMore" hidden><button id="toolPhotos" type="button">▧ Photos</button><button id="toolVoice" type="button">🎤 Voice</button><button id="toolGif" type="button">GIF Stickers</button><button id="moreFile" type="button">📎 File</button><button id="moreLocation" type="button">📍 Location</button><button id="moreContact" type="button">👤 Contact</button></div>'
     +'<div class="msg-composer"><button class="msg-tool msg-plus" id="toolMore" type="button" aria-label="Open attachment tools"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg></button><button class="msg-tool msg-camera" id="toolCamera" type="button" aria-label="Take photo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3l1.5-2h7L17 7h3v12H4z"/><circle cx="12" cy="13" r="4"/></svg></button><div class="msg-bar"><input id="msgInput" placeholder="Message '+msgEsc(th.name.split(' ')[0])+'…" aria-label="Message '+msgEsc(th.name)+'"></div><button class="msg-send" id="msgSend" type="button" aria-label="Send message" disabled>Send</button></div></div>';
   document.getElementById('msgBack').onclick=function(){state.thread=0;render();syncMessages(true);};
