@@ -566,6 +566,6 @@ input,textarea,select,[contenteditable="true"]{pointer-events:auto}
 @media(max-width:439px){
   html,body{background:#331174!important}
   .message-view{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
-  .message-view .msg-bar{bottom:calc(78px + env(safe-area-inset-bottom,0px));padding-bottom:12px}
+  .message-view .msg-bar{position:relative;bottom:auto;flex:0 0 auto;padding-bottom:12px}
   .message-view .msg-thread{padding-bottom:16px}
 }
