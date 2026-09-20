@@ -599,7 +599,8 @@ input:not([type="checkbox"]):not([type="radio"]),textarea,select,.search,.msg-ba
 .search{display:flex;align-items:center;padding-block:9px!important}
 .search input{height:30px!important;min-height:30px!important}
 .inbox-row,.p-action,.menu-row{min-height:56px}
-.message-view{height:100dvh;max-height:100%;overflow:hidden}
+.screen:has(.message-view){display:flex;padding-bottom:0!important;overflow:hidden!important}
+.message-view{flex:1;height:auto;min-height:0;max-height:none;overflow:hidden}
 .message-view .msg-thread{padding:18px 18px 16px;gap:14px;scroll-padding-bottom:16px}
 .message-view .bubble{max-width:78%;padding:14px 16px;border-radius:20px;font-size:15px;line-height:1.45}
 .message-view .bubble.me{border-bottom-right-radius:8px}
