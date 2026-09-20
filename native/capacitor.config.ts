@@ -18,7 +18,7 @@ const config: CapacitorConfig = {
     allowNavigation: ["venduapp.com", "www.venduapp.com"],
   },
   ios: {
-    contentInset: "always",
+    contentInset: "never",
     limitsNavigationsToAppBoundDomains: false,
   },
   android: {
