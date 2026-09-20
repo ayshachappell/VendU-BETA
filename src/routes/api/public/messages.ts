@@ -60,10 +60,11 @@ export const Route = createFileRoute("/api/public/messages")({
           const peerIsA = String(c["participant_b_email"]) === email;
           const peerEmail = String(c[peerIsA ? "participant_a_email" : "participant_b_email"] ?? "");
           const peerName = String(c[peerIsA ? "participant_a_name" : "participant_b_name"] ?? "Student");
-          const [{ data: messages }, { data: transactions }, { data: read }] = await Promise.all([
+          const [{ data: messages }, { data: transactions }, { data: read }, { data: peerVendor }] = await Promise.all([
             supabaseAdmin.from("conversation_messages").select("*").eq("conversation_id", id).order("created_at", { ascending: true }).limit(500),
             supabaseAdmin.from("message_transactions").select("*").eq("conversation_id", id).order("created_at", { ascending: true }),
             supabaseAdmin.from("conversation_reads").select("read_at").eq("conversation_id", id).eq("reader_email", email).maybeSingle(),
+            supabaseAdmin.from("vendors").select("accent_color,avatar_url").eq("owner_email", peerEmail).eq("build", build).eq("published", true).maybeSingle(),
           ]);
           const readAt = Date.parse(String(read?.read_at ?? "")) || 0;
           const safeTransactions = (transactions ?? []).map((tx) => {
@@ -80,6 +81,8 @@ export const Route = createFileRoute("/api/public/messages")({
             id,
             name: peerName,
             peerEmail,
+            color: peerVendor?.accent_color ?? null,
+            avatar: peerVendor?.avatar_url ?? null,
             updatedAt: c["updated_at"],
             unread: (messages ?? []).filter((m) => String(m.sender_email ?? "") !== email && Date.parse(String(m.created_at)) > readAt).length,
             messages: (messages ?? []).map((m) => publicMessage(m as Record<string, unknown>)),

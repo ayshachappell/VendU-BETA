@@ -21,20 +21,20 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: BetaRedirect,
+  component: MainRedirect,
 });
 
-function BetaRedirect() {
+function MainRedirect() {
   useEffect(() => {
     // A verification link lands here first — consume the token before leaving.
     if (handleMagicLinkReturn()) return;
-    window.location.replace("/beta/index.html");
+    window.location.replace("/main/index.html");
   }, []);
   return (
     <main className="flex min-h-screen items-center justify-center bg-background px-6 text-center">
       <div>
         <p className="text-sm text-muted-foreground">Opening The VendU App…</p>
-        <a href="/beta/index.html" className="mt-3 inline-block text-sm font-semibold underline">
+        <a href="/main/index.html" className="mt-3 inline-block text-sm font-semibold underline">
           Tap here if nothing happens
         </a>
       </div>
