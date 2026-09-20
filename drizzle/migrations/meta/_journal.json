@@ -8,6 +8,13 @@
       "when": 1789910997038,
       "tag": "0000_persistent_messaging_and_transactions",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789911480434,
+      "tag": "0001_secure_message_attachment_storage",
+      "breakpoints": true
     }
   ]
 }
