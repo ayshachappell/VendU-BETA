@@ -2301,8 +2301,8 @@ function openPerson(name,init,col){
 }
 function localThreadFromConversation(c){
   var th=(state.inbox||[]).filter(function(t){return t.serverId===c.id||t.id===c.id;})[0];
-  if(!th){th={id:c.id,serverId:c.id,name:c.name||'Student',peerEmail:c.peerEmail||'',init:(c.name||'?').charAt(0).toUpperCase(),color:'#5A2BE0',unread:0,msgs:[]};state.inbox.unshift(th);}
-  th.serverId=c.id;th.peerEmail=c.peerEmail||th.peerEmail;th.name=c.name||th.name;th.unread=c.unread||0;
+  if(!th){th={id:c.id,serverId:c.id,name:c.name||'Student',peerEmail:c.peerEmail||'',init:(c.name||'?').charAt(0).toUpperCase(),color:c.color||'#5A2BE0',avatar:c.avatar||'',unread:0,msgs:[]};state.inbox.unshift(th);}
+  th.serverId=c.id;th.peerEmail=c.peerEmail||th.peerEmail;th.name=c.name||th.name;th.color=c.color||th.color;th.avatar=c.avatar||th.avatar;th.unread=c.unread||0;
   th.msgs=(c.messages||[]).map(function(m){return [m.senderEmail&&m.senderEmail===myAccountEmail()?activeName():(m.senderName||c.name),m.body||'',m];});
   th.transactions=c.transactions||[];if(th.transactions.length)th.deal=serverDeal(th.transactions[th.transactions.length-1]);return th;
 }
@@ -2390,7 +2390,7 @@ function messageScreen(){
   if(!th){state.thread=0;return render();}
   var _deal=dealStripHTML(th),_threadColor=messageColor(th),_threadText=textOn(_threadColor);
   screen.innerHTML='<div class="fade message-view" style="--thread-color:'+_threadColor+';--thread-text:'+_threadText+'">'
-    +'<div class="topbar msg-theme-header" style="background:'+bannerGrad(_threadColor)+'"><div class="brandrow"><div class="msg-person"><div class="detail-av msg-person-av" id="thav" style="background:'+_threadColor+'">'+th.init+'<span class="livedot"></span></div><div class="msg-person-name">'+msgEsc(th.name)+' <span class="msg-verified" aria-label="Verified">✓</span></div></div><button class="locpill" id="msgBack" type="button">‹ Inbox</button></div></div>'
+    +'<div class="topbar msg-theme-header" style="background:'+bannerGrad(_threadColor)+'"><div class="brandrow"><div class="msg-person"><div class="detail-av msg-person-av" id="thav"'+(th.avatar?' style="background-color:'+_threadColor+';background-image:url(&quot;'+msgEsc(th.avatar)+'&quot;);background-size:cover;background-position:center"':' style="background:'+_threadColor+'"')+'>'+(th.avatar?'':th.init)+'<span class="livedot"></span></div><div class="msg-person-name">'+msgEsc(th.name)+' <span class="msg-verified" aria-label="Verified">✓</span></div></div><button class="locpill" id="msgBack" type="button">‹ Inbox</button></div></div>'
     +'<div class="msg-thread" id="thread">'+th.msgs.map(messageBubble).join('')+'</div>'+_deal
     +'<div class="msg-safety-note">To help everyone stay safer, meet in public during daylight, bring someone you trust, and never send money before meeting.</div>'
     +'<div class="msg-more" id="msgMore" hidden><button id="toolPhotos" type="button">▧ Photos</button><button id="toolVoice" type="button">🎤 Voice</button><button id="toolGif" type="button">GIF Stickers</button><button id="moreFile" type="button">📎 File</button><button id="moreLocation" type="button">📍 Location</button><button id="moreContact" type="button">👤 Contact</button></div>'
