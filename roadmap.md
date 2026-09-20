@@ -92,3 +92,4 @@
 - [x] v43: lifted the storefront welcome grad cap fully above the “U” (matching the other lockups) and turned profile @ handles white for legibility on the purple identity surfaces; service-worker caches bumped to v43.
 - [x] v44: raised the graduation cap above the “U” in student-profile banners to `top: -12px` across Main and Beta; service-worker caches bumped to v44.
 - [x] v45: matched student-profile “The VendU App” lockups to the animated header design in Main and Beta while preserving the `top: -12px` cap position.
+- [x] v46: matched the student-profile graduation cap height to the standard “The VendU App” header cap at `top: -9px` across Main and Beta.
