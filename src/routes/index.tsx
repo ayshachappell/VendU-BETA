@@ -5,13 +5,13 @@ import { handleMagicLinkReturn } from "@/lib/vendu-magic-link";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "The VendU App — Campus Marketplace for Students" },
+      { title: "The VendU App Beta — Campus Marketplace for Students" },
       {
         name: "description",
         content:
-          "Join The VendU App: sell your stuff, book a service and get paid on your campus marketplace.",
+          "Join The VendU App beta: sell your stuff, book a service and get paid on your campus marketplace.",
       },
-      { property: "og:title", content: "The VendU App — Campus Marketplace for Students" },
+      { property: "og:title", content: "The VendU App Beta — Campus Marketplace for Students" },
       {
         property: "og:description",
         content:
@@ -28,13 +28,13 @@ function MainRedirect() {
   useEffect(() => {
     // A verification link lands here first — consume the token before leaving.
     if (handleMagicLinkReturn()) return;
-    window.location.replace("/main/index.html");
+    window.location.replace("/beta/index.html");
   }, []);
   return (
     <main className="flex min-h-screen items-center justify-center bg-background px-6 text-center">
       <div>
         <p className="text-sm text-muted-foreground">Opening The VendU App…</p>
-        <a href="/main/index.html" className="mt-3 inline-block text-sm font-semibold underline">
+        <a href="/beta/index.html" className="mt-3 inline-block text-sm font-semibold underline">
           Tap here if nothing happens
         </a>
       </div>
