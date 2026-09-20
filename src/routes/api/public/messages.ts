@@ -44,6 +44,42 @@ export const Route = createFileRoute("/api/public/messages")({
         const build = normalizeBuild(raw["build"]);
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
+        if (action === "gifSearch") {
+          const query = str(raw["query"], 80);
+          const lovableApiKey = process.env["LOVABLE_API_KEY"]!;
+          const klipyApiKey = process.env["KLIPY_API_KEY"]!;
+          if (!lovableApiKey || !klipyApiKey) return json({ ok: false, message: "GIF search is unavailable right now." }, 503);
+          const params = new URLSearchParams({ customer_id: email, per_page: "24" });
+          if (query) params.set("q", query);
+          const endpoint = query ? "search" : "trending";
+          const response = await fetch(`https://connector-gateway.lovable.dev/klipy/gifs/${endpoint}?${params}`, {
+            headers: {
+              Authorization: `Bearer ${lovableApiKey}`,
+              "X-Connection-Api-Key": klipyApiKey,
+            },
+          });
+          if (!response.ok) {
+            const errorBody = await response.text();
+            console.error(`KLIPY request failed [${response.status}]: ${errorBody}`);
+            return json({ ok: false, message: "GIF search could not load. Try again." }, response.status);
+          }
+          const result = (await response.json()) as { result?: boolean; data?: { data?: Record<string, unknown>[] } };
+          if (!result.result) return json({ ok: false, message: "GIF search could not load. Try again." }, 502);
+          const gifs = (result.data?.data ?? []).flatMap((item) => {
+            const file = item["file"] as Record<string, Record<string, { url?: string; width?: number; height?: number }>> | undefined;
+            if (!file) return [];
+            const variants = [file["md"], file["sm"], file["xs"], file["hd"], ...Object.values(file)];
+            let media: { url?: string; width?: number; height?: number } | undefined;
+            for (const variant of variants) {
+              media = variant?.["webp"] ?? variant?.["gif"] ?? variant?.["mp4"];
+              if (media?.url) break;
+            }
+            if (!media?.url || !media.url.startsWith("https://")) return [];
+            return [{ id: String(item["id"] ?? media.url), title: str(item["title"], 100) || "GIF", url: media.url, width: media.width ?? null, height: media.height ?? null }];
+          });
+          return json({ ok: true, gifs });
+        }
+
         async function ownedConversation(id: string) {
           const { data } = await supabaseAdmin
             .from("conversations")
@@ -179,6 +215,18 @@ export const Route = createFileRoute("/api/public/messages")({
             attachment = { path: objectPath, name: safeName(raw["fileName"]), type: hit[1], size: bytes.length };
           } else if (raw["attachment"] && typeof raw["attachment"] === "object") {
             attachment = raw["attachment"] as Record<string, unknown>;
+            if (["gif", "sticker"].includes(kind)) {
+              let mediaUrl: URL;
+              try {
+                mediaUrl = new URL(String(attachment["url"] ?? ""));
+              } catch {
+                return json({ ok: false, message: "That GIF is not available." }, 400);
+              }
+              if (mediaUrl.protocol !== "https:" || !(mediaUrl.hostname === "klipy.com" || mediaUrl.hostname.endsWith(".klipy.com"))) {
+                return json({ ok: false, message: "That GIF source is not supported." }, 400);
+              }
+              attachment = { url: mediaUrl.toString(), label: str(attachment["label"], 100) || "GIF" };
+            }
           }
           if (!body && !attachment) return json({ ok: false, message: "Write a message or add an attachment." }, 400);
           const profile = await ensureProfile(email);

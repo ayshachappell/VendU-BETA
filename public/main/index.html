@@ -11,7 +11,7 @@
 /* Always-fresh assets: every page load requests a unique URL, so no browser,
    proxy or installed-app cache can ever serve an old stylesheet or tutorial. */
 (function(){
-  var B='/main/', V='v51';
+  var B='/main/', V='v52';
   var l=document.createElement('link');
   l.rel='stylesheet'; l.href=B+'vendu-shared.css?v='+V;
   document.head.appendChild(l);
@@ -32,7 +32,7 @@
   }).catch(function(){});
 })();
 </script>
-<link rel="manifest" href="/main/manifest.webmanifest?v=51">
+<link rel="manifest" href="/main/manifest.webmanifest?v=52">
 <meta name="theme-color" content="#331174">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -2368,7 +2368,7 @@ function inboxScreen(){
 }
 function msgEsc(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function messageColor(th){var c=String((th&&th.color)||'');return /^#[0-9a-f]{6}$/i.test(c)?c:'#5A2BE0';}
-function messageBubble(m){var meta=m[2]||{},me=m[0]==='You'||m[0]===state.studentName||m[0]===state.vendorName||String(meta.senderEmail||'').toLowerCase()===myAccountEmail();var out='<div class="bubble '+(me?'me':'')+'">'+msgEsc(m[1]);if(meta.attachment){var a=meta.attachment;out+='<button class="bubble-attachment" data-attachment="'+msgEsc(a.path||'')+'" data-thread="'+msgEsc(state.thread)+'">'+(meta.kind==='image'?'📷 Photo':meta.kind==='voice'?'🎤 Voice message':meta.kind==='gif'?'GIF / sticker':'📎 '+msgEsc(a.name||meta.kind||'Attachment'))+'</button>';}return out+'</div>';}
+function messageBubble(m){var meta=m[2]||{},me=m[0]==='You'||m[0]===state.studentName||m[0]===state.vendorName||String(meta.senderEmail||'').toLowerCase()===myAccountEmail();var out='<div class="bubble '+(me?'me':'')+'">'+msgEsc(m[1]);if(meta.attachment){var a=meta.attachment;if((meta.kind==='gif'||meta.kind==='sticker')&&a.url)out+='<img class="bubble-gif" src="'+msgEsc(a.url)+'" alt="'+msgEsc(a.label||'GIF')+'" loading="lazy">';else out+='<button class="bubble-attachment" data-attachment="'+msgEsc(a.path||'')+'" data-thread="'+msgEsc(state.thread)+'">'+(meta.kind==='image'?'📷 Photo':meta.kind==='voice'?'🎤 Voice message':'📎 '+msgEsc(a.name||meta.kind||'Attachment'))+'</button>';}return out+'</div>';}
 function fileData(file,cb){if(!file)return;if(file.size>8*1024*1024){toast('Attachments must be 8 MB or smaller.');return;}var r=new FileReader();r.onload=function(){cb({dataUrl:r.result,fileName:file.name||'attachment',kind:/^image\//.test(file.type)?'image':/^audio\//.test(file.type)?'voice':'file'});};r.onerror=function(){toast('Could not read that attachment.');};r.readAsDataURL(file);}
 function sendThreadMessage(th,payload){payload=payload||{};var text=String(payload.body||'').trim();if(!text&&!payload.dataUrl&&!payload.attachment)return;th.msgs.push([activeName(),text,payload]);messageScreen();if(th.serverId&&window.VendU&&VendU.sendMessage)VendU.sendMessage({conversationId:th.serverId,body:text,kind:payload.kind||'text',dataUrl:payload.dataUrl||'',fileName:payload.fileName||'',attachment:payload.attachment||null,senderName:activeName(),build:BUILD}).then(function(r){if(!r||!r.ok)toast((r&&r.message)||'Message could not be sent.');else syncMessages(true);});}
 function wireMessageTools(th){
@@ -2376,13 +2376,23 @@ function wireMessageTools(th){
   var cam=document.getElementById('toolCamera'),pics=document.getElementById('toolPhotos'),voice=document.getElementById('toolVoice'),gif=document.getElementById('toolGif'),more=document.getElementById('toolMore');
   if(cam)cam.onclick=function(){choose(msgCamera);};if(pics)pics.onclick=function(){choose(msgMedia);};
   msgCamera.onchange=function(){fileData(msgCamera.files[0],function(p){sendThreadMessage(th,p);});};msgMedia.onchange=function(){fileData(msgMedia.files[0],function(p){sendThreadMessage(th,p);});};msgFile.onchange=function(){fileData(msgFile.files[0],function(p){sendThreadMessage(th,p);});};
-  if(gif)gif.onclick=function(){var q=prompt('Search GIFs or choose a sticker:','Celebration');if(q)sendThreadMessage(th,{kind:'sticker',body:'🎉 '+q,attachment:{label:q}});};
+  if(gif)gif.onclick=function(){openGifPicker(th);};
   if(more)more.onclick=function(){var m=document.getElementById('msgMore');if(m)m.hidden=!m.hidden;};
   var mf=document.getElementById('moreFile');if(mf)mf.onclick=function(){choose(msgFile);};
   var ml=document.getElementById('moreLocation');if(ml)ml.onclick=function(){if(!navigator.geolocation)return toast('Location is unavailable.');navigator.geolocation.getCurrentPosition(function(p){var u='https://maps.google.com/?q='+p.coords.latitude+','+p.coords.longitude;sendThreadMessage(th,{kind:'location',body:'📍 Shared location',attachment:{url:u,label:'Open map'}});},function(){toast('Location permission was not granted.');});};
   var mc=document.getElementById('moreContact');if(mc)mc.onclick=function(){var c=prompt('Enter a name and phone number to share:');if(c)sendThreadMessage(th,{kind:'contact',body:'👤 '+c,attachment:{label:c}});};
   if(voice)voice.onclick=async function(){if(!navigator.mediaDevices||!window.MediaRecorder)return toast('Voice recording is not supported on this device.');if(voice.dataset.recording==='1'){window._venduRecorder.stop();voice.dataset.recording='0';voice.textContent='🎤';return;}try{var stream=await navigator.mediaDevices.getUserMedia({audio:true}),parts=[],rec=new MediaRecorder(stream);window._venduRecorder=rec;rec.ondataavailable=function(e){parts.push(e.data);};rec.onstop=function(){stream.getTracks().forEach(function(t){t.stop();});var blob=new Blob(parts,{type:rec.mimeType||'audio/webm'}),file=new File([blob],'voice-message.webm',{type:blob.type});fileData(file,function(p){sendThreadMessage(th,p);});};rec.start();voice.dataset.recording='1';voice.textContent='■';toast('Recording — tap stop to send.');}catch(e){toast('Microphone permission was not granted.');}};
   screen.querySelectorAll('[data-attachment]').forEach(function(el){el.onclick=function(){var meta=(th.msgs||[]).map(function(x){return x[2]&&x[2].attachment;}).filter(function(a){return a&&a.path===el.dataset.attachment;})[0];if(meta&&meta.url)return window.open(meta.url,'_blank');if(!el.dataset.attachment)return;VendU.messageAttachmentUrl(th.serverId,el.dataset.attachment,BUILD).then(function(r){if(r&&r.url)window.open(r.url,'_blank');});};});
+}
+function openGifPicker(th){
+  var more=document.getElementById('msgMore');if(more)more.hidden=true;
+  var existing=document.querySelector('.gif-picker');if(existing)existing.remove();
+  var panel=document.createElement('div');panel.className='gif-picker';panel.innerHTML='<div class="gif-picker-head"><input id="gifQuery" type="search" placeholder="Search GIFs" aria-label="Search GIFs"><button id="gifClose" type="button" aria-label="Close GIF search">×</button></div><div class="gif-results" id="gifResults"><div class="gif-status">Loading GIFs…</div></div>';
+  var composer=document.querySelector('.msg-composer');if(!composer)return;composer.parentNode.insertBefore(panel,composer);
+  var query=panel.querySelector('#gifQuery'),results=panel.querySelector('#gifResults'),timer;
+  function close(){panel.remove();}
+  function load(value){results.innerHTML='<div class="gif-status">Loading GIFs…</div>';VendU.messageAction({action:'gifSearch',query:value||'',build:BUILD}).then(function(r){if(!panel.isConnected)return;if(!r||!r.ok||!r.gifs||!r.gifs.length){results.innerHTML='<div class="gif-status">No GIFs found. Try another search.</div>';return;}results.innerHTML=r.gifs.map(function(g){return '<button type="button" data-gif="'+msgEsc(g.url)+'" data-label="'+msgEsc(g.title)+'" aria-label="Send '+msgEsc(g.title)+'"><img src="'+msgEsc(g.url)+'" alt="" loading="lazy"></button>';}).join('');results.querySelectorAll('[data-gif]').forEach(function(el){el.onclick=function(){sendThreadMessage(th,{kind:'gif',body:'',attachment:{url:el.dataset.gif,label:el.dataset.label||'GIF'}});close();};});}).catch(function(){if(panel.isConnected)results.innerHTML='<div class="gif-status">GIF search could not load. Try again.</div>';});}
+  panel.querySelector('#gifClose').onclick=close;query.oninput=function(){clearTimeout(timer);timer=setTimeout(function(){load(query.value.trim());},300);};query.focus();load('');
 }
 function messageScreen(){
   document.getElementById('nav').classList.add('message-active');
@@ -2392,7 +2402,6 @@ function messageScreen(){
   screen.innerHTML='<div class="fade message-view" style="--thread-color:'+_threadColor+';--thread-text:'+_threadText+'">'
     +'<div class="topbar msg-theme-header" style="background:'+bannerGrad(_threadColor)+'"><div class="brandrow"><div class="msg-person"><div class="detail-av msg-person-av" id="thav"'+(th.avatar?' style="background-color:'+_threadColor+';background-image:url(&quot;'+msgEsc(th.avatar)+'&quot;);background-size:cover;background-position:center"':' style="background:'+_threadColor+'"')+'>'+(th.avatar?'':th.init)+'<span class="livedot"></span></div><div class="msg-person-name">'+msgEsc(th.name)+' <span class="msg-verified" aria-label="Verified">✓</span></div></div><button class="locpill" id="msgBack" type="button">‹ Inbox</button></div></div>'
     +'<div class="msg-thread" id="thread">'+th.msgs.map(messageBubble).join('')+'</div>'+_deal
-    +'<div class="msg-safety-note">To help everyone stay safer, meet in public during daylight, bring someone you trust, and never send money before meeting.</div>'
     +'<div class="msg-more" id="msgMore" hidden><button id="toolPhotos" type="button">▧ Photos</button><button id="toolVoice" type="button">🎤 Voice</button><button id="toolGif" type="button">GIF Stickers</button><button id="moreFile" type="button">📎 File</button><button id="moreLocation" type="button">📍 Location</button><button id="moreContact" type="button">👤 Contact</button></div>'
     +'<div class="msg-composer"><button class="msg-tool msg-plus" id="toolMore" type="button" aria-label="Open attachment tools"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg></button><button class="msg-tool msg-camera" id="toolCamera" type="button" aria-label="Take photo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3l1.5-2h7L17 7h3v12H4z"/><circle cx="12" cy="13" r="4"/></svg></button><div class="msg-bar"><input id="msgInput" placeholder="Message '+msgEsc(th.name.split(' ')[0])+'…" aria-label="Message '+msgEsc(th.name)+'"></div><button class="msg-send" id="msgSend" type="button" aria-label="Send message" disabled>Send</button></div></div>';
   document.getElementById('msgBack').onclick=function(){state.thread=0;render();syncMessages(true);};
@@ -2401,7 +2410,7 @@ function messageScreen(){
   var input=document.getElementById('msgInput'),sendButton=document.getElementById('msgSend');
   var send=function(){if(input&&input.value.trim())sendThreadMessage(th,{body:input.value.trim(),kind:'text'});};
   var updateSend=function(){if(sendButton)sendButton.disabled=!(input&&input.value.trim());};
-  sendButton.onclick=send;input.oninput=updateSend;input.onkeydown=function(e){if(e.key==='Enter')send();};updateSend();
+  sendButton.onclick=send;input.onfocus=function(){var m=document.getElementById('msgMore');if(m)m.hidden=true;var g=document.querySelector('.gif-picker');if(g)g.remove();};input.oninput=updateSend;input.onkeydown=function(e){if(e.key==='Enter')send();};updateSend();
   if(th.serverId&&window.VendU&&VendU.markConversationRead)VendU.markConversationRead(th.serverId,BUILD);
   var thr=document.getElementById('thread');if(thr)thr.scrollTop=thr.scrollHeight;
 }
