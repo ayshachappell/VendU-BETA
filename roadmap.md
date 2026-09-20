@@ -115,3 +115,4 @@
 - v59: GIF picker loads trending on open and searches as you type with real error messages; attachment messages (photo, voice, file, location, contact, GIF) now confirm send, roll back and warn on failure, and open correctly in the thread.
 - [x] v60: profiles and storefronts opened from Messages return to their originating list or conversation; Market badges clear report flags; Buy and Trade & Requests use equal-width controls in Main, Beta, demos, and tutorials.
 - [x] v61: all mobile top bars, profile/storefront controls, Messages controls, and pull indicators respect each device's status-bar safe area in Main and Beta.
+- [x] v62: anchored the vendor storefront Back button in a dedicated status-bar-safe layer with a full 44px touch target in Main and Beta.

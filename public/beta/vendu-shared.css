@@ -684,3 +684,8 @@ input:not([type="checkbox"]):not([type="radio"]),textarea,select,.search,.msg-ba
 .storefront .awning{min-height:calc(102px + env(safe-area-inset-top,0px))!important;padding-top:calc(48px + env(safe-area-inset-top,0px))!important}
 .roofline .backbtn{top:calc(14px + env(safe-area-inset-top,0px))}
 .ptr{top:calc(6px + env(safe-area-inset-top,0px))}
+
+/* v62 - anchor the vendor storefront Back control to its own safe top layer */
+.storefront{position:relative}
+.storefront .roofline{position:absolute;inset:0 0 auto 0;height:calc(58px + env(safe-area-inset-top,0px));padding:0;overflow:visible;z-index:40;pointer-events:none}
+.storefront .roofline .backbtn{top:calc(10px + env(safe-area-inset-top,0px))!important;left:14px;min-width:82px;min-height:44px;padding:10px 14px 10px 10px;box-sizing:border-box;justify-content:center;pointer-events:auto}
