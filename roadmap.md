@@ -109,3 +109,4 @@
 - [x] v53: restored the reference safety reminder above a bottom-anchored message bar, matched conversation spacing, and enlarged touch areas across Main, Beta, demos, and tutorials.
 - [x] v54: removed the hidden navigation's reserved space so the DM safety reminder and message bar reach the true bottom on every viewport in Main and Beta.
 - [x] v55: aligned message-list avatars with names and added a private, confirmed thread-removal control in Main and Beta.
+- [x] v56: aligned request-card avatars precisely with the first line of student names in Main and Beta.
