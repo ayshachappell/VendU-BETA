@@ -1089,6 +1089,9 @@ export type Database = {
           layout: string
           owner_email: string
           payments: Json
+          pickup_label: string | null
+          pickup_lat: number | null
+          pickup_lng: number | null
           published: boolean
           shop_name: string
           tagline: string | null
@@ -1108,6 +1111,9 @@ export type Database = {
           layout?: string
           owner_email: string
           payments?: Json
+          pickup_label?: string | null
+          pickup_lat?: number | null
+          pickup_lng?: number | null
           published?: boolean
           shop_name: string
           tagline?: string | null
@@ -1127,6 +1133,9 @@ export type Database = {
           layout?: string
           owner_email?: string
           payments?: Json
+          pickup_label?: string | null
+          pickup_lat?: number | null
+          pickup_lng?: number | null
           published?: boolean
           shop_name?: string
           tagline?: string | null

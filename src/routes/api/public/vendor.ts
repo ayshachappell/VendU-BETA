@@ -11,6 +11,12 @@ import {
 
 type Body = Record<string, unknown>;
 
+/** Optional vendor pickup coordinate — stored only when the vendor shares it. */
+function coord(value: unknown, max: number): number | null {
+  const n = Number(value);
+  return Number.isFinite(n) && Math.abs(n) <= max && n !== 0 ? n : null;
+}
+
 type ServiceIn = {
   id?: unknown;
   title?: unknown;
@@ -41,6 +47,9 @@ function shapeVendor(
     avatarUrl: v["avatar_url"] ?? "",
     badges: v["badges"] ?? [],
     availability: v["availability"] ?? "",
+    pickupLabel: v["pickup_label"] ?? "",
+    pickupLat: v["pickup_lat"] ?? null,
+    pickupLng: v["pickup_lng"] ?? null,
     payments: v["payments"] ?? {},
     socials: socialsByEmail.get(String(v["owner_email"] ?? "").toLowerCase()) ?? {},
     boosted: !!v["boosted"],
@@ -202,6 +211,9 @@ export const Route = createFileRoute("/api/public/vendor")({
             avatar_url: cleanUrl(raw["avatarUrl"], 800000),
             badges,
             availability: str(raw["availability"], 160) || null,
+            pickup_label: str(raw["pickupLabel"], 80) || null,
+            pickup_lat: coord(raw["pickupLat"], 90),
+            pickup_lng: coord(raw["pickupLng"], 180),
             payments,
             published: raw["published"] === undefined ? true : !!raw["published"],
           };
