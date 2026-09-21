@@ -1,16 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
+  internalLogin,
+  isInternalEmail,
   isVerifiedStudent,
   json,
   logAttempt,
   normalizeAccessEmail,
+  normalizeBuild,
   normalizePassword,
   passwordLogin,
+  recordStudent,
   requireStudent,
   setPasswordWithToken,
   signOutEverywhere,
   touchStudent,
 } from "@/lib/edu-verification.server";
+
 
 function bearer(request: Request): string {
   const m = /^Bearer\s+(.+)$/i.exec((request.headers.get("authorization") ?? "").trim());
@@ -30,11 +35,24 @@ export const Route = createFileRoute("/api/public/auth/password")({
         }
         const action = String(body["action"] ?? "").slice(0, 24);
 
-        /* Log in with email + password — no school-email screen needed. */
+        /* Log in with email + password — no school-email screen needed.
+           Company addresses (CEO, admin, @venduapp.com testers) sign in
+           with the email alone. */
         if (action === "login") {
           const email = normalizeAccessEmail(body["email"]);
+          if (!email) return json({ ok: false, message: "Enter your email." }, 400);
+
+          if (isInternalEmail(email)) {
+            await logAttempt(email, "login");
+            const internal = await internalLogin(email);
+            if (!internal.ok) return json({ ok: false, message: internal.message }, 401);
+            await recordStudent(email, normalizeBuild(body["build"]), null);
+            await touchStudent(email);
+            return json({ ok: true, email, internal: true, session: internal.session });
+          }
+
           const password = normalizePassword(body["password"]);
-          if (!email || !password)
+          if (!password)
             return json({ ok: false, message: "Enter your email and password." }, 400);
           await logAttempt(email, "login");
           if (!(await isVerifiedStudent(email)))
@@ -50,6 +68,7 @@ export const Route = createFileRoute("/api/public/auth/password")({
           await touchStudent(email);
           return json({ ok: true, email, session: result.session });
         }
+
 
         const auth = await requireStudent(request);
         if ("response" in auth) return auth.response;

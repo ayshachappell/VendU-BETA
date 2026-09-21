@@ -2077,19 +2077,27 @@ function onboarding(){
     </div></div>`;
     var pwBusy=false;
     var goBtn=document.getElementById('pwGo');
+    /* Company accounts (CEO, admin and @venduapp.com testers) log in with the email alone. */
+    function isInternalLogin(e){return /@(integroservicegroup|venduapp)\.com$/i.test(String(e||'').trim());}
+    var pwField=document.getElementById('pwPass');
+    var pwEmailEl=document.getElementById('pwEmail');
+    function syncPwField(){var internal=isInternalLogin(pwEmailEl.value);pwField.style.display=internal?'none':'';goBtn.textContent=internal?'Log in with email':'Log in';}
+    pwEmailEl.oninput=syncPwField;syncPwField();
     goBtn.onclick=function(){
       if(pwBusy)return;
-      var em=(document.getElementById('pwEmail').value||'').trim().toLowerCase();
-      var pw=document.getElementById('pwPass').value||'';
+      var em=(pwEmailEl.value||'').trim().toLowerCase();
+      var pw=pwField.value||'';
+      var internal=isInternalLogin(em);
       if(!VendU.looksLikeEmail(em)){state.eduErr='Enter a valid email address';onboarding();return;}
-      if(pw.length<8){state.eduErr='Enter your password (at least 8 characters)';state.eduEmail=em;onboarding();return;}
+      if(!internal&&pw.length<8){state.eduErr='Enter your password (at least 8 characters)';state.eduEmail=em;onboarding();return;}
       pwBusy=true;goBtn.textContent='Logging in\u2026';
-      VendU.loginPassword(em,pw,BUILD).then(function(r){
+      VendU.loginPassword(em,internal?'':pw,BUILD).then(function(r){
         pwBusy=false;
         if(r&&r.ok){state.eduErr='';state.pwLogin=false;state.eduEmail=r.email||em;state.eduDone=true;applyAccount(r.email||em);toast('Welcome back \u2713');finishOnboarding();return;}
-        state.eduEmail=em;state.eduErr=(r&&r.message)||'That email and password didn\u2019t match.';onboarding();
+        state.eduEmail=em;state.eduErr=(r&&r.message)||(internal?'Could not sign in with that company email.':'That email and password didn\u2019t match.');onboarding();
       });
     };
+
     document.getElementById('pwBack').onclick=function(){state.pwLogin=false;state.eduErr='';state.obStep=1;render();};
     var _ebk=document.getElementById('eduBack');if(_ebk)_ebk.onclick=function(){state.pwLogin=false;state.eduErr='';state.obStep=0;render();};
     var _fgt=document.getElementById('pwForgot');if(_fgt)_fgt.onclick=function(){state.pwLogin=false;state.eduErr='';state.eduCodeSent=false;state.obStep=2;render();toast('Enter your school email and a new password \u2014 we\u2019ll email a link to confirm it.');};

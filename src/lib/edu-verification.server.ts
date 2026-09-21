@@ -62,14 +62,31 @@ export function isTesterEmail(email: string): boolean {
   return email.endsWith(`@${TESTER_DOMAIN}`);
 }
 
+/** Company addresses (CEO / admin / tester domains) sign in with email only. */
+export function isInternalEmail(email: string): boolean {
+  return isCeoEmail(email) || isTesterEmail(email);
+}
+
+/** Same shape check as normalizeAnyEmail, but keeps admin@ style prefixes. */
+function normalizeInternalEmail(raw: unknown): string | null {
+  if (typeof raw !== "string") return null;
+  const email = raw.trim().toLowerCase();
+  if (email.length < 6 || email.length > 254) return null;
+  if (!/^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(email)) return null;
+  return isInternalEmail(email) ? email : null;
+}
+
 /** A .edu student address, or a CEO / tester / invited-tester address. */
 export function normalizeAccessEmail(raw: unknown): string | null {
   const edu = normalizeEduEmail(raw);
   if (edu) return edu;
+  const internal = normalizeInternalEmail(raw);
+  if (internal) return internal;
   const any = normalizeAnyEmail(raw);
   if (!any) return null;
   return isCeoEmail(any) || isTesterEmail(any) ? any : null;
 }
+
 
 
 export function schoolDomain(email: string): string {
@@ -384,7 +401,59 @@ export async function signOutEverywhere(accessToken: string) {
   return res.ok;
 }
 
+/* ------------------------------------------------------------------ *
+ * Internal sign-in: company addresses (CEO, admin and @venduapp.com
+ * tester accounts) sign in with the email alone — no password typed.
+ * The account still holds a real password; it is derived on the server
+ * from a secret, so it is never shown, shared or guessable. Student
+ * (.edu) accounts always type their own password.
+ * ------------------------------------------------------------------ */
+async function internalSecret(email: string): Promise<string> {
+  const seed =
+    process.env["INTERNAL_LOGIN_SECRET"] ??
+    process.env["SUPABASE_SERVICE_ROLE_KEY"] ??
+    "";
+  const data = new TextEncoder().encode(`vendu:internal:${seed}:${email}`);
+  const digest = await crypto.subtle.digest("SHA-256", data);
+  return (
+    "Iv1-" +
+    Array.from(new Uint8Array(digest))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("")
+      .slice(0, 48)
+  );
+}
+
+export async function internalLogin(email: string) {
+  if (!isInternalEmail(email))
+    return { ok: false as const, message: "That address needs a password." };
+  const password = await internalSecret(email);
+
+  const first = await passwordLogin(email, password);
+  if (first.ok) return first;
+
+  // First time on this address (or its password predates this flow):
+  // provision the account with the derived password, then sign in.
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: list } = await supabaseAdmin.auth.admin.listUsers({ page: 1, perPage: 200 });
+  const existing = (list?.users ?? []).find(
+    (u) => (u.email ?? "").toLowerCase() === email,
+  );
+  if (existing) {
+    await supabaseAdmin.auth.admin.updateUserById(existing.id, {
+      password,
+      email_confirm: true,
+    });
+  } else {
+    await supabaseAdmin.auth.admin.createUser({ email, password, email_confirm: true });
+  }
+  const second = await passwordLogin(email, password);
+  if (second.ok) return second;
+  return { ok: false as const, message: "Could not sign you in right now." };
+}
+
 /** Swap a refresh token for a fresh session so long-lived devices stay signed in. */
+
 export async function refreshSession(refreshToken: string) {
   const { url, key } = authBase();
   const res = await fetch(`${url}/auth/v1/token?grant_type=refresh_token`, {

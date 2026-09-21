@@ -245,7 +245,7 @@
         saveSession(res.session);
         try {
           localStorage.setItem(KEY, JSON.stringify({ email: res.email, at: Date.now(), build: build }));
-          localStorage.setItem(PWKEY, "1");
+          if (password) localStorage.setItem(PWKEY, "1");
         } catch (e) {}
       }
       return res;
