@@ -116,3 +116,5 @@
 - [x] v60: profiles and storefronts opened from Messages return to their originating list or conversation; Market badges clear report flags; Buy and Trade & Requests use equal-width controls in Main, Beta, demos, and tutorials.
 - [x] v61: all mobile top bars, profile/storefront controls, Messages controls, and pull indicators respect each device's status-bar safe area in Main and Beta.
 - [x] v62: anchored the vendor storefront Back button in a dedicated status-bar-safe layer with a full 44px touch target in Main and Beta.
+
+- v63 — tutorial: Next/Back on every step in both builds; missing targets show a centred card instead of skipping, so no step can dead-end on any device or preview size.
