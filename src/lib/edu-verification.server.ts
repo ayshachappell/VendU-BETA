@@ -62,14 +62,31 @@ export function isTesterEmail(email: string): boolean {
   return email.endsWith(`@${TESTER_DOMAIN}`);
 }
 
+/** Company addresses (CEO / admin / tester domains) sign in with email only. */
+export function isInternalEmail(email: string): boolean {
+  return isCeoEmail(email) || isTesterEmail(email);
+}
+
+/** Same shape check as normalizeAnyEmail, but keeps admin@ style prefixes. */
+function normalizeInternalEmail(raw: unknown): string | null {
+  if (typeof raw !== "string") return null;
+  const email = raw.trim().toLowerCase();
+  if (email.length < 6 || email.length > 254) return null;
+  if (!/^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(email)) return null;
+  return isInternalEmail(email) ? email : null;
+}
+
 /** A .edu student address, or a CEO / tester / invited-tester address. */
 export function normalizeAccessEmail(raw: unknown): string | null {
   const edu = normalizeEduEmail(raw);
   if (edu) return edu;
+  const internal = normalizeInternalEmail(raw);
+  if (internal) return internal;
   const any = normalizeAnyEmail(raw);
   if (!any) return null;
   return isCeoEmail(any) || isTesterEmail(any) ? any : null;
 }
+
 
 
 export function schoolDomain(email: string): string {
