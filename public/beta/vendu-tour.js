@@ -270,10 +270,9 @@
       // Going backwards we never skip past steps — the user asked for the
       // previous step, so show its card centred instead of rewinding further.
       dbgLog("target missing for step", i, st.title);
-      if (dir < 0) return showCentered(st);
-      i += dir;
-      if (i >= list.length) return end();
-      return show();
+      // Whatever the device or build, never dead-end: show this step's card
+      // centred so Back and Next always stay available.
+      return showCentered(st);
     }
     try {
       el.scrollIntoView({ block: "center", behavior: "smooth" });
@@ -453,9 +452,9 @@
       '<div class="tour-actions">' +
       (i > 0 ? '<button class="tour-back" data-tour="back">Back</button>' : '<span class="tour-spacer"></span>') +
       dots() +
-      (withDo && (st.click || st.event)
-        ? '<span class="tour-spacer"></span>'
-        : '<button class="tour-next" data-tour="next">Next</button>') +
+      '<button class="tour-next" data-tour="next">' +
+      (withDo && (st.click || st.event) ? "Next" : st.next || "Next") +
+      "</button>" +
       "</div>"
     );
   }
