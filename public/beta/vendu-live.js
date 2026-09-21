@@ -85,7 +85,10 @@
         cat: v.category || "Other",
         v: 1,
         lic: 0,
-        dist: 0.5,
+        dist: null,
+        pickup: v.pickupLabel || "",
+        lat: typeof v.pickupLat === "number" ? v.pickupLat : null,
+        lng: typeof v.pickupLng === "number" ? v.pickupLng : null,
         offer: v.tagline || "",
         price: priceLabel,
         rating: "",
@@ -229,6 +232,9 @@
       }
       state.vendorName = r.vendor.shopName || state.vendorName;
       state.vendorUuid = r.vendor.id || state.vendorUuid || "";
+      state.pickupLabel = r.vendor.pickupLabel || state.pickupLabel || "";
+      if (typeof r.vendor.pickupLat === "number") state.pickupLat = r.vendor.pickupLat;
+      if (typeof r.vendor.pickupLng === "number") state.pickupLng = r.vendor.pickupLng;
       state.hasStore = true;
       clearPending();
       redraw();
@@ -304,6 +310,9 @@
       avatarUrl: state.avatar || "",
       badges: (state.badges || []).slice(0, 2),
       availability: "",
+      pickupLabel: state.pickupLabel || "",
+      pickupLat: state.pickupLat == null ? null : state.pickupLat,
+      pickupLng: state.pickupLng == null ? null : state.pickupLng,
       payments: payments,
       campusDomain: domain(),
       services: services,
