@@ -1015,8 +1015,9 @@ function applyAccount(email){
   state.acctEmail=email||'';
   state.isCEO=isCEOEmail(email);
   state.isRealStudent=isEduEmail(email);
-  state.tester=false;
+  state.tester=isTesterEmail(email);
   if((state.isCEO||state.isRealStudent)&&state.demoContent){state.gallery=[];state.services=[];state.socials=[];state.pays=[];state.demoContent=false;}
+  if(state.tester)seedDemoContent();
   if(state.isCEO){state.isFounder=false;}
   try{document.body.classList.toggle('internal-account',!!state.isCEO);}catch(e){}
   if(state.isRealStudent||state.isCEO)creditReferral();
