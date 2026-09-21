@@ -1187,6 +1187,7 @@ function browseBody(){
   let f=HUSTLES.filter(h=>h.campus===state.campus.id&&(state.cat==='All'||h.cat===state.cat)&&(state.q===''||(h.name+h.offer+h.cat).toLowerCase().includes(state.q.toLowerCase())));
   if(state.avail)f=f.filter(h=>AVAIL.includes(h.id));
   if(state.cheap)f=f.filter(h=>firstNum(h.price)<=25);
+  if(state.near){applyRealDistances();}
   if(state.near)f=[...f].sort((a,b)=>((a.dist==null?1e6:a.dist)-(b.dist==null?1e6:b.dist)));
   if(state.top)f=[...f].sort((a,b)=>parseFloat(b.rating)-parseFloat(a.rating));
   const pool=HUSTLES.filter(h=>h.campus===state.campus.id&&!h.me);
