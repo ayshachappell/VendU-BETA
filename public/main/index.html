@@ -11,7 +11,7 @@
 /* Always-fresh assets: every page load requests a unique URL, so no browser,
    proxy or installed-app cache can ever serve an old stylesheet or tutorial. */
 (function(){
-  var B='/main/', V='v64';
+  var B='/main/', V='v65';
   var l=document.createElement('link');
   l.rel='stylesheet'; l.href=B+'vendu-shared.css?v='+V;
   document.head.appendChild(l);
@@ -1008,12 +1008,16 @@ function commPills(name,max){try{return COMM.filter(function(c){return c.campus=
                                 founder, vendor or storefront. */
 function isCEOEmail(e){return /@integroservicegroup\.com$/i.test(String(e||'').trim());}
 function isEduEmail(e){return /\.edu$/i.test(String(e||'').trim());}
+/* @venduapp.com testers always see the seeded sample app. */
+function isTesterEmail(e){return /@venduapp\.com$/i.test(String(e||'').trim());}
+function seedDemoContent(){state.userType=state.userType||'vendor';state.isSeller=true;state.subscribed=true;state.formCat=state.formCat||'Beauty';if(!state.services.length)state.services=[['Signature service','$25'],['Add-on','$10']];if(!state.gallery.length)state.gallery=[pic('#5A2BE0','#8a5bf0','\u2728','Your work'),pic('#0e9f6e','#0891b2','\ud83d\udcf7','Your work'),pic('#c026d3','#e11d48','\ud83c\udfa8','Your work')];if(!state.socials.length)state.socials=[{type:'Instagram',url:'instagram.com/you'},{type:'TikTok',url:'tiktok.com/@you'}];if(!state.pays.length)state.pays=[{app:'Cash App',handle:'$you'},{app:'Venmo',handle:'@you'}];state.demoContent=true;if(typeof refreshDemo==='function')refreshDemo();}
 function applyAccount(email){
   state.acctEmail=email||'';
   state.isCEO=isCEOEmail(email);
   state.isRealStudent=isEduEmail(email);
-  state.tester=false;
+  state.tester=isTesterEmail(email);
   if((state.isCEO||state.isRealStudent)&&state.demoContent){state.gallery=[];state.services=[];state.socials=[];state.pays=[];state.demoContent=false;}
+  if(state.tester)seedDemoContent();
   if(state.isCEO){state.isFounder=false;}
   try{document.body.classList.toggle('internal-account',!!state.isCEO);}catch(e){}
   if(state.isRealStudent||state.isCEO)creditReferral();
