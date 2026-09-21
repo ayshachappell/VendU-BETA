@@ -401,7 +401,59 @@ export async function signOutEverywhere(accessToken: string) {
   return res.ok;
 }
 
+/* ------------------------------------------------------------------ *
+ * Internal sign-in: company addresses (CEO, admin and @venduapp.com
+ * tester accounts) sign in with the email alone — no password typed.
+ * The account still holds a real password; it is derived on the server
+ * from a secret, so it is never shown, shared or guessable. Student
+ * (.edu) accounts always type their own password.
+ * ------------------------------------------------------------------ */
+async function internalSecret(email: string): Promise<string> {
+  const seed =
+    process.env["INTERNAL_LOGIN_SECRET"] ??
+    process.env["SUPABASE_SERVICE_ROLE_KEY"] ??
+    "";
+  const data = new TextEncoder().encode(`vendu:internal:${seed}:${email}`);
+  const digest = await crypto.subtle.digest("SHA-256", data);
+  return (
+    "Iv1-" +
+    Array.from(new Uint8Array(digest))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("")
+      .slice(0, 48)
+  );
+}
+
+export async function internalLogin(email: string) {
+  if (!isInternalEmail(email))
+    return { ok: false as const, message: "That address needs a password." };
+  const password = await internalSecret(email);
+
+  const first = await passwordLogin(email, password);
+  if (first.ok) return first;
+
+  // First time on this address (or its password predates this flow):
+  // provision the account with the derived password, then sign in.
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: list } = await supabaseAdmin.auth.admin.listUsers({ page: 1, perPage: 200 });
+  const existing = (list?.users ?? []).find(
+    (u) => (u.email ?? "").toLowerCase() === email,
+  );
+  if (existing) {
+    await supabaseAdmin.auth.admin.updateUserById(existing.id, {
+      password,
+      email_confirm: true,
+    });
+  } else {
+    await supabaseAdmin.auth.admin.createUser({ email, password, email_confirm: true });
+  }
+  const second = await passwordLogin(email, password);
+  if (second.ok) return second;
+  return { ok: false as const, message: "Could not sign you in right now." };
+}
+
 /** Swap a refresh token for a fresh session so long-lived devices stay signed in. */
+
 export async function refreshSession(refreshToken: string) {
   const { url, key } = authBase();
   const res = await fetch(`${url}/auth/v1/token?grant_type=refresh_token`, {
