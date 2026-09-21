@@ -122,3 +122,5 @@
 
 - v64 — Sign-in order: Get started → Log in (Back → Welcome) → "Verify your school email" → role picker (Back → Log in) → verify screen with password + confirm (Back → role picker). Password chosen at sign-up is saved automatically when the emailed link is opened. Added "Forgot your password?" on the Log in page.
 - v64: Pull-to-refresh now blocked on storefronts, viewed profiles, and storefront setup (state.detail/userView/storefrontSetup added to gate); still allowed only on Feed, Browse/Events, Buy, Trade & Requests. Both builds.
+
+- v64.1 — Company sign-in: @integroservicegroup.com (CEO/admin) and @venduapp.com addresses log in on the Log in page with the email only, no password (password box hides itself). test@venduapp.com still opens demo access as before. Students (.edu) still use email + password.
