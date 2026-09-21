@@ -119,3 +119,5 @@
 
 - v63 — tutorial: Next/Back on every step in both builds; missing targets show a centred card instead of skipping, so no step can dead-end on any device or preview size.
 - v63 — Near me is real: vendors can save an optional pickup/meet-up spot (label + one-tap location) on their storefront; Browse sorts by true distance from the student and shows the pickup area when no distance is known.
+
+- v64 — Sign-in order: Get started → Log in (Back → Welcome) → "Verify your school email" → role picker (Back → Log in) → verify screen with password + confirm (Back → role picker). Password chosen at sign-up is saved automatically when the emailed link is opened. Added "Forgot your password?" on the Log in page.

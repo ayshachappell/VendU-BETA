@@ -11,7 +11,7 @@
 /* Always-fresh assets: every page load requests a unique URL, so no browser,
    proxy or installed-app cache can ever serve an old stylesheet or tutorial. */
 (function(){
-  var B='/main/', V='v63';
+  var B='/main/', V='v64';
   var l=document.createElement('link');
   l.rel='stylesheet'; l.href=B+'vendu-shared.css?v='+V;
   document.head.appendChild(l);
@@ -2037,28 +2037,32 @@ function logoutAllDevices(){
   });
 }
 
+function applyPendingPw(done){var pw='';try{pw=localStorage.getItem('vendu_pending_pw')||'';}catch(e){}
+  if(!pw||!window.VendU||!VendU.setPassword){done();return;}
+  VendU.setPassword(pw,pw).then(function(){try{localStorage.removeItem('vendu_pending_pw');}catch(e){}done();},function(){done();});}
 function finishOnboarding(){state.onboarded=true;state.tab='home';state.obStep=0;try{if(state.isRealStudent&&window.VendU&&VendU.hasPassword&&!VendU.hasPassword())state.pwCreate=true;}catch(e){}try{document.querySelectorAll('#nav .navitem').forEach(function(n){n.classList.toggle('on',n.dataset.tab==='home');});}catch(e){}render();}
 function onboarding(){
   /* Already verified (e.g. returning from the emailed sign-in link): drop straight
      into the app so the interactive tutorial starts, whatever the user picked. */
-  if(VERIFIED&&!state.eduDone){var _st=VendU.student()||{};state.eduDone=true;state.eduCodeSent=false;state.eduEmail=_st.email||'';applyAccount(_st.email||'');return finishOnboarding();}
+  if(VERIFIED&&!state.eduDone){var _st=VendU.student()||{};state.eduDone=true;state.eduCodeSent=false;state.eduEmail=_st.email||'';applyAccount(_st.email||'');applyPendingPw(function(){finishOnboarding();});return;}
   const s=state.obStep;
   if(s===0){screen.innerHTML=`<div class="ob">
     <div class="ob-body welcome-body"><img class="welcome-icon" src="/icons/icon-192.png" alt="The VendU App icon" width="92" height="92" style="border-radius:22px;box-shadow:0 10px 26px rgba(90,43,224,.28);margin-bottom:26px"><div class="ob-title welcome-title"><span class="welcome-kicker">Welcome to</span><span class="wordmark welcome-wordmark">${WMFULL}</span></div><div class="ob-text welcome-subtitle">Sell your stuff, book a service, get paid.</div></div>
     <button class="ob-btn" id="obnext">Get started</button><button class="ob-back" id="obskip">I\u2019m a tester \u2014 skip \u2192</button></div>`;
-    document.getElementById('obnext').onclick=()=>{state.obStep=1;render();};
+    document.getElementById('obnext').onclick=()=>{state.obStep=1;state.pwLogin=true;state.eduErr='';render();};
     var _sk0=document.getElementById('obskip');if(_sk0)_sk0.onclick=()=>demoSkip();
     return;}
+  if(state.pwLogin&&!VERIFIED&&!state.eduDone)return pwLoginScreen();
   if(s===1){screen.innerHTML=`<div class="ob"><button class="ob-back ob-back-corner" id="obback1">\u2039 Back</button>
     <div class="ob-body"><img src="/icons/icon-192.png" alt="The VendU App logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(90,43,224,.26);margin-bottom:14px"><div class="ob-title role-title"><span class="role-title-line">How will you use</span><span class="wordmark headline-wordmark role-title-brand">${WMFULL}<span class="role-question">?</span></span></div><div class="ob-text" style="margin-bottom:20px">Everyone gets a free account. Becoming a vendor is completely optional \u2014 you can switch it on or off anytime.</div>
       <div class="ob-choice" data-ut="regular"><div class="obc-em">\u{1F64B}\u{1F3FF}\u200D\u2640\uFE0F</div><div><div class="obc-t">Just browsing</div><div class="obc-d">Book vendors, buy, sell & barter items, message & comment. Always free.</div></div></div>
       <div class="ob-choice" data-ut="vendor"><div class="obc-em">\u{1F6CD}\uFE0F</div><div><div class="obc-t">I\u2019m a vendor</div><div class="obc-d">I offer a service and want a storefront with services, bookings & payments. Free \u2014 optional, and you can turn it off anytime.</div></div></div>
     </div></div>`;
     screen.querySelectorAll('[data-ut]').forEach(el=>el.onclick=()=>{state.userType=el.dataset.ut;state.isSeller=(el.dataset.ut==='vendor');state.obStep=2;render();});
-    document.getElementById('obback1').onclick=()=>{state.obStep=0;render();};
+    document.getElementById('obback1').onclick=()=>{state.pwLogin=true;state.eduErr='';render();};
     return;}
   if(VERIFIED||state.eduDone){state.eduDone=true;return finishOnboarding();}
-  if(state.pwLogin){
+  function pwLoginScreen(){
     var perr=state.eduErr?`<div class="edu-err">${state.eduErr}</div>`:'';
     screen.innerHTML=`<div class="ob"><button class="ob-back ob-back-corner" id="eduBack">\u2039 Back</button>
     <div class="ob-body"><img src="/icons/icon-192.png" alt="The VendU App logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(90,43,224,.26);margin-bottom:14px"><div class="ob-title">Log in</div>
@@ -2069,6 +2073,7 @@ function onboarding(){
       <button class="submit" id="pwGo" style="margin:2px 0 0">Log in</button>
     </div>${perr}
     <div class="edu-note" style="margin-top:16px">New here, or forgot your password? <span id="pwBack" style="color:var(--violet);font-weight:700;cursor:pointer">Verify your school email</span></div>
+    <div class="edu-note" style="margin-top:8px"><span id="pwForgot" style="color:var(--violet);font-weight:700;cursor:pointer">Forgot your password?</span></div>
     </div></div>`;
     var pwBusy=false;
     var goBtn=document.getElementById('pwGo');
@@ -2085,7 +2090,9 @@ function onboarding(){
         state.eduEmail=em;state.eduErr=(r&&r.message)||'That email and password didn\u2019t match.';onboarding();
       });
     };
-    document.getElementById('pwBack').onclick=function(){state.pwLogin=false;state.eduErr='';onboarding();};
+    document.getElementById('pwBack').onclick=function(){state.pwLogin=false;state.eduErr='';state.obStep=1;render();};
+    var _ebk=document.getElementById('eduBack');if(_ebk)_ebk.onclick=function(){state.pwLogin=false;state.eduErr='';state.obStep=0;render();};
+    var _fgt=document.getElementById('pwForgot');if(_fgt)_fgt.onclick=function(){state.pwLogin=false;state.eduErr='';state.eduCodeSent=false;state.obStep=2;render();toast('Enter your school email and a new password \u2014 we\u2019ll email a link to confirm it.');};
     return;
   }
   {
@@ -2094,12 +2101,12 @@ function onboarding(){
     screen.innerHTML=`<div class="ob"><button class="ob-back ob-back-corner" id="eduBack">\u2039 Back</button>
     <div class="ob-body"><img src="/icons/icon-192.png" alt="The VendU App logo" width="72" height="72" style="border-radius:18px;box-shadow:0 8px 22px rgba(90,43,224,.26);margin-bottom:14px"><div class="ob-title">${sent?'Check your email':'Verify your school email'}</div>
     <div class="ob-text" style="margin-bottom:20px">${sent?('We emailed a secure sign-in link to <b>'+state.eduEmail+'</b>. Open it and The VendU App unlocks automatically.'):'The VendU App is students-only. Enter your college <b>.edu</b> email \u2014 any school works \u2014 and we\u2019ll email you a sign-in link. Your campus feed is set from this address.'}</div>
-    ${sent?`<div class="edu-note" style="max-width:330px;font-size:14px">Open the email from The VendU App and tap <b>Verify Email</b>. This page unlocks as soon as you do.</div>${err}<div class="edu-note" style="margin-top:16px">Waiting for you to tap the link\u2026 this screen unlocks by itself.</div><div class="edu-note">Didn\u2019t get it? Check your spam folder, then <span id="eduResend" style="color:var(--violet);font-weight:700;cursor:pointer">resend the link</span> \u00b7 <span id="eduEdit" style="cursor:pointer;text-decoration:underline">use a different email</span></div>`:`<div class="edu-row" style="width:100%;max-width:330px"><input id="eduIn" type="email" inputmode="email" autocomplete="email" value="${state.eduEmail||''}" placeholder="you@yourschool.edu" style="flex:1;border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-family:inherit;font-size:15px;outline:0;background:#fff"><button class="verify-btn" id="eduBtn">Send link</button></div>${err}<div class="ob-text" style="margin:22px 0 9px;font-weight:600;color:var(--ink)">Expected graduation year</div><div class="pldays" style="justify-content:center;padding:0">${['2025','2026','2027','2028','2029'].map(y=>`<div class="plday ${state.gradYear===y?'on':''}" data-gradyear="${y}">\u2019${y.slice(2)}</div>`).join('')}</div><div class="edu-legal ${state.legalOK?'on':''}" id="eduLegal" role="checkbox" tabindex="0" aria-checked="${state.legalOK?'true':'false'}"><span class="lbox">\u2713</span><span>I have read and agree to The VendU App\u2019s <a href="/legal/terms.html?from=signin" target="_blank" rel="noopener">Terms &amp; Conditions</a>, <a href="/legal/privacy.html?from=signin" target="_blank" rel="noopener">Privacy Policy</a> and <a href="/legal/support.html?from=signin" target="_blank" rel="noopener">Community Guidelines</a>.</span></div><div class="edu-note" style="margin-top:14px">Already set a password? <span id="eduPwLogin" style="color:var(--violet);font-weight:700;cursor:pointer">Log in with email &amp; password</span></div><div class="edu-note">Any college works \u2014 we only use your school email to confirm you\u2019re a student and to show you your campus. No spam, ever.</div>`}
+    ${sent?`<div class="edu-note" style="max-width:330px;font-size:14px">Open the email from The VendU App and tap <b>Verify Email</b>. This page unlocks as soon as you do.</div>${err}<div class="edu-note" style="margin-top:16px">Waiting for you to tap the link\u2026 this screen unlocks by itself.</div><div class="edu-note">Didn\u2019t get it? Check your spam folder, then <span id="eduResend" style="color:var(--violet);font-weight:700;cursor:pointer">resend the link</span> \u00b7 <span id="eduEdit" style="cursor:pointer;text-decoration:underline">use a different email</span></div>`:`<div class="edu-row" style="width:100%;max-width:330px"><input id="eduIn" type="email" inputmode="email" autocomplete="email" value="${state.eduEmail||''}" placeholder="you@yourschool.edu" style="flex:1;border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-family:inherit;font-size:15px;outline:0;background:#fff"><button class="verify-btn" id="eduBtn">Send link</button></div><div style="width:100%;max-width:330px;display:flex;flex-direction:column;gap:10px;margin-top:10px"><input id="eduPw" type="password" autocomplete="new-password" placeholder="Create a password (8+ characters)" value="${state.signupPw||''}" style="border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-family:inherit;font-size:15px;outline:0;background:#fff"><input id="eduPw2" type="password" autocomplete="new-password" placeholder="Confirm password" value="${state.signupPw2||''}" style="border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-family:inherit;font-size:15px;outline:0;background:#fff"></div>${err}<div class="ob-text" style="margin:22px 0 9px;font-weight:600;color:var(--ink)">Expected graduation year</div><div class="pldays" style="justify-content:center;padding:0">${['2025','2026','2027','2028','2029'].map(y=>`<div class="plday ${state.gradYear===y?'on':''}" data-gradyear="${y}">\u2019${y.slice(2)}</div>`).join('')}</div><div class="edu-legal ${state.legalOK?'on':''}" id="eduLegal" role="checkbox" tabindex="0" aria-checked="${state.legalOK?'true':'false'}"><span class="lbox">\u2713</span><span>I have read and agree to The VendU App\u2019s <a href="/legal/terms.html?from=signin" target="_blank" rel="noopener">Terms &amp; Conditions</a>, <a href="/legal/privacy.html?from=signin" target="_blank" rel="noopener">Privacy Policy</a> and <a href="/legal/support.html?from=signin" target="_blank" rel="noopener">Community Guidelines</a>.</span></div><div class="edu-note" style="margin-top:14px">Already set a password? <span id="eduPwLogin" style="color:var(--violet);font-weight:700;cursor:pointer">Log in with email &amp; password</span></div><div class="edu-note">Any college works \u2014 we only use your school email to confirm you\u2019re a student and to show you your campus. No spam, ever.</div>`}
     </div>
     <button class="ob-back" id="eduSkip">I\u2019m a tester \u2014 skip sign-up \u2192</button></div>`;
     /* Keep whatever the student already typed, so picking a grad year or the
        legal checkbox never wipes the email box. */
-    function keepEmail(){var i=document.getElementById('eduIn');if(i)state.eduEmail=(i.value||'').trim();}
+    function keepEmail(){var i=document.getElementById('eduIn');if(i)state.eduEmail=(i.value||'').trim();var p1=document.getElementById('eduPw');if(p1)state.signupPw=p1.value||'';var p2=document.getElementById('eduPw2');if(p2)state.signupPw2=p2.value||'';}
     document.getElementById('eduBack').onclick=function(){state.obStep=1;state.eduErr='';state.eduCodeSent=false;render();};
     var _eduIn=document.getElementById('eduIn');
     if(_eduIn){_eduIn.oninput=function(){state.eduEmail=(_eduIn.value||'').trim();};}
@@ -2109,7 +2116,7 @@ function onboarding(){
     function submitCode(){
       if(busy)return;
       var st=VendU.student();
-      if(st&&st.email){state.eduErr='';state.eduEmail=st.email;state.eduDone=true;state.eduCodeSent=false;applyAccount(st.email);toast('Verified \u2713 Welcome to The VendU App');finishOnboarding();return;}
+      if(st&&st.email){state.eduErr='';state.eduEmail=st.email;state.eduDone=true;state.eduCodeSent=false;applyAccount(st.email);toast('Verified \u2713 Welcome to The VendU App');applyPendingPw(function(){finishOnboarding();});return;}
       return;
     }
     var sendBtn=document.getElementById('eduBtn');
@@ -2119,6 +2126,10 @@ function onboarding(){
       if(/@venduapp\.com$/.test(v)){if(!state.legalOK){fail('Please read and agree to the Terms, Privacy Policy and Guidelines to continue');return;}state.eduEmail=v;state.acctEmail=v;state.eduErr='';toast('Tester access \u2713 demo campus, vendors and storefront loaded');demoSkip();return;}
       if(!VendU.looksLikeEdu(v)&&!/@(integroservicegroup|vendu)\./.test(v)){fail('Use your college .edu email address');return;}
       if(!state.legalOK){fail('Please read and agree to the Terms, Privacy Policy and Guidelines to continue');return;}
+      var _pw=((document.getElementById('eduPw')||{}).value)||'',_pw2=((document.getElementById('eduPw2')||{}).value)||'';
+      if(_pw.length<8){fail('Create a password with at least 8 characters');return;}
+      if(_pw!==_pw2){fail('Both passwords have to match');return;}
+      state.signupPw=_pw;state.signupPw2=_pw2;try{localStorage.setItem('vendu_pending_pw',_pw);}catch(e){}
       if(busy)return;busy=true;sendBtn.textContent='Sending\u2026';sendBtn.classList.add('busy');
       state.eduEmail=v;var cc=campusByDomain(v);if(cc)state.campus=cc;
       VendU.sendCode(v,BUILD).then(function(r){busy=false;
