@@ -1,16 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
+  internalLogin,
+  isInternalEmail,
   isVerifiedStudent,
   json,
   logAttempt,
   normalizeAccessEmail,
+  normalizeBuild,
   normalizePassword,
   passwordLogin,
+  recordStudent,
   requireStudent,
   setPasswordWithToken,
   signOutEverywhere,
   touchStudent,
 } from "@/lib/edu-verification.server";
+
 
 function bearer(request: Request): string {
   const m = /^Bearer\s+(.+)$/i.exec((request.headers.get("authorization") ?? "").trim());
