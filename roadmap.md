@@ -121,3 +121,4 @@
 - v63 — Near me is real: vendors can save an optional pickup/meet-up spot (label + one-tap location) on their storefront; Browse sorts by true distance from the student and shows the pickup area when no distance is known.
 
 - v64 — Sign-in order: Get started → Log in (Back → Welcome) → "Verify your school email" → role picker (Back → Log in) → verify screen with password + confirm (Back → role picker). Password chosen at sign-up is saved automatically when the emailed link is opened. Added "Forgot your password?" on the Log in page.
+- v64: Pull-to-refresh now blocked on storefronts, viewed profiles, and storefront setup (state.detail/userView/storefrontSetup added to gate); still allowed only on Feed, Browse/Events, Buy, Trade & Requests. Both builds.
