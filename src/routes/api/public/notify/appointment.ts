@@ -103,6 +103,18 @@ export const Route = createFileRoute("/api/public/notify/appointment")({
         const service = safeText(booking.service, 60) || "your appointment";
         const when = safeText(raw.when, 40);
 
+        /* The text always goes to the number saved on the caller's own
+           profile, never to a number supplied in the request. */
+        const { data: profile } = await supabaseAdmin
+          .from("profiles")
+          .select("phone")
+          .eq("email", email)
+          .maybeSingle();
+        const phone = digits(profile?.phone);
+        if (!phone) {
+          return json({ ok: false, message: "Add your mobile number in Settings to get text reminders." }, 400);
+        }
+
         const sms = await sendSms(
           phone,
           `VendU: you're booked with ${vendor} — ${service}${when ? ` on ${when}` : ""}. Reply STOP to opt out.`,
