@@ -1,6 +1,6 @@
 {
   "name": "The VendU App Beta",
-  "short_name": "VendU Beta",
+  "short_name": "The VendU App Beta",
   "description": "The VendU beta build — test new campus marketplace features and send feedback.",
   "start_url": "/beta/index.html",
   "scope": "/beta/",
