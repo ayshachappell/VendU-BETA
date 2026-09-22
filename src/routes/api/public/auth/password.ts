@@ -70,6 +70,22 @@ export const Route = createFileRoute("/api/public/auth/password")({
           return json({ ok: true, email, session: result.session });
         }
 
+        /* Second half of the company sign-in: the emailed code proves the
+           person really owns that company address. */
+        if (action === "internalVerify") {
+          const email = normalizeAccessEmail(body["email"]);
+          if (!email || !isInternalEmail(email)) {
+            return json({ ok: false, message: "That address needs a password." }, 400);
+          }
+          const result = await internalCodeVerify(email, String(body["code"] ?? ""));
+          if (!result.ok) return json({ ok: false, message: result.message }, 401);
+          await recordStudent(email, normalizeBuild(body["build"]), null);
+          await touchStudent(email);
+          return json({ ok: true, email, internal: true, session: result.session });
+        }
+
+
+
 
         const auth = await requireStudent(request);
         if ("response" in auth) return auth.response;
