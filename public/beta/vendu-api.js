@@ -251,6 +251,19 @@
       return res;
     });
   };
+  W.internalVerify = function (email, code, build) {
+    return post("/api/public/auth/password", {
+      action: "internalVerify", email: email, code: code, build: build,
+    }).then(function (res) {
+      if (res && res.ok) {
+        saveSession(res.session);
+        try {
+          localStorage.setItem(KEY, JSON.stringify({ email: res.email, at: Date.now(), build: build }));
+        } catch (e) {}
+      }
+      return res;
+    });
+  };
   W.signOutEverywhere = function () {
     return authPost("/api/public/auth/password", { action: "logoutAll" })
       .then(function (r) { if (r && r.ok) W.signOut(); return r; })
