@@ -1061,7 +1061,7 @@ function syncFounders(){
       state.lbRank=r.myRank||0;
       state.lbRows=(r.leaderboard||[]).filter(function(x){return (x.referrals||0)>0;}).map(function(x){return [x.me?'You':('@'+x.code),x.referrals,!!x.founder];});
       syncFounder();
-      try{render();}catch(e){}
+      try{bgRender();}catch(e){}
     });
   }catch(e){}
 }
@@ -2340,7 +2340,7 @@ function localThreadFromConversation(c){
 }
 function myAccountEmail(){try{var s=window.VendU&&VendU.student&&VendU.student();return String((s&&s.email)||'').toLowerCase();}catch(e){return '';}}
 function serverDeal(t){if(!t)return null;return {serverId:t.id,id:t.reference_id,item:t.title,seller:t.seller_name,pays:t.payment_methods||[],role:String(t.seller_email||'').toLowerCase()===myAccountEmail()?'seller':'buyer',buyerMet:!!t.buyer_met_at,sellerMet:!!t.seller_met_at,buyerPaid:!!t.buyer_paid_at,paid:!!t.seller_paid_at,paidAt:t.seller_paid_at?new Date(t.seller_paid_at).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}):'',availableAt:t.meetup_available_at,appointmentAt:t.appointment_at};}
-function syncMessages(redraw){if(!window.VendU||!VendU.listMessages||!myAccountEmail())return Promise.resolve();return VendU.listMessages(BUILD).then(function(r){if(!r||!r.ok)return;var hidden=r.hiddenConversationIds||[];state.inbox=(state.inbox||[]).filter(function(t){return hidden.indexOf(String(t.serverId||t.id))<0;});(r.conversations||[]).forEach(localThreadFromConversation);state.messageNotifications=r.notifications||[];if(redraw){if(state.thread)messageScreen();else if(state.inboxView)inboxScreen();}}).catch(function(){});}
+function syncMessages(redraw){if(!window.VendU||!VendU.listMessages||!myAccountEmail())return Promise.resolve();return VendU.listMessages(BUILD).then(function(r){if(!r||!r.ok)return;var hidden=r.hiddenConversationIds||[];state.inbox=(state.inbox||[]).filter(function(t){return hidden.indexOf(String(t.serverId||t.id))<0;});(r.conversations||[]).forEach(localThreadFromConversation);state.messageNotifications=r.notifications||[];if(redraw&&!venduBusy()){if(state.thread)messageScreen();else if(state.inboxView)inboxScreen();}}).catch(function(){});}
 function transactionFor(th){return th&&th.deal;}
 function openThread(name,init,color,deal,peerEmail){
   name=name||'a seller';peerEmail=String(peerEmail||'').toLowerCase();
@@ -2541,6 +2541,8 @@ try{(function(){
   document.addEventListener('pointercancel',function(){cur=null;},true);
 })();}catch(e){}
 
+function venduBusy(){try{var a=document.activeElement;if(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))return true;if(document.querySelector('.tour-modal,.privacy-modal,.sheet.open,.gifpick,.attachmenu'))return true;}catch(e){}return false;}
+function bgRender(){if(venduBusy())return;try{render();}catch(e){}}
 function render(){document.getElementById('nav').classList.remove('messages-open','message-active');try{retagDemo();}catch(e){}if(state.onboarded&&!state.pwCreate&&!state.homeConfirm&&!state.homePick&&(!state.isRealStudent||homeCampusSaved())&&window.VendU&&VendU.startTour)setTimeout(function(){VendU.startTour();},300);if(!state.onboarded){if(state.storefrontSetup)return add();return onboarding();}if(state.pwCreate)return pwCreateScreen();if(state.moreMenu)return settingsScreen();if(state.campusPick)return campusPicker();if(state.homeConfirm)return homeConfirmScreen();if(state.themeView)return themeScreen();if(state.book)return bookingScreen();if(state.bookSet)return bookingSettings();if(state.userView)return userProfile();if(state.thread)return messageScreen();if(state.inboxView)return inboxScreen();if(state.groupCreateView)return createGroupScreen();if(state.groupView)return groupPage();if(state.detail)return detail(state.detail);if(state.leaderboard)return leaderboard();if(state.storefrontSetup)return add();if(state.savedView)return savedScreen();if(state.myPostsView)return myPostsScreen();if(state.svcEdit)return servicesEditor();if(state.tab==='add')return addTab();({home,market,venuU,profile}[state.tab]||home)();}
 document.getElementById('nav').querySelectorAll('.navitem').forEach(item=>{item.onclick=()=>{if(!state.onboarded)return;document.querySelectorAll('.navitem').forEach(n=>n.classList.remove('on'));item.classList.add('on');if(item.dataset.tab==='add'&&state.tab!=='add')state.prevTab=state.tab;state.tab=item.dataset.tab;state.moreMenu=false;state.userView=null;state.thread=0;state.inboxView=false;state.groupView=null;state.groupCreateView=false;state.myPostsView=false;state.themeView=false;state.reviewOpen=false;state.cat='All';state.q='';state.near=false;state.detail=0;state.book=null;state.svcEdit=false;state.addMode=null;state.newPhoto=null;state.leaderboard=false;state.storefrontSetup=false;state.reviewOpen=false;state.msgTo=0;state.openMC=0;state.bookSet=false;state.subPrompt=false;state.savedView=false;state.campusPick=false;state.campusQ='';if(item.dataset.tab!=='add')state.submitted=false;render();screen.scrollTop=0;if(item.dataset.tab==='profile')setTimeout(function(){try{venduLiveSync();}catch(e){}},0);};});
 try{restoreCampusPref();}catch(e){}

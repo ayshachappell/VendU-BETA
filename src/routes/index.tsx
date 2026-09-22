@@ -31,10 +31,17 @@ function MainRedirect() {
     window.location.replace("/beta/index.html");
   }, []);
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background px-6 text-center">
+    <main
+      className="flex min-h-screen items-center justify-center px-6 text-center"
+      style={{ backgroundColor: "#331174", color: "#ffffff" }}
+    >
       <div>
-        <p className="text-sm text-muted-foreground">Opening The VendU App…</p>
-        <a href="/beta/index.html" className="mt-3 inline-block text-sm font-semibold underline">
+        <p className="text-sm opacity-80">Opening The VendU App…</p>
+        <a
+          href="/beta/index.html"
+          className="mt-3 inline-block text-sm font-semibold underline"
+          style={{ color: "#ffffff" }}
+        >
           Tap here if nothing happens
         </a>
       </div>

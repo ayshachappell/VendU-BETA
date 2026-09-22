@@ -29,6 +29,13 @@
       "when": 1789949830569,
       "tag": "0003_add_vendor_pickup_location",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790086861912,
+      "tag": "0004_restrict_moderation_blocks_reads",
+      "breakpoints": true
     }
   ]
 }
