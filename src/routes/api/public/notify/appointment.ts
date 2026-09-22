@@ -68,7 +68,6 @@ export const Route = createFileRoute("/api/public/notify/appointment")({
 
         const build = normalizeBuild(raw.build);
         const vendorId = safeText(raw.vendorId, 64);
-        const phone = digits(raw.phone);
         if (!vendorId) return json({ ok: false, message: "Missing booking." }, 400);
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -103,6 +102,18 @@ export const Route = createFileRoute("/api/public/notify/appointment")({
         const vendor = safeText(booking.vendor_id, 60) || "your vendor";
         const service = safeText(booking.service, 60) || "your appointment";
         const when = safeText(raw.when, 40);
+
+        /* The text always goes to the number saved on the caller's own
+           profile, never to a number supplied in the request. */
+        const { data: profile } = await supabaseAdmin
+          .from("profiles")
+          .select("phone")
+          .eq("email", email)
+          .maybeSingle();
+        const phone = digits(profile?.phone);
+        if (!phone) {
+          return json({ ok: false, message: "Add your mobile number in Settings to get text reminders." }, 400);
+        }
 
         const sms = await sendSms(
           phone,

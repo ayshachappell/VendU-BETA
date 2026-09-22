@@ -7,6 +7,33 @@ const MAX_TEXT = 4000;
 const MAX_ATTACHMENT = 8 * 1024 * 1024;
 const DATA_URL = /^data:([a-z0-9.+-]+\/[a-z0-9.+-]+);base64,([a-z0-9+/=]+)$/i;
 
+/* Only these attachment types may be stored. Anything else is rejected, so a
+   message can never carry an executable or script disguised as a file. */
+const ALLOWED_TYPES: Record<string, RegExp[]> = {
+  "image/jpeg": [/^\xFF\xD8\xFF/],
+  "image/png": [/^\x89PNG\r\n\x1a\n/],
+  "image/gif": [/^GIF8[79]a/],
+  "image/webp": [/^RIFF.{4}WEBP/s],
+  "image/heic": [/^.{4}ftyp/s],
+  "application/pdf": [/^%PDF-/],
+  "audio/webm": [/^\x1aE\xdf\xa3/],
+  "video/webm": [/^\x1aE\xdf\xa3/],
+  "audio/ogg": [/^OggS/],
+  "audio/mpeg": [/^(ID3|\xFF)/],
+  "audio/mp4": [/^.{4}ftyp/s],
+  "audio/m4a": [/^.{4}ftyp/s],
+  "video/mp4": [/^.{4}ftyp/s],
+  "text/plain": [/^/],
+};
+
+/** True when the bytes really look like the declared attachment type. */
+function bytesMatchType(type: string, bytes: Buffer): boolean {
+  const signatures = ALLOWED_TYPES[type];
+  if (!signatures) return false;
+  const head = bytes.subarray(0, 16).toString("binary");
+  return signatures.some((signature) => signature.test(head));
+}
+
 function safeName(value: unknown) {
   return str(value, 80).replace(/[^a-z0-9._-]+/gi, "-") || "attachment";
 }
@@ -228,10 +255,14 @@ export const Route = createFileRoute("/api/public/messages")({
             if (!hit) return json({ ok: false, message: "That attachment format is not supported." }, 400);
             const bytes = Buffer.from(hit[2]!, "base64");
             if (bytes.length > MAX_ATTACHMENT) return json({ ok: false, message: "Attachments must be 8 MB or smaller." }, 413);
+            const mime = hit[1]!.toLowerCase();
+            if (!bytesMatchType(mime, bytes)) {
+              return json({ ok: false, message: "You can send photos, voice notes, PDFs and plain text files only." }, 415);
+            }
             const objectPath = `${build}/${conversationId}/${crypto.randomUUID()}-${safeName(raw["fileName"])}`;
-            const { error } = await supabaseAdmin.storage.from("message-attachments").upload(objectPath, bytes, { contentType: hit[1]!, upsert: false });
+            const { error } = await supabaseAdmin.storage.from("message-attachments").upload(objectPath, bytes, { contentType: mime, upsert: false });
             if (error) return json({ ok: false, message: "Could not upload that attachment." }, 500);
-            attachment = { path: objectPath, name: safeName(raw["fileName"]), type: hit[1], size: bytes.length };
+            attachment = { path: objectPath, name: safeName(raw["fileName"]), type: mime, size: bytes.length };
           } else if (raw["attachment"] && typeof raw["attachment"] === "object") {
             attachment = raw["attachment"] as Record<string, unknown>;
             if (["gif", "sticker"].includes(kind)) {
@@ -269,9 +300,31 @@ export const Route = createFileRoute("/api/public/messages")({
 
         if (action === "createTransaction") {
           const peer = String(conversation["participant_a_email"]) === email ? String(conversation["participant_b_email"]) : String(conversation["participant_a_email"]);
-          const role = str(raw["role"], 12) === "seller" ? "seller" : "buyer";
-          const sellerEmail = role === "seller" ? email : peer;
-          const buyerEmail = role === "seller" ? peer : email;
+          const referenceId = str(raw["referenceId"], 120);
+          /* Who is selling is decided from saved records — a shop owner or the
+             person who posted the listing — never from the request itself. */
+          async function sellsThis(candidate: string) {
+            const lower = candidate.toLowerCase();
+            const { count: shops } = await supabaseAdmin
+              .from("vendors").select("id", { count: "exact", head: true })
+              .eq("owner_email", lower).eq("build", build);
+            if ((shops ?? 0) > 0) return true;
+            if (/^[0-9a-f-]{36}$/i.test(referenceId)) {
+              const { count: listings } = await supabaseAdmin
+                .from("posts").select("id", { count: "exact", head: true })
+                .eq("id", referenceId).eq("author_email", lower);
+              if ((listings ?? 0) > 0) return true;
+            }
+            return false;
+          }
+          const callerSells = await sellsThis(email);
+          const peerSells = callerSells ? false : await sellsThis(peer);
+          if (!callerSells && !peerSells) {
+            return json({ ok: false, message: "We could not confirm who is selling here." }, 403);
+          }
+          const role = callerSells ? "seller" : "buyer";
+          const sellerEmail = callerSells ? email : peer;
+          const buyerEmail = callerSells ? peer : email;
           const appointmentAt = str(raw["appointmentAt"], 40) || null;
           const meetupAt = appointmentAt ? new Date(Date.parse(appointmentAt) - 15 * 60 * 1000).toISOString() : new Date().toISOString();
           const row = {

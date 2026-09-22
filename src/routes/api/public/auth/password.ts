@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
-  internalLogin,
+  internalCodeRequest,
+  internalCodeVerify,
   isInternalEmail,
   isVerifiedStudent,
   json,
@@ -42,13 +43,13 @@ export const Route = createFileRoute("/api/public/auth/password")({
           const email = normalizeAccessEmail(body["email"]);
           if (!email) return json({ ok: false, message: "Enter your email." }, 400);
 
+          /* Company addresses skip the password, but they still have to open
+             the one-time code we email to that address. */
           if (isInternalEmail(email)) {
             await logAttempt(email, "login");
-            const internal = await internalLogin(email);
-            if (!internal.ok) return json({ ok: false, message: internal.message }, 401);
-            await recordStudent(email, normalizeBuild(body["build"]), null);
-            await touchStudent(email);
-            return json({ ok: true, email, internal: true, session: internal.session });
+            const sent = await internalCodeRequest(email);
+            if (!sent.ok) return json({ ok: false, message: sent.message }, 429);
+            return json({ ok: true, email, internal: true, codeSent: true });
           }
 
           const password = normalizePassword(body["password"]);
@@ -68,6 +69,22 @@ export const Route = createFileRoute("/api/public/auth/password")({
           await touchStudent(email);
           return json({ ok: true, email, session: result.session });
         }
+
+        /* Second half of the company sign-in: the emailed code proves the
+           person really owns that company address. */
+        if (action === "internalVerify") {
+          const email = normalizeAccessEmail(body["email"]);
+          if (!email || !isInternalEmail(email)) {
+            return json({ ok: false, message: "That address needs a password." }, 400);
+          }
+          const result = await internalCodeVerify(email, String(body["code"] ?? ""));
+          if (!result.ok) return json({ ok: false, message: result.message }, 401);
+          await recordStudent(email, normalizeBuild(body["build"]), null);
+          await touchStudent(email);
+          return json({ ok: true, email, internal: true, session: result.session });
+        }
+
+
 
 
         const auth = await requireStudent(request);
