@@ -2074,6 +2074,7 @@ function onboarding(){
     <div style="width:100%;max-width:330px;display:flex;flex-direction:column;gap:10px">
       <input id="pwEmail" type="email" inputmode="email" autocomplete="email" value="${state.eduEmail||''}" placeholder="you@yourschool.edu" style="border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-family:inherit;font-size:15px;outline:0;background:#fff">
       <input id="pwPass" type="password" autocomplete="current-password" placeholder="Password" style="border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-family:inherit;font-size:15px;outline:0;background:#fff">
+      <input id="pwCode" type="text" inputmode="numeric" autocomplete="one-time-code" placeholder="6-digit code from your email" style="display:none;border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-family:inherit;font-size:15px;outline:0;background:#fff">
       <button class="submit" id="pwGo" style="margin:2px 0 0">Log in</button>
     </div>${perr}
     <div class="edu-note" style="margin-top:16px">New here, or forgot your password? <span id="pwBack" style="color:var(--violet);font-weight:700;cursor:pointer">Verify your school email</span></div>
@@ -2085,7 +2086,9 @@ function onboarding(){
     function isInternalLogin(e){return /@(integroservicegroup|venduapp)\.com$/i.test(String(e||'').trim());}
     var pwField=document.getElementById('pwPass');
     var pwEmailEl=document.getElementById('pwEmail');
-    function syncPwField(){var internal=isInternalLogin(pwEmailEl.value);pwField.style.display=internal?'none':'';goBtn.textContent=internal?'Log in with email':'Log in';}
+    var codeField=document.getElementById('pwCode');
+    function codeMode(){return !!state.pwCodeSent&&isInternalLogin(pwEmailEl.value);}
+    function syncPwField(){var internal=isInternalLogin(pwEmailEl.value);pwField.style.display=internal?'none':'';codeField.style.display=codeMode()?'':'none';goBtn.textContent=codeMode()?'Verify code':(internal?'Email me a code':'Log in');}
     pwEmailEl.oninput=syncPwField;syncPwField();
     goBtn.onclick=function(){
       if(pwBusy)return;
@@ -2093,12 +2096,26 @@ function onboarding(){
       var pw=pwField.value||'';
       var internal=isInternalLogin(em);
       if(!VendU.looksLikeEmail(em)){state.eduErr='Enter a valid email address';onboarding();return;}
+      function unlock(r,fallback){state.eduErr='';state.pwLogin=false;state.pwCodeSent=false;state.eduEmail=(r&&r.email)||fallback;state.eduDone=true;applyAccount((r&&r.email)||fallback);toast('Welcome back \u2713');finishOnboarding();}
+      /* Company accounts: confirm the one-time code we emailed. */
+      if(internal&&codeMode()){
+        var code=(codeField.value||'').replace(/\D/g,'');
+        if(code.length<6){state.eduErr='Enter the 6-digit code we emailed you';state.eduEmail=em;onboarding();return;}
+        pwBusy=true;goBtn.textContent='Checking\u2026';
+        VendU.internalVerify(em,code,BUILD).then(function(r){
+          pwBusy=false;
+          if(r&&r.ok){unlock(r,em);return;}
+          state.eduEmail=em;state.eduErr=(r&&r.message)||'That code didn\u2019t work. Try again.';onboarding();
+        });
+        return;
+      }
       if(!internal&&pw.length<8){state.eduErr='Enter your password (at least 8 characters)';state.eduEmail=em;onboarding();return;}
-      pwBusy=true;goBtn.textContent='Logging in\u2026';
+      pwBusy=true;goBtn.textContent=internal?'Sending code\u2026':'Logging in\u2026';
       VendU.loginPassword(em,internal?'':pw,BUILD).then(function(r){
         pwBusy=false;
-        if(r&&r.ok){state.eduErr='';state.pwLogin=false;state.eduEmail=r.email||em;state.eduDone=true;applyAccount(r.email||em);toast('Welcome back \u2713');finishOnboarding();return;}
-        state.eduEmail=em;state.eduErr=(r&&r.message)||(internal?'Could not sign in with that company email.':'That email and password didn\u2019t match.');onboarding();
+        if(r&&r.ok&&r.codeSent){state.eduErr='';state.eduEmail=em;state.pwCodeSent=true;onboarding();toast('We emailed a 6-digit code to '+em);return;}
+        if(r&&r.ok){unlock(r,em);return;}
+        state.eduEmail=em;state.eduErr=(r&&r.message)||(internal?'Could not email a code to that company address.':'That email and password didn\u2019t match.');onboarding();
       });
     };
 
