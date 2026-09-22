@@ -7,6 +7,33 @@ const MAX_TEXT = 4000;
 const MAX_ATTACHMENT = 8 * 1024 * 1024;
 const DATA_URL = /^data:([a-z0-9.+-]+\/[a-z0-9.+-]+);base64,([a-z0-9+/=]+)$/i;
 
+/* Only these attachment types may be stored. Anything else is rejected, so a
+   message can never carry an executable or script disguised as a file. */
+const ALLOWED_TYPES: Record<string, RegExp[]> = {
+  "image/jpeg": [/^\xFF\xD8\xFF/],
+  "image/png": [/^\x89PNG\r\n\x1a\n/],
+  "image/gif": [/^GIF8[79]a/],
+  "image/webp": [/^RIFF.{4}WEBP/s],
+  "image/heic": [/^.{4}ftyp/s],
+  "application/pdf": [/^%PDF-/],
+  "audio/webm": [/^\x1aE\xdf\xa3/],
+  "video/webm": [/^\x1aE\xdf\xa3/],
+  "audio/ogg": [/^OggS/],
+  "audio/mpeg": [/^(ID3|\xFF)/],
+  "audio/mp4": [/^.{4}ftyp/s],
+  "audio/m4a": [/^.{4}ftyp/s],
+  "video/mp4": [/^.{4}ftyp/s],
+  "text/plain": [/^/],
+};
+
+/** True when the bytes really look like the declared attachment type. */
+function bytesMatchType(type: string, bytes: Buffer): boolean {
+  const signatures = ALLOWED_TYPES[type];
+  if (!signatures) return false;
+  const head = bytes.subarray(0, 16).toString("binary");
+  return signatures.some((signature) => signature.test(head));
+}
+
 function safeName(value: unknown) {
   return str(value, 80).replace(/[^a-z0-9._-]+/gi, "-") || "attachment";
 }
