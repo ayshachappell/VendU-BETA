@@ -68,7 +68,6 @@ export const Route = createFileRoute("/api/public/notify/appointment")({
 
         const build = normalizeBuild(raw.build);
         const vendorId = safeText(raw.vendorId, 64);
-        const phone = digits(raw.phone);
         if (!vendorId) return json({ ok: false, message: "Missing booking." }, 400);
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
