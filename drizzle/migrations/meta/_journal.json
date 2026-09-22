@@ -36,6 +36,13 @@
       "when": 1790086861912,
       "tag": "0004_restrict_moderation_blocks_reads",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1790089105695,
+      "tag": "0005_lock_public_reference_tables",
+      "breakpoints": true
     }
   ]
 }
