@@ -300,9 +300,31 @@ export const Route = createFileRoute("/api/public/messages")({
 
         if (action === "createTransaction") {
           const peer = String(conversation["participant_a_email"]) === email ? String(conversation["participant_b_email"]) : String(conversation["participant_a_email"]);
-          const role = str(raw["role"], 12) === "seller" ? "seller" : "buyer";
-          const sellerEmail = role === "seller" ? email : peer;
-          const buyerEmail = role === "seller" ? peer : email;
+          const referenceId = str(raw["referenceId"], 120);
+          /* Who is selling is decided from saved records — a shop owner or the
+             person who posted the listing — never from the request itself. */
+          async function sellsThis(candidate: string) {
+            const lower = candidate.toLowerCase();
+            const { count: shops } = await supabaseAdmin
+              .from("vendors").select("id", { count: "exact", head: true })
+              .eq("owner_email", lower).eq("build", build);
+            if ((shops ?? 0) > 0) return true;
+            if (/^[0-9a-f-]{36}$/i.test(referenceId)) {
+              const { count: listings } = await supabaseAdmin
+                .from("posts").select("id", { count: "exact", head: true })
+                .eq("id", referenceId).eq("author_email", lower);
+              if ((listings ?? 0) > 0) return true;
+            }
+            return false;
+          }
+          const callerSells = await sellsThis(email);
+          const peerSells = callerSells ? false : await sellsThis(peer);
+          if (!callerSells && !peerSells) {
+            return json({ ok: false, message: "We could not confirm who is selling here." }, 403);
+          }
+          const role = callerSells ? "seller" : "buyer";
+          const sellerEmail = callerSells ? email : peer;
+          const buyerEmail = callerSells ? peer : email;
           const appointmentAt = str(raw["appointmentAt"], 40) || null;
           const meetupAt = appointmentAt ? new Date(Date.parse(appointmentAt) - 15 * 60 * 1000).toISOString() : new Date().toISOString();
           const row = {
