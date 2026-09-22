@@ -262,7 +262,7 @@ export const Route = createFileRoute("/api/public/messages")({
             const objectPath = `${build}/${conversationId}/${crypto.randomUUID()}-${safeName(raw["fileName"])}`;
             const { error } = await supabaseAdmin.storage.from("message-attachments").upload(objectPath, bytes, { contentType: mime, upsert: false });
             if (error) return json({ ok: false, message: "Could not upload that attachment." }, 500);
-            attachment = { path: objectPath, name: safeName(raw["fileName"]), type: hit[1], size: bytes.length };
+            attachment = { path: objectPath, name: safeName(raw["fileName"]), type: mime, size: bytes.length };
           } else if (raw["attachment"] && typeof raw["attachment"] === "object") {
             attachment = raw["attachment"] as Record<string, unknown>;
             if (["gif", "sticker"].includes(kind)) {
