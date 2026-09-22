@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
-  internalLogin,
+  internalCodeRequest,
+  internalCodeVerify,
   isInternalEmail,
   isVerifiedStudent,
   json,
