@@ -255,8 +255,12 @@ export const Route = createFileRoute("/api/public/messages")({
             if (!hit) return json({ ok: false, message: "That attachment format is not supported." }, 400);
             const bytes = Buffer.from(hit[2]!, "base64");
             if (bytes.length > MAX_ATTACHMENT) return json({ ok: false, message: "Attachments must be 8 MB or smaller." }, 413);
+            const mime = hit[1]!.toLowerCase();
+            if (!bytesMatchType(mime, bytes)) {
+              return json({ ok: false, message: "You can send photos, voice notes, PDFs and plain text files only." }, 415);
+            }
             const objectPath = `${build}/${conversationId}/${crypto.randomUUID()}-${safeName(raw["fileName"])}`;
-            const { error } = await supabaseAdmin.storage.from("message-attachments").upload(objectPath, bytes, { contentType: hit[1]!, upsert: false });
+            const { error } = await supabaseAdmin.storage.from("message-attachments").upload(objectPath, bytes, { contentType: mime, upsert: false });
             if (error) return json({ ok: false, message: "Could not upload that attachment." }, 500);
             attachment = { path: objectPath, name: safeName(raw["fileName"]), type: hit[1], size: bytes.length };
           } else if (raw["attachment"] && typeof raw["attachment"] === "object") {
