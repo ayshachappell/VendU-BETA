@@ -30,7 +30,7 @@
   function refreshSession() {
     var s = session();
     if (!s || !s.refresh_token) return Promise.resolve(null);
-    return fetch("/api/public/verify/refresh", {
+    return fetch((W.API_BASE || "") + "/api/public/verify/refresh", {
       method: "POST",
       cache: "no-store",
       headers: { "Content-Type": "application/json" },
@@ -66,7 +66,10 @@
   function request(path, body, token, retried) {
     var headers = { "Content-Type": "application/json" };
     if (token) headers.Authorization = "Bearer " + token;
-    return fetch(path, {
+    /* In the native shell the app is bundled locally, so API calls need the
+       absolute server URL; on the web the path stays relative. */
+    var url = (W.API_BASE || "") + path;
+    return fetch(url, {
       method: "POST",
       cache: "no-store",
       headers: headers,
@@ -319,7 +322,7 @@
   /* ---- persistent, participant-only direct messages and transactions ---- */
   W.messageAction = function (payload) {
     payload = payload || {};
-    payload.build = payload.build || (location.pathname.indexOf("/beta") === 0 ? "beta" : "main");
+    payload.build = payload.build || W.BUILD || (location.pathname.indexOf("/beta") === 0 ? "beta" : "main");
     return authPost("/api/public/messages", payload);
   };
   W.listMessages = function (build) { return W.messageAction({ action: "list", build: build }); };

@@ -1,54 +1,78 @@
-# Shipping VendU to the App Store and Google Play
+# Shipping VendU Beta to the App Store and Google Play
 
-The web app is the product; Capacitor wraps it in a native shell. Nothing here runs
-inside Lovable — do it locally after you push the project to GitHub.
+## How it works
 
-## 1. Get the code
+The beta web app (`public/beta/`) is **bundled inside the native binary** — it is a
+real installed app, not a website wrapper. Only data calls go to the live server.
 
-```bash
-git clone <your-github-repo> vendu && cd vendu
-npm install
-```
+- `capacitor.config.ts` (repo root) — app ID `app.vendu.beta`, name "VendU Beta",
+  `webDir: "public/beta"`.
+- `public/beta/index.html` — first script detects the native shell
+  (`window.Capacitor.isNativePlatform()`) and sets:
+  - `window.VendU.IS_NATIVE` — true inside the native app
+  - `window.VendU.API_BASE` — `https://venduapp.com` in native, `""` on web
+  - `window.VendU.BUILD` — always `"beta"` in native
+  - Asset base `B` — `""` in native (webview root), `"/beta/"` on web
+  - Android hardware back button → in-app history, else exit app
+- All API calls (`vendu-api.js`, `vendu-safety.js`, campus lookup in `index.html`)
+  are prefixed with `API_BASE`, so they hit `https://venduapp.com/api/...`
+  from inside the app.
+- `CapacitorHttp` plugin is enabled, so every `fetch()` runs through the native
+  HTTP stack — no CORS problems, no server changes needed.
+- Sessions live in `localStorage`, which persists per-app on both platforms.
 
-## 2. Add Capacitor
+## Plugins included
 
-```bash
-npm install @capacitor/core @capacitor/cli
-npx cap init "VendU" "app.vendu.mobile" --web-dir=native/shell
-npm install @capacitor/ios @capacitor/android
-npx cap add ios
-npx cap add android
-```
+`@capacitor/app` (back button), `@capacitor/status-bar`, `@capacitor/splash-screen`,
+`@capacitor/keyboard`, `@capacitor/haptics`. App icon + splash generated from
+`assets/icon.png` via `npx capacitor-assets generate`.
 
-## 3. Point the shell at your live site
-
-Copy `native/capacitor.config.ts` (in this repo) over the generated
-`capacitor.config.ts`. It loads the published VendU site inside the native shell, so
-every Lovable publish updates the app without a new store release. Change
-`server.url` to your own domain once you connect one.
-
-For the **beta** app, use `native/capacitor.config.beta.ts` instead (already set to
-`app.vendu.beta` / `VendU Beta` / `/beta/index.html`) in a separate checkout. That
-gives you two separate store listings from the same repo.
-
-Signing steps live in `native/SIGNING.md`.
-
-## 4. Build and submit
+## Everyday workflow
 
 ```bash
-npm run build
-npx cap sync
-npx cap open ios      # Xcode: signing team, then Archive → App Store Connect
-npx cap open android  # Android Studio: Build → Generate Signed Bundle (.aab) → Play Console
+# after changing anything under public/beta/
+npx cap sync          # copies web assets + plugin updates into ios/ and android/
+
+npx cap open ios      # Xcode (needs a Mac)
+npx cap open android  # Android Studio
 ```
 
-App icons live in `public/icons/icon-512.png`; use that file when Xcode or Android
-Studio asks for the app icon source.
+To regenerate icons/splash after replacing `assets/icon.png`:
 
-## 5. Store requirements checklist
+```bash
+npx capacitor-assets generate --iconBackgroundColor '#331174' --splashBackgroundColor '#331174'
+```
 
-- Apple requires an account-deletion path for apps with sign-in — students can email
-  support to remove their record, or add an in-app "Delete my account" action.
-- Both stores need a privacy policy URL and a support URL before review.
-- Because students sign in with an email code, provide Apple a demo `.edu` address
-  and note that a one-time code is emailed to it.
+## Building the Android app (no Mac needed)
+
+With the Android SDK installed:
+
+```bash
+cd android
+./gradlew assembleDebug        # → android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+For the Play Store release build, see `native/SIGNING.md` (signed `.aab`).
+
+## Building the iOS app (Mac + Xcode required)
+
+`npx cap add ios` already generated `ios/`. On a Mac: `npx cap open ios`, set the
+signing team, then Product → Archive → Distribute App → App Store Connect.
+
+## Store requirements checklist
+
+- Apple requires an in-app account-deletion path — the beta has "Delete my account"
+  in settings (wired to `/api/public/account/delete`).
+- Privacy policy: https://venduapp.com/legal/privacy.html
+- Terms: https://venduapp.com/legal/terms.html
+- Support: https://venduapp.com/legal/support.html
+- Demo account for reviewers: any `@venduapp.com` address signs in with the email
+  alone (company/tester addresses skip the password AND the email code).
+- Screenshots: 6.7" and 5.5" iPhone + Android phone/tablet shots, plus a
+  1024×500 feature graphic for Google Play.
+
+## When the main (non-beta) build ships
+
+Duplicate this setup with a second config: app ID `app.vendu.mobile`, name "VendU",
+`webDir: "public/main"`, and change the native `API_BASE`/`BUILD` values in
+`public/main/index.html` the same way (currently only the beta is wired for native).

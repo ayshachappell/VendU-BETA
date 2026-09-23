@@ -2,7 +2,7 @@
    Shared by the Main and Beta builds; works with the tutorial views too. */
 (function () {
   var W = (window.VendU = window.VendU || {});
-  var BUILD = location.pathname.indexOf("/beta") === 0 ? "beta" : "main";
+  var BUILD = W.BUILD || (location.pathname.indexOf("/beta") === 0 ? "beta" : "main");
   var SUPPORT = "support@venduapp.com";
   var PAY_NOTE =
     "Payments happen directly between you and this person. VendU never holds or refunds money — double-check the handle before you send anything.";
@@ -156,7 +156,7 @@
     return !!(BLOCKS.hidden[k] || BLOCKS.deleted[k]);
   };
   function loadBlocks() {
-    fetch("/api/public/report?build=" + BUILD + "&t=" + Date.now(), { cache: "no-store" })
+    fetch((W.API_BASE || "") + "/api/public/report?build=" + BUILD + "&t=" + Date.now(), { cache: "no-store" })
       .then(function (r) {
         return r.json();
       })
