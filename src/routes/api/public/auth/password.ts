@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   internalCodeRequest,
   internalCodeVerify,
+  internalLogin,
   isInternalEmail,
   isVerifiedStudent,
   json,
@@ -47,9 +48,11 @@ export const Route = createFileRoute("/api/public/auth/password")({
              the one-time code we email to that address. */
           if (isInternalEmail(email)) {
             await logAttempt(email, "login");
-            const sent = await internalCodeRequest(email);
-            if (!sent.ok) return json({ ok: false, message: sent.message }, 429);
-            return json({ ok: true, email, internal: true, codeSent: true });
+            const result = await internalLogin(email);
+            if (!result.ok) return json({ ok: false, message: result.message }, 401);
+            await recordStudent(email, normalizeBuild(body["build"]), null);
+            await touchStudent(email);
+            return json({ ok: true, email, internal: true, session: result.session });
           }
 
           const password = normalizePassword(body["password"]);

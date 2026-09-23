@@ -421,6 +421,32 @@ export async function internalCodeVerify(email: string, code: string) {
   return verifyEmailCode(email, clean);
 }
 
+/** Company addresses open immediately (owner-approved): a server-derived
+ *  password keeps a real account behind each address. */
+export async function internalLogin(email: string) {
+  if (!isInternalEmail(email))
+    return { ok: false as const, message: "That address needs a password." };
+  const { createHash } = await import("crypto");
+  const seed = process.env["INTERNAL_LOGIN_SECRET"] ?? process.env["SUPABASE_SERVICE_ROLE_KEY"] ?? "";
+  const password = "Iv1-" + createHash("sha256").update(`vendu:internal:${seed}:${email}`).digest("hex").slice(0, 48);
+  let r = await passwordLogin(email, password);
+  if (r.ok) return r;
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const created = await supabaseAdmin.auth.admin.createUser({ email, password, email_confirm: true });
+  if (created.error) {
+    let id: string | undefined;
+    for (let page = 1; page <= 20 && !id; page++) {
+      const { data } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 200 });
+      id = data?.users.find((u) => (u.email ?? "").toLowerCase() === email)?.id;
+      if (!data || data.users.length < 200) break;
+    }
+    if (!id) return { ok: false as const, message: "Could not open that company account." };
+    await supabaseAdmin.auth.admin.updateUserById(id, { password, email_confirm: true });
+  }
+  r = await passwordLogin(email, password);
+  return r;
+}
+
 /** Swap a refresh token for a fresh session so long-lived devices stay signed in. */
 
 export async function refreshSession(refreshToken: string) {
