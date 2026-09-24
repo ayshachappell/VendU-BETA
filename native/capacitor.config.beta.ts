@@ -5,7 +5,7 @@ import type { CapacitorConfig } from "@capacitor/cli";
  * Use this in a second checkout/branch so Main and Beta stay separate apps.
  */
 const config: CapacitorConfig = {
-  appId: "app.vendu.beta",
+  appId: "com.integroservicegroup.venduapp",
   appName: "VendU Beta",
   webDir: "native/shell",
   server: {

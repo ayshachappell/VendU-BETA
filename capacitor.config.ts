@@ -12,7 +12,7 @@ import type { CapacitorConfig } from "@capacitor/cli";
  * stack (no CORS issues, cookies handled natively).
  */
 const config: CapacitorConfig = {
-  appId: "app.vendu.beta",
+  appId: "com.integroservicegroup.venduapp",
   appName: "VendU Beta",
   webDir: "public/beta",
   plugins: {
