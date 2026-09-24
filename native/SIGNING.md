@@ -1,6 +1,6 @@
 # Signing & submitting VendU Beta
 
-The beta is app ID **`app.vendu.beta`** ("VendU Beta"). The web app is bundled
+The beta is app ID **`com.integroservicegroup.venduapp`** ("VendU Beta"). The web app is bundled
 inside the binary; signing packages that bundle for the stores.
 
 ## What you must buy / create
@@ -15,7 +15,7 @@ inside the binary; signing packages that bundle for the stores.
 2. `npx cap open ios` → select the **App** target → Signing & Capabilities.
 3. Check "Automatically manage signing", pick your Team (your Apple Developer
    account). Xcode creates the certificate + provisioning profile for you.
-4. Bundle Identifier must be `app.vendu.beta`.
+4. Bundle Identifier must be `com.integroservicegroup.venduapp`.
 5. Product → Archive → Distribute App → App Store Connect → Upload.
 6. In App Store Connect: add the listing info, screenshots, privacy policy URL,
    and the demo account below, then submit for review. For a beta, distribute
@@ -113,12 +113,12 @@ npx cap open ios
 Then in Xcode:
 1. Select the **App** target → **Signing & Capabilities** → check
    *Automatically manage signing* → choose your Team (sign in with your Apple
-   ID if asked). Bundle ID must read `app.vendu.beta`.
+   ID if asked). Bundle ID must read `com.integroservicegroup.venduapp`.
 2. Menu: **Product → Archive**. When it finishes, click **Distribute App** →
    **App Store Connect** → **Upload**. (First upload: Xcode may ask for an
    app-specific password — generate one at appleid.apple.com.)
 3. Go to https://appstoreconnect.apple.com → **My Apps → + → New App**:
-   - Platform: iOS, Name: "VendU Beta", Bundle ID: `app.vendu.beta`, SKU:
+   - Platform: iOS, Name: "VendU Beta", Bundle ID: `com.integroservicegroup.venduapp`, SKU:
      anything (e.g. `vendu-beta-1`).
    - Fill in the listing: description, keywords, support URL
      (`https://venduapp.com/legal/support.html`), privacy policy URL
