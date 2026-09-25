@@ -1,4 +1,4 @@
-package app.vendu.beta;
+package com.integroservicegroup.venduapp;
 
 import com.getcapacitor.BridgeActivity;
 

@@ -8,7 +8,8 @@ const MAX_ATTACHMENT = 8 * 1024 * 1024;
 const DATA_URL = /^data:([a-z0-9.+-]+\/[a-z0-9.+-]+);base64,([a-z0-9+/=]+)$/i;
 
 /* Only these attachment types may be stored. Anything else is rejected, so a
-   message can never carry an executable or script disguised as a file. */
+   message can never carry an executable or script disguised as a file. Every
+   type is verified against the file's real magic bytes, not just its name. */
 const ALLOWED_TYPES: Record<string, RegExp[]> = {
   "image/jpeg": [/^\xFF\xD8\xFF/],
   "image/png": [/^\x89PNG\r\n\x1a\n/],
@@ -24,6 +25,17 @@ const ALLOWED_TYPES: Record<string, RegExp[]> = {
   "audio/m4a": [/^.{4}ftyp/s],
   "video/mp4": [/^.{4}ftyp/s],
   "text/plain": [/^/],
+  "text/csv": [/^/],
+  "application/rtf": [/^\{\\rtf/],
+  // Modern Office docs are zip containers — PK\x03\x04 magic, never MZ/ELF.
+  "application/zip": [/^PK\x03\x04/],
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [/^PK\x03\x04/],
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [/^PK\x03\x04/],
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation": [/^PK\x03\x04/],
+  // Legacy Office docs are OLE containers.
+  "application/msword": [/^\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1/],
+  "application/vnd.ms-excel": [/^\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1/],
+  "application/vnd.ms-powerpoint": [/^\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1/],
 };
 
 /** True when the bytes really look like the declared attachment type. */
@@ -257,7 +269,7 @@ export const Route = createFileRoute("/api/public/messages")({
             if (bytes.length > MAX_ATTACHMENT) return json({ ok: false, message: "Attachments must be 8 MB or smaller." }, 413);
             const mime = hit[1]!.toLowerCase();
             if (!bytesMatchType(mime, bytes)) {
-              return json({ ok: false, message: "You can send photos, voice notes, PDFs and plain text files only." }, 415);
+              return json({ ok: false, message: "That file type can't be sent. You can share photos, voice notes, PDFs, text files, documents (Word, Excel, PowerPoint) and zip files." }, 415);
             }
             const objectPath = `${build}/${conversationId}/${crypto.randomUUID()}-${safeName(raw["fileName"])}`;
             const { error } = await supabaseAdmin.storage.from("message-attachments").upload(objectPath, bytes, { contentType: mime, upsert: false });
@@ -301,30 +313,39 @@ export const Route = createFileRoute("/api/public/messages")({
         if (action === "createTransaction") {
           const peer = String(conversation["participant_a_email"]) === email ? String(conversation["participant_b_email"]) : String(conversation["participant_a_email"]);
           const referenceId = str(raw["referenceId"], 120);
-          /* Who is selling is decided from saved records — a shop owner or the
-             person who posted the listing — never from the request itself. */
-          async function sellsThis(candidate: string) {
-            const lower = candidate.toLowerCase();
-            const { count: shops } = await supabaseAdmin
-              .from("vendors").select("id", { count: "exact", head: true })
-              .eq("owner_email", lower).eq("build", build);
-            if ((shops ?? 0) > 0) return true;
-            if (/^[0-9a-f-]{36}$/i.test(referenceId)) {
-              const { count: listings } = await supabaseAdmin
-                .from("posts").select("id", { count: "exact", head: true })
-                .eq("id", referenceId).eq("author_email", lower);
-              if ((listings ?? 0) > 0) return true;
+          /* Who is selling is decided from the referenced record — the shop
+             that was booked or the listing being bought — never from the
+             request itself, and never from "this person happens to own a
+             shop". A vendor buying from another vendor is the buyer here,
+             even though they run their own storefront. */
+          async function sellerForReference(): Promise<string | null> {
+            // Booking: referenceId looks like "booking-<vendorId>-<timestamp>".
+            const booking = /^booking-([0-9a-f-]{36})-\d+$/i.exec(referenceId);
+            const vendorId = booking?.[1];
+            if (vendorId) {
+              const { data } = await supabaseAdmin
+                .from("vendors").select("owner_email")
+                .eq("id", vendorId).eq("build", build).maybeSingle();
+              return String(data?.["owner_email"] ?? "").toLowerCase() || null;
             }
-            return false;
+            // Marketplace listing: referenceId is the post id.
+            if (/^[0-9a-f-]{36}$/i.test(referenceId)) {
+              const { data } = await supabaseAdmin
+                .from("posts").select("author_email")
+                .eq("id", referenceId).maybeSingle();
+              return String(data?.["author_email"] ?? "").toLowerCase() || null;
+            }
+            return null;
           }
-          const callerSells = await sellsThis(email);
-          const peerSells = callerSells ? false : await sellsThis(peer);
-          if (!callerSells && !peerSells) {
+          const resolvedSeller = await sellerForReference();
+          const me = email.toLowerCase();
+          const them = peer.toLowerCase();
+          if (!resolvedSeller || (resolvedSeller !== me && resolvedSeller !== them)) {
             return json({ ok: false, message: "We could not confirm who is selling here." }, 403);
           }
-          const role = callerSells ? "seller" : "buyer";
-          const sellerEmail = callerSells ? email : peer;
-          const buyerEmail = callerSells ? peer : email;
+          const role = resolvedSeller === me ? "seller" : "buyer";
+          const sellerEmail = resolvedSeller === me ? email : peer;
+          const buyerEmail = resolvedSeller === me ? peer : email;
           const appointmentAt = str(raw["appointmentAt"], 40) || null;
           const meetupAt = appointmentAt ? new Date(Date.parse(appointmentAt) - 15 * 60 * 1000).toISOString() : new Date().toISOString();
           const row = {
