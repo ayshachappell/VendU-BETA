@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Moderation block-list reads require a verified user session because moderation decisions are private.
+- Verification-status polling requires a short-lived server-signed token bound to the email request.

@@ -103,6 +103,42 @@ export function normalizeCode(raw: unknown): string | null {
   return code.length === 6 ? code : null;
 }
 
+/** Short-lived proof that this browser initiated verification for an address. */
+export async function createVerificationLookupToken(email: string): Promise<string> {
+  const { createHmac, randomBytes } = await import("node:crypto");
+  const secret = process.env["INTERNAL_LOGIN_SECRET"] ?? process.env["SUPABASE_SERVICE_ROLE_KEY"];
+  if (!secret) throw new Error("Verification lookup signing is not configured");
+  const payload = Buffer.from(
+    JSON.stringify({ email, exp: Date.now() + 15 * 60 * 1000, nonce: randomBytes(16).toString("hex") }),
+  ).toString("base64url");
+  const signature = createHmac("sha256", secret).update(payload).digest("base64url");
+  return `${payload}.${signature}`;
+}
+
+/** Validate a verification lookup token and return its bound address. */
+export async function emailFromVerificationLookupToken(token: unknown): Promise<string | null> {
+  if (typeof token !== "string" || token.length > 2048) return null;
+  const [payload, signature, extra] = token.split(".");
+  if (!payload || !signature || extra) return null;
+  const { createHmac, timingSafeEqual } = await import("node:crypto");
+  const secret = process.env["INTERNAL_LOGIN_SECRET"] ?? process.env["SUPABASE_SERVICE_ROLE_KEY"];
+  if (!secret) return null;
+  const expected = createHmac("sha256", secret).update(payload).digest("base64url");
+  const suppliedBytes = Buffer.from(signature);
+  const expectedBytes = Buffer.from(expected);
+  if (suppliedBytes.length !== expectedBytes.length || !timingSafeEqual(suppliedBytes, expectedBytes)) return null;
+  try {
+    const parsed = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as {
+      email?: unknown;
+      exp?: unknown;
+    };
+    if (typeof parsed.exp !== "number" || parsed.exp < Date.now()) return null;
+    return normalizeAccessEmail(parsed.email);
+  } catch {
+    return null;
+  }
+}
+
 function authBase(): { url: string; key: string } {
   const url = process.env["SUPABASE_URL"];
   const key = process.env["SUPABASE_PUBLISHABLE_KEY"];
