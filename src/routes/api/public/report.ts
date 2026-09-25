@@ -17,6 +17,8 @@ export const Route = createFileRoute("/api/public/report")({
   server: {
     handlers: {
       GET: async ({ request }) => {
+        const auth = await requireStudent(request);
+        if ("response" in auth) return auth.response;
         const build = normalizeBuild(new URL(request.url).searchParams.get("build"));
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
         const { data } = await supabaseAdmin

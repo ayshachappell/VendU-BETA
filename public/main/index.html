@@ -11,7 +11,7 @@
 /* Always-fresh assets: every page load requests a unique URL, so no browser,
    proxy or installed-app cache can ever serve an old stylesheet or tutorial. */
 (function(){
-  var B='/main/', V='v66';
+  var B='/main/', V='v67';
   var l=document.createElement('link');
   l.rel='stylesheet'; l.href=B+'vendu-shared.css?v='+V;
   document.head.appendChild(l);
@@ -979,6 +979,7 @@ function mapsUrl(q){var place=campusPlace();var short=((typeof state!=="undefine
 function bannerGrad(c){const top=textOn(c)==='#ffffff'?c:shade(c,-45);return `linear-gradient(140deg,${top},${shade(c,-52)})`;}
 
 function icon(p,w=18){return `<svg width="${w}" height="${w}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`}
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 const star='<svg width="13" height="13" viewBox="0 0 24 24" fill="#FFB020" stroke="none"><path d="m12 2 3 6.5 7 .8-5.2 4.7 1.4 6.9L12 17.8 5.8 20.9l1.4-6.9L2 9.3l7-.8z"/></svg>';
 const pin='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.6"/></svg>';
 const heart=f=>`<svg width="17" height="17" viewBox="0 0 24 24" fill="${f?'#FF5C8A':'none'}" stroke="${f?'#FF5C8A':'currentColor'}" stroke-width="2"><path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11z"/></svg>`;
@@ -1180,7 +1181,7 @@ function feedBody(){
       <div class="p-text">${p.text}</div>
       <div class="p-actions"><div class="p-act ${p.liked?'liked':''}" data-like="${p.id}">${heart(p.liked)} ${p.likes}</div>
         <div class="p-act ${open?'liked':''}" data-cmt="${p.id}">${icon('<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',17)} ${p.comments.length}${p.comments.length?(open?' · hide':' · view'):''}</div></div>
-      ${open?`${(state.allC===p.id?p.comments:p.comments.slice(-2)).map(c=>`<div class="p-comment"><b class="gp-author" data-user="${c[0]}␟${c[0].charAt(0)}␟0" style="cursor:pointer">${c[0]}</b> ${c[1]}</div>`).join('')}${p.comments.length>2&&state.allC!==p.id?`<div class="p-moreC" data-allc="${p.id}">View all ${p.comments.length} comments</div>`:''}<div class="p-cbox"><input id="ci${p.id}" placeholder="Add a comment…"><button data-send="${p.id}">Post</button></div>`:''}
+      ${open?`${(state.allC===p.id?p.comments:p.comments.slice(-2)).map(c=>`<div class="p-comment"><b class="gp-author" data-user="${esc(c[0])}␟${esc(c[0]).charAt(0)}␟0" style="cursor:pointer">${esc(c[0])}</b> ${esc(c[1])}</div>`).join('')}${p.comments.length>2&&state.allC!==p.id?`<div class="p-moreC" data-allc="${p.id}">View all ${p.comments.length} comments</div>`:''}<div class="p-cbox"><input id="ci${p.id}" placeholder="Add a comment…"><button data-send="${p.id}">Post</button></div>`:''}
     </div>`}).join('')}</div>`;
 }
 
@@ -1201,9 +1202,9 @@ function browseBody(){
   const showFeat=state.q===''&&feat.length>0;
   return `<div class="chips"><div class="chip near ${state.near?'on':''}" id="nearchip">${pin} Near me</div>${CATS.map(c=>`<div class="chip ${c===state.cat?'on':''}" data-cat="${c}">${c}</div>`).join('')}</div>
     <div class="chips" style="padding-top:8px"><div class="chip ${state.avail?'on':''}" data-f="avail">🟢 Available now</div><div class="chip ${state.cheap?'on':''}" data-f="cheap">Under $25</div><div class="chip ${state.top?'on':''}" data-f="top">★ Top rated</div></div>
-    ${showFeat?`<div class="sec-head"><div class="sec-title">🔥 Featured</div></div><div class="spotlight-scroll">${feat.map(h=>`<div class="spot" data-open="${h.id}" style="background:${bg(h)}"><span class="tag">${h.cat}</span><div class="who">${h.name}${h.v?CHECK:''}${SAMPLE(h)}</div><div class="what">${h.offer.split('.')[0]}.</div><div class="price">${h.price}</div></div>`).join('')}</div>`:''}
+    ${showFeat?`<div class="sec-head"><div class="sec-title">🔥 Featured</div></div><div class="spotlight-scroll">${feat.map(h=>`<div class="spot" data-open="${h.id}" style="background:${bg(h)}"><span class="tag">${h.cat}</span><div class="who">${h.name}${h.v?CHECK:''}${SAMPLE(h)}</div><div class="what">${esc(h.offer.split('.')[0])}.</div><div class="price">${h.price}</div></div>`).join('')}</div>`:''}
     <div class="sec-head"><div class="sec-title">${state.near?'Nearest you':state.top?'Top rated':state.cat==='All'?'All hustles':state.cat}</div><div class="sec-link">${f.length} found</div></div>
-    <div class="list">${clean?sponsoredCard():''}${f.length?f.map((h,i)=>`<div class="card" data-open="${h.id}" style="animation-delay:${i*40}ms"><div class="avatar-wrap"><div class="avatar" style="${h.avatar?'background-image:url('+h.avatar+');background-size:cover;background-position:center':'background:'+bg(h)}">${h.avatar?'':h.init}</div>${isLive(h)?'<span class="livedot"></span>':''}</div><div class="body"><div class="name">${h.name}${h.v?CHECK:''}${SAMPLE(h)}${vendorPills(h)}${h.boost?'<span class="boostpill">⚡ Boosted</span>':''}${AVAIL.includes(h.id)?'<span class="availpill">● now</span>':''}${pillFor(h)}</div><div class="offer">${h.offer}</div><div class="metarow"><span class="catbadge">${h.cat}</span><span class="rating">${star} ${h.rating}</span>${distText(h)?`<span class="dist">${pin} ${distText(h)}</span>`:''}<span class="pricetag">${h.price}</span></div></div></div>`).join(''):`<div class="empty" style="padding-top:50px">${clean?'Nothing on your campus yet.<br>Tap the ＋ to post the first one.':'No hustles match those filters yet.'}</div>`}</div>`;
+    <div class="list">${clean?sponsoredCard():''}${f.length?f.map((h,i)=>`<div class="card" data-open="${h.id}" style="animation-delay:${i*40}ms"><div class="avatar-wrap"><div class="avatar" style="${h.avatar?'background-image:url('+h.avatar+');background-size:cover;background-position:center':'background:'+bg(h)}">${h.avatar?'':h.init}</div>${isLive(h)?'<span class="livedot"></span>':''}</div><div class="body"><div class="name">${h.name}${h.v?CHECK:''}${SAMPLE(h)}${vendorPills(h)}${h.boost?'<span class="boostpill">⚡ Boosted</span>':''}${AVAIL.includes(h.id)?'<span class="availpill">● now</span>':''}${pillFor(h)}</div><div class="offer">${esc(h.offer)}</div><div class="metarow"><span class="catbadge">${h.cat}</span><span class="rating">${star} ${h.rating}</span>${distText(h)?`<span class="dist">${pin} ${distText(h)}</span>`:''}<span class="pricetag">${h.price}</span></div></div></div>`).join(''):`<div class="empty" style="padding-top:50px">${clean?'Nothing on your campus yet.<br>Tap the ＋ to post the first one.':'No hustles match those filters yet.'}</div>`}</div>`;
 }
 
 function eventsBody(){
@@ -1305,7 +1306,7 @@ function detail(id){
     <div class="sfview"><button data-sfv="grid" class="${sfv==='grid'?'on':''}">Grid view</button><button data-sfv="window" class="${sfv==='window'?'on':''}">Window view</button></div><div class="windows ${sfv==='grid'?'grid':''}">${windows}</div>
     <div class="statrow"><div class="stat"><div class="n">${h.rating}${h.me?'':'★'}</div><div class="l">${h.reviews} reviews</div></div><div class="stat"><div class="n">${h.jobs}${h.me?'':'+'}</div><div class="l">jobs done</div></div><div class="stat"><div class="n">${h.since}</div><div class="l">on campus</div></div></div>
     <div class="detail-body">
-      <div class="block-t">About</div><div class="block-p">${h.bio}</div>
+      <div class="block-t">About</div><div class="block-p">${esc(h.bio)}</div>
       <div class="block-t">Services & prices</div>${emptySvc?`<div class="prompt">Add your services under <b>Set up your storefront</b> and they show here.</div>`:svcs.filter(s=>s[0]).map(s=>`<div class="svc"><span>${s[0]}</span><span class="p">${s[1]}</span></div>`).join('')}
       <div class="block-t">Accepts <span style="font-weight:500;font-size:12px;color:var(--mist)">· tap to pay</span></div><div class="paychips">${acceptsList}</div>
       ${reviews}
@@ -2172,7 +2173,7 @@ function onboarding(){
 function savedScreen(){
   const list=(state.saved||[]).map(id=>HUSTLES.find(x=>x.id===id)).filter(Boolean);
   screen.innerHTML=`<div class="topbar"><div class="brandrow"><div class="wordmark">Saved hustles</div><div class="locpill" id="savClose" style="cursor:pointer">\u2715 Close</div></div></div>
-    <div class="enter" style="padding:10px 0 20px">${list.length?`<div class="list">${list.map((h,i)=>`<div class="card" data-open="${h.id}" style="animation-delay:${i*40}ms"><div class="avatar-wrap"><div class="avatar" style="${h.avatar?'background-image:url('+h.avatar+');background-size:cover;background-position:center':'background:'+bg(h)}">${h.avatar?'':h.init}</div>${isLive(h)?'<span class="livedot"></span>':''}</div><div class="body"><div class="name">${h.name}${h.v?CHECK:''}${pillFor(h)}</div><div class="offer">${h.offer}</div><div class="metarow"><span class="catbadge">${h.cat}</span><span class="rating">${star} ${h.rating}</span><span class="pricetag">${h.price}</span></div></div></div>`).join('')}</div>`:`<div class="empty" style="padding-top:52px">No saved hustles yet.<br>Tap the \ud83d\udd16 bookmark on any storefront to save it here.</div>`}</div>`;
+    <div class="enter" style="padding:10px 0 20px">${list.length?`<div class="list">${list.map((h,i)=>`<div class="card" data-open="${h.id}" style="animation-delay:${i*40}ms"><div class="avatar-wrap"><div class="avatar" style="${h.avatar?'background-image:url('+h.avatar+');background-size:cover;background-position:center':'background:'+bg(h)}">${h.avatar?'':h.init}</div>${isLive(h)?'<span class="livedot"></span>':''}</div><div class="body"><div class="name">${h.name}${h.v?CHECK:''}${pillFor(h)}</div><div class="offer">${esc(h.offer)}</div><div class="metarow"><span class="catbadge">${h.cat}</span><span class="rating">${star} ${h.rating}</span><span class="pricetag">${h.price}</span></div></div></div>`).join('')}</div>`:`<div class="empty" style="padding-top:52px">No saved hustles yet.<br>Tap the \ud83d\udd16 bookmark on any storefront to save it here.</div>`}</div>`;
   document.getElementById('savClose').onclick=()=>{state.savedView=false;render();};
   screen.querySelectorAll('[data-open]').forEach(el=>el.onclick=()=>openDetail(+el.dataset.open));
 }

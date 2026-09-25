@@ -156,7 +156,12 @@
     return !!(BLOCKS.hidden[k] || BLOCKS.deleted[k]);
   };
   function loadBlocks() {
-    fetch("/api/public/report?build=" + BUILD + "&t=" + Date.now(), { cache: "no-store" })
+    var session = W.session && W.session();
+    if (!session || !session.access_token) return;
+    fetch("/api/public/report?build=" + BUILD + "&t=" + Date.now(), {
+      cache: "no-store",
+      headers: { Authorization: "Bearer " + session.access_token },
+    })
       .then(function (r) {
         return r.json();
       })

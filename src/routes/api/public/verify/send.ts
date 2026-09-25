@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
+  createVerificationLookupToken,
   json,
   logAttempt,
   normalizeAccessEmail,
@@ -38,7 +39,7 @@ export const Route = createFileRoute("/api/public/verify/send")({
         if (!result.ok) {
           return json({ ok: false, message: result.message }, 502);
         }
-        return json({ ok: true });
+        return json({ ok: true, lookupToken: await createVerificationLookupToken(email) });
 
       },
     },
