@@ -352,7 +352,7 @@
     return VendU.commentPost(uuid, text, build(), state.isSeller ? "vendor" : "student").catch(function () {});
   };
 
-  /* ---- referrals & founder spots, straight from the backend ---- */
+  /* ---- referrals & charter spots, straight from the backend ---- */
   L.referrals = function () {
     if (!signedIn() || !VendU.referralMe) return Promise.resolve();
     return VendU.referralMe(build()).then(function (r) {
@@ -360,14 +360,14 @@
       state.refCode = r.code;
       state.refLink = r.link;
       state.referrals = r.myReferrals || 0;
-      state.founderTotal = r.claimed || 0;
-      try { FOUNDERS = Math.min(FOUNDER_CAP, r.claimed || 0); } catch (e) {}
-      if (r.founderNumber) state.founderNum = r.founderNumber;
+      state.charterTotal = r.claimed || 0;
+      try { CHARTERS = Math.min(CHARTER_CAP, r.claimed || 0); } catch (e) {}
+      if (r.founderNumber) state.charterNum = r.founderNumber;
       state.lbRank = r.myRank || 0;
       state.lbRows = (r.leaderboard || [])
         .filter(function (x) { return (x.referrals || 0) > 0; })
         .map(function (x) { return [x.me ? "You" : x.name, x.referrals, !!x.founder]; });
-      try { syncFounder(); } catch (e) {}
+      try { syncCharter(); } catch (e) {}
       redraw();
     }).catch(function () {});
   };

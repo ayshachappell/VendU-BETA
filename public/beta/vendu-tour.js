@@ -72,7 +72,7 @@
     return (
       $(".p-name .dealpill") ||
       $(".p-name .soonpill") ||
-      $(".p-name .founderpill") ||
+      $(".p-name .charterpill") ||
       $(".p-name .vendorpill") ||
       $(".p-name")
     );
@@ -125,7 +125,7 @@
         before: goFeed,
         target: postBadge,
         title: "Badges tell you who's who",
-        text: "🎓 Founder is one of the first 10 verified vendors on a campus, 💠 Vendor sells, ★ is The VendU App staff, and the campus badge shows their school. 🏷️ Sale, 🏷️ 20% off and ⏳ Ending soon show while a promo is running. Posts show up to two.",
+        text: "🎓 Charter is one of the first 10 verified vendors on a campus, 💠 Vendor sells, ★ is The VendU App staff, and the campus badge shows their school. 🏷️ Sale, 🏷️ 20% off and ⏳ Ending soon show while a promo is running. Posts show up to two.",
         place: "below",
       },
       {
@@ -176,8 +176,8 @@
       {
         before: goProfile,
         target: function () { return $(".ref") || $("#startsell"); },
-        title: "Vendors referred → become a Founder",
-        text: "Copy your referral link and share it. Every vendor who signs up through it counts here — hit 3 and you become one of the 10 🎓 Founders on your campus, free forever with a monthly Boost and the Founder badge on your name. 🏆 Leaderboard ranks founders by referrals.",
+        title: "Vendors referred → become a Charter",
+        text: "Copy your referral link and share it. Every vendor who signs up through it counts here — hit 3 and you become one of the 10 🎓 Charters on your campus, free forever with a monthly Boost and the Charter badge on your name. 🏆 Leaderboard ranks charters by referrals.",
         next: "Finish",
         place: "above",
       },

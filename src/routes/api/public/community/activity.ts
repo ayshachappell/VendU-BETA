@@ -72,8 +72,8 @@ export const Route = createFileRoute("/api/public/community/activity")({
           return json({ ok: true, stats });
         }
 
-        /* Founder math for one school (.edu domain), computed live.
-           A founder = someone whose invite link brought in FOUNDER_GOAL (3)
+        /* Charter math for one school (.edu domain), computed live.
+           A charter = someone whose invite link brought in FOUNDER_GOAL (3)
            vendors from that same school. Spots are capped at 10 per school. */
         if (action === "founders") {
           const CAP = 10;
@@ -89,7 +89,7 @@ export const Route = createFileRoute("/api/public/community/activity")({
           // rejects LIKE wildcards (% and _) so the pattern below can never be
           // widened to match other schools.
           if (!/^[a-z0-9-]+(\.[a-z0-9-]+)*\.edu$/.test(domain)) {
-            return json({ ok: false, message: "Founder standings are only available for school campuses." }, 400);
+            return json({ ok: false, message: "Charter standings are only available for school campuses." }, 400);
           }
           const myCode = str(raw.refCode, 64);
 
@@ -113,7 +113,7 @@ export const Route = createFileRoute("/api/public/community/activity")({
             .map(([code, referrals]) => ({ code, referrals }))
             .sort((a, b) => b.referrals - a.referrals || a.code.localeCompare(b.code));
 
-          // Founder seats go to the first accounts to reach the goal.
+          // Charter seats go to the first accounts to reach the goal.
           const qualified = [...firstAt.entries()]
             .sort((a, b) => (a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0))
             .map(([code]) => code);

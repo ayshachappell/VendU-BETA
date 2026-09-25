@@ -74,7 +74,7 @@
 .role-title-line{display:block;white-space:nowrap}
 .headline-wordmark.role-title-brand{display:flex!important;margin-top:8px;white-space:nowrap}
 .role-question{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;color:var(--ink);margin-left:2px}
-.internal-account .founder{display:none!important}
+.internal-account .charter{display:none!important}
 .topbar{padding:18px 14px 10px!important}
 .campus-bg{opacity:.095!important;font-size:20px!important;line-height:2.35!important}
 .search{border-radius:999px!important;padding:7px 14px!important;box-shadow:0 4px 14px rgba(28,21,38,.09)!important}

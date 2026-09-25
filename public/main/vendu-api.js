@@ -301,8 +301,8 @@
     return myActivity({ action: "referralCount", refCode: refCode, build: build });
   };
 
-  /* ---- founder spots & leaderboard math (per school, live) ---- */
-  W.founderStats = function (domain, refCode, build) {
+  /* ---- charter spots & leaderboard math (per school, live) ---- */
+  W.charterStats = function (domain, refCode, build) {
     return activity({ action: "founders", domain: domain, refCode: refCode, build: build });
   };
 

@@ -83,8 +83,8 @@
   .seg{display:flex;gap:6px;background:#F1ECE2;border-radius:12px;padding:4px;margin:0 20px}
   .seg div{flex:1;text-align:center;padding:9px;border-radius:9px;font-size:13.5px;font-weight:600;color:var(--mist);cursor:pointer;transition:.15s}
   .seg div.on{background:#fff;color:var(--ink);box-shadow:0 2px 6px rgba(28,21,38,.08)}
-  .founder{margin:14px 20px 0;background:linear-gradient(100deg,rgba(90,43,224,.86),rgba(138,91,240,.86));backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);color:#fff;border-radius:16px;padding:13px 15px;font-size:13px;line-height:1.35;box-shadow:0 8px 22px rgba(90,43,224,.25);display:flex;gap:11px;align-items:center}
-  .founder .em{font-size:20px}.founder b{font-family:'Bricolage Grotesque',sans-serif;font-weight:700}
+  .charter{margin:14px 20px 0;background:linear-gradient(100deg,rgba(90,43,224,.86),rgba(138,91,240,.86));backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);color:#fff;border-radius:16px;padding:13px 15px;font-size:13px;line-height:1.35;box-shadow:0 8px 22px rgba(90,43,224,.25);display:flex;gap:11px;align-items:center}
+  .charter .em{font-size:20px}.charter b{font-family:'Bricolage Grotesque',sans-serif;font-weight:700}
   .chips{display:flex;gap:9px;overflow-x:auto;padding:14px 20px 4px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
   .chip{flex:none;border:1px solid var(--line);background:rgba(255,255,255,.82);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);color:var(--ink);font-size:13px;font-weight:600;padding:9px 15px;border-radius:100px;cursor:pointer;transition:.15s;white-space:nowrap}
   .chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
@@ -481,15 +481,15 @@
 .soonpill{font-size:10px;font-weight:800;color:#8A5A00;background:#FFF0D6;padding:2px 7px;border-radius:999px;white-space:nowrap}
 .commpill{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;color:var(--ink);background:var(--line);padding:3px 9px;border-radius:999px;white-space:nowrap}
 .up-badges{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px}
-.founderpill{font-size:10px;font-weight:800;color:#a5810f;background:#FFF3D6;padding:2px 7px;border-radius:999px;letter-spacing:.02em;white-space:nowrap}
+.charterpill{font-size:10px;font-weight:800;color:#a5810f;background:#FFF3D6;padding:2px 7px;border-radius:999px;letter-spacing:.02em;white-space:nowrap}
 .beta-tag{font-size:9px;font-weight:800;letter-spacing:.08em;color:#fff;background:var(--violet);padding:3px 7px;border-radius:6px;vertical-align:middle}
 .lb-summary{font-size:12.5px;color:var(--violet);font-weight:600;margin:-2px 0 14px}
 .lb-nmwrap{flex:1;min-width:0}
-.lb-found{font-size:11px;color:var(--mist);font-weight:600;margin-top:1px}
+.lb-charter{font-size:11px;color:var(--mist);font-weight:600;margin-top:1px}
 
 /* --- badge & name polish --- */
 .p-name,.name,.store-name,.up-name{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-width:0;line-height:1.25}
-.founderpill,.vendorpill,.dealpill,.soonpill,.commpill,.ceopill{flex:0 0 auto;font-size:10px;font-weight:800;letter-spacing:.01em;line-height:1;padding:4px 8px;border-radius:999px;white-space:nowrap;text-transform:none}
+.charterpill,.vendorpill,.dealpill,.soonpill,.commpill,.ceopill{flex:0 0 auto;font-size:10px;font-weight:800;letter-spacing:.01em;line-height:1;padding:4px 8px;border-radius:999px;white-space:nowrap;text-transform:none}
 .up-badges{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px}
 
 /* ===== Storefront refresh — refined awning, editorial layout, floating action bar ===== */
@@ -505,7 +505,7 @@
 .detail-av{width:84px;height:84px;border-radius:24px;border:0;box-shadow:0 12px 26px rgba(0,0,0,.14);font-size:32px}
 .shop-sign>div:last-child{padding-top:30px}
 .shop-sign .store-name{font-size:20px;margin:0 0 6px}
-.store-badges span,.store-badges .dealpill,.store-badges .soonpill,.store-badges .founderpill,.store-badges .vendorpill,.store-badges .licpill,.store-badges .foodpill{background:transparent!important;border:1px solid var(--line);color:var(--mist)!important;font-size:10px!important;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px!important;border-radius:100px}
+.store-badges span,.store-badges .dealpill,.store-badges .soonpill,.store-badges .charterpill,.store-badges .vendorpill,.store-badges .licpill,.store-badges .foodpill{background:transparent!important;border:1px solid var(--line);color:var(--mist)!important;font-size:10px!important;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px!important;border-radius:100px}
 .store-badges .dealpill,.store-badges .soonpill{border-color:color-mix(in srgb,var(--amber) 45%,#fff);color:#a5600f!important}
 .store-badges .licpill{border-color:#bfe3d2;color:#0b7f5b!important}
 .socialrow{padding:18px 20px 0}
@@ -552,11 +552,11 @@
 .shop-sign{margin-top:-6px;padding-top:16px}
 /* high-trust signal badges */
 .store-badges{display:inline-flex;flex-wrap:wrap;gap:6px;vertical-align:middle;margin-left:6px}
-.store-badges span,.store-badges .dealpill,.store-badges .soonpill,.store-badges .founderpill,.store-badges .vendorpill,.store-badges .licpill,.store-badges .foodpill{
+.store-badges span,.store-badges .dealpill,.store-badges .soonpill,.store-badges .charterpill,.store-badges .vendorpill,.store-badges .licpill,.store-badges .foodpill{
   border:0!important;font-size:10px!important;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
   padding:5px 10px!important;border-radius:100px;line-height:1;box-shadow:0 1px 2px rgba(20,16,28,.10)}
 .store-badges .dealpill,.store-badges .soonpill{background:linear-gradient(180deg,#FFE9B8,#FBD27E)!important;color:#7A4A05!important}
-.store-badges .founderpill{background:linear-gradient(180deg,#7E2338,#5E152A)!important;color:#FFE7EE!important}
+.store-badges .charterpill{background:linear-gradient(180deg,#7E2338,#5E152A)!important;color:#FFE7EE!important}
 .store-badges .vendorpill{background:linear-gradient(180deg,#EFE7FF,#DED0FF)!important;color:#4A22B8!important}
 .store-badges .licpill,.store-badges .foodpill{background:linear-gradient(180deg,#D8F5E9,#B5E9D5)!important;color:#0A6E50!important}
 .store-badges .ceopill{background:linear-gradient(180deg,#22202C,#131118)!important;color:#FFD98A!important}
@@ -578,11 +578,11 @@
   text-shadow:0 1px 2px rgba(20,16,28,.35);margin-bottom:0;position:relative;z-index:1}
 
 /* translucent, glassy signal badges (see-through tint, hairline outline) */
-.store-badges span,.store-badges .dealpill,.store-badges .soonpill,.store-badges .founderpill,.store-badges .vendorpill,.store-badges .licpill,.store-badges .foodpill,.store-badges .ceopill{
+.store-badges span,.store-badges .dealpill,.store-badges .soonpill,.store-badges .charterpill,.store-badges .vendorpill,.store-badges .licpill,.store-badges .foodpill,.store-badges .ceopill{
   box-shadow:none!important;padding:4px 10px!important;font-weight:800;
   backdrop-filter:blur(4px) saturate(1.1);-webkit-backdrop-filter:blur(4px) saturate(1.1)}
 .store-badges .dealpill,.store-badges .soonpill{color:#9A6108!important;background:rgba(251,210,126,.16)!important;border:1px solid rgba(154,97,8,.32)!important}
-.store-badges .founderpill{color:#7E2338!important;background:rgba(126,35,56,.09)!important;border:1px solid rgba(126,35,56,.30)!important}
+.store-badges .charterpill{color:#7E2338!important;background:rgba(126,35,56,.09)!important;border:1px solid rgba(126,35,56,.30)!important}
 .store-badges .vendorpill{color:#4A22B8!important;background:rgba(74,34,184,.08)!important;border:1px solid rgba(74,34,184,.28)!important}
 .store-badges .licpill,.store-badges .foodpill{color:#0A6E50!important;background:rgba(10,110,80,.08)!important;border:1px solid rgba(10,110,80,.28)!important}
 .store-badges .ceopill{color:#8A6A10!important;background:rgba(138,106,16,.10)!important;border:1px solid rgba(138,106,16,.30)!important}
@@ -922,8 +922,8 @@ let idc=1;
 const MSGS={};
 const BOOKED={};
 
-const FOUNDER_CAP=10, FOUNDER_GOAL=3;
-let FOUNDERS=0; /* founder seats actually claimed at this school; filled live from the backend */
+const CHARTER_CAP=10, CHARTER_GOAL=3;
+let CHARTERS=0; /* charter seats actually claimed at this school; filled live from the backend */
 function pic(a,b,e,t){var svg='<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+a+'"/><stop offset="1" stop-color="'+b+'"/></linearGradient></defs><rect width="320" height="240" fill="url(%23g)"/><text x="160" y="122" font-size="96" text-anchor="middle">'+e+'</text><text x="160" y="210" font-size="22" font-family="sans-serif" font-weight="700" fill="rgba(255,255,255,.92)" text-anchor="middle">'+t+'</text></svg>';return {src:'data:image/svg+xml;utf8,'+encodeURIComponent(svg),fit:'cover'};}
 const HUSTLES=[
   {id:1,name:"Nia's Kitchen",init:'N',avail:1,cat:'Food',food:'prepared',v:1,lic:1,dist:0.4,offer:'Home-cooked plates & weekly meal prep. Delivered to your dorm.',price:'$8–12',rating:'4.9',reviews:41,jobs:120,since:'2024',c:0,pays:['Cash App','Zelle'],bio:"Junior, business major. Order by 6pm for next-day plates.",services:[['Single plate','$10'],['Weekly prep (5 meals)','$45'],['Party tray','$60']]},
@@ -964,7 +964,7 @@ const EVENTS_SEED=[
   {title:'Gospel Night',inDays:16,hour:19,loc:'Chapel',c:5,tag:'Free'},
   {title:'Spring Fling Yard Show',inDays:45,hour:18,loc:'Amphitheater',c:1,tag:'Popular'},
 ];
-GOODS.forEach(function(g){if(!g.campus)g.campus='fvsu';});REQUESTS.forEach(function(r){if(!r.campus)r.campus='fvsu';});FEED.forEach(function(p){if(!p.campus)p.campus='fvsu';});EVENTS_SEED.forEach(function(e){if(!e.campus)e.campus='fvsu';});GOODS.push({emoji:'📕',name:'Bio 101 textbook (like new)',price:'$30',tag:'Sell',c:2,by:'Nia W.',bi:'N',bc:5,campus:'spelman'});REQUESTS.push({who:'Maya',in:'M',c:6,barter:1,txt:'Trading my mini fridge for a desk lamp + snacks',campus:'spelman'});FEED.push({id:41,s:21,promo:'BOOKING',when:'3h ago',text:'Homecoming glam slots are filling fast 💄 book early!',likes:31,liked:false,comments:[],campus:'spelman'});EVENTS_SEED.push({title:'Spelhouse Fashion Showcase',inDays:5,hour:18,loc:'Sisters Chapel',c:6,tag:'Popular',campus:'spelman'});[1,2,3,5,6].forEach(function(_id){var _v=HUSTLES.find(function(x){return x.id===_id;});if(_v)_v.founder=1;});
+GOODS.forEach(function(g){if(!g.campus)g.campus='fvsu';});REQUESTS.forEach(function(r){if(!r.campus)r.campus='fvsu';});FEED.forEach(function(p){if(!p.campus)p.campus='fvsu';});EVENTS_SEED.forEach(function(e){if(!e.campus)e.campus='fvsu';});GOODS.push({emoji:'📕',name:'Bio 101 textbook (like new)',price:'$30',tag:'Sell',c:2,by:'Nia W.',bi:'N',bc:5,campus:'spelman'});REQUESTS.push({who:'Maya',in:'M',c:6,barter:1,txt:'Trading my mini fridge for a desk lamp + snacks',campus:'spelman'});FEED.push({id:41,s:21,promo:'BOOKING',when:'3h ago',text:'Homecoming glam slots are filling fast 💄 book early!',likes:31,liked:false,comments:[],campus:'spelman'});EVENTS_SEED.push({title:'Spelhouse Fashion Showcase',inDays:5,hour:18,loc:'Sisters Chapel',c:6,tag:'Popular',campus:'spelman'});[1,2,3,5,6].forEach(function(_id){var _v=HUSTLES.find(function(x){return x.id===_id;});if(_v)_v.charter=1;});
 const BETA_EMAIL='info@integroservicegroup.com';/* beta feedback inbox */
 var BUILD=(window.VendU&&window.VendU.BUILD)||((location.pathname.indexOf('/beta')===0)?'beta':'main');
 var VENDU_BOOKED_KEY='vendu_booked_'+BUILD;
@@ -977,7 +977,7 @@ function markBooked(id,svc){if(hasBooked(id))return;state.booked.push(id);saveBo
 try{if(window.VendU)VendU.consumeMagicLink();}catch(e){}
 var VERIFY_ERR='';try{if(/[?&]verify=expired/.test(location.search)){VERIFY_ERR='That link expired or was already used. Send yourself a new one.';history.replaceState(null,'',location.pathname);}if(location.hash==='#verified')history.replaceState(null,'',location.pathname);}catch(e){}
 var VERIFIED=!!(window.VendU&&VendU.student());
-let state={eduEmail:'',eduCodeSent:false,eduErr:VERIFY_ERR,tab:'home',home:'browse',cat:'All',q:'',near:false,mkt:'goods',formCat:'Food',foodType:'baked',eduOK:false,a1:false,a2:false,a3:false,submitted:false,avatar:'',gallery:[],themeColor:'#5A2BE0',book:null,openC:0,detail:0,isSeller:true,events:[],eventNotifications:[],about:"Tell buyers about your storefront — what you make or do, your vibe, and how to work with you.",services:[],referrals:0,isFounder:false,addMode:null,svcEdit:false,newPhoto:null,reviewOpen:false,reviewStars:5,booked:[],leaderboard:false,storefrontSetup:false,hasStore:false,mpays:[],avail:false,cheap:false,top:false,justReferred:-1,msgTo:0,openMC:0,bookSet:false,booking:{mode:'builtin',link:'',provider:'Calendly',days:{Mon:true,Tue:true,Wed:true,Thu:true,Fri:true,Sat:true,Sun:false},open:'09:00',close:'18:00',blackouts:[]},onboarded:false,tester:false,isCEO:false,isRealStudent:false,acctEmail:'',tourActive:false,userType:null,obStep:0,eduDone:false,legalOK:false,studentName:'',vendorName:'',bookMethod:0,pays:[],socials:[],saved:[],savedView:false,sfView:'window',campus:campusById('fvsu'),campusPick:false,campusQ:'',hubView:'resources',openRes:-1,intros:[],introText:'',classes:[{id:'c1',name:'BIOL 101',days:['Mon','Wed','Fri'],start:'09:00',end:'09:50',loc:'Founders Hall 204',c:0},{id:'c2',name:'MATH 241',days:['Tue','Thu'],start:'11:00',end:'12:15',loc:'Science Bldg 110',c:2},{id:'c3',name:'ENG 102',days:['Mon','Wed'],start:'14:00',end:'15:15',loc:'Humanities 3',c:4}],todos:[{id:'t1',text:'Finish BIOL lab report',done:false,due:'Today'},{id:'t2',text:'Email advisor about fall registration',done:false,due:'Tomorrow'},{id:'t3',text:'Read Chapter 5 for ENG',done:true,due:'None'}],plannerSub:'schedule',plannerDay:'',classForm:null,todoText:'',todoDue:'None',route:{stops:[],mode:'walk'},promo:{type:'none',pct:'20',ends:''},moreMenu:false,boosted:false,appTheme:'violet',themeView:false,myPostsView:false,thread:0,inboxView:false,joinedComm:[],groupView:null,userView:null,groupCreateView:false,assignMod:false,createGroup:null,groupPostText:'',gradYear:'',inbox:[{id:'ths1',name:'Fades by Marcus',init:'M',color:'#F0873B',unread:1,msgs:[['Fades by Marcus','Appreciate the booking! You want the usual taper this time? ✂️']]},{id:'ths2',name:'Tutor Tori',init:'T',color:'#C026D3',unread:0,msgs:[['You','Hey! Free to help with calc this week?'],['Tutor Tori','Yes! Thursday after 4 works 📚']]}]};
+let state={eduEmail:'',eduCodeSent:false,eduErr:VERIFY_ERR,tab:'home',home:'browse',cat:'All',q:'',near:false,mkt:'goods',formCat:'Food',foodType:'baked',eduOK:false,a1:false,a2:false,a3:false,submitted:false,avatar:'',gallery:[],themeColor:'#5A2BE0',book:null,openC:0,detail:0,isSeller:true,events:[],eventNotifications:[],about:"Tell buyers about your storefront — what you make or do, your vibe, and how to work with you.",services:[],referrals:0,isCharter:false,addMode:null,svcEdit:false,newPhoto:null,reviewOpen:false,reviewStars:5,booked:[],leaderboard:false,storefrontSetup:false,hasStore:false,mpays:[],avail:false,cheap:false,top:false,justReferred:-1,msgTo:0,openMC:0,bookSet:false,booking:{mode:'builtin',link:'',provider:'Calendly',days:{Mon:true,Tue:true,Wed:true,Thu:true,Fri:true,Sat:true,Sun:false},open:'09:00',close:'18:00',blackouts:[]},onboarded:false,tester:false,isCEO:false,isRealStudent:false,acctEmail:'',tourActive:false,userType:null,obStep:0,eduDone:false,legalOK:false,studentName:'',vendorName:'',bookMethod:0,pays:[],socials:[],saved:[],savedView:false,sfView:'window',campus:campusById('fvsu'),campusPick:false,campusQ:'',hubView:'resources',openRes:-1,intros:[],introText:'',classes:[{id:'c1',name:'BIOL 101',days:['Mon','Wed','Fri'],start:'09:00',end:'09:50',loc:'Founders Hall 204',c:0},{id:'c2',name:'MATH 241',days:['Tue','Thu'],start:'11:00',end:'12:15',loc:'Science Bldg 110',c:2},{id:'c3',name:'ENG 102',days:['Mon','Wed'],start:'14:00',end:'15:15',loc:'Humanities 3',c:4}],todos:[{id:'t1',text:'Finish BIOL lab report',done:false,due:'Today'},{id:'t2',text:'Email advisor about fall registration',done:false,due:'Tomorrow'},{id:'t3',text:'Read Chapter 5 for ENG',done:true,due:'None'}],plannerSub:'schedule',plannerDay:'',classForm:null,todoText:'',todoDue:'None',route:{stops:[],mode:'walk'},promo:{type:'none',pct:'20',ends:''},moreMenu:false,boosted:false,appTheme:'violet',themeView:false,myPostsView:false,thread:0,inboxView:false,joinedComm:[],groupView:null,userView:null,groupCreateView:false,assignMod:false,createGroup:null,groupPostText:'',gradYear:'',inbox:[{id:'ths1',name:'Fades by Marcus',init:'M',color:'#F0873B',unread:1,msgs:[['Fades by Marcus','Appreciate the booking! You want the usual taper this time? ✂️']]},{id:'ths2',name:'Tutor Tori',init:'T',color:'#C026D3',unread:0,msgs:[['You','Hey! Free to help with calc this week?'],['Tutor Tori','Yes! Thursday after 4 works 📚']]}]};
 const screen=document.getElementById('screen'),photo=document.getElementById('photo'),gphoto=document.getElementById('gphoto'),ephoto=document.getElementById('ephoto'),cphoto=document.getElementById('cphoto'),msgCamera=document.getElementById('msgCamera'),msgMedia=document.getElementById('msgMedia'),msgFile=document.getElementById('msgFile');
 const color=i=>COLORS[i%COLORS.length];
 const bg=h=>h.me?state.themeColor:color(h.c);
@@ -1006,15 +1006,15 @@ function myPromo(){var pr=state.promo||{};if(!pr.type||pr.type==='none')return n
   return {t:'Sale',k:'sale'};}
 function promoNote(){var pr=state.promo||{};if(!pr.type||pr.type==='none')return '';var d=myPromo();if(!d)return 'Your promo has ended — badge removed.';return 'Showing '+d.t+(pr.ends?' until '+pr.ends:' (no end date)');}
 /* Max two badges anywhere. Priority: the deal the post is actually about,
-   then Founder, then Vendor. */
-function vendorPills(h,txt){if(!h)return '';var out=[];var d=dealFor(h,txt);if(d)out.push(pillHTML(d));if(h.founder)out.push('<span class="founderpill">\u{1F393} Founder</span>');if(out.length<2)out.push('<span class="vendorpill">\u{1F4A0} Vendor</span>');return out.slice(0,2).join('');}
+   then Charter, then Vendor. */
+function vendorPills(h,txt){if(!h)return '';var out=[];var d=dealFor(h,txt);if(d)out.push(pillHTML(d));if(h.charter)out.push('<span class="charterpill">\u{1F393} Charter</span>');if(out.length<2)out.push('<span class="vendorpill">\u{1F4A0} Vendor</span>');return out.slice(0,2).join('');}
 function commPills(name,max){try{return COMM.filter(function(c){return c.campus===state.campus.id&&c.members.some(function(m){return m.name===name;});}).slice(0,max||1).map(function(c){return '<span class="commpill">'+c.emoji+' '+c.name+'</span>';}).join('');}catch(e){return '';}}
 
 /* ===== Account kinds =====
    @integroservicegroup.com  -> CEO. Permanent access, never expires, never purged.
    *.edu                     -> real student. The only accounts other students see.
    Everyone else / testers   -> demo access only; never counted as a real user,
-                                founder, vendor or storefront. */
+                                charter, vendor or storefront. */
 function isCEOEmail(e){return /@integroservicegroup\.com$/i.test(String(e||'').trim());}
 function isEduEmail(e){return /\.edu$/i.test(String(e||'').trim());}
 /* @venduapp.com testers always see the seeded sample app. */
@@ -1027,7 +1027,7 @@ function applyAccount(email){
   state.tester=isTesterEmail(email);
   if((state.isCEO||state.isRealStudent)&&state.demoContent){state.gallery=[];state.services=[];state.socials=[];state.pays=[];state.demoContent=false;}
   if(state.tester)seedDemoContent();
-  if(state.isCEO){state.isFounder=false;}
+  if(state.isCEO){state.isCharter=false;}
   try{document.body.classList.toggle('internal-account',!!state.isCEO);}catch(e){}
   if(state.isRealStudent||state.isCEO)creditReferral();
   loadReferrals();syncReferralsFromServer();syncServerStats();
@@ -1042,49 +1042,49 @@ function applyAccount(email){
   maybeAskHomeCampus();
 }
 
-/* ===== Referrals & founder spots (10 per school, 3 vendor referrals = founder) ===== */
+/* ===== Referrals & charter spots (10 per school, 3 vendor referrals = charter) ===== */
 function brandName(n){return String(n==null?"":n).replace(/Vend\s*U/g,'Vend<span class="brandu">U</span>');}
 function myRefCodeLocal(){var e=String(state.acctEmail||'').toLowerCase();var s=(e.split('@')[0]||'').replace(/[^a-z0-9]/g,'');if(!e)return s||'vendu';var h=0;for(var i=0;i<e.length;i++){h=(h*31+e.charCodeAt(i))>>>0;}return ((s||'vendu').slice(0,10))+h.toString(36).slice(0,4);}function myRefCode(){return state.refCode||myRefCodeLocal();}function myRefLink(){return state.refLink||('https://venduapp.com/?ref='+myRefCode());}
 function shareRefLink(){var url=myRefLink();var txt='Join me on The VendU App — buy, sell and book with students on campus.';var copied=false;try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url);copied=true;}}catch(e){}try{if(navigator.share){navigator.share({title:'The VendU App',text:txt,url:url}).catch(function(){});toast(copied?'Link copied — pick where to share 🔗':'Pick where to share 🔗');return;}}catch(e){}toast('Referral link copied! 🔗');}
-function founderNumber(){if(state.founderNum)return state.founderNum;var n=0;try{n=parseInt(localStorage.getItem('vendu_founder_num')||'0',10)||0;}catch(e){}if(!n&&state.referrals>=FOUNDER_GOAL){n=Math.min(FOUNDER_CAP,(FOUNDERS||0)+1);try{localStorage.setItem('vendu_founder_num',String(n));}catch(e){}}state.founderNum=n;return n;}
-function founderCongrats(){var host=document.querySelector('.device')||document.body;if(document.getElementById('fcong'))return;var w=document.createElement('div');w.id='fcong';w.style.cssText='position:absolute;inset:0;background:rgba(20,12,40,.55);display:flex;align-items:center;justify-content:center;z-index:80;padding:24px';w.innerHTML='<div style="background:var(--card,#fff);border-radius:20px;padding:24px 20px;text-align:center;max-width:300px;box-shadow:0 20px 50px rgba(0,0,0,.3)">'+'<div style="font-size:40px">\uD83C\uDF93</div><div style="font-family:Bricolage Grotesque;font-weight:800;font-size:20px;margin-top:6px">You\u2019re a Founder!</div>'+'<div style="font-size:13.5px;color:var(--mist,#777);line-height:1.5;margin:8px 0 16px">Three vendors signed up with your link, so you claimed <b>Founder #'+founderNumber()+' of '+FOUNDER_CAP+'</b> at '+CAMP()+'. Your \uD83C\uDF93 Founder badge now shows everywhere you post, plus a monthly Boost.</div>'+'<button id="fcongok" class="submit" style="margin:0">Nice!</button></div>';host.appendChild(w);document.getElementById('fcongok').onclick=function(){w.remove();try{render();}catch(e){}};}
-function syncFounder(){var was=state.isFounder;state.isFounder=!state.isCEO&&state.referrals>=FOUNDER_GOAL;if(state.isFounder&&!was){founderNumber();var seen=false;try{seen=!!localStorage.getItem('vendu_founder_congrats');localStorage.setItem('vendu_founder_congrats','1');}catch(e){}if(!seen)setTimeout(founderCongrats,400);}}
-function loadReferrals(){try{state.referrals=parseInt(localStorage.getItem('vendu_refs_'+myRefCode())||'0',10)||0;}catch(e){state.referrals=0;}syncFounder();}
+function charterNumber(){if(state.charterNum)return state.charterNum;var n=0;try{n=parseInt(localStorage.getItem('vendu_founder_num')||'0',10)||0;}catch(e){}if(!n&&state.referrals>=CHARTER_GOAL){n=Math.min(CHARTER_CAP,(CHARTERS||0)+1);try{localStorage.setItem('vendu_founder_num',String(n));}catch(e){}}state.charterNum=n;return n;}
+function charterCongrats(){var host=document.querySelector('.device')||document.body;if(document.getElementById('fcong'))return;var w=document.createElement('div');w.id='fcong';w.style.cssText='position:absolute;inset:0;background:rgba(20,12,40,.55);display:flex;align-items:center;justify-content:center;z-index:80;padding:24px';w.innerHTML='<div style="background:var(--card,#fff);border-radius:20px;padding:24px 20px;text-align:center;max-width:300px;box-shadow:0 20px 50px rgba(0,0,0,.3)">'+'<div style="font-size:40px">\uD83C\uDF93</div><div style="font-family:Bricolage Grotesque;font-weight:800;font-size:20px;margin-top:6px">You\u2019re a Charter!</div>'+'<div style="font-size:13.5px;color:var(--mist,#777);line-height:1.5;margin:8px 0 16px">Three vendors signed up with your link, so you claimed <b>Charter #'+charterNumber()+' of '+CHARTER_CAP+'</b> at '+CAMP()+'. Your \uD83C\uDF93 Charter badge now shows everywhere you post, plus a monthly Boost.</div>'+'<button id="fcongok" class="submit" style="margin:0">Nice!</button></div>';host.appendChild(w);document.getElementById('fcongok').onclick=function(){w.remove();try{render();}catch(e){}};}
+function syncCharter(){var was=state.isCharter;state.isCharter=!state.isCEO&&state.referrals>=CHARTER_GOAL;if(state.isCharter&&!was){charterNumber();var seen=false;try{seen=!!localStorage.getItem('vendu_founder_congrats');localStorage.setItem('vendu_founder_congrats','1');}catch(e){}if(!seen)setTimeout(charterCongrats,400);}}
+function loadReferrals(){try{state.referrals=parseInt(localStorage.getItem('vendu_refs_'+myRefCode())||'0',10)||0;}catch(e){state.referrals=0;}syncCharter();}
 function creditReferral(){try{var r=localStorage.getItem('vendu_ref_from');if(!r||localStorage.getItem('vendu_ref_done'))return;if(r===myRefCode())return;localStorage.setItem('vendu_ref_done','1');try{if(window.VendU&&VendU.recordReferral)VendU.recordReferral(r,(state.campus&&state.campus.name)||'',BUILD);}catch(e){}var k='vendu_refs_'+r;localStorage.setItem(k,String((parseInt(localStorage.getItem(k)||'0',10)||0)+1));}catch(e){}}
 /* Keep referrals, ratings and jobs-done in sync with the shared backend so they
    follow the student across devices. */
-function syncReferralsFromServer(){try{if(!window.VendU||!VendU.referralCount||!state.isRealStudent&&!state.isCEO)return;VendU.referralCount(myRefCode(),BUILD).then(function(r){if(r&&r.ok&&typeof r.referrals==='number'){state.referrals=r.referrals;try{localStorage.setItem('vendu_refs_'+myRefCode(),String(r.referrals));}catch(e){}syncFounder();try{render();}catch(e){}}try{syncFounders();}catch(e){}});}catch(e){}}
-/* ===== Live founder math, per school (.edu domain) =====
-   Spots left, my founder number, my rank and the leaderboard all come from the
+function syncReferralsFromServer(){try{if(!window.VendU||!VendU.referralCount||!state.isRealStudent&&!state.isCEO)return;VendU.referralCount(myRefCode(),BUILD).then(function(r){if(r&&r.ok&&typeof r.referrals==='number'){state.referrals=r.referrals;try{localStorage.setItem('vendu_refs_'+myRefCode(),String(r.referrals));}catch(e){}syncCharter();try{render();}catch(e){}}try{syncCharters();}catch(e){}});}catch(e){}}
+/* ===== Live charter math, per school (.edu domain) =====
+   Spots left, my charter number, my rank and the leaderboard all come from the
    backend so every student at the same school sees the same numbers. */
 function schoolDomainOf(){var e=String(state.acctEmail||state.eduEmail||'').toLowerCase();var d=e.split('@')[1]||'';if(d)return d;return (state.campus&&state.campus.domain)||'';}
-function syncFounders(){
+function syncCharters(){
   try{
-    if(!window.VendU||!VendU.founderStats)return;
+    if(!window.VendU||!VendU.charterStats)return;
     var dom=schoolDomainOf();if(!dom)return;if(!/\.edu$/.test(dom))return;
-    VendU.founderStats(dom,myRefCode(),BUILD).then(function(r){
+    VendU.charterStats(dom,myRefCode(),BUILD).then(function(r){
       if(!r||!r.ok)return;
-      FOUNDERS=Math.min(FOUNDER_CAP,r.claimed||0);
-      state.founderTotal=r.total||0;
+      CHARTERS=Math.min(CHARTER_CAP,r.claimed||0);
+      state.charterTotal=r.total||0;
       if(typeof r.myReferrals==='number'){state.referrals=r.myReferrals;try{localStorage.setItem('vendu_refs_'+myRefCode(),String(r.myReferrals));}catch(e){}}
-      if(r.founderNumber){state.founderNum=r.founderNumber;try{localStorage.setItem('vendu_founder_num',String(r.founderNumber));}catch(e){}}
+      if(r.founderNumber){state.charterNum=r.founderNumber;try{localStorage.setItem('vendu_founder_num',String(r.founderNumber));}catch(e){}}
       state.lbRank=r.myRank||0;
       state.lbRows=(r.leaderboard||[]).filter(function(x){return (x.referrals||0)>0;}).map(function(x){return [x.me?'You':('@'+x.code),x.referrals,!!x.founder];});
-      syncFounder();
+      syncCharter();
       try{bgRender();}catch(e){}
     });
   }catch(e){}
 }
-try{setInterval(function(){try{syncFounders();}catch(e){}},60000);}catch(e){}
+try{setInterval(function(){try{syncCharters();}catch(e){}},60000);}catch(e){}
 function syncServerStats(){try{if(!window.VendU||!VendU.vendorStats)return;var ids=HUSTLES.filter(function(h){return !h.me;}).map(function(h){return h.id;});if(!ids.length)return;VendU.vendorStats(ids,BUILD).then(function(r){if(!r||!r.ok||!r.stats)return;var changed=false;Object.keys(r.stats).forEach(function(id){var st=r.stats[id];var h=HUSTLES.find(function(x){return x.id===id;});if(!h||!st)return;if(st.jobs){h.jobs=(parseInt(h.jobs,10)||0)+st.jobs;changed=true;}if(st.avg){h.rating=st.avg;h.reviews=(parseInt(h.reviews,10)||0)+st.reviews;changed=true;}});if(changed){state._staleStats=true;}});}catch(e){}}
 
-/* ---- live sync: stats, founders, and any server-backed counts, in real time ---- */
+/* ---- live sync: stats, charters, and any server-backed counts, in real time ---- */
 try{
   var _liveBusy=false;
   function venduLiveSync(){try{if(window.VenduLive){VenduLive.referrals();VenduLive.pull(false);}}catch(e){}
     if(_liveBusy||document.hidden)return;_liveBusy=true;
     try{syncServerStats();}catch(e){}
-    try{syncFounders();}catch(e){}
+    try{syncCharters();}catch(e){}
     try{if(typeof syncReferralsFromServer==='function')syncReferralsFromServer();}catch(e){}
     setTimeout(function(){_liveBusy=false;},1500);
   }
@@ -1115,10 +1115,10 @@ var _lastSeen=Date.now();
 try{['pointerdown','keydown','touchstart','scroll'].forEach(function(ev){window.addEventListener(ev,function(){_lastSeen=Date.now();},{passive:true});});document.addEventListener('visibilitychange',function(){if(!document.hidden)_lastSeen=Date.now();});}catch(e){}
 function imLive(){return !document.hidden&&(Date.now()-_lastSeen)<2*60*1000;}
 function isLive(h){return h&&h.me?imLive():!!(h&&h.avail);}
-function accountBadge(){return state.isCEO?'<span class="ceopill">\u2605 CEO</span>':(state.isFounder&&state.isRealStudent?'<span class="founderpill">\u{1F393} Founder</span>':'');}
+function accountBadge(){return state.isCEO?'<span class="ceopill">\u2605 CEO</span>':(state.isCharter&&state.isRealStudent?'<span class="charterpill">\u{1F393} Charter</span>':'');}
 function doLogout(){try{VendU.signOut();}catch(e){}try{localStorage.removeItem('vendu_return_build');}catch(e){}location.reload();}
 
-function founderBanner(){if(state.isCEO||FOUNDERS>=FOUNDER_CAP)return '';const left=FOUNDER_CAP-FOUNDERS;return `<div class="founder"><span class="em">🎓</span><div>Only <b>${left} founder spot${left>1?'s':''}</b> left at ${CAMP()}.</div></div>`;}
+function charterBanner(){if(state.isCEO||CHARTERS>=CHARTER_CAP)return '';const left=CHARTER_CAP-CHARTERS;return `<div class="charter"><span class="em">🎓</span><div>Only <b>${left} charter spot${left>1?'s':''}</b> left at ${CAMP()}.</div></div>`;}
 
 /* ---- automatic feed posts (no manual feed composer anywhere) ----
    The feed is generated by real vendor actions only: adding a service,
@@ -1128,7 +1128,7 @@ function myFeedVendor(){
   var nm=state.vendorName||'Your storefront';
   if(!h){h={id:'me',name:nm,init:nm.charAt(0).toUpperCase(),cat:state.formCat||'Other',v:1,lic:0,dist:0,offer:state.about||'',price:'',rating:'5.0',reviews:0,jobs:0,since:String(new Date().getFullYear()),c:0,pays:[],bio:'',services:[],campus:state.campus.id,me:1};HUSTLES.push(h);}
   h.name=nm;h.init=nm.charAt(0).toUpperCase();h.cat=state.formCat||h.cat;h.campus=state.campus.id;
-  h.services=state.services||[];h.gallery=state.gallery||[];h.founder=!!state.isFounder;h.avatar=state.avatar||'';
+  h.services=state.services||[];h.gallery=state.gallery||[];h.charter=!!state.isCharter;h.avatar=state.avatar||'';
   if(state.vendorUuid)h.uuid=state.vendorUuid;
   return h;
 }
@@ -1184,8 +1184,8 @@ function feedBody(){
   const showSeededEverywhere=!!(state.tester||state.demoContent||state.tourActive);
   const TENDAYS=10*24*3600*1000;
   const posts=FEED.filter(p=>{const h=HUSTLES.find(x=>x.id===p.s);return h&&(!p.ts||Date.now()-p.ts<TENDAYS)&&(showSeededEverywhere||h.campus===state.campus.id)&&(!q||(h.name+p.text).toLowerCase().includes(q))});
-  if(!posts.length)return founderBanner()+`<div class="empty" style="padding-top:50px">Nothing in the feed yet.<br>Add a service or switch on a promo and it posts here automatically.</div>`;
-  return founderBanner()+`<div class="feed">${posts.map((p,i)=>{const h=HUSTLES.find(x=>x.id===p.s);const open=state.openC===p.id;return `
+  if(!posts.length)return charterBanner()+`<div class="empty" style="padding-top:50px">Nothing in the feed yet.<br>Add a service or switch on a promo and it posts here automatically.</div>`;
+  return charterBanner()+`<div class="feed">${posts.map((p,i)=>{const h=HUSTLES.find(x=>x.id===p.s);const open=state.openC===p.id;return `
     <div class="post" style="animation-delay:${i*40}ms">
       <div class="p-head"><div class="p-av-wrap"><div class="p-av" data-open="${h.id}" style="${h.avatar?'background-image:url('+h.avatar+');background-size:cover;background-position:center':'background:'+bg(h)}">${h.avatar?'':h.init}</div>${isLive(h)?'<span class="livedot"></span>':''}</div>
         <div><div class="p-name" data-open="${h.id}">${h.name}${h.v?CHECK:''}${SAMPLE(h)}${vendorPills(h,p.text||p.body||'')}</div><div class="p-when">${p.when} · ${h.cat}</div></div>
@@ -1914,11 +1914,11 @@ function settingsScreen(){
 }
 function profile(){
   const av=state.avatar?`background-image:url(${state.avatar})`:`background:${state.themeColor}`;
-  const refLink=myRefLink(), refShown=refLink.replace(/^https?:\/\//,''), goal=FOUNDER_GOAL;
+  const refLink=myRefLink(), refShown=refLink.replace(/^https?:\/\//,''), goal=CHARTER_GOAL;
   const viewBtn=`<button class="submit viewbtn student-view-profile" id="viewme"><span class="view-label">View My</span><span class="viewwm">${WM}</span></button>`;
   const studentSwitch=`<button class="submit profile-switch" id="toregular">Switch to Student View</button>`;
-  const membership=`<div class="plan" style="background:${bannerGrad(state.themeColor)};color:#fff"><div class="plan-badge">${state.isFounder?'🎓 Founder':'💠 Vendor'}</div><div class="p-lbl">Your membership</div><div class="p-big">${state.isFounder?`Founder #${founderNumber()} of ${FOUNDER_CAP}`:'Vendor'}</div>
-    <div class="ref"><div class="ref-top"><span>Vendors referred</span><span><b>${state.referrals}</b> / ${goal}</span></div><div style="font-size:11.5px;opacity:.85;margin:-4px 0 9px">${state.isFounder?'🎓 Founder — free forever + a monthly Boost':`${Math.max(0,goal-state.referrals)} more vendor sign-ups through your link to become a founder`}</div>
+  const membership=`<div class="plan" style="background:${bannerGrad(state.themeColor)};color:#fff"><div class="plan-badge">${state.isCharter?'🎓 Charter':'💠 Vendor'}</div><div class="p-lbl">Your membership</div><div class="p-big">${state.isCharter?`Charter #${charterNumber()} of ${CHARTER_CAP}`:'Vendor'}</div>
+    <div class="ref"><div class="ref-top"><span>Vendors referred</span><span><b>${state.referrals}</b> / ${goal}</span></div><div style="font-size:11.5px;opacity:.85;margin:-4px 0 9px">${state.isCharter?'🎓 Charter — free forever + a monthly Boost':`${Math.max(0,goal-state.referrals)} more vendor sign-ups through your link to become a charter`}</div>
       <div class="ref-dots">${Array.from({length:goal}).map((_,i)=>`<div class="rdot ${i<state.referrals?'on':''} ${i===state.justReferred?'pop':''}">🎓</div>`).join('')}</div>
       <div class="ref-link"><span class="rl">${refShown}</span><button id="shareref">Share</button></div>
       <button class="ref-demo" id="lbBtn" style="margin-top:10px">🏆 Leaderboard</button></div></div>`;
@@ -1945,7 +1945,7 @@ function profile(){
   screen.querySelectorAll('[data-gradyear]').forEach(el=>el.onclick=()=>{state.gradYear=el.dataset.gradyear;render();});
   screen.querySelectorAll('[data-opencomm]').forEach(el=>el.onclick=()=>{openGroup(el.dataset.opencomm);});
   const sr=document.getElementById('shareref');if(sr)sr.onclick=()=>shareRefLink();
-  const lb=document.getElementById('lbBtn');if(lb)lb.onclick=()=>{state.leaderboard=true;render();try{syncFounders();}catch(e){}};
+  const lb=document.getElementById('lbBtn');if(lb)lb.onclick=()=>{state.leaderboard=true;render();try{syncCharters();}catch(e){}};
   const vm=document.getElementById('viewme');if(vm)vm.onclick=()=>openDetail('me');
   var _mt=document.getElementById('moretoggle');if(_mt)_mt.onclick=()=>{state.moreMenu=true;render();screen.scrollTop=0;};
   screen.querySelectorAll('[data-menu]').forEach(el=>el.onclick=()=>{const m=el.dataset.menu;if(m==='setup'){state.storefrontSetup=true;render();}else if(m==='bookings'){state.bookSet=true;render();}else if(m==='saved'){state.savedView=true;render();}else if(m==='me'){openDetail('me');}else if(m==='boost'){state.boosted=!state.boosted;toast(state.boosted?'⚡ Storefront boosted! Optional upgrade — listing is always free.':'Boost turned off. Your storefront stays free & live.');render();}else if(m==='theme'){state.themeView=true;render();}else if(m==='regular'){state.isSeller=false;state.tab='profile';toast('Vendor mode off — your storefront is saved. Switch back anytime.');render();}else if(m==='myposts'){state.myPostsView=true;render();}else if(m==='feedback'){try{window.location.href='mailto:'+BETA_EMAIL+'?subject='+encodeURIComponent('The VendU App Beta Feedback')+'&body='+encodeURIComponent('What I liked:\n\nWhat confused me:\n\nWhat I wish it did:\n');}catch(e){}toast('Opening email — tell us anything! 💬');}else if(m==='tour'){VendU.startTour(true);}else if(m==='support'){window.open('/legal/support.html','_blank','noopener');}else if(m==='privacy'){window.open('/legal/privacy.html','_blank','noopener');}else if(m==='terms'||m==='legal'){window.open('/legal/terms.html','_blank','noopener');}else if(m==='delete'){deleteAccount();}else if(m==='logout'){doLogout();}else if(m==='inbox'){openInbox();}else toast('Opens in the real build ⚙️');});
@@ -1956,8 +1956,8 @@ function leaderboard(){
   const rows=lbRows();
   const medal=i=>['🥇','🥈','🥉'][i]||('#'+(i+1));
   screen.innerHTML=`<div class="topbar"><div class="brandrow"><div class="wordmark">🏆 Leaderboard</div><div class="locpill" id="lbClose" style="cursor:pointer">✕ Close</div></div></div>
-    <div style="padding:8px 20px 20px" class="enter"><div class="form-sub">Founders ranked by vendors referred. Refer more with your link to climb.</div><div class="lb-summary">🎓 <b>${FOUNDERS}</b> of <b>${FOUNDER_CAP}</b> founder spots claimed · <b>${Math.max(0,FOUNDER_CAP-FOUNDERS)}</b> left</div>
-    ${rows.length?rows.map((r,i)=>`<div class="lbrow ${r[0]==='You'?'me':''}"><div class="lb-rank">${medal(i)}</div><div class="lb-nmwrap"><div class="lb-name">${r[0]}</div>${r[2]?'<div class="lb-found">🎓 Founder</div>':''}</div><div class="lb-count">${r[1]} <span>referred</span></div></div>`).join(''):`<div class="prompt">No one has referred a vendor at ${CAMP()} yet. Share your invite link — the first students to bring in ${FOUNDER_GOAL} vendors each claim a founder spot and appear here.</div>`}</div>`;
+    <div style="padding:8px 20px 20px" class="enter"><div class="form-sub">Charters ranked by vendors referred. Refer more with your link to climb.</div><div class="lb-summary">🎓 <b>${CHARTERS}</b> of <b>${CHARTER_CAP}</b> charter spots claimed · <b>${Math.max(0,CHARTER_CAP-CHARTERS)}</b> left</div>
+    ${rows.length?rows.map((r,i)=>`<div class="lbrow ${r[0]==='You'?'me':''}"><div class="lb-rank">${medal(i)}</div><div class="lb-nmwrap"><div class="lb-name">${r[0]}</div>${r[2]?'<div class="lb-found">🎓 Charter</div>':''}</div><div class="lb-count">${r[1]} <span>referred</span></div></div>`).join(''):`<div class="prompt">No one has referred a vendor at ${CAMP()} yet. Share your invite link — the first students to bring in ${CHARTER_GOAL} vendors each claim a charter spot and appear here.</div>`}</div>`;
   document.getElementById('lbClose').onclick=()=>{state.leaderboard=false;render();};
 }
 
