@@ -191,8 +191,7 @@
   W.checkVerified = function (email) {
     var lookupToken = "";
     try { lookupToken = localStorage.getItem("vendu_verify_lookup") || ""; } catch (e) {}
-    if (!lookupToken) return Promise.resolve(false);
-    return post("/api/public/verify/lookup", { lookupToken: lookupToken }).then(function (res) {
+    return post("/api/public/verify/lookup", { lookupToken: lookupToken, email: email }).then(function (res) {
       if (res && res.verified) {
         try {
           localStorage.setItem(
