@@ -217,6 +217,21 @@ export async function logAttempt(email: string, kind: string) {
   await supabaseAdmin.from("verification_attempts").insert({ email, kind });
 }
 
+/** True when this address was sent a verification email in the last 30 minutes.
+    Lets a reopened tab (which lost its per-tab lookup token) keep polling. */
+export async function recentlyRequestedVerification(email: string): Promise<boolean> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const since = new Date(Date.now() - 30 * 60 * 1000).toISOString();
+  const { data } = await supabaseAdmin
+    .from("verification_attempts")
+    .select("email")
+    .eq("email", email)
+    .eq("kind", "send")
+    .gte("created_at", since)
+    .limit(1);
+  return !!data?.length;
+}
+
 export async function recordStudent(email: string, build: Build, gradYear: string | null) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { INTERNAL_DEFAULT_CAMPUS_DOMAIN } = await import("@/lib/campus.server");
