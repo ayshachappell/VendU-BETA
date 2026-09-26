@@ -127,3 +127,4 @@
 
 ## v65 — tester demo restored
 - Logging in with an @venduapp.com address (e.g. test@venduapp.com) again flags the account as a tester and seeds the sample storefronts, services, gallery, socials and payments (Main + Beta).
+- [ ] Fix verification stuck on tab reopen (lookup token in sessionStorage lost)
