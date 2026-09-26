@@ -137,7 +137,7 @@
       path: location.pathname,
     }).then(function (res) {
       if (res && res.ok && res.lookupToken) {
-        try { sessionStorage.setItem("vendu_verify_lookup", res.lookupToken); } catch (e) {}
+        try { localStorage.setItem("vendu_verify_lookup", res.lookupToken); } catch (e) {}
       }
       return res;
     });
@@ -193,7 +193,7 @@
      browser, phone or desktop). Unlocks devices that never saw the link. */
   W.checkVerified = function (email) {
     var lookupToken = "";
-    try { lookupToken = sessionStorage.getItem("vendu_verify_lookup") || ""; } catch (e) {}
+    try { lookupToken = localStorage.getItem("vendu_verify_lookup") || ""; } catch (e) {}
     if (!lookupToken) return Promise.resolve(false);
     return post("/api/public/verify/lookup", { lookupToken: lookupToken }).then(function (res) {
       if (res && res.verified) {
@@ -202,7 +202,7 @@
             KEY,
             JSON.stringify({ email: res.email || email, at: Date.now() }),
           );
-          sessionStorage.removeItem("vendu_verify_lookup");
+          localStorage.removeItem("vendu_verify_lookup");
         } catch (e) {}
         return true;
       }
