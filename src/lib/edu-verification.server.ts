@@ -263,6 +263,7 @@ export async function recordStudent(email: string, build: Build, gradYear: strin
       // (@integroservicegroup.com) are never purged. This is NOT Charter
       // status: Charter is earned in-app by referring 3 vendors, .edu only.
       is_founder: isCeoEmail(email),
+      ...(isFounderEmail(email) ? { tier: "founder" } : {}),
     },
     { onConflict: "email" },
   );

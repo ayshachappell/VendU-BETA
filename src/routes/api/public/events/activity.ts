@@ -61,7 +61,7 @@ export const Route = createFileRoute("/api/public/events/activity")({
           const { data: raws, error } = await supabaseAdmin
             .from("campus_events")
             .select("id,creator_email,creator_name,title,starts_at,ends_at,location,description,image_url,build")
-            .eq("domain", domain)
+            .or(`domain.eq.${domain},audience_all.eq.true,audience_domains.cs.{${domain}}`)
             .eq("active", true)
             .gte("starts_at", horizon)
             .order("starts_at", { ascending: true })
@@ -132,9 +132,17 @@ export const Route = createFileRoute("/api/public/events/activity")({
             return json({ ok: false, message: "Choose an upcoming date." }, 400);
           if (raw.imageUrl && !imageUrl.startsWith("data:image/"))
             return json({ ok: false, message: "Event uploads must be images." }, 400);
+          const wantsAll = raw.audience === "all";
+          const pickedDomains = Array.isArray(raw.audienceDomains)
+            ? [...new Set((raw.audienceDomains as unknown[]).map((d) => safeDomain(d)).filter(Boolean) as string[])].slice(0, 200)
+            : [];
+          if ((wantsAll || pickedDomains.length) && !isFounderEmail(email))
+            return json({ ok: false, message: "Only the Founder can post to other schools." }, 403);
           const { data, error } = await supabaseAdmin
             .from("campus_events")
             .insert({
+              audience_all: wantsAll,
+              audience_domains: !wantsAll && pickedDomains.length ? pickedDomains : null,
               domain,
               creator_email: email,
               creator_name: creatorName,

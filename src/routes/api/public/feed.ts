@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { json, normalizeBuild, requireStudent } from "@/lib/edu-verification.server";
+import { isFounderEmail, json, normalizeBuild, requireStudent } from "@/lib/edu-verification.server";
 import { cleanUrl, homeDomainFor, ensureProfile, safeDomain, str } from "@/lib/vendu-core.server";
 
 type Body = Record<string, unknown>;
@@ -30,7 +30,7 @@ export const Route = createFileRoute("/api/public/feed")({
             .from("posts")
             .select("*")
             .eq("build", build)
-            .eq("campus_domain", domain)
+            .or(`campus_domain.eq.${domain},audience_all.eq.true,audience_domains.cs.{${domain}}`)
             .gte("created_at", since)
             .order("created_at", { ascending: false })
             .limit(120);
@@ -67,6 +67,7 @@ export const Route = createFileRoute("/api/public/feed")({
               return {
                 id: pid,
                 authorEmail: p["author_email"],
+                founder: isFounderEmail(String(p["author_email"] ?? "")),
                 authorName: p["author_name"] ?? "",
                 authorAvatar: author?.["avatar_url"] ?? "",
                 authorLive: (Date.parse(String(author?.["last_seen_at"] ?? "")) || 0) > Date.now() - 2 * 60 * 1000,
@@ -124,6 +125,14 @@ export const Route = createFileRoute("/api/public/feed")({
              app sends no campus, it falls back to their own school. */
           const domain = safeDomain(raw["domain"]) || (await homeDomainFor(email));
           if (!domain) return json({ ok: false, message: "Pick your campus first." }, 400);
+          /* "All schools" / "Select schools" is Founder-only, checked here on
+             the server so nobody else can post outside their own campus rules. */
+          const wantsAll = raw["audience"] === "all";
+          const pickedDomains = Array.isArray(raw["audienceDomains"])
+            ? [...new Set((raw["audienceDomains"] as unknown[]).map((d) => safeDomain(d)).filter(Boolean) as string[])].slice(0, 200)
+            : [];
+          if ((wantsAll || pickedDomains.length) && !isFounderEmail(email))
+            return json({ ok: false, message: "Only the Founder can post to other schools." }, 403);
           const vendorId = str(raw["vendorId"], 64) || null;
           const authorName = await savedAuthorName(vendorId);
           const row = {
@@ -142,6 +151,8 @@ export const Route = createFileRoute("/api/public/feed")({
             vendor_id: vendorId,
             event_id: str(raw["eventId"], 64) || null,
             auto: !!raw["auto"],
+            audience_all: wantsAll,
+            audience_domains: !wantsAll && pickedDomains.length ? pickedDomains : null,
           };
           const { data, error } = await supabaseAdmin
             .from("posts")
