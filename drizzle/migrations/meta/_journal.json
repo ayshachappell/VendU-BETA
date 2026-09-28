@@ -43,6 +43,13 @@
       "when": 1790089105695,
       "tag": "0005_lock_public_reference_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1790617693308,
+      "tag": "0006_founder_tier_audience_photo_links",
+      "breakpoints": true
     }
   ]
 }

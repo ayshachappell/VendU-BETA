@@ -3,6 +3,8 @@ import {
   internalCodeRequest,
   internalCodeVerify,
   isInternalEmail,
+  isFounderEmail,
+  isDemoOnlyEmail,
   isVerifiedStudent,
   json,
   logAttempt,
@@ -46,7 +48,22 @@ export const Route = createFileRoute("/api/public/auth/password")({
 
           /* Company addresses skip the password, but they still have to open
              the one-time code we email to that address. */
-          if (isInternalEmail(email)) {
+          /* Tester addresses open the on-device demo only: no password, no
+             code, and no live session is ever issued for them. */
+          if (isDemoOnlyEmail(email)) {
+            return json({ ok: true, email, demo: true });
+          }
+
+          /* The Founder signs in with a password; with the box left empty we
+             email a one-time code instead (until a password is set). */
+          if (isFounderEmail(email) && !normalizePassword(body["password"])) {
+            await logAttempt(email, "login");
+            const result = await internalCodeRequest(email);
+            if (!result.ok) return json({ ok: false, message: result.message }, 401);
+            return json({ ok: true, email, internal: true, codeSent: true });
+          }
+
+          if (isInternalEmail(email) && !isFounderEmail(email)) {
             await logAttempt(email, "login");
             const result = await internalCodeRequest(email);
             if (!result.ok) return json({ ok: false, message: result.message }, 401);
@@ -75,7 +92,7 @@ export const Route = createFileRoute("/api/public/auth/password")({
            person really owns that company address. */
         if (action === "internalVerify") {
           const email = normalizeAccessEmail(body["email"]);
-          if (!email || !isInternalEmail(email)) {
+          if (!email || !isInternalEmail(email) || isDemoOnlyEmail(email)) {
             return json({ ok: false, message: "That address needs a password." }, 400);
           }
           const result = await internalCodeVerify(email, String(body["code"] ?? ""));
