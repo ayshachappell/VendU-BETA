@@ -102,6 +102,8 @@ export type Database = {
       campus_events: {
         Row: {
           active: boolean
+          audience_all: boolean
+          audience_domains: string[] | null
           build: string
           created_at: string
           creator_email: string
@@ -118,6 +120,8 @@ export type Database = {
         }
         Insert: {
           active?: boolean
+          audience_all?: boolean
+          audience_domains?: string[] | null
           build?: string
           created_at?: string
           creator_email: string
@@ -134,6 +138,8 @@ export type Database = {
         }
         Update: {
           active?: boolean
+          audience_all?: boolean
+          audience_domains?: string[] | null
           build?: string
           created_at?: string
           creator_email?: string
@@ -708,6 +714,8 @@ export type Database = {
       }
       posts: {
         Row: {
+          audience_all: boolean
+          audience_domains: string[] | null
           author_email: string
           author_name: string | null
           auto: boolean
@@ -727,6 +735,8 @@ export type Database = {
           vendor_id: string | null
         }
         Insert: {
+          audience_all?: boolean
+          audience_domains?: string[] | null
           author_email: string
           author_name?: string | null
           auto?: boolean
@@ -746,6 +756,8 @@ export type Database = {
           vendor_id?: string | null
         }
         Update: {
+          audience_all?: boolean
+          audience_domains?: string[] | null
           author_email?: string
           author_name?: string | null
           auto?: boolean
@@ -929,6 +941,7 @@ export type Database = {
           is_founder: boolean
           last_active_at: string
           school_domain: string
+          tier: string
           verified_at: string
         }
         Insert: {
@@ -940,6 +953,7 @@ export type Database = {
           is_founder?: boolean
           last_active_at?: string
           school_domain: string
+          tier?: string
           verified_at?: string
         }
         Update: {
@@ -951,6 +965,7 @@ export type Database = {
           is_founder?: boolean
           last_active_at?: string
           school_domain?: string
+          tier?: string
           verified_at?: string
         }
         Relationships: []
@@ -984,6 +999,7 @@ export type Database = {
           caption: string | null
           created_at: string
           id: string
+          link_url: string | null
           service_id: string | null
           sort_order: number
           url: string
@@ -993,6 +1009,7 @@ export type Database = {
           caption?: string | null
           created_at?: string
           id?: string
+          link_url?: string | null
           service_id?: string | null
           sort_order?: number
           url: string
@@ -1002,6 +1019,7 @@ export type Database = {
           caption?: string | null
           created_at?: string
           id?: string
+          link_url?: string | null
           service_id?: string | null
           sort_order?: number
           url?: string
@@ -1085,6 +1103,7 @@ export type Database = {
           campus_domain: string
           category: string | null
           created_at: string
+          founder_page: boolean
           id: string
           layout: string
           owner_email: string
@@ -1107,6 +1126,7 @@ export type Database = {
           campus_domain: string
           category?: string | null
           created_at?: string
+          founder_page?: boolean
           id?: string
           layout?: string
           owner_email: string
@@ -1129,6 +1149,7 @@ export type Database = {
           campus_domain?: string
           category?: string | null
           created_at?: string
+          founder_page?: boolean
           id?: string
           layout?: string
           owner_email?: string
