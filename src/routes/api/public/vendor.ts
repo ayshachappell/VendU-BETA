@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { json, normalizeBuild, requireStudent } from "@/lib/edu-verification.server";
+import { isFounderEmail, json, normalizeBuild, requireStudent } from "@/lib/edu-verification.server";
 import {
   cleanUrl,
   homeDomainFor,
@@ -27,6 +27,19 @@ type ServiceIn = {
   promoEndsAt?: unknown;
 };
 
+/** Founder photo links: plain http(s) URLs only. */
+function safeLink(raw: unknown): string | null {
+  const v = typeof raw === "string" ? raw.trim().slice(0, 600) : "";
+  if (!v) return null;
+  const withScheme = /^https?:\/\//i.test(v) ? v : `https://${v}`;
+  try {
+    const u = new URL(withScheme);
+    return u.protocol === "https:" || u.protocol === "http:" ? u.toString() : null;
+  } catch {
+    return null;
+  }
+}
+
 function shapeVendor(
   v: Record<string, unknown>,
   services: Record<string, unknown>[],
@@ -37,6 +50,7 @@ function shapeVendor(
   return {
     id: v["id"],
     ownerEmail: v["owner_email"],
+    founder: !!v["founder_page"],
     live: liveByEmail.get(String(v["owner_email"] ?? "").toLowerCase()) ?? false,
     campusDomain: v["campus_domain"],
     shopName: v["shop_name"],
@@ -71,6 +85,7 @@ function shapeVendor(
         id: p["id"],
         url: p["url"],
         caption: p["caption"] ?? "",
+        link: p["link_url"] ?? "",
         serviceId: p["service_id"],
       })),
   };
@@ -99,7 +114,8 @@ export const Route = createFileRoute("/api/public/vendor")({
             .order("boosted", { ascending: false })
             .order("updated_at", { ascending: false })
             .limit(200);
-          if (filter.domain) q = q.eq("campus_domain", filter.domain);
+          /* The Founder's page shows at every school. */
+          if (filter.domain) q = q.or(`campus_domain.eq.${filter.domain},founder_page.eq.true`);
           if (filter.id) q = q.eq("id", filter.id);
           if (filter.owner) q = q.eq("owner_email", filter.owner);
           if (!filter.owner) q = q.eq("published", true);
@@ -214,7 +230,8 @@ export const Route = createFileRoute("/api/public/vendor")({
             pickup_label: str(raw["pickupLabel"], 80) || null,
             pickup_lat: coord(raw["pickupLat"], 90),
             pickup_lng: coord(raw["pickupLng"], 180),
-            payments,
+            payments: isFounderEmail(email) ? {} : payments,
+            founder_page: isFounderEmail(email),
             published: raw["published"] === undefined ? true : !!raw["published"],
           };
 
@@ -256,7 +273,8 @@ export const Route = createFileRoute("/api/public/vendor")({
                 return {
                   vendor_id: vendorId,
                   url: cleanUrl(obj["url"], 800000) ?? "",
-                  caption: str(obj["caption"], 120) || null,
+                  caption: str(obj["caption"], isFounderEmail(email) ? 400 : 120) || null,
+                  link_url: isFounderEmail(email) ? safeLink(obj["link"]) : null,
                   sort_order: i,
                 };
               })

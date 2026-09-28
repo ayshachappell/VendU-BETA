@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { json, normalizeBuild, requireStudent } from "@/lib/edu-verification.server";
+import { isFounderEmail, json, normalizeBuild, requireStudent } from "@/lib/edu-verification.server";
 import { ensureProfile, str } from "@/lib/vendu-core.server";
 
 type Body = Record<string, unknown>;
@@ -220,6 +220,7 @@ export const Route = createFileRoute("/api/public/messages")({
         if (action === "open") {
           const peerEmail = str(raw["peerEmail"], 254).toLowerCase();
           if (!peerEmail || peerEmail === email) return json({ ok: false, message: "That person cannot be messaged." }, 400);
+          if (isFounderEmail(peerEmail)) return json({ ok: false, message: "This account doesn't take messages." }, 403);
           const sorted = pair(email, peerEmail);
           const a = sorted[0] ?? email;
           const b = sorted[1] ?? peerEmail;
