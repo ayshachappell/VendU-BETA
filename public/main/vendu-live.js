@@ -80,6 +80,7 @@
         live: 1,
         me: !!mine,
         owner: String(v.ownerEmail || "").toLowerCase(),
+        founder: v.founder ? 1 : 0,
         name: v.shopName,
         init: initialOf(v.shopName),
         cat: v.category || "Other",
@@ -106,7 +107,7 @@
         services: services,
         campus: cid,
         gallery: (v.photos || []).map(function (p) {
-          return { src: p.url, fit: "cover", label: p.caption || "" };
+          return { src: p.url, fit: "cover", label: p.caption || "", desc: p.caption || "", link: p.link || "" };
         }),
       });
     });
@@ -167,9 +168,11 @@
   }
 
   /* ---- pull everything for the current campus ---- */
+  /* Tester accounts run the on-device demo only: never load or send live data. */
+  function demoOnly() { try { return !!state.tester; } catch (e) { return false; } }
   var busy = false;
   L.pull = function (thenRender) {
-    if (busy || !api()) return Promise.resolve();
+    if (busy || !api() || demoOnly()) return Promise.resolve();
     /* browse whatever campus the location pill shows; writes stay on the
        student's home campus (see domain() used by L.post/L.publish) */
     var dom = viewDomain();
@@ -299,7 +302,7 @@
       };
     });
     var photos = (state.gallery || []).map(function (g) {
-      return { url: g.src, caption: g.label || "" };
+      return { url: g.src, caption: g.desc || g.label || "", link: g.link || "" };
     });
     return VendU.publishVendor({
       shopName: state.vendorName || "",
@@ -335,6 +338,7 @@
   L.post = function (post) {
     if (!signedIn()) return Promise.resolve();
     post = post || {};
+    try { if (typeof founderAud === "function") { var fa = founderAud(); Object.keys(fa).forEach(function (k) { post[k] = fa[k]; }); } } catch (e) {}
     post.domain = post.domain || viewDomain();
     post.authorName = post.identityMode === "vendor" ? (state.vendorName || "") : (state.studentName || "");
     post.identityMode = post.identityMode || "student";
@@ -388,7 +392,7 @@
 
   /* Everything a signed-in student needs, on start and after verifying. */
   L.start = function () {
-    if (!signedIn()) return;
+    if (!signedIn() || demoOnly()) return;
     L.loadProfile();
     L.loadVendor();
     L.creditInvite();
