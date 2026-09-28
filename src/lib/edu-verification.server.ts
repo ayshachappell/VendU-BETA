@@ -22,7 +22,15 @@ export const CEO_DOMAIN = "integroservicegroup.com";
 export const CEO_EMAILS = [
   "ayshac@integroservicegroup.com",
   "info@integroservicegroup.com",
+  "ayshac@venduapp.com",
 ];
+
+/** The one and only Founder account. Signs in with a password (or an emailed
+ *  code until one is set) and always uses the live app, never the demo. */
+export const FOUNDER_EMAIL = "ayshac@venduapp.com";
+export function isFounderEmail(email: string): boolean {
+  return String(email ?? "").trim().toLowerCase() === FOUNDER_EMAIL;
+}
 
 /**
  * CEO access. Every address ending in @integroservicegroup.com has permanent
@@ -59,7 +67,11 @@ function normalizeAnyEmail(raw: unknown): string | null {
 /** Tester domain: demo-only access, never an admin and never a real student. */
 export const TESTER_DOMAIN = "venduapp.com";
 export function isTesterEmail(email: string): boolean {
-  return email.endsWith(`@${TESTER_DOMAIN}`);
+  return email.endsWith(`@${TESTER_DOMAIN}`) && !isFounderEmail(email);
+}
+/** Demo-only accounts never get a live session and can never write live data. */
+export function isDemoOnlyEmail(email: string): boolean {
+  return isTesterEmail(String(email ?? "").trim().toLowerCase());
 }
 
 /** Company addresses (CEO / admin / tester domains) sign in with email only. */
@@ -365,6 +377,11 @@ export async function requireStudent(
         { ok: false, needsAuth: true, message: "Sign in with your school email to continue." },
         401,
       ),
+    };
+  }
+  if (isDemoOnlyEmail(email)) {
+    return {
+      response: json({ ok: false, message: "Tester accounts only open the demo." }, 403),
     };
   }
   if (!(await isVerifiedStudent(email))) {
