@@ -24,11 +24,13 @@
      otherwise exit (standard native behavior). */
   if(NATIVE){try{var App=(window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.App)||null;
     if(App&&App.addListener){App.addListener('backButton',function(e){if(e&&e.canGoBack){window.history.back();}else{try{App.exitApp();}catch(_e){}}});}}catch(e){}}
-  var B=NATIVE?'':'/beta/', V='v67';
+  var B=NATIVE?'':'/beta/', V='v68';
   var l=document.createElement('link');
   l.rel='stylesheet'; l.href=B+'vendu-shared.css?v='+V;
   document.head.appendChild(l);
   ['vendu-api.js','vendu-live.js','vendu-analytics.js','vendu-tour.js','vendu-safety.js'].forEach(function(f){
+    /* core API loads parser-blocking so the app code below always finds it ready */
+    if(f==='vendu-api.js'||f==='vendu-live.js'){document.write('<script src="'+B+f+'?v='+V+'"><\/script>');return;}
     var s=document.createElement('script');
     s.src=B+f+'?v='+V; s.async=false;
     document.head.appendChild(s);
