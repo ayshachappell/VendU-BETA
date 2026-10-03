@@ -2133,7 +2133,7 @@ function onboarding(){
       pwBusy=true;goBtn.textContent='Logging in\u2026';
       VendU.loginPassword(em,internal?'':pw,BUILD).then(function(r){
         pwBusy=false;
-        if(r&&r.ok&&r.codeSent){state.eduErr='';state.eduEmail=em;state.pwCodeSent=true;onboarding();toast('We emailed a 6-digit code to '+em);return;}
+        if(r&&r.ok&&r.codeSent){state.eduErr='';state.eduEmail=em;state.pwCodeSent=true;onboarding();toast(r.passwordNotSet?'Password not set yet \u2014 we emailed a 6-digit code to '+em+'. After you\u2019re in, set your password in Settings.':'We emailed a 6-digit code to '+em);return;}
         if(r&&r.ok){unlock(r,em);return;}
         state.eduEmail=em;state.eduErr=(r&&r.message)||(internal?'Could not email a code to that company address.':'That email and password didn\u2019t match.');onboarding();
       });
