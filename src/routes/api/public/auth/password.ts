@@ -74,6 +74,18 @@ export const Route = createFileRoute("/api/public/auth/password")({
           if (!password)
             return json({ ok: false, message: "Enter your email and password." }, 400);
           await logAttempt(email, "login");
+          /* Founder: if the password hasn't been set yet (or doesn't match),
+             email a one-time code so she can still get in and set it. */
+          if (isFounderEmail(email)) {
+            const result = await passwordLogin(email, password);
+            if (result.ok) {
+              await touchStudent(email);
+              return json({ ok: true, email, session: result.session });
+            }
+            const code = await internalCodeRequest(email);
+            if (!code.ok) return json({ ok: false, message: result.message }, 401);
+            return json({ ok: true, email, internal: true, codeSent: true, passwordNotSet: true });
+          }
           if (!(await isVerifiedStudent(email)))
             return json(
               {
