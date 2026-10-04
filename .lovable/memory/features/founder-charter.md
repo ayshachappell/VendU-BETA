@@ -1,6 +1,6 @@
 ---
 name: Founder vs Charter
-description: Single Founder ayshac@venduapp.com (live only, all-school posting, link-photo storefront, no messages); tester demo-only; tiers starter/charter/founder
+description: Single Founder ayshac@venduapp.com (Live or Demo choice after log-in, all-school posting, link-photo storefront, no messages); tester demo-only; tiers starter/charter/founder
 type: feature
 ---
 - Only Founder: ayshac@venduapp.com. live app by default; after log-in she can choose Live or Demo and switch any time (Founder demo never saves real data). Password login (blank password = emailed code until set).
